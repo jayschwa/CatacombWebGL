@@ -128,7 +128,7 @@ func main() {
 		panic(err)
 	}
 	for _, m := range maps {
-		fmt.Println(m.Name())
+		fmt.Println(m.Name(), m.Width, "x", m.Height)
 		var planes [3][]byte
 		for i := 0; i < 3; i += 2 {
 			fmt.Println("Plane", i)
@@ -138,7 +138,7 @@ func main() {
 			expandedSize := int(binary.LittleEndian.Uint16(planeData))
 			fmt.Println("Carmack compression ratio:", float64(len(planeData))/float64(expandedSize))
 			fmt.Println("RLEW compression ratio:", float64(expandedSize)/float64(m.Len()))
-			fmt.Println("Aggregate compression raio:", float64(len(planeData))/float64(m.Len()))
+			fmt.Println("Aggregate compression ratio:", float64(len(planeData))/float64(m.Len()))
 			expandedData := make([]byte, expandedSize)
 			err := CarmackExpand(expandedData, planeData[2:])
 			if err != nil {
