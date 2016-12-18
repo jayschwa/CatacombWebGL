@@ -24,10 +24,10 @@ func (r *BitReader) ReadBit() (bool, error) {
 			return false, err
 		}
 		r.byte = byte
-		r.mask = 0x80
+		r.mask = 0x01
 	}
 	bit := (r.byte & r.mask) != 0
-	r.mask = r.mask >> 1
+	r.mask = r.mask << 1
 	return bit, nil
 }
 
@@ -159,6 +159,29 @@ func (g *Graphics) Chunk(i int) ([]byte, error) {
 	return d_data, nil
 }
 
+type Dimensions struct {
+	Width, Height int16
+}
+
+func (d Dimensions) String() string {
+	return fmt.Sprintf("%vx%v", d.Width*8, d.Height)
+}
+
+type PictureTable []Dimensions
+
+func (g *Graphics) PictureTable() (PictureTable, error) {
+	chunk, err := g.Chunk(0)
+	if err != nil {
+		return nil, err
+	}
+	table := make(PictureTable, len(chunk)/4)
+	err = binary.Read(bytes.NewReader(chunk), binary.LittleEndian, table)
+	if err != nil {
+		return nil, err
+	}
+	return table, nil
+}
+
 func main() {
 	g, err := OpenGraphics("EGAGRAPH.C3D", "EGAHEAD.C3D", "EGADICT.C3D")
 	if err != nil {
@@ -175,4 +198,6 @@ func main() {
 		}
 		fmt.Println("chunk", i, len(chunk))
 	}
+	picTable, err := g.PictureTable()
+	fmt.Println(picTable)
 }
