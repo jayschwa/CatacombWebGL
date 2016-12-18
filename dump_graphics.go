@@ -4,6 +4,9 @@ import (
 	"bytes"
 	"encoding/binary"
 	"fmt"
+	"image"
+	"image/color"
+	"image/png"
 	"io"
 	"os"
 )
@@ -164,7 +167,7 @@ type Dimensions struct {
 }
 
 func (d Dimensions) String() string {
-	return fmt.Sprintf("%vx%v", d.Width*8, d.Height)
+	return fmt.Sprintf("%vx%v", d.Width, d.Height)
 }
 
 type PictureTable []Dimensions
@@ -179,25 +182,105 @@ func (g *Graphics) PictureTable() (PictureTable, error) {
 	if err != nil {
 		return nil, err
 	}
+	for i := range table {
+		table[i].Width *= 8
+	}
 	return table, nil
+}
+
+func (g *Graphics) Picture(i int) (*Picture, error) {
+	picTable, err := g.PictureTable()
+	if err != nil {
+		return nil, err
+	}
+	dims := picTable[i-5]
+	chunk, err := g.Chunk(i)
+	if err != nil {
+		return nil, err
+	}
+	return &Picture{chunk, dims}, nil
+}
+
+type Picture struct {
+	data []byte
+	dims Dimensions
+}
+
+var Magenta = color.RGBA{0xAA, 0x00, 0xAA, 0xFF}
+
+func (p *Picture) At(x, y int) color.Color {
+	planeSize := int(p.dims.Width*p.dims.Height) / 8
+	if len(p.data) / planeSize < 4 {
+		return color.Gray{}
+	}
+
+	planes := make([][]byte, 4)
+	for i := range planes {
+		start := i * planeSize
+		end := start + planeSize
+		planes[i] = p.data[start:end]
+	}
+	pos := x + y*int(p.dims.Width)
+	readBit := func(plane int) bool {
+		byte := planes[plane][pos/8]
+		shift := uint(7 - pos%8)
+		return (byte>>shift)&0x01 != 0
+	}
+	intense := readBit(3)
+	readColor := func(plane int) byte {
+		if readBit(plane) {
+			if intense {
+				return 0xFF
+			} else {
+				return 0xAA
+			}
+		} else {
+			if intense {
+				return 0x55
+			} else {
+				return 0x00
+			}
+		}
+	}
+	c := color.RGBA{
+		R: readColor(2),
+		G: readColor(1),
+		B: readColor(0),
+		A: 0xFF,
+	}
+	if c == Magenta {
+		c.A = 0x00
+	}
+	return c
+}
+
+func (p *Picture) Bounds() image.Rectangle {
+	return image.Rectangle{
+		Max: image.Point{int(p.dims.Width), int(p.dims.Height)},
+	}
+}
+
+func (p *Picture) ColorModel() color.Model {
+	return color.RGBAModel
 }
 
 func main() {
 	g, err := OpenGraphics("EGAGRAPH.C3D", "EGAHEAD.C3D", "EGADICT.C3D")
 	if err != nil {
-		fmt.Println(err)
+		panic(err)
 	}
-	for i := 0; i <= 162; i++ {
-		chunk, err := g.Chunk(i)
+	for i := 21; i < 160; i++ {
+		pic, err := g.Picture(i)
+		fmt.Println("picture", i)
 		if err != nil {
-			fmt.Println("chunk", i, err)
-			fmt.Println("header", g.header[i])
-		}
-		if chunk == nil {
+			fmt.Println(err)
 			continue
 		}
-		fmt.Println("chunk", i, len(chunk))
+		f, err := os.Create(fmt.Sprintf("pictures/%v.png", i))
+		if err != nil {
+			panic(err)
+		}
+		png.Encode(f, pic)
+		f.Close()
 	}
-	picTable, err := g.PictureTable()
-	fmt.Println(picTable)
 }
