@@ -1,13 +1,59 @@
 <html>
-<body>
-<pre id="map">
-</pre>
-</body>
+	<head>
+		<title>My first three.js app</title>
+		<style>
+			body { margin: 0; }
+			canvas { width: 100%; height: 100% }
+		</style>
+	</head>
+	<body>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r83/three.min.js" integrity="sha256-9ytKBXG7+A+edjlxLzfzHGhMleDxCukt+KYzxDCZ/zI=" crossorigin="anonymous"></script>
+		<script>
+			var scene = new THREE.Scene();
+			var camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.01, 256);
+
+			var renderer = new THREE.WebGLRenderer();
+			renderer.setSize(window.innerWidth, window.innerHeight);
+			document.body.appendChild(renderer.domElement);
+
+			var geometry = new THREE.PlaneBufferGeometry(40, 28, 40, 28);
+			var material = new THREE.MeshBasicMaterial({color: 0x555555, wireframe: true});
+			var plane = new THREE.Mesh(geometry, material);
+			plane.position.x = 19.5;
+			plane.position.y = -13.5;
+			plane.position.z = -0.5;
+			scene.add(plane);
+
+
+			var texture = new THREE.TextureLoader().load('pictures/140.png');
+			texture.magFilter = THREE.NearestFilter;
+			texture.minFilter = THREE.LinearMipMapLinearFilter;
+
+			var geometry = new THREE.BoxGeometry(1, 1, 1);
+			var material = new THREE.MeshBasicMaterial({map: texture});
+			var cube = new THREE.Mesh(geometry, material);
+			scene.add(cube);
+
+			camera.up.set(0, 0, 1);
+			camera.position.x = 3;
+			camera.position.y = -2;
+			camera.lookAt(cube.position);
+
+
+			var render = function() {
+				requestAnimationFrame(render);
+				renderer.render(scene, camera);
+			};
+
+			render();
+		</script>
+	</body>
+</html>
 <script>
 function fetchAndDrawMap() {
 	fetch("maps/0_Approach.c3dmap")
 	.then(function(response) {
-		return response.arrayBuffer();
+		return response.arrayBuffer()
 	})
 	.then(function(buffer) {
 		drawMap(new Uint8Array(buffer))
@@ -43,6 +89,5 @@ function drawMap(bytes) {
 		container.innerText += "\n"
 	}
 }
-fetchAndDrawMap()
 </script>
 </html>
