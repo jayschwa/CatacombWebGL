@@ -5,6 +5,7 @@ import (
 	"encoding/binary"
 	"fmt"
 	"io/ioutil"
+	"strings"
 )
 
 type MapHeader struct {
@@ -127,7 +128,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	for _, m := range maps {
+	for mn, m := range maps {
 		fmt.Println(m.Name(), m.Width, "x", m.Height)
 		var planes [3][]byte
 		for i := 0; i < 3; i += 2 {
@@ -156,6 +157,18 @@ func main() {
 				}
 				planes[i][k] = planeWords[k*2] // condense down to bytes - high byte is never used
 			}
+		}
+
+		// Dump uncompressed plane 0 to file, prefixed with width and height bytes
+		file_bytes := make([]byte, len(planes[0])+2)
+		file_bytes[0] = byte(m.Width)
+		file_bytes[1] = byte(m.Height)
+		copy(file_bytes[2:], planes[0])
+		filename := strings.Replace(m.Name(), " ", "_", -1)
+		filename = fmt.Sprintf("maps/%v_%v.c3dmap", mn, filename)
+		err = ioutil.WriteFile(filename, file_bytes, 0777)
+		if err != nil {
+			panic(err)
 		}
 
 		// Draw text map
