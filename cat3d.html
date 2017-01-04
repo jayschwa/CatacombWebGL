@@ -25,18 +25,94 @@
 			scene.add(plane);
 
 
+			var geometry = new THREE.BufferGeometry();
+			// create a simple square shape. We duplicate the top left and bottom right
+			// vertices because each vertex needs to appear once per triangle.
+			var vertices = new Float32Array([
+				// East face
+				0.5, -0.5, 0.5,
+				0.5, -0.5, -0.5,
+				0.5, 0.5, -0.5,
+				0.5, -0.5, 0.5,
+				0.5, 0.5, -0.5,
+				0.5, 0.5, 0.5,
+
+				// North face
+				0.5, 0.5, 0.5,
+				0.5, 0.5, -0.5,
+				-0.5, 0.5, -0.5,
+				0.5, 0.5, 0.5,
+				-0.5, 0.5, -0.5,
+				-0.5, 0.5, 0.5,
+
+				// West face
+				-0.5, 0.5, 0.5,
+				-0.5, 0.5, -0.5,
+				-0.5, -0.5, -0.5,
+				-0.5, 0.5, 0.5,
+				-0.5, -0.5, -0.5,
+				-0.5, -0.5, 0.5,
+
+				// South face
+				-0.5, -0.5, 0.5,
+				-0.5, -0.5, -0.5,
+				0.5, -0.5, -0.5,
+				-0.5, -0.5, 0.5,
+				0.5, -0.5, -0.5,
+				0.5, -0.5, 0.5
+			]);
+
+			var uvs = new Float32Array([
+				// East face
+				0, 1,
+				0, 0,
+				1, 0,
+				0, 1,
+				1, 0,
+				1, 1,
+
+				// North face
+				0, 1,
+				0, 0,
+				1, 0,
+				0, 1,
+				1, 0,
+				1, 1,
+
+				// West face
+				0, 1,
+				0, 0,
+				1, 0,
+				0, 1,
+				1, 0,
+				1, 1,
+
+				// South face
+				0, 1,
+				0, 0,
+				1, 0,
+				0, 1,
+				1, 0,
+				1, 1
+			])
+
+			// itemSize = 3 because there are 3 values (components) per vertex
+			geometry.addAttribute('position', new THREE.BufferAttribute(vertices, 3));
+			geometry.addAttribute('uv', new THREE.BufferAttribute(uvs, 2));
+
+
 			var texture = new THREE.TextureLoader().load('pictures/140.png');
 			texture.magFilter = THREE.NearestFilter;
 			texture.minFilter = THREE.LinearMipMapLinearFilter;
 
-			var geometry = new THREE.BoxGeometry(1, 1, 1);
 			var material = new THREE.MeshBasicMaterial({map: texture});
 			var cube = new THREE.Mesh(geometry, material);
+			cube.position.set(1, -1, 0);
 			scene.add(cube);
 
 			camera.up.set(0, 0, 1);
-			camera.position.x = 3;
-			camera.position.y = -2;
+			camera.position.x = -1;
+			camera.position.y = 1;
 			camera.lookAt(cube.position);
 
 
