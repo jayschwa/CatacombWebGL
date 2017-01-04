@@ -17,13 +17,18 @@ function drawMap(bytes) {
 	let container = document.getElementById("map")
 	let width = bytes[0]
 	let height = bytes[1]
-	let plane = bytes.slice(2)
+	let size = width * height
+	let layout = bytes.slice(2, size+2)
+	let entities = bytes.slice(size+2)
 	for (h = 0; h < height; h++) {
 		for (w = 0; w < width; w++) {
 			let idx = h * width + w
-			var b = plane[idx]
+			var b = layout[idx]
 			if (b > 0x20) {
 				b = 0
+			}
+			if (!b) {
+				b = entities[idx]
 			}
 			if (b) {
 				var t = b.toString(16).toUpperCase()

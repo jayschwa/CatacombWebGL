@@ -5,6 +5,7 @@ import (
 	"encoding/binary"
 	"fmt"
 	"io/ioutil"
+	"os"
 	"strings"
 )
 
@@ -159,17 +160,17 @@ func main() {
 			}
 		}
 
-		// Dump uncompressed plane 0 to file, prefixed with width and height bytes
-		file_bytes := make([]byte, len(planes[0])+2)
-		file_bytes[0] = byte(m.Width)
-		file_bytes[1] = byte(m.Height)
-		copy(file_bytes[2:], planes[0])
+		// Write width, height, plane 0, and plane 2 to standalone file
 		filename := strings.Replace(m.Name(), " ", "_", -1)
 		filename = fmt.Sprintf("maps/%v_%v.c3dmap", mn, filename)
-		err = ioutil.WriteFile(filename, file_bytes, 0777)
+		outfile, err := os.Create(filename)
 		if err != nil {
 			panic(err)
 		}
+		outfile.Write([]byte{byte(m.Width), byte(m.Height)})
+		outfile.Write(planes[0])
+		outfile.Write(planes[2])
+		outfile.Close()
 
 		// Draw text map
 		for h := 0; h < int(m.Height); h++ {
