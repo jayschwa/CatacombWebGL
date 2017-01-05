@@ -48,15 +48,11 @@
 				0.5, -0.5, 0.5,
 				0.5, -0.5, -0.5,
 				0.5, 0.5, -0.5,
-				0.5, -0.5, 0.5,
-				0.5, 0.5, -0.5,
 				0.5, 0.5, 0.5,
 
 				// North face
 				0.5, 0.5, 0.5,
 				0.5, 0.5, -0.5,
-				-0.5, 0.5, -0.5,
-				0.5, 0.5, 0.5,
 				-0.5, 0.5, -0.5,
 				-0.5, 0.5, 0.5,
 
@@ -64,33 +60,32 @@
 				-0.5, 0.5, 0.5,
 				-0.5, 0.5, -0.5,
 				-0.5, -0.5, -0.5,
-				-0.5, 0.5, 0.5,
-				-0.5, -0.5, -0.5,
 				-0.5, -0.5, 0.5,
 
 				// South face
 				-0.5, -0.5, 0.5,
 				-0.5, -0.5, -0.5,
 				0.5, -0.5, -0.5,
-				-0.5, -0.5, 0.5,
-				0.5, -0.5, -0.5,
 				0.5, -0.5, 0.5
 			]);
+
+			var indices = new Uint8Array([
+				0, 1, 2, 0, 2, 3,
+				4, 5, 6, 4, 6, 7,
+				8, 9, 10, 8, 10, 11,
+				12, 13, 14, 12, 14, 15
+			])
 
 			var uvs = new Float32Array([
 				// East face
 				0.0, 1,
 				0.0, 0,
 				0.5, 0,
-				0.0, 1,
-				0.5, 0,
 				0.5, 1,
 
 				// North face
 				0.5, 1,
 				0.5, 0,
-				1.0, 0,
-				0.5, 1,
 				1.0, 0,
 				1.0, 1,
 
@@ -98,21 +93,18 @@
 				0.0, 1,
 				0.0, 0,
 				0.5, 0,
-				0.0, 1,
-				0.5, 0,
 				0.5, 1,
 
 				// South face
 				0.5, 1,
 				0.5, 0,
 				1.0, 0,
-				0.5, 1,
-				1.0, 0,
 				1.0, 1
 			])
 
 			// itemSize = 3 because there are 3 values (components) per vertex
 			geometry.addAttribute('position', new THREE.BufferAttribute(vertices, 3));
+			geometry.addAttribute('index', new THREE.BufferAttribute(indices, 1))
 			geometry.addAttribute('uv', new THREE.BufferAttribute(uvs, 2));
 
 			for (wallType of wallTypes) {
