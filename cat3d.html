@@ -12,6 +12,15 @@
 <script src="FirstPersonControls.js"></script>
 <script>
 
+THREE.Vector3.prototype.copy = function(v) {
+	this.x = v.x
+	this.y = v.y
+	if (v.isVector3) {
+		this.z = v.z
+	}
+	return this
+}
+
 let wallTypes = [
 	{id: 1, name: "stone"},
 	{id: 2, name: "slime"},
@@ -37,7 +46,7 @@ var geometry = new THREE.PlaneBufferGeometry(40, 28, 40, 28);
 var material = new THREE.MeshBasicMaterial({color: 0x555555});
 var plane = new THREE.Mesh(geometry, material);
 plane.position.x = 19.5;
-plane.position.y = -13.5;
+plane.position.y = 13.5;
 plane.position.z = -0.5;
 scene.add(plane);
 
@@ -124,8 +133,20 @@ var render = function() {
 	renderer.render(scene, camera);
 };
 
+const PLAYER_START_NORTH = 0x01
+const PLAYER_START_EAST = 0x02
+const PLAYER_START_SOUTH = 0x03
+const PLAYER_START_WEST = 0x04
+const PLAYER_START_SET = new Set([PLAYER_START_NORTH, PLAYER_START_EAST, PLAYER_START_SOUTH, PLAYER_START_WEST])
+
+const TELEPORTER_A = 0x1F
+const TELEPORTER_B = 0x20
+const TELEPORTER_C = 0x21
+const TELEPORTER_SET = new Set([TELEPORTER_A, TELEPORTER_B, TELEPORTER_C])
+
 class Tile {
-	constructor(index, position, layout, entity) {
+	constructor(map, index, position, layout, entity) {
+		this.map = map
 		this.index = index
 		this.position = position
 		this.layout = layout
@@ -138,37 +159,38 @@ class Tile {
 	}
 }
 
+function isStartOrTeleport(tile) {
+	return PLAYER_START_SET.has(tile.entity) || TELEPORTER_SET.has(tile.entity)
+}
+
 class Map {
 	constructor(bytes) {
 		this.width = bytes[0]
 		this.height = bytes[1]
-		let size = this.width * this.height
-		this.layout = bytes.slice(2, size + 2)
-		this.entities = bytes.slice(size + 2)
+		this.layout = bytes.slice(2, this.size() + 2)
+		this.entities = bytes.slice(this.size() + 2)
 	}
 
 	positionAt(index) {
 		let x = index % this.width
-		let y = Math.floor(index / this.width)
-		return new THREE.Vector3(x, -y, 0)
+		let y = this.height - Math.floor(index / this.width)
+		return new THREE.Vector2(x, y)
+	}
+
+	size() {
+		return this.width * this.height
 	}
 
 	tileAt(index) {
-		if (index < 0 || index >= this.width * this.height) {
-			return null
-		}
-		return new Tile(index, this.positionAt(index), this.layout[index], this.entities[index])
+		return new Tile(this, index, this.positionAt(index), this.layout[index], this.entities[index])
 	}
 
-	[Symbol.iterator]() {
-		var index = 0
-		let map = this
-		return {
-			next: function() {
-				let tile = map.tileAt(index++)
-				return {value: tile, done: tile == null}
-			}
+	tiles() {
+		const tiles = []
+		for (let i = 0; i < this.size(); i++) {
+			tiles.push(this.tileAt(i))
 		}
+		return tiles
 	}
 }
 
@@ -178,13 +200,25 @@ function fetchMapAndRender() {
 		return response.arrayBuffer()
 	})
 	.then(function(buffer) {
-		let map = new Map(new Uint8Array(buffer))
+		const map = new Map(new Uint8Array(buffer))
 		addWallCubes(map, scene)
 		render()
 	});
 }
+
+function setupWallGeometry(map, scene) {
+	const visited = Array(map.size()).fill(false)
+	const queue = map.tiles().filter(isStartOrTeleport)
+	queue.forEach(tile => visited[tile.index] = true)
+	while (queue.length) {
+		const tile = queue.shift()
+		// add wall geometry
+		// for each adjacent, non-wall, and unvisited tile, enqueue
+	}
+}
+
 function addWallCubes(map, scene) {
-	for (tile of map) {
+	for (tile of map.tiles()) {
 		if (tile.isWall()) {
 			let b = tile.layout - 1
 			let wall = wallTypes[b].mesh.clone()
@@ -192,14 +226,14 @@ function addWallCubes(map, scene) {
 			scene.add(wall)
 		}
 		let e = tile.entity
-		if (1 <= e && e <= 4) {
+		if (PLAYER_START_SET.has(tile.entity)) {
 			camera.position.copy(tile.position)
 			var target = camera.position.clone()
-			switch (e) {
-				case 1: target.y += 1; break
-				case 2: target.x += 1; break
-				case 3: target.y -= 1; break
-				case 4: target.x -= 1; break
+			switch (tile.entity) {
+				case PLAYER_START_NORTH: target.y += 1; break
+				case PLAYER_START_EAST: target.x += 1; break
+				case PLAYER_START_SOUTH: target.y -= 1; break
+				case PLAYER_START_WEST: target.x -= 1; break
 			}
 			camera.lookAt(target)
 		}
