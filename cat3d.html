@@ -124,50 +124,84 @@ var render = function() {
 	renderer.render(scene, camera);
 };
 
+class Tile {
+	constructor(index, position, layout, entity) {
+		this.index = index
+		this.position = position
+		this.layout = layout
+		this.entity = entity
+	}
+
+	isWall() {
+		let b = this.layout - 1
+		return 0 <= b && b < wallTypes.length
+	}
+}
+
+class Map {
+	constructor(bytes) {
+		this.width = bytes[0]
+		this.height = bytes[1]
+		let size = this.width * this.height
+		this.layout = bytes.slice(2, size + 2)
+		this.entities = bytes.slice(size + 2)
+	}
+
+	positionAt(index) {
+		let x = index % this.width
+		let y = Math.floor(index / this.width)
+		return new THREE.Vector3(x, -y, 0)
+	}
+
+	tileAt(index) {
+		if (index < 0 || index >= this.width * this.height) {
+			return null
+		}
+		return new Tile(index, this.positionAt(index), this.layout[index], this.entities[index])
+	}
+
+	[Symbol.iterator]() {
+		var index = 0
+		let map = this
+		return {
+			next: function() {
+				let tile = map.tileAt(index++)
+				return {value: tile, done: tile == null}
+			}
+		}
+	}
+}
+
 function fetchMapAndRender() {
 	fetch("maps/13_Warrens.c3dmap")
 	.then(function(response) {
 		return response.arrayBuffer()
 	})
 	.then(function(buffer) {
-		let bytes = new Uint8Array(buffer)
-		let width = bytes[0]
-		let height = bytes[1]
-		let size = width * height
-		let layout = bytes.slice(2, size+2)
-		let entities = bytes.slice(size+2)
-		let map = {
-			width: width,
-			height: height,
-			layout: layout,
-			entities: entities
-		}
+		let map = new Map(new Uint8Array(buffer))
 		addWallCubes(map, scene)
 		render()
 	});
 }
 function addWallCubes(map, scene) {
-	for (h = 0; h < map.height; h++) {
-		for (w = 0; w < map.width; w++) {
-			let idx = h * map.width + w
-			let b = map.layout[idx] - 1
-			if (0 <= b && b < wallTypes.length) {
-				let wall = wallTypes[b].mesh.clone()
-				wall.position.set(w, -h, 0)
-				scene.add(wall)
+	for (tile of map) {
+		if (tile.isWall()) {
+			let b = tile.layout - 1
+			let wall = wallTypes[b].mesh.clone()
+			wall.position.copy(tile.position)
+			scene.add(wall)
+		}
+		let e = tile.entity
+		if (1 <= e && e <= 4) {
+			camera.position.copy(tile.position)
+			var target = camera.position.clone()
+			switch (e) {
+				case 1: target.y += 1; break
+				case 2: target.x += 1; break
+				case 3: target.y -= 1; break
+				case 4: target.x -= 1; break
 			}
-			let e = map.entities[idx]
-			if (1 <= e && e <= 4) {
-				camera.position.set(w, -h, 0)
-				var target = camera.position.clone()
-				switch (e) {
-					case 1: target.y += 1; break
-					case 2: target.x += 1; break
-					case 3: target.y -= 1; break
-					case 4: target.x -= 1; break
-				}
-				camera.lookAt(target)
-			}
+			camera.lookAt(target)
 		}
 	}
 	controls = new THREE.FirstPersonControls(camera, target)
