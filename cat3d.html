@@ -64,36 +64,36 @@
 
 			var uvs = new Float32Array([
 				// East face
-				0, 1,
-				0, 0,
-				1, 0,
-				0, 1,
-				1, 0,
-				1, 1,
+				0.0, 1,
+				0.0, 0,
+				0.5, 0,
+				0.0, 0,
+				0.5, 0,
+				0.5, 1,
 
 				// North face
-				0, 1,
-				0, 0,
-				1, 0,
-				0, 1,
-				1, 0,
-				1, 1,
+				0.5, 1,
+				0.5, 0,
+				1.0, 0,
+				0.5, 1,
+				1.0, 0,
+				1.0, 1,
 
 				// West face
-				0, 1,
-				0, 0,
-				1, 0,
-				0, 1,
-				1, 0,
-				1, 1,
+				0.0, 1,
+				0.0, 0,
+				0.5, 0,
+				0.0, 1,
+				0.5, 0,
+				0.5, 1,
 
 				// South face
-				0, 1,
-				0, 0,
-				1, 0,
-				0, 1,
-				1, 0,
-				1, 1
+				0.5, 1,
+				0.5, 0,
+				1.0, 0,
+				0.5, 1,
+				1.0, 0,
+				1.0, 1
 			])
 
 			// itemSize = 3 because there are 3 values (components) per vertex
@@ -101,7 +101,7 @@
 			geometry.addAttribute('uv', new THREE.BufferAttribute(uvs, 2));
 
 
-			var texture = new THREE.TextureLoader().load('pictures/140.png');
+			var texture = new THREE.TextureLoader().load('pictures/slime.png');
 			texture.magFilter = THREE.NearestFilter;
 			texture.minFilter = THREE.LinearMipMapLinearFilter;
 
