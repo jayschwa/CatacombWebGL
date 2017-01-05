@@ -4,10 +4,10 @@
  * @author paulirish / http://paulirish.com/
  */
 
-THREE.FirstPersonControls = function ( object, domElement ) {
+THREE.FirstPersonControls = function ( object, target, domElement ) {
 
 	this.object = object;
-	this.target = new THREE.Vector3( 0, 0, 0 );
+	this.target = target;
 
 	this.domElement = ( domElement !== undefined ) ? domElement : document;
 

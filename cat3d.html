@@ -24,12 +24,10 @@
 			var scene = new THREE.Scene();
 			var camera = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight, 0.01, 256);
 			camera.up.set(0, 0, 1)
-			camera.position.set(5, -5, 0)
-			var controls = new THREE.FirstPersonControls(camera)
-			controls.lookSpeed = 0.05
-			controls.lookVertical = false
 
-			var renderer = new THREE.WebGLRenderer();
+			var controls = null
+
+			var renderer = new THREE.WebGLRenderer({antialias: true});
 			renderer.setSize(window.innerWidth, window.innerHeight);
 			document.body.appendChild(renderer.domElement);
 
@@ -120,19 +118,20 @@
 			for (wallType of wallTypes) {
 				var texture = new THREE.TextureLoader().load("walls/" + wallType.name + ".png");
 				texture.magFilter = THREE.NearestFilter;
-				texture.minFilter = THREE.NearestFilter;
+				texture.minFilter = THREE.LinearMipMapLinearFilter;
+				texture.anisotropy = renderer.getMaxAnisotropy()
 				var material = new THREE.MeshBasicMaterial({map: texture});
 				wallType.mesh = new THREE.Mesh(geometry, material);
 			}
 
 			var render = function() {
 				requestAnimationFrame(render);
-				controls.update(clock.getDelta())
+				//controls.update(clock.getDelta())
 				renderer.render(scene, camera);
 			};
 
 			function fetchMapAndRender() {
-				fetch("maps/0_Approach.c3dmap")
+				fetch("maps/13_Warrens.c3dmap")
 				.then(function(response) {
 					return response.arrayBuffer()
 				})
@@ -159,9 +158,20 @@
 						let e = entities[idx]
 						if (1 <= e && e <= 4) {
 							camera.position.set(w, -h, 0)
+							var target = camera.position.clone()
+							switch (e) {
+								case 1: target.y += 1; break
+								case 2: target.x += 1; break
+								case 3: target.y -= 1; break
+								case 4: target.x -= 1; break
+							}
+							camera.lookAt(target)
 						}
 					}
 				}
+				controls = new THREE.FirstPersonControls(camera, target)
+				controls.lookSpeed = 0.05
+				controls.lookVertical = false
 				render()
 			}
 			fetchMapAndRender()
