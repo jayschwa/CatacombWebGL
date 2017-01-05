@@ -10,10 +10,21 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r83/three.min.js" integrity="sha256-9ytKBXG7+A+edjlxLzfzHGhMleDxCukt+KYzxDCZ/zI=" crossorigin="anonymous"></script>
 		<script src="FirstPersonControls.js"></script>
 		<script>
+			let wallTypes = [
+				{id: 1, name: "stone"},
+				{id: 2, name: "slime"},
+				{id: 3, name: "white"},
+				{id: 4, name: "blood"},
+				{id: 5, name: "tar"},
+				{id: 6, name: "gold"},
+				{id: 7, name: "hell"}
+			]
+
 			var clock = new THREE.Clock();
 			var scene = new THREE.Scene();
 			var camera = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight, 0.01, 256);
 			camera.up.set(0, 0, 1)
+			camera.position.set(5, -5, 0)
 			var controls = new THREE.FirstPersonControls(camera)
 			controls.lookSpeed = 0.05
 			controls.lookVertical = false
@@ -23,7 +34,7 @@
 			document.body.appendChild(renderer.domElement);
 
 			var geometry = new THREE.PlaneBufferGeometry(40, 28, 40, 28);
-			var material = new THREE.MeshBasicMaterial({color: 0x555555, wireframe: true});
+			var material = new THREE.MeshBasicMaterial({color: 0x555555});
 			var plane = new THREE.Mesh(geometry, material);
 			plane.position.x = 19.5;
 			plane.position.y = -13.5;
@@ -106,15 +117,13 @@
 			geometry.addAttribute('position', new THREE.BufferAttribute(vertices, 3));
 			geometry.addAttribute('uv', new THREE.BufferAttribute(uvs, 2));
 
-
-			var texture = new THREE.TextureLoader().load('walls/slime.png');
-			texture.magFilter = THREE.NearestFilter;
-			texture.minFilter = THREE.NearestFilter;
-
-			var material = new THREE.MeshBasicMaterial({map: texture});
-			var cube = new THREE.Mesh(geometry, material);
-			cube.position.set(1, -1, 0);
-			scene.add(cube);
+			for (wallType of wallTypes) {
+				var texture = new THREE.TextureLoader().load("walls/" + wallType.name + ".png");
+				texture.magFilter = THREE.NearestFilter;
+				texture.minFilter = THREE.NearestFilter;
+				var material = new THREE.MeshBasicMaterial({map: texture});
+				wallType.mesh = new THREE.Mesh(geometry, material);
+			}
 
 			var render = function() {
 				requestAnimationFrame(render);
@@ -122,49 +131,44 @@
 				renderer.render(scene, camera);
 			};
 
-			render();
+			function fetchMapAndRender() {
+				fetch("maps/0_Approach.c3dmap")
+				.then(function(response) {
+					return response.arrayBuffer()
+				})
+				.then(function(buffer) {
+					drawMap(new Uint8Array(buffer))
+				});
+			}
+			function drawMap(bytes) {
+				let container = document.getElementById("map")
+				let width = bytes[0]
+				let height = bytes[1]
+				let size = width * height
+				let layout = bytes.slice(2, size+2)
+				let entities = bytes.slice(size+2)
+				for (h = 0; h < height; h++) {
+					for (w = 0; w < width; w++) {
+						let idx = h * width + w
+						let b = layout[idx] - 1
+						if (0 <= b && b < wallTypes.length) {
+							let wall = wallTypes[b].mesh.clone()
+							wall.position.set(w, -h, 0)
+							scene.add(wall)
+						}
+						let e = entities[idx]
+						if (1 <= e && e <= 4) {
+							camera.position.set(w, -h, 0)
+						}
+					}
+				}
+				render()
+			}
+			fetchMapAndRender()
 		</script>
 	</body>
 </html>
 <script>
-function fetchAndDrawMap() {
-	fetch("maps/0_Approach.c3dmap")
-	.then(function(response) {
-		return response.arrayBuffer()
-	})
-	.then(function(buffer) {
-		drawMap(new Uint8Array(buffer))
-	});
-}
-function drawMap(bytes) {
-	let container = document.getElementById("map")
-	let width = bytes[0]
-	let height = bytes[1]
-	let size = width * height
-	let layout = bytes.slice(2, size+2)
-	let entities = bytes.slice(size+2)
-	for (h = 0; h < height; h++) {
-		for (w = 0; w < width; w++) {
-			let idx = h * width + w
-			var b = layout[idx]
-			if (b > 0x20) {
-				b = 0
-			}
-			if (!b) {
-				b = entities[idx]
-			}
-			if (b) {
-				var t = b.toString(16).toUpperCase()
-				if (t.length < 2) {
-					t = "0" + t
-				}
-				container.innerText += t
-			} else {
-				container.innerText += "  "
-			}
-		}
-		container.innerText += "\n"
-	}
-}
+
 </script>
 </html>
