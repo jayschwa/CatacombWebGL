@@ -8,9 +8,15 @@
 	</head>
 	<body>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r83/three.min.js" integrity="sha256-9ytKBXG7+A+edjlxLzfzHGhMleDxCukt+KYzxDCZ/zI=" crossorigin="anonymous"></script>
+		<script src="FirstPersonControls.js"></script>
 		<script>
+			var clock = new THREE.Clock();
 			var scene = new THREE.Scene();
-			var camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.01, 256);
+			var camera = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight, 0.01, 256);
+			camera.up.set(0, 0, 1)
+			var controls = new THREE.FirstPersonControls(camera)
+			controls.lookSpeed = 0.05
+			controls.lookVertical = false
 
 			var renderer = new THREE.WebGLRenderer();
 			renderer.setSize(window.innerWidth, window.innerHeight);
@@ -103,21 +109,16 @@
 
 			var texture = new THREE.TextureLoader().load('walls/slime.png');
 			texture.magFilter = THREE.NearestFilter;
-			texture.minFilter = THREE.LinearMipMapLinearFilter;
+			texture.minFilter = THREE.NearestFilter;
 
 			var material = new THREE.MeshBasicMaterial({map: texture});
 			var cube = new THREE.Mesh(geometry, material);
 			cube.position.set(1, -1, 0);
 			scene.add(cube);
 
-			camera.up.set(0, 0, 1);
-			camera.position.x = 3;
-			camera.position.y = -3;
-			camera.lookAt(cube.position);
-
-
 			var render = function() {
 				requestAnimationFrame(render);
+				controls.update(clock.getDelta())
 				renderer.render(scene, camera);
 			};
 
