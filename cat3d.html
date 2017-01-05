@@ -104,7 +104,7 @@
 
 			// itemSize = 3 because there are 3 values (components) per vertex
 			geometry.addAttribute('position', new THREE.BufferAttribute(vertices, 3));
-			geometry.addAttribute('index', new THREE.BufferAttribute(indices, 1))
+			geometry.setIndex(new THREE.BufferAttribute(indices, 1))
 			geometry.addAttribute('uv', new THREE.BufferAttribute(uvs, 2));
 
 			for (wallType of wallTypes) {
