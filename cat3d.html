@@ -140,11 +140,11 @@
 						layout: layout,
 						entities: entities
 					}
-					drawMap(map)
+					addWallCubes(map, scene)
+					render()
 				});
 			}
-			function drawMap(map) {
-				let container = document.getElementById("map")
+			function addWallCubes(map, scene) {
 				for (h = 0; h < map.height; h++) {
 					for (w = 0; w < map.width; w++) {
 						let idx = h * map.width + w
@@ -171,7 +171,6 @@
 				controls = new THREE.FirstPersonControls(camera, target)
 				controls.lookSpeed = 0.05
 				controls.lookVertical = false
-				render()
 			}
 			fetchMapAndRender()
 		</script>
