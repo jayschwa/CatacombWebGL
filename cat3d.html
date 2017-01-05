@@ -128,26 +128,33 @@
 					return response.arrayBuffer()
 				})
 				.then(function(buffer) {
-					drawMap(new Uint8Array(buffer))
+					let bytes = new Uint8Array(buffer)
+					let width = bytes[0]
+					let height = bytes[1]
+					let size = width * height
+					let layout = bytes.slice(2, size+2)
+					let entities = bytes.slice(size+2)
+					let map = {
+						width: width,
+						height: height,
+						layout: layout,
+						entities: entities
+					}
+					drawMap(map)
 				});
 			}
-			function drawMap(bytes) {
+			function drawMap(map) {
 				let container = document.getElementById("map")
-				let width = bytes[0]
-				let height = bytes[1]
-				let size = width * height
-				let layout = bytes.slice(2, size+2)
-				let entities = bytes.slice(size+2)
-				for (h = 0; h < height; h++) {
-					for (w = 0; w < width; w++) {
-						let idx = h * width + w
-						let b = layout[idx] - 1
+				for (h = 0; h < map.height; h++) {
+					for (w = 0; w < map.width; w++) {
+						let idx = h * map.width + w
+						let b = map.layout[idx] - 1
 						if (0 <= b && b < wallTypes.length) {
 							let wall = wallTypes[b].mesh.clone()
 							wall.position.set(w, -h, 0)
 							scene.add(wall)
 						}
-						let e = entities[idx]
+						let e = map.entities[idx]
 						if (1 <= e && e <= 4) {
 							camera.position.set(w, -h, 0)
 							var target = camera.position.clone()
