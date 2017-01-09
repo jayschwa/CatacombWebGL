@@ -21,15 +21,20 @@ THREE.Vector3.prototype.copy = function(v) {
 	return this
 }
 
-let wallTypes = [
-	{id: 1, name: "stone"},
-	{id: 2, name: "slime"},
-	{id: 3, name: "white"},
-	{id: 4, name: "blood"},
-	{id: 5, name: "tar"},
-	{id: 6, name: "gold"},
-	{id: 7, name: "hell"}
-]
+const wallTypeMap = {
+	1: "stone",
+	2: "slime",
+	3: "white",
+	4: "blood",
+	5: "tar",
+	6: "gold",
+	7: "hell"
+}
+
+function getWallName(type, direction) {
+	const suffix = ["north", "south"].includes(direction) ? "dark" : "light"
+	return wallTypeMap[type] + "_" + suffix
+}
 
 var clock = new THREE.Clock();
 var scene = new THREE.Scene();
@@ -50,86 +55,51 @@ plane.position.y = 13.5;
 plane.position.z = -0.5;
 scene.add(plane);
 
-
-var geometry = new THREE.BufferGeometry();
-// create a simple square shape. We duplicate the top left and bottom right
-// vertices because each vertex needs to appear once per triangle.
-var vertices = new Float32Array([
-	// East face
-	0.5, -0.5, 0.5,
-	0.5, -0.5, -0.5,
-	0.5, 0.5, -0.5,
-	0.5, 0.5, 0.5,
-
-	// North face
-	0.5, 0.5, 0.5,
-	0.5, 0.5, -0.5,
-	-0.5, 0.5, -0.5,
-	-0.5, 0.5, 0.5,
-
-	// West face
-	-0.5, 0.5, 0.5,
-	-0.5, 0.5, -0.5,
-	-0.5, -0.5, -0.5,
-	-0.5, -0.5, 0.5,
-
-	// South face
-	-0.5, -0.5, 0.5,
-	-0.5, -0.5, -0.5,
-	0.5, -0.5, -0.5,
-	0.5, -0.5, 0.5
-]);
-
-var indices = new Uint8Array([
-	0, 1, 2, 0, 2, 3,
-	4, 5, 6, 4, 6, 7,
-	8, 9, 10, 8, 10, 11,
-	12, 13, 14, 12, 14, 15
-])
-
-var uvs = new Float32Array([
-	// East face
-	0.0, 1,
-	0.0, 0,
-	0.5, 0,
-	0.5, 1,
-
-	// North face
-	0.5, 1,
-	0.5, 0,
-	1.0, 0,
-	1.0, 1,
-
-	// West face
-	0.0, 1,
-	0.0, 0,
-	0.5, 0,
-	0.5, 1,
-
-	// South face
-	0.5, 1,
-	0.5, 0,
-	1.0, 0,
-	1.0, 1
-])
-
-// itemSize = 3 because there are 3 values (components) per vertex
-geometry.addAttribute('position', new THREE.BufferAttribute(vertices, 3));
-geometry.setIndex(new THREE.BufferAttribute(indices, 1))
-geometry.addAttribute('uv', new THREE.BufferAttribute(uvs, 2));
-
-for (wallType of wallTypes) {
-	var texture = new THREE.TextureLoader().load("walls/" + wallType.name + ".png");
-	texture.magFilter = THREE.NearestFilter;
-	texture.minFilter = THREE.LinearMipMapLinearFilter;
-	texture.anisotropy = renderer.getMaxAnisotropy()
-	var material = new THREE.MeshBasicMaterial({map: texture});
-	wallType.mesh = new THREE.Mesh(geometry, material);
+function createWallGeometry(position, direction) {
+	const verticesByDirection = {
+		east: [
+			0.5, -0.5, 0.5,
+			0.5, -0.5, -0.5,
+			0.5, 0.5, -0.5,
+			0.5, 0.5, 0.5
+		],
+		north: [
+			0.5, 0.5, 0.5,
+			0.5, 0.5, -0.5,
+			-0.5, 0.5, -0.5,
+			-0.5, 0.5, 0.5
+		],
+		west: [
+			-0.5, 0.5, 0.5,
+			-0.5, 0.5, -0.5,
+			-0.5, -0.5, -0.5,
+			-0.5, -0.5, 0.5
+		],
+		south: [
+			-0.5, -0.5, 0.5,
+			-0.5, -0.5, -0.5,
+			0.5, -0.5, -0.5,
+			0.5, -0.5, 0.5
+		]
+	}
+	vertices = verticesByDirection[direction]
+	for (let i = 0; i < vertices.length; i++) {
+		if (i % 3 == 0) {
+			vertices[i] += position.x
+		} else if (i % 3 == 1) {
+			vertices[i] += position.y
+		}
+	}
+	return {
+		vertices: vertices,
+		indices: [0, 1, 2, 0, 2, 3],
+		uvs: [0, 1, 0, 0, 1, 0, 1, 1]
+	}
 }
 
 var render = function() {
 	requestAnimationFrame(render);
-	//controls.update(clock.getDelta())
+	controls.update(clock.getDelta())
 	renderer.render(scene, camera);
 };
 
@@ -153,9 +123,37 @@ class Tile {
 		this.entity = entity
 	}
 
+	adjacentTiles() {
+		// TODO: Tile should not be aware of how data is laid out in Map
+		return [
+			this.index - 1,
+			this.index + 1,
+			this.index - this.map.width,
+			this.index + this.map.width
+		]
+		.filter(idx => 0 <= idx && idx < this.map.size())
+		.map(idx => this.map.tileAt(idx))
+	}
+
+	directionTo(other) {
+		const tx = this.position.x
+		const ty = this.position.y
+		const ox = other.position.x
+		const oy = other.position.y
+		if (tx < ox && ty == oy) {
+			return "east"
+		} else if (tx > ox && ty == oy) {
+			return "west"
+		} else if (ty < oy && tx == ox) {
+			return "north"
+		} else if (ty > oy && tx == ox) {
+			return "south"
+		}
+		return null
+	}
+
 	isWall() {
-		let b = this.layout - 1
-		return 0 <= b && b < wallTypes.length
+		return wallTypeMap[this.layout] !== undefined
 	}
 }
 
@@ -163,7 +161,7 @@ function isStartOrTeleport(tile) {
 	return PLAYER_START_SET.has(tile.entity) || TELEPORTER_SET.has(tile.entity)
 }
 
-class Map {
+class TileMap {
 	constructor(bytes) {
 		this.width = bytes[0]
 		this.height = bytes[1]
@@ -195,36 +193,79 @@ class Map {
 }
 
 function fetchMapAndRender() {
-	fetch("maps/13_Warrens.c3dmap")
+	fetch("maps/6_Tower_2.c3dmap")
 	.then(function(response) {
 		return response.arrayBuffer()
 	})
 	.then(function(buffer) {
-		const map = new Map(new Uint8Array(buffer))
-		addWallCubes(map, scene)
+		const map = new TileMap(new Uint8Array(buffer))
+		setupWallGeometry(map, scene)
+		setupPlayerSpawn(map)
+		controls = new THREE.FirstPersonControls(camera, new THREE.Vector3(0, 0, 0.5))
+		controls.lookSpeed = 0.05
+		controls.lookVertical = false
 		render()
 	});
 }
 
 function setupWallGeometry(map, scene) {
+	const wallGeometry = new Map()
 	const visited = Array(map.size()).fill(false)
 	const queue = map.tiles().filter(isStartOrTeleport)
 	queue.forEach(tile => visited[tile.index] = true)
 	while (queue.length) {
 		const tile = queue.shift()
+		const adjacent = tile.adjacentTiles()
+		const walls = adjacent.filter(t => t.isWall())
+
 		// add wall geometry
-		// for each adjacent, non-wall, and unvisited tile, enqueue
+		walls.forEach(wall => {
+			const dir = wall.directionTo(tile)
+			const name = getWallName(wall.layout, dir)
+			if (!wallGeometry.has(name)) {
+				wallGeometry.set(name, {
+					vertices: [],
+					indices: [],
+					uvs: []
+				})
+			}
+			const wg = wallGeometry.get(name)
+			const numVertices = wg.vertices.length / 3
+			const newGeometry = createWallGeometry(wall.position, dir)
+			wg.vertices = wg.vertices.concat(newGeometry.vertices)
+			wg.indices = wg.indices.concat(newGeometry.indices.map(i => numVertices + i))
+			wg.uvs = wg.uvs.concat(newGeometry.uvs)
+		})
+
+		// enqueue adjacent floor tiles that haven't been visited yet
+		const unvisited_floors = adjacent.filter(t => !t.isWall()).filter(t => !visited[t.index])
+		unvisited_floors.forEach(tile => {
+			queue.push(tile)
+			visited[tile.index] = true
+		})
 	}
+
+	// add aggregate wall geometries to scene
+	wallGeometry.forEach((geometry, name) => {
+		console.log(name)
+		console.log(geometry.vertices.length / 12)
+
+		const bufferGeometry = new THREE.BufferGeometry()
+		bufferGeometry.addAttribute('position', new THREE.BufferAttribute(new Float32Array(geometry.vertices), 3))
+		bufferGeometry.setIndex(new THREE.BufferAttribute(new Uint16Array(geometry.indices), 1))
+		bufferGeometry.addAttribute('uv', new THREE.BufferAttribute(new Float32Array(geometry.uvs), 2))
+
+		const texture = new THREE.TextureLoader().load("walls/" + name + ".png")
+		texture.magFilter = THREE.NearestFilter
+		texture.minFilter = THREE.LinearMipMapLinearFilter
+		texture.anisotropy = renderer.getMaxAnisotropy()
+		const material = new THREE.MeshBasicMaterial({map: texture})
+		scene.add(new THREE.Mesh(bufferGeometry, material))
+	})
 }
 
-function addWallCubes(map, scene) {
+function setupPlayerSpawn(map) {
 	for (tile of map.tiles()) {
-		if (tile.isWall()) {
-			let b = tile.layout - 1
-			let wall = wallTypes[b].mesh.clone()
-			wall.position.copy(tile.position)
-			scene.add(wall)
-		}
 		let e = tile.entity
 		if (PLAYER_START_SET.has(tile.entity)) {
 			camera.position.copy(tile.position)
@@ -238,9 +279,6 @@ function addWallCubes(map, scene) {
 			camera.lookAt(target)
 		}
 	}
-	controls = new THREE.FirstPersonControls(camera, target)
-	controls.lookSpeed = 0.05
-	controls.lookVertical = false
 }
 fetchMapAndRender()
 
