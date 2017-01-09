@@ -47,14 +47,6 @@ var renderer = new THREE.WebGLRenderer({antialias: true});
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
-var geometry = new THREE.PlaneBufferGeometry(40, 28, 40, 28);
-var material = new THREE.MeshBasicMaterial({color: 0x555555});
-var plane = new THREE.Mesh(geometry, material);
-plane.position.x = 19.5;
-plane.position.y = 13.5;
-plane.position.z = -0.5;
-scene.add(plane);
-
 function createWallGeometry(position, direction) {
 	const verticesByDirection = {
 		east: [
@@ -193,7 +185,7 @@ class TileMap {
 }
 
 function fetchMapAndRender() {
-	fetch("maps/6_Tower_2.c3dmap")
+	fetch("maps/18_Halls_of_Blood.c3dmap")
 	.then(function(response) {
 		return response.arrayBuffer()
 	})
@@ -209,6 +201,7 @@ function fetchMapAndRender() {
 }
 
 function setupWallGeometry(map, scene) {
+	const floorGeometry = {vertices: [], indices: []}
 	const wallGeometry = new Map()
 	const visited = Array(map.size()).fill(false)
 	const queue = map.tiles().filter(isStartOrTeleport)
@@ -217,6 +210,24 @@ function setupWallGeometry(map, scene) {
 		const tile = queue.shift()
 		const adjacent = tile.adjacentTiles()
 		const walls = adjacent.filter(t => t.isWall())
+
+		// add floor geometry
+		const fg = function(position) {
+			const x = position.x
+			const y = position.y
+			return {
+				vertices: [
+					x-0.5, y+0.5, -0.5,
+					x-0.5, y-0.5, -0.5,
+					x+0.5, y+0.5, -0.5,
+					x+0.5, y-0.5, -0.5
+				],
+				indices: [0, 1, 2, 3, 2, 1	]
+			}
+		}(tile.position)
+		const numFloorVertices = floorGeometry.vertices.length / 3
+		floorGeometry.vertices = floorGeometry.vertices.concat(fg.vertices)
+		floorGeometry.indices = floorGeometry.indices.concat(fg.indices.map(i => numFloorVertices + i))
 
 		// add wall geometry
 		walls.forEach(wall => {
@@ -245,11 +256,15 @@ function setupWallGeometry(map, scene) {
 		})
 	}
 
+	// add floor geometry to scene
+	const geometry = new THREE.BufferGeometry()
+	geometry.addAttribute('position', new THREE.BufferAttribute(new Float32Array(floorGeometry.vertices), 3))
+	geometry.setIndex(new THREE.BufferAttribute(new Uint16Array(floorGeometry.indices), 1))
+	const material = new THREE.MeshBasicMaterial({color: 0x555555})
+	scene.add(new THREE.Mesh(geometry, material))
+
 	// add aggregate wall geometries to scene
 	wallGeometry.forEach((geometry, name) => {
-		console.log(name)
-		console.log(geometry.vertices.length / 12)
-
 		const bufferGeometry = new THREE.BufferGeometry()
 		bufferGeometry.addAttribute('position', new THREE.BufferAttribute(new Float32Array(geometry.vertices), 3))
 		bufferGeometry.setIndex(new THREE.BufferAttribute(new Uint16Array(geometry.indices), 1))
