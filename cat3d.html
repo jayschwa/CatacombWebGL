@@ -272,7 +272,6 @@ function setupWallGeometry(map, scene) {
 
 		const texture = new THREE.TextureLoader().load("walls/" + name + ".png")
 		texture.magFilter = THREE.NearestFilter
-		texture.minFilter = THREE.LinearMipMapLinearFilter
 		texture.anisotropy = renderer.getMaxAnisotropy()
 		const material = new THREE.MeshBasicMaterial({map: texture})
 		scene.add(new THREE.Mesh(bufferGeometry, material))
