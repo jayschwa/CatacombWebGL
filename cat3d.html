@@ -62,8 +62,8 @@ class Player extends THREE.Object3D {
 		this.moveSpeed = 5
 		this.sprintSpeed = 10
 
-		this.moveDirection = new THREE.Vector2()
-		this.moveVelocity = new THREE.Vector2()
+		this.moveDirection = new THREE.Vector3()
+		this.moveVelocity = new THREE.Vector3()
 		this.turnDirection = 0
 
 		this.raycaster = new THREE.Raycaster()
@@ -75,7 +75,7 @@ class Player extends THREE.Object3D {
 		if (!delta) { return }
 
 		let xDist = this.moveVelocity.x * delta
-		let zDist = this.moveVelocity.y * delta
+		let zDist = this.moveVelocity.z * delta
 		if (zDist) {
 			const direction = this.getWorldDirection().multiplyScalar(Math.sign(zDist))
 			this.raycaster.set(this.position, direction)
@@ -102,8 +102,8 @@ class Player extends THREE.Object3D {
 		return this.moveVelocity.copy(this.moveDirection).normalize().multiplyScalar(speed)
 	}
 
-	moveForward(value) { this.moveDirection.y += value; this.updateVelocity() }
-	moveBackward(value) { this.moveDirection.y -= value; this.updateVelocity() }
+	moveForward(value) { this.moveDirection.z += value; this.updateVelocity() }
+	moveBackward(value) { this.moveDirection.z -= value; this.updateVelocity() }
 	moveLeft(value) { this.moveDirection.x += value; this.updateVelocity() }
 	moveRight(value) { this.moveDirection.x -= value; this.updateVelocity() }
 	sprint(value) { this.sprinting = value > 0; this.updateVelocity() }
