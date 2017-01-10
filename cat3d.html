@@ -49,9 +49,9 @@ renderer.domElement.addEventListener("click", event => {
 class Player extends THREE.Object3D {
 	constructor(camera) {
 		super()
+		this.up.set(0, 0, 1)
 		this.camera = camera
 		this.add(camera)
-		this.up.set(0, 0, 1)
 		this.moveSpeed = 2
 		this.sprintSpeed = 4
 	}
