@@ -51,7 +51,7 @@ class Player extends THREE.Object3D {
 		super()
 		this.camera = camera
 		this.add(camera)
-		camera.rotateZ(Math.PI)
+		this.up.set(0, 0, 1)
 		this.moveSpeed = 2
 		this.sprintSpeed = 4
 	}
@@ -66,10 +66,10 @@ class Player extends THREE.Object3D {
 			this.translateZ(mag * delta)
 		}
 		if (this.movingLeft) {
-			this.translateX(mag * delta)
+			this.translateX(-mag * delta)
 		}
 		if (this.movingRight) {
-			this.translateX(-mag * delta)
+			this.translateX(mag * delta)
 		}
 
 		this.lastTime = time
@@ -103,15 +103,21 @@ const binds = {
 }
 
 function onKeyDown(event) {
-	binds[event.code](true)
+	const command = binds[event.code]
+	if (command) {
+		command(true)
+	}
 }
 
 function onKeyUp(event) {
-	binds[event.code](false)
+	const command = binds[event.code]
+	if (command) {
+		command(false)
+	}
 }
 
 function onMouseMove(event) {
-	player.rotateY(event.movementX / 2000)
+	player.rotateY(-event.movementX / 2000)
 }
 
 const eventHandlers = [
@@ -309,20 +315,17 @@ function setupWallGeometry(map, scene) {
 }
 
 function setupPlayerSpawn(map) {
-	for (tile of map.tiles()) {
-		let e = tile.entity
-		if (PLAYER_START_SET.has(tile.entity)) {
-			player.position.copy(tile.position)
-			var target = player.position.clone()
-			switch (tile.entity) {
-				case PLAYER_START_NORTH: target.y += 1; break
-				case PLAYER_START_EAST: target.x += 1; break
-				case PLAYER_START_SOUTH: target.y -= 1; break
-				case PLAYER_START_WEST: target.x -= 1; break
-			}
-			player.lookAt(target)
-		}
+	const spawn = map.tiles().filter(t => PLAYER_START_SET.has(t.entity))[0]
+	player.position.copy(spawn.position)
+	const target = player.position.clone()
+	console.log(spawn.entity)
+	switch (spawn.entity) {
+		case PLAYER_START_NORTH: target.y -= 1; break
+		case PLAYER_START_EAST: target.x -= 1; break
+		case PLAYER_START_SOUTH: target.y += 1; break
+		case PLAYER_START_WEST: target.x += 1; break
 	}
+	player.lookAt(target)
 }
 fetchMapAndRender()
 
