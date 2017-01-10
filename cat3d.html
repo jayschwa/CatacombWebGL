@@ -63,43 +63,41 @@ class Player extends THREE.Object3D {
 		this.sprintSpeed = 10
 
 		this.moveDirection = new THREE.Vector3()
-		this.moveVelocity = new THREE.Vector3()
+		this.velocity = new THREE.Vector3()
 		this.turnDirection = 0
 
 		this.raycaster = new THREE.Raycaster()
 	}
 
 	update(time) {
-		const delta = time - this.lastTime
+		const timeDelta = time - this.lastTime
 		this.lastTime = time
-		if (!delta) { return }
+		if (!timeDelta) { return }
 
-		let xDist = this.moveVelocity.x * delta
-		let zDist = this.moveVelocity.z * delta
-		if (zDist) {
-			const direction = this.getWorldDirection().multiplyScalar(Math.sign(zDist))
-			this.raycaster.set(this.position, direction)
-			this.raycaster.far = this.radius + Math.abs(zDist)
-			const intersections = this.raycaster.intersectObjects(scene.children)
-			const clampedMagnitude = intersections.map(i => i.distance).reduce(Math.min, Math.abs(zDist))
-			zDist = Math.sign(zDist) * clampedMagnitude
+		if (this.turnDirection) {
+			this.rotateY(this.turnDirection * timeDelta)
+			this.updateVelocity()
 		}
-		if (xDist) {
-			const direction = this.getWorldDirection().cross(this.up).multiplyScalar(-Math.sign(xDist))
+
+		const positionDelta = this.velocity.clone().multiplyScalar(timeDelta)
+		if (positionDelta.lengthSq()) {
+			const direction = positionDelta.clone().normalize()
 			this.raycaster.set(this.position, direction)
-			this.raycaster.far = this.radius + Math.abs(xDist)
-			const intersections = this.raycaster.intersectObjects(scene.children)
-			const clampedMagnitude = intersections.map(i => i.distance).reduce(Math.min, Math.abs(xDist))
-			xDist = Math.sign(xDist) * clampedMagnitude
+			this.raycaster.far = this.radius + positionDelta.length()
+			const collisions = this.raycaster.intersectObjects(scene.children)
+			for (const collision of collisions) {
+				const excess = this.raycaster.far - collision.distance
+				positionDelta.addScaledVector(collision.face.normal, excess)
+			}
 		}
-		this.translateX(xDist)
-		this.translateZ(zDist)
-		this.rotateY(this.turnDirection * delta)
+
+		this.position.add(positionDelta)
 	}
 
 	updateVelocity() {
 		const speed = this.sprinting ? this.sprintSpeed : this.moveSpeed
-		return this.moveVelocity.copy(this.moveDirection).normalize().multiplyScalar(speed)
+		this.velocity.copy(this.moveDirection).normalize().multiplyScalar(speed)  // velocity in object space
+		return this.localToWorld(this.velocity).sub(this.position)                // velocity in world space
 	}
 
 	moveForward(value) { this.moveDirection.z += value; this.updateVelocity() }
@@ -140,6 +138,7 @@ function onKey(value) {
 
 function onMouseMove(event) {
 	player.rotateY(-event.movementX / 2000)
+	player.updateVelocity()
 }
 
 const eventHandlers = [
