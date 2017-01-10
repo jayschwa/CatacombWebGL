@@ -59,37 +59,29 @@ class Player extends THREE.Object3D {
 		this.moveSpeed = 2.5
 		this.sprintSpeed = 5
 
-		this.lastTime = 0
-		this.movingForward = false
-		this.movingBackward = false
-		this.movingLeft = false
-		this.movingRight = false
-		this.turningLeft = false
-		this.turningRight = false
+		this.moveDirection = new THREE.Vector2()
+		this.turnDirection = 0
 	}
 
 	update(time) {
 		const delta = time - this.lastTime
-		const speed = this.sprinting ? this.sprintSpeed : this.moveSpeed
-		const translation = new THREE.Vector3(
-			this.movingLeft - this.movingRight,
-			0,
-			this.movingForward - this.movingBackward
-		).normalize().multiplyScalar(speed)
-		this.translateX(translation.x * delta)
-		this.translateZ(translation.z * delta)
-		const direction = this.turningLeft - this.turningRight
-		this.rotateY(direction * delta)
 		this.lastTime = time
+		if (!delta) { return }
+
+		const speed = this.sprinting ? this.sprintSpeed : this.moveSpeed
+		const movement = this.moveDirection.clone().normalize().multiplyScalar(speed * delta)
+		this.translateX(movement.x)
+		this.translateZ(movement.y)
+		this.rotateY(this.turnDirection * delta)
 	}
 
-	moveForward(bool) { this.movingForward = bool }
-	moveBackward(bool) { this.movingBackward = bool }
-	moveLeft(bool) { this.movingLeft = bool }
-	moveRight(bool) { this.movingRight = bool }
-	sprint(bool) { this.sprinting = bool }
-	turnLeft(bool) { this.turningLeft = bool }
-	turnRight(bool) { this.turningRight = bool }
+	moveForward(value) { this.moveDirection.y += value }
+	moveBackward(value) { this.moveDirection.y -= value }
+	moveLeft(value) { this.moveDirection.x += value }
+	moveRight(value) { this.moveDirection.x -= value }
+	sprint(value) { this.sprinting = value > 0 }
+	turnLeft(value) { this.turnDirection += value }
+	turnRight(value) { this.turnDirection -= value }
 }
 
 const camera = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight, 0.01, 256);
@@ -110,17 +102,12 @@ const binds = {
 	ShiftLeft: player.sprint.bind(player)
 }
 
-function onKeyDown(event) {
-	const command = binds[event.code]
-	if (command) {
-		command(true)
-	}
-}
-
-function onKeyUp(event) {
-	const command = binds[event.code]
-	if (command) {
-		command(false)
+function onKey(value) {
+	return (event) => {
+		const command = binds[event.code]
+		if (command && !event.repeat) {
+			command(value)
+		}
 	}
 }
 
@@ -129,8 +116,8 @@ function onMouseMove(event) {
 }
 
 const eventHandlers = [
-	["keydown", onKeyDown],
-	["keyup", onKeyUp],
+	["keydown", onKey(1)],
+	["keyup", onKey(-1)],
 	["mousemove", onMouseMove]
 ]
 
