@@ -9,7 +9,6 @@
 <body>
 </body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r83/three.min.js" integrity="sha256-9ytKBXG7+A+edjlxLzfzHGhMleDxCukt+KYzxDCZ/zI=" crossorigin="anonymous"></script>
-<script src="FirstPersonControls.js"></script>
 <script>
 
 THREE.Vector3.prototype.copy = function(v) {
@@ -38,19 +37,102 @@ function getWallName(type, direction) {
 
 var clock = new THREE.Clock();
 var scene = new THREE.Scene();
-var camera = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight, 0.01, 256);
-camera.up.set(0, 0, 1)
-
-var controls = null
 
 var renderer = new THREE.WebGLRenderer({antialias: true});
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
+renderer.domElement.addEventListener("click", event => {
+	renderer.domElement.requestPointerLock()
+})
+
+class Player extends THREE.Object3D {
+	constructor(camera) {
+		super()
+		this.camera = camera
+		this.add(camera)
+		camera.rotateZ(Math.PI)
+		this.moveSpeed = 2
+		this.sprintSpeed = 4
+	}
+
+	update(time) {
+		const delta = time - this.lastTime
+		const mag = this.sprinting ? this.sprintSpeed : this.moveSpeed
+		if (this.movingForward) {
+			this.translateZ(-mag * delta)
+		}
+		if (this.movingBackward) {
+			this.translateZ(mag * delta)
+		}
+		if (this.movingLeft) {
+			this.translateX(mag * delta)
+		}
+		if (this.movingRight) {
+			this.translateX(-mag * delta)
+		}
+
+		this.lastTime = time
+	}
+
+	moveForward(bool) { this.movingForward = bool }
+	moveBackward(bool) { this.movingBackward = bool }
+	moveLeft(bool) { this.movingLeft = bool }
+	moveRight(bool) { this.movingRight = bool }
+	sprint(bool) { this.sprinting = bool }
+}
+
+const camera = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight, 0.01, 256);
+const player = new Player(camera)
+scene.add(player)
+
+const binds = {
+	ArrowUp: player.moveForward.bind(player),
+	KeyW: player.moveForward.bind(player),
+
+	ArrowDown: player.moveBackward.bind(player),
+	KeyS: player.moveBackward.bind(player),
+
+	ArrowLeft: player.moveLeft.bind(player),
+	KeyA: player.moveLeft.bind(player),
+
+	ArrowRight: player.moveRight.bind(player),
+	KeyD: player.moveRight.bind(player),
+
+	ShiftLeft: player.sprint.bind(player)
+}
+
+function onKeyDown(event) {
+	binds[event.code](true)
+}
+
+function onKeyUp(event) {
+	binds[event.code](false)
+}
+
+function onMouseMove(event) {
+	player.rotateY(event.movementX / 2000)
+}
+
+const eventHandlers = [
+	["keydown", onKeyDown],
+	["keyup", onKeyUp],
+	["mousemove", onMouseMove]
+]
+
+document.addEventListener("pointerlockchange", event => {
+	if (document.pointerLockElement === renderer.domElement) {
+		eventHandlers.forEach(([e, f]) => document.addEventListener(e, f))
+	} else {
+		eventHandlers.forEach(([e, f]) => document.removeEventListener(e, f))
+	}
+})
+
 var render = function() {
+	const time = clock.getElapsedTime()
+	player.update(time)
+	renderer.render(scene, player.camera);
 	requestAnimationFrame(render);
-	controls.update(clock.getDelta())
-	renderer.render(scene, camera);
 };
 
 const PLAYER_START_NORTH = 0x01
@@ -143,7 +225,7 @@ class TileMap {
 }
 
 function fetchMapAndRender() {
-	fetch("maps/18_Halls_of_Blood.c3dmap")
+	fetch("maps/13_Warrens.c3dmap")
 	.then(function(response) {
 		return response.arrayBuffer()
 	})
@@ -151,9 +233,6 @@ function fetchMapAndRender() {
 		const map = new TileMap(new Uint8Array(buffer))
 		setupWallGeometry(map, scene)
 		setupPlayerSpawn(map)
-		controls = new THREE.FirstPersonControls(camera, new THREE.Vector3(0, 0, 0.5))
-		controls.lookSpeed = 0.05
-		controls.lookVertical = false
 		render()
 	});
 }
@@ -184,9 +263,11 @@ class WallGeometry extends THREE.PlaneGeometry {
 function setupWallGeometry(map, scene) {
 	const floorGeometry = new THREE.Geometry()
 	const wallGeometry = new Map()
+
 	const visited = Array(map.size()).fill(false)
 	const queue = map.tiles().filter(isStartOrTeleport)
 	queue.forEach(tile => visited[tile.index] = true)
+
 	while (queue.length) {
 		const tile = queue.shift()
 		const adjacent = tile.adjacentTiles()
@@ -231,15 +312,15 @@ function setupPlayerSpawn(map) {
 	for (tile of map.tiles()) {
 		let e = tile.entity
 		if (PLAYER_START_SET.has(tile.entity)) {
-			camera.position.copy(tile.position)
-			var target = camera.position.clone()
+			player.position.copy(tile.position)
+			var target = player.position.clone()
 			switch (tile.entity) {
 				case PLAYER_START_NORTH: target.y += 1; break
 				case PLAYER_START_EAST: target.x += 1; break
 				case PLAYER_START_SOUTH: target.y -= 1; break
 				case PLAYER_START_WEST: target.x -= 1; break
 			}
-			camera.lookAt(target)
+			player.lookAt(target)
 		}
 	}
 }
