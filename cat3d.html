@@ -56,25 +56,30 @@ class Player extends THREE.Object3D {
 		this.add(camera)
 		this.camera = camera
 
-		this.moveSpeed = 2
-		this.sprintSpeed = 4
+		this.moveSpeed = 2.5
+		this.sprintSpeed = 5
+
+		this.lastTime = 0
+		this.movingForward = false
+		this.movingBackward = false
+		this.movingLeft = false
+		this.movingRight = false
+		this.turningLeft = false
+		this.turningRight = false
 	}
 
 	update(time) {
 		const delta = time - this.lastTime
-		const mag = this.sprinting ? this.sprintSpeed : this.moveSpeed
-		if (this.movingForward) {
-			this.translateZ(mag * delta)
-		}
-		if (this.movingBackward) {
-			this.translateZ(-mag * delta)
-		}
-		if (this.movingLeft) {
-			this.translateX(mag * delta)
-		}
-		if (this.movingRight) {
-			this.translateX(-mag * delta)
-		}
+		const speed = this.sprinting ? this.sprintSpeed : this.moveSpeed
+		const translation = new THREE.Vector3(
+			this.movingLeft - this.movingRight,
+			0,
+			this.movingForward - this.movingBackward
+		).normalize().multiplyScalar(speed)
+		this.translateX(translation.x * delta)
+		this.translateZ(translation.z * delta)
+		const direction = this.turningLeft - this.turningRight
+		this.rotateY(direction * delta)
 		this.lastTime = time
 	}
 
@@ -83,6 +88,8 @@ class Player extends THREE.Object3D {
 	moveLeft(bool) { this.movingLeft = bool }
 	moveRight(bool) { this.movingRight = bool }
 	sprint(bool) { this.sprinting = bool }
+	turnLeft(bool) { this.turningLeft = bool }
+	turnRight(bool) { this.turningRight = bool }
 }
 
 const camera = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight, 0.01, 256);
@@ -91,15 +98,13 @@ scene.add(player)
 
 const binds = {
 	ArrowUp: player.moveForward.bind(player),
-	KeyW: player.moveForward.bind(player),
-
+	ArrowLeft: player.turnLeft.bind(player),
 	ArrowDown: player.moveBackward.bind(player),
-	KeyS: player.moveBackward.bind(player),
+	ArrowRight: player.turnRight.bind(player),
 
-	ArrowLeft: player.moveLeft.bind(player),
+	KeyW: player.moveForward.bind(player),
 	KeyA: player.moveLeft.bind(player),
-
-	ArrowRight: player.moveRight.bind(player),
+	KeyS: player.moveBackward.bind(player),
 	KeyD: player.moveRight.bind(player),
 
 	ShiftLeft: player.sprint.bind(player)
