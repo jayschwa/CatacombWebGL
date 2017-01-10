@@ -50,8 +50,12 @@ class Player extends THREE.Object3D {
 	constructor(camera) {
 		super()
 		this.up.set(0, 0, 1)
-		this.camera = camera
+
+		camera.rotation.set(0, 0, 0)
+		camera.rotateY(Math.PI)
 		this.add(camera)
+		this.camera = camera
+
 		this.moveSpeed = 2
 		this.sprintSpeed = 4
 	}
@@ -60,18 +64,17 @@ class Player extends THREE.Object3D {
 		const delta = time - this.lastTime
 		const mag = this.sprinting ? this.sprintSpeed : this.moveSpeed
 		if (this.movingForward) {
-			this.translateZ(-mag * delta)
-		}
-		if (this.movingBackward) {
 			this.translateZ(mag * delta)
 		}
-		if (this.movingLeft) {
-			this.translateX(-mag * delta)
+		if (this.movingBackward) {
+			this.translateZ(-mag * delta)
 		}
-		if (this.movingRight) {
+		if (this.movingLeft) {
 			this.translateX(mag * delta)
 		}
-
+		if (this.movingRight) {
+			this.translateX(-mag * delta)
+		}
 		this.lastTime = time
 	}
 
@@ -230,8 +233,8 @@ class TileMap {
 	}
 }
 
-function fetchMapAndRender() {
-	fetch("maps/13_Warrens.c3dmap")
+function fetchMapAndRender(name) {
+	fetch("maps/" + name + ".c3dmap")
 	.then(function(response) {
 		return response.arrayBuffer()
 	})
@@ -318,16 +321,15 @@ function setupPlayerSpawn(map) {
 	const spawn = map.tiles().filter(t => PLAYER_START_SET.has(t.entity))[0]
 	player.position.copy(spawn.position)
 	const target = player.position.clone()
-	console.log(spawn.entity)
 	switch (spawn.entity) {
-		case PLAYER_START_NORTH: target.y -= 1; break
-		case PLAYER_START_EAST: target.x -= 1; break
-		case PLAYER_START_SOUTH: target.y += 1; break
-		case PLAYER_START_WEST: target.x += 1; break
+		case PLAYER_START_NORTH: target.y += 1; break
+		case PLAYER_START_EAST: target.x += 1; break
+		case PLAYER_START_SOUTH: target.y -= 1; break
+		case PLAYER_START_WEST: target.x -= 1; break
 	}
 	player.lookAt(target)
 }
-fetchMapAndRender()
+fetchMapAndRender("8_Access_Floor")
 
 </script>
 </html>
