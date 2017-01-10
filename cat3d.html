@@ -52,8 +52,7 @@ class Player extends THREE.Object3D {
 		super()
 		this.up.set(0, 0, 1)
 
-		camera.rotation.set(0, 0, 0)
-		camera.rotateY(Math.PI)
+		camera.rotation.set(0, Math.PI, 0)
 		this.add(camera)
 		this.camera = camera
 
