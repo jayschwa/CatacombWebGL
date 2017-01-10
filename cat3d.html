@@ -77,12 +77,20 @@ class Player extends THREE.Object3D {
 		let xDist = this.moveVelocity.x * delta
 		let zDist = this.moveVelocity.y * delta
 		if (zDist) {
-			this.raycaster.set(this.position, this.getWorldDirection())
-			this.raycaster.far = this.radius + zDist
+			const direction = this.getWorldDirection().multiplyScalar(Math.sign(zDist))
+			this.raycaster.set(this.position, direction)
+			this.raycaster.far = this.radius + Math.abs(zDist)
 			const intersections = this.raycaster.intersectObjects(scene.children)
-			for (const intersection of intersections) {
-				zDist = Math.min(zDist, intersection.distance - this.radius)
-			}
+			const clampedMagnitude = intersections.map(i => i.distance).reduce(Math.min, Math.abs(zDist))
+			zDist = Math.sign(zDist) * clampedMagnitude
+		}
+		if (xDist) {
+			const direction = this.getWorldDirection().cross(this.up).multiplyScalar(-Math.sign(xDist))
+			this.raycaster.set(this.position, direction)
+			this.raycaster.far = this.radius + Math.abs(xDist)
+			const intersections = this.raycaster.intersectObjects(scene.children)
+			const clampedMagnitude = intersections.map(i => i.distance).reduce(Math.min, Math.abs(xDist))
+			xDist = Math.sign(xDist) * clampedMagnitude
 		}
 		this.translateX(xDist)
 		this.translateZ(zDist)
