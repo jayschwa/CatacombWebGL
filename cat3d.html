@@ -84,7 +84,7 @@ class Player extends THREE.Object3D {
 	moveBackward(value) { this.moveDirection.y -= value; this.updateVelocity() }
 	moveLeft(value) { this.moveDirection.x += value; this.updateVelocity() }
 	moveRight(value) { this.moveDirection.x -= value; this.updateVelocity() }
-	sprint(value) { this.sprinting = value > 0 }
+	sprint(value) { this.sprinting = value > 0; this.updateVelocity() }
 	turnLeft(value) { this.turnDirection += value }
 	turnRight(value) { this.turnDirection -= value }
 }
@@ -326,7 +326,7 @@ function setupPlayerSpawn(map) {
 	}
 	player.lookAt(target)
 }
-fetchMapAndRender("8_Access_Floor")
+fetchMapAndRender("13_Warrens")
 
 </script>
 </html>
