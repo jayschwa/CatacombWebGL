@@ -81,13 +81,16 @@ class Player extends THREE.Object3D {
 
 		const positionDelta = this.velocity.clone().multiplyScalar(timeDelta)
 		if (positionDelta.lengthSq()) {
-			const direction = positionDelta.clone().normalize()
-			this.raycaster.set(this.position, direction)
-			this.raycaster.far = this.radius + positionDelta.length()
-			const collisions = this.raycaster.intersectObjects(scene.children)
-			for (const collision of collisions) {
-				const excess = this.raycaster.far - collision.distance
-				positionDelta.addScaledVector(collision.face.normal, excess)
+			for (let i = -1; i <= 1; i++) {
+				const angle = i*Math.PI/4
+				const direction = positionDelta.clone().normalize().applyAxisAngle(this.up, angle)
+				this.raycaster.set(this.position, direction)
+				this.raycaster.far = this.radius + positionDelta.length() * Math.cos(angle)
+				const collisions = this.raycaster.intersectObjects(scene.children)
+				for (const collision of collisions) {
+					const excess = this.raycaster.far - collision.distance
+					positionDelta.addScaledVector(collision.face.normal, excess)
+				}
 			}
 		}
 
