@@ -51,6 +51,7 @@ renderer.domElement.addEventListener("click", event => {
 class Player extends THREE.Object3D {
 	constructor(camera) {
 		super()
+		this.name = "Player"
 		this.up.set(0, 0, 1)
 
 		camera.rotation.set(0, Math.PI, 0)
@@ -296,6 +297,7 @@ class WallGeometry extends THREE.PlaneGeometry {
 }
 
 const maze = new THREE.Group()
+maze.name = "Maze"
 function setupMaze(map, scene) {
 	const floorGeometry = new THREE.Geometry()
 	const wallGeometry = new Map()
@@ -340,7 +342,9 @@ function setupMaze(map, scene) {
 		texture.magFilter = THREE.NearestFilter
 		texture.anisotropy = renderer.getMaxAnisotropy()
 		const material = new THREE.MeshBasicMaterial({map: texture})
-		maze.add(new THREE.Mesh(bufferGeometry, material))
+		const mesh = new THREE.Mesh(bufferGeometry, material)
+		mesh.name = name
+		maze.add(mesh)
 	})
 	scene.add(maze)
 }
@@ -361,24 +365,46 @@ function setupPlayerSpawn(map) {
 const portals = []
 
 class Portal extends THREE.Sprite {
+
 	constructor(position) {
-		const textures = [80, 81, 82, 83].map(i => new THREE.TextureLoader().load("pictures/"+i+".png"))
-		textures.forEach(t => t.magFilter = THREE.NearestFilter)
-		super(new THREE.SpriteMaterial({map: textures[0]}))
-		this.textures = textures
+		super()
+		this.name = "Portal"
 		this.position.copy(position)
-		this.textureIndex = 0
 		this.fps = 8
 	}
 
 	update(time) {
-		const idx = Math.floor(time * this.fps) % this.textures.length
-		if (idx != this.textureIndex) {
-			this.material.map = this.textures[idx]
-			this.material.needsUpdate
-			this.textureIndex = idx
+		if (this.material.map && this.material.map.isSpriteSheet) {
+			const n = Math.floor(time * this.fps) % this.material.map.frames
+			this.material.map.setFrame(n)
 		}
 	}
+}
+
+function SpriteSheetProxy(texture, frames) {
+	const offset = texture.offset.clone()
+	const repeat = texture.repeat.clone()
+	const proxy = new Proxy(texture, {
+		get: function(obj, prop) {
+			switch (prop) {
+				case "offset": return offset
+				case "repeat": return repeat
+				default: return obj[prop]
+			}
+		}
+	})
+	proxy.frames = frames || Math.floor(texture.image.width / texture.image.height)
+	proxy.isSpriteSheet = true
+	proxy.setFrame = function(n) {
+		if (n < 0 || n >= this.frames) {
+			throw new RangeError("Invalid frame number")
+		}
+		const width = 1 / this.frames
+		this.offset.x = n * width
+		this.repeat.x = width
+	}
+	proxy.setFrame(0)
+	return proxy
 }
 
 function addPortals(map, scene) {
@@ -388,6 +414,14 @@ function addPortals(map, scene) {
 		portals.push(portal)
 		scene.add(portal)
 	}
+	new THREE.TextureLoader().load("sprites/portal.png", texture => {
+		texture.magFilter = THREE.NearestFilter
+		portals.forEach(portal => {
+			const spritesheet = SpriteSheetProxy(texture)
+			portal.material.map = spritesheet
+			portal.material.needsUpdate = true
+		})
+	})
 }
 
 fetchMapAndRender("8_Access_Floor")
