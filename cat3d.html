@@ -79,28 +79,31 @@ class Player extends THREE.Object3D {
 			this.updateVelocity()
 		}
 
-		const positionDelta = this.velocity.clone().multiplyScalar(timeDelta)
-		if (positionDelta.lengthSq()) {
-			for (let i = -1; i <= 1; i++) {
-				const angle = i*Math.PI/4
-				const direction = positionDelta.clone().normalize().applyAxisAngle(this.up, angle)
+		if (this.velocity.lengthSq()) {
+			const positionDelta = this.velocity.clone().multiplyScalar(timeDelta)
+			for (let i of [0, 1]) {
+				const component = positionDelta.getComponent(i)
+				const magnitude = Math.abs(component)
+				const direction = new THREE.Vector3()
+				direction.setComponent(i, Math.sign(component))
 				this.raycaster.set(this.position, direction)
-				this.raycaster.far = this.radius + positionDelta.length() * Math.cos(angle)
+				this.raycaster.far = this.radius + magnitude
 				const collisions = this.raycaster.intersectObjects(scene.children)
-				for (const collision of collisions) {
-					const excess = this.raycaster.far - collision.distance
-					positionDelta.addScaledVector(collision.face.normal, excess)
+				for (let collision of collisions) {
+					const overlap = this.raycaster.far - collision.distance
+					const offset = Math.min(overlap, magnitude)
+					positionDelta.addScaledVector(collision.face.normal, offset)
 				}
 			}
+			this.position.add(positionDelta)
 		}
-
-		this.position.add(positionDelta)
 	}
 
 	updateVelocity() {
 		const speed = this.sprinting ? this.sprintSpeed : this.moveSpeed
 		this.velocity.copy(this.moveDirection).normalize().multiplyScalar(speed)  // velocity in object space
-		return this.localToWorld(this.velocity).sub(this.position)                // velocity in world space
+		this.localToWorld(this.velocity).sub(this.position)                       // velocity in world space
+		return this.velocity.multiplyScalar(100).roundToZero().divideScalar(100)  // round tiny values to zero
 	}
 
 	moveForward(value) { this.moveDirection.z += value; this.updateVelocity() }
