@@ -7,6 +7,24 @@ import (
 	"os"
 )
 
+type ResizedCanvas struct {
+	image.Image
+	Width, Height int
+}
+
+func (i ResizedCanvas) At(x, y int) color.Color {
+	xOffset := (i.Width - i.Image.Bounds().Dx()) / 2
+	yOffset := (i.Height - i.Image.Bounds().Dy()) / 2
+	point := image.Pt(x, y).Sub(image.Pt(xOffset, yOffset))
+	return i.Image.At(point.X, point.Y)
+}
+
+func (i ResizedCanvas) Bounds() image.Rectangle {
+	return image.Rectangle{
+		Max: image.Point{i.Width, i.Height},
+	}
+}
+
 type MultiImage []image.Image
 
 func (mi MultiImage) At(x, y int) color.Color {
@@ -50,6 +68,7 @@ func main() {
 		if err != nil {
 			panic(err)
 		}
+		img = ResizedCanvas{img, 64, 64}
 		images = append(images, img)
 		f.Close()
 	}
