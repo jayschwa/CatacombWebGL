@@ -88,7 +88,7 @@ class Player extends THREE.Object3D {
 				direction.setComponent(i, Math.sign(component))
 				this.raycaster.set(this.position, direction)
 				this.raycaster.far = this.radius + magnitude
-				const collisions = this.raycaster.intersectObjects(scene.children)
+				const collisions = this.raycaster.intersectObjects(maze.children)
 				for (let collision of collisions) {
 					const overlap = this.raycaster.far - collision.distance
 					const offset = Math.min(overlap, magnitude)
@@ -164,9 +164,10 @@ document.addEventListener("pointerlockchange", event => {
 var render = function() {
 	const time = clock.getElapsedTime()
 	player.update(time)
-	renderer.render(scene, player.camera);
-	requestAnimationFrame(render);
-};
+	portals.forEach(p => p.update(time))
+	renderer.render(scene, player.camera)
+	requestAnimationFrame(render)
+}
 
 const PLAYER_START_NORTH = 0x01
 const PLAYER_START_EAST = 0x02
@@ -264,8 +265,9 @@ function fetchMapAndRender(name) {
 	})
 	.then(function(buffer) {
 		const map = new TileMap(new Uint8Array(buffer))
-		setupWallGeometry(map, scene)
+		setupMaze(map, scene)
 		setupPlayerSpawn(map)
+		addPortals(map, scene)
 		render()
 	});
 }
@@ -293,7 +295,8 @@ class WallGeometry extends THREE.PlaneGeometry {
 	}
 }
 
-function setupWallGeometry(map, scene) {
+const maze = new THREE.Group()
+function setupMaze(map, scene) {
 	const floorGeometry = new THREE.Geometry()
 	const wallGeometry = new Map()
 
@@ -328,7 +331,7 @@ function setupWallGeometry(map, scene) {
 
 	// add floor geometry to scene
 	const material = new THREE.MeshBasicMaterial({color: 0x555555})
-	scene.add(new THREE.Mesh(new THREE.BufferGeometry().fromGeometry(floorGeometry), material))
+	maze.add(new THREE.Mesh(new THREE.BufferGeometry().fromGeometry(floorGeometry), material))
 
 	// add aggregate wall geometries to scene
 	wallGeometry.forEach((geometry, name) => {
@@ -337,8 +340,9 @@ function setupWallGeometry(map, scene) {
 		texture.magFilter = THREE.NearestFilter
 		texture.anisotropy = renderer.getMaxAnisotropy()
 		const material = new THREE.MeshBasicMaterial({map: texture})
-		scene.add(new THREE.Mesh(bufferGeometry, material))
+		maze.add(new THREE.Mesh(bufferGeometry, material))
 	})
+	scene.add(maze)
 }
 
 function setupPlayerSpawn(map) {
@@ -353,7 +357,40 @@ function setupPlayerSpawn(map) {
 	}
 	player.lookAt(target)
 }
-fetchMapAndRender("0_Approach")
+
+const portals = []
+
+class Portal extends THREE.Sprite {
+	constructor(position) {
+		const textures = [80, 81, 82, 83].map(i => new THREE.TextureLoader().load("pictures/"+i+".png"))
+		textures.forEach(t => t.magFilter = THREE.NearestFilter)
+		super(new THREE.SpriteMaterial({map: textures[0]}))
+		this.textures = textures
+		this.position.copy(position)
+		this.textureIndex = 0
+		this.fps = 8
+	}
+
+	update(time) {
+		const idx = Math.floor(time * this.fps) % this.textures.length
+		if (idx != this.textureIndex) {
+			this.material.map = this.textures[idx]
+			this.material.needsUpdate
+			this.textureIndex = idx
+		}
+	}
+}
+
+function addPortals(map, scene) {
+	const portalTiles = map.tiles().filter(t => t.entity == 0x18)
+	for (let tile of portalTiles) {
+		const portal = new Portal(tile.position)
+		portals.push(portal)
+		scene.add(portal)
+	}
+}
+
+fetchMapAndRender("8_Access_Floor")
 
 </script>
 </html>
