@@ -48,20 +48,14 @@ renderer.domElement.addEventListener("click", event => {
 	renderer.domElement.requestPointerLock()
 })
 
-class Player extends THREE.Object3D {
-	constructor(camera) {
+class Entity extends THREE.Object3D {
+	constructor(size, speed) {
 		super()
-		this.name = "Player"
+		this.name = "Entity"
 		this.up.set(0, 0, 1)
 
-		camera.rotation.set(0, Math.PI, 0)
-		this.add(camera)
-		this.camera = camera
-
-		this.radius = 2/3
-
-		this.moveSpeed = 5
-		this.sprintSpeed = 10
+		this.size = size
+		this.speed = speed || 0
 
 		this.moveDirection = new THREE.Vector3()
 		this.velocity = new THREE.Vector3()
@@ -88,7 +82,7 @@ class Player extends THREE.Object3D {
 				const direction = new THREE.Vector3()
 				direction.setComponent(i, Math.sign(component))
 				this.raycaster.set(this.position, direction)
-				this.raycaster.far = this.radius + magnitude
+				this.raycaster.far = this.size + magnitude
 				const collisions = this.raycaster.intersectObjects(maze.children)
 				for (let collision of collisions) {
 					const overlap = this.raycaster.far - collision.distance
@@ -101,17 +95,26 @@ class Player extends THREE.Object3D {
 	}
 
 	updateVelocity() {
-		const speed = this.sprinting ? this.sprintSpeed : this.moveSpeed
-		this.velocity.copy(this.moveDirection).normalize().multiplyScalar(speed)  // velocity in object space
-		this.localToWorld(this.velocity).sub(this.position)                       // velocity in world space
-		return this.velocity.multiplyScalar(100).roundToZero().divideScalar(100)  // round tiny values to zero
+		this.velocity.copy(this.moveDirection).normalize().multiplyScalar(this.speed)  // velocity in object space
+		this.localToWorld(this.velocity).sub(this.position)                            // velocity in world space
+		return this.velocity.multiplyScalar(100).roundToZero().divideScalar(100)       // round tiny values to zero
+	}
+}
+
+class Player extends Entity {
+	constructor(camera) {
+		super(2/3, 5)
+		this.name = "Player"
+		camera.rotation.set(0, Math.PI, 0)
+		this.add(camera)
+		this.camera = camera
 	}
 
 	moveForward(value) { this.moveDirection.z += value; this.updateVelocity() }
 	moveBackward(value) { this.moveDirection.z -= value; this.updateVelocity() }
 	moveLeft(value) { this.moveDirection.x += value; this.updateVelocity() }
 	moveRight(value) { this.moveDirection.x -= value; this.updateVelocity() }
-	sprint(value) { this.sprinting = value > 0; this.updateVelocity() }
+	sprint(value) { this.speed *= (value > 0) ? 2 : 0.5; this.updateVelocity() }
 	turnLeft(value) { this.turnDirection += value }
 	turnRight(value) { this.turnDirection -= value }
 }
