@@ -126,7 +126,7 @@ class Fireball extends Entity {
 	}
 
 	onCollision(collision) {
-		this.parent.remove(this)
+		this.shouldRemove = true
 	}
 
 	update(time) {
@@ -220,9 +220,14 @@ document.addEventListener("pointerlockchange", event => {
 
 var render = function() {
 	const time = clock.getElapsedTime()
+	const objectsToRemove = []
 	scene.traverse(obj => {
 		obj.update && obj.update(time)
+		if (obj.shouldRemove) {
+			objectsToRemove.push(obj)
+		}
 	})
+	objectsToRemove.forEach(obj => obj.parent.remove(obj))
 	renderer.render(scene, player.camera)
 	requestAnimationFrame(render)
 }
