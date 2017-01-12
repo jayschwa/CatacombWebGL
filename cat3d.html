@@ -167,8 +167,9 @@ document.addEventListener("pointerlockchange", event => {
 
 var render = function() {
 	const time = clock.getElapsedTime()
-	player.update(time)
-	portals.forEach(p => p.update(time))
+	scene.traverse(obj => {
+		obj.update && obj.update(time)
+	})
 	renderer.render(scene, player.camera)
 	requestAnimationFrame(render)
 }
