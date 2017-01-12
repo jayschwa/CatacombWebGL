@@ -14,7 +14,7 @@ type ResizedCanvas struct {
 
 func (i ResizedCanvas) At(x, y int) color.Color {
 	xOffset := (i.Width - i.Image.Bounds().Dx()) / 2
-	yOffset := (i.Height - i.Image.Bounds().Dy()) / 2
+	yOffset := i.Height - i.Image.Bounds().Dy()
 	point := image.Pt(x, y).Sub(image.Pt(xOffset, yOffset))
 	return i.Image.At(point.X, point.Y)
 }
@@ -68,7 +68,7 @@ func main() {
 		if err != nil {
 			panic(err)
 		}
-		img = ResizedCanvas{img, 64, 64}
+		img = ResizedCanvas{img, 128, 64}
 		images = append(images, img)
 		f.Close()
 	}

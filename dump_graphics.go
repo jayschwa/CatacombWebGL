@@ -173,7 +173,7 @@ func (d Dimensions) String() string {
 type PictureTable []Dimensions
 
 func (g *Graphics) PictureTable() (PictureTable, error) {
-	chunk, err := g.Chunk(0)
+	chunk, err := g.Chunk(1)
 	if err != nil {
 		return nil, err
 	}
@@ -193,7 +193,7 @@ func (g *Graphics) Picture(i int) (*Picture, error) {
 	if err != nil {
 		return nil, err
 	}
-	dims := picTable[i-5]
+	dims := picTable[i-160]
 	chunk, err := g.Chunk(i)
 	if err != nil {
 		return nil, err
@@ -210,11 +210,11 @@ var Magenta = color.RGBA{0xAA, 0x00, 0xAA, 0xFF}
 
 func (p *Picture) At(x, y int) color.Color {
 	planeSize := int(p.dims.Width*p.dims.Height) / 8
-	if len(p.data) / planeSize < 4 {
+	if len(p.data)/planeSize < 5 {
 		return color.Gray{}
 	}
 
-	planes := make([][]byte, 4)
+	planes := make([][]byte, 5)
 	for i := range planes {
 		start := i * planeSize
 		end := start + planeSize
@@ -226,7 +226,7 @@ func (p *Picture) At(x, y int) color.Color {
 		shift := uint(7 - pos%8)
 		return (byte>>shift)&0x01 != 0
 	}
-	intense := readBit(3)
+	intense := readBit(4)
 	readColor := func(plane int) byte {
 		if readBit(plane) {
 			if intense {
@@ -242,11 +242,15 @@ func (p *Picture) At(x, y int) color.Color {
 			}
 		}
 	}
+	var alpha byte
+	if !readBit(0) {
+		alpha = 0xFF
+	}
 	c := color.RGBA{
-		R: readColor(2),
-		G: readColor(1),
-		B: readColor(0),
-		A: 0xFF,
+		R: readColor(3),
+		G: readColor(2),
+		B: readColor(1),
+		A: alpha,
 	}
 	if c == Magenta {
 		c.A = 0x00
@@ -269,7 +273,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	for i := 21; i < 160; i++ {
+	for i := 161; i <= 162; i++ {
 		pic, err := g.Picture(i)
 		fmt.Println("picture", i)
 		if err != nil {

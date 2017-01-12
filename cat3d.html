@@ -156,6 +156,28 @@ class Player extends Entity {
 		camera.rotation.set(0, Math.PI, 0)
 		this.add(camera)
 		this.camera = camera
+
+		new THREE.TextureLoader().load("sprites/hand.png", texture => {
+			texture.magFilter = THREE.NearestFilter
+			texture.repeat.y = 1.5
+			const spritesheet = SpriteSheetProxy(texture, 2)
+			this.hand = new THREE.Sprite(new THREE.SpriteMaterial({map: spritesheet}))
+			this.hand.setFrame = spritesheet.setFrame.bind(spritesheet)
+			this.hand.scale.divideScalar(18)
+			this.hand.translateZ(0.1)
+			this.hand.translateY(-0.01375)
+			this.hand.translateX(-0.00265)
+			this.add(this.hand)
+		})
+	}
+
+	update(time) {
+		super.update(time)
+		if (this.chargeStarted) {
+			const timeDelta = time - this.chargeStarted
+			const frame = Math.ceil(timeDelta * 8) % 2
+			this.hand.setFrame(frame)
+		}
 	}
 
 	moveForward(value) { this.moveDirection.z += value; this.updateVelocity() }
@@ -168,10 +190,13 @@ class Player extends Entity {
 	shoot(value) {
 		if (value > 0) {
 			this.chargeStarted = this.lastTime
+			this.hand.setFrame(1)
 		} else {
 			const chargeTime = this.lastTime - this.chargeStarted
 			const fireball = new Fireball(this.position, this.getWorldDirection(), chargeTime > 1)
 			scene.add(fireball)
+			this.chargeStarted = 0
+			this.hand.setFrame(0)
 		}
 	}
 }
