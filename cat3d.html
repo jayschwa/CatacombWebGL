@@ -99,6 +99,7 @@ class TextureCache extends THREE.TextureLoader {
 				})
 			queued.texture = texture
 			queuedTextures.set(path, queued)
+			texture.magFilter = THREE.NearestFilter
 			return texture
 		}
 	}
@@ -188,7 +189,6 @@ class Entity extends THREE.Object3D {
 }
 
 const fireballTexture = textureCache.get("sprites/fireball.png")
-fireballTexture.magFilter = THREE.NearestFilter
 
 class Fireball extends Entity {
 	constructor(origin, direction, isBig) {
@@ -239,7 +239,6 @@ class Player extends Entity {
 		this.camera = camera
 
 		textureCache.get("sprites/hand.png", texture => {
-			texture.magFilter = THREE.NearestFilter
 			texture.repeat.y = 1.5
 			const spritesheet = SpriteSheetProxy(texture, 2)
 			this.hand = new THREE.Sprite(new THREE.SpriteMaterial({map: spritesheet}))
@@ -548,7 +547,6 @@ function setupMaze(map, scene) {
 				const geometry = new WallGeometry(tile.position, dir)
 				const bufferGeometry = new THREE.BufferGeometry().fromGeometry(geometry)
 				const texture = textureCache.get("walls/" + name + ".png")
-				texture.magFilter = THREE.NearestFilter
 				texture.anisotropy = renderer.getMaxAnisotropy()
 				const material = new THREE.MeshBasicMaterial({map: texture, transparent: true, opacity: 0.5})
 				const mesh = new THREE.Mesh(bufferGeometry, material)
@@ -572,7 +570,6 @@ function setupMaze(map, scene) {
 	wallGeometry.forEach((geometry, name) => {
 		const bufferGeometry = new THREE.BufferGeometry().fromGeometry(geometry)
 		const texture = textureCache.get("walls/" + name + ".png")
-		texture.magFilter = THREE.NearestFilter
 		texture.anisotropy = renderer.getMaxAnisotropy()
 		const material = new THREE.MeshBasicMaterial({map: texture})
 		const mesh = new THREE.Mesh(bufferGeometry, material)
@@ -649,7 +646,6 @@ function addPortals(map, scene) {
 		scene.add(portal)
 	}
 	textureCache.get("sprites/portal.png", texture => {
-		texture.magFilter = THREE.NearestFilter
 		portals.forEach(portal => {
 			const spritesheet = SpriteSheetProxy(texture)
 			portal.material.map = spritesheet
