@@ -47,6 +47,65 @@ const camera = new THREE.PerspectiveCamera(45, 0, 0.01, 256)
 const clock = new THREE.Clock()
 const scene = new THREE.Scene()
 
+class TextureCache extends THREE.TextureLoader {
+	constructor() {
+		super(...arguments)
+		this.cache = new Map()
+		this.queued = new Map()
+		this.stats = new Map()
+	}
+
+	load(path, ...args) {
+		if (!this.stats.has(path)) {
+			this.stats.set(path, {hits: 0, loaded: 0})
+		}
+		this.stats.get(path).loaded++
+		return super.load(path, ...args)
+	}
+
+	get(path, onLoad, onProgress, onError) {
+		if (this.cache.has(path)) {
+			this.stats.get(path).hits++
+			const texture = this.cache.get(path)
+			onLoad && onLoad(texture)
+			return texture
+		} else if (this.queued.has(path)) {
+			this.stats.get(path).hits++
+			const queued = this.queued.get(path)
+			queued.onLoad.push(onLoad)
+			queued.onProgress.push(onProgress)
+			queued.onError.push(onError)
+			return queued.texture
+		} else {
+			const cachedTextures = this.cache
+			const queuedTextures = this.queued
+			const queued = {
+				onLoad: [onLoad],
+				onProgress: [onProgress],
+				onError: [onError]
+			}
+			const texture = this.load(path,
+				(...args) => {
+					cachedTextures.set(path, queued)
+					queuedTextures.delete(path)
+					queued.onLoad.forEach(f => f && f(...args))
+				},
+				(...args) => {
+					queued.onProgress.forEach(f => f && f(...args))
+				},
+				(...args) => {
+					queuedTextures.delete(path)
+					queued.onError.forEach(f => f && f(...args))
+				})
+			queued.texture = texture
+			queuedTextures.set(path, queued)
+			return texture
+		}
+	}
+}
+
+const textureCache = new TextureCache()
+
 function resizeView(width, height) {
 	renderer.setSize(width, height)
 	camera.aspect = width / height
@@ -128,7 +187,7 @@ class Entity extends THREE.Object3D {
 	}
 }
 
-const fireballTexture = new THREE.TextureLoader().load("sprites/fireball.png")
+const fireballTexture = textureCache.get("sprites/fireball.png")
 fireballTexture.magFilter = THREE.NearestFilter
 
 class Fireball extends Entity {
@@ -179,7 +238,7 @@ class Player extends Entity {
 		this.add(camera)
 		this.camera = camera
 
-		new THREE.TextureLoader().load("sprites/hand.png", texture => {
+		textureCache.get("sprites/hand.png", texture => {
 			texture.magFilter = THREE.NearestFilter
 			texture.repeat.y = 1.5
 			const spritesheet = SpriteSheetProxy(texture, 2)
@@ -368,8 +427,16 @@ class Tile {
 		return null
 	}
 
+	isFloor() {
+		return !(this.isWall() || this.isExplodable())
+	}
+
 	isWall() {
 		return wallTypeMap[this.layout] !== undefined
+	}
+
+	isExplodable() {
+		return wallTypeMap[this.layout-7] !== undefined
 	}
 }
 
@@ -447,6 +514,7 @@ class WallGeometry extends THREE.PlaneGeometry {
 
 const maze = new THREE.Group()
 maze.name = "Maze"
+const explodable = new THREE.Group()
 function setupMaze(map, scene) {
 	const floorGeometry = new THREE.Geometry()
 	const wallGeometry = new Map()
@@ -462,7 +530,7 @@ function setupMaze(map, scene) {
 
 		floorGeometry.merge(new FloorGeometry(tile.position))
 
-		// add wall geometry
+		// add static wall geometry
 		walls.forEach(wall => {
 			const dir = wall.directionTo(tile)
 			const name = getWallName(wall.layout, dir)
@@ -471,6 +539,22 @@ function setupMaze(map, scene) {
 			}
 			wallGeometry.get(name).merge(new WallGeometry(wall.position, dir))
 		})
+
+		// add explodeable wall geometry
+		if (tile.isExplodable()) {
+			adjacent.filter(a => a.isFloor()).forEach(floor => {
+				const dir = tile.directionTo(floor)
+				const name = getWallName(tile.layout-7, dir)
+				const geometry = new WallGeometry(tile.position, dir)
+				const bufferGeometry = new THREE.BufferGeometry().fromGeometry(geometry)
+				const texture = textureCache.get("walls/" + name + ".png")
+				texture.magFilter = THREE.NearestFilter
+				texture.anisotropy = renderer.getMaxAnisotropy()
+				const material = new THREE.MeshBasicMaterial({map: texture, transparent: true, opacity: 0.5})
+				const mesh = new THREE.Mesh(bufferGeometry, material)
+				explodable.add(mesh)
+			})
+		}
 
 		// enqueue adjacent floor tiles that haven't been visited yet
 		const unvisited_floors = adjacent.filter(t => !t.isWall()).filter(t => !visited[t.index])
@@ -487,7 +571,7 @@ function setupMaze(map, scene) {
 	// add aggregate wall geometries to scene
 	wallGeometry.forEach((geometry, name) => {
 		const bufferGeometry = new THREE.BufferGeometry().fromGeometry(geometry)
-		const texture = new THREE.TextureLoader().load("walls/" + name + ".png")
+		const texture = textureCache.get("walls/" + name + ".png")
 		texture.magFilter = THREE.NearestFilter
 		texture.anisotropy = renderer.getMaxAnisotropy()
 		const material = new THREE.MeshBasicMaterial({map: texture})
@@ -496,6 +580,7 @@ function setupMaze(map, scene) {
 		maze.add(mesh)
 	})
 	scene.add(maze)
+	scene.add(explodable)
 }
 
 function setupPlayerSpawn(map) {
@@ -563,7 +648,7 @@ function addPortals(map, scene) {
 		portals.push(portal)
 		scene.add(portal)
 	}
-	new THREE.TextureLoader().load("sprites/portal.png", texture => {
+	textureCache.get("sprites/portal.png", texture => {
 		texture.magFilter = THREE.NearestFilter
 		portals.forEach(portal => {
 			const spritesheet = SpriteSheetProxy(texture)
@@ -573,7 +658,7 @@ function addPortals(map, scene) {
 	})
 }
 
-fetchMapAndRender("8_Access_Floor")
+fetchMapAndRender("17_Labyrinth")
 
 </script>
 </html>
