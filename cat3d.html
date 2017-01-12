@@ -85,6 +85,7 @@ class Entity extends THREE.Object3D {
 				this.raycaster.far = this.size + magnitude
 				const collisions = this.raycaster.intersectObjects(maze.children)
 				for (let collision of collisions) {
+					this.onCollision(collision)
 					const overlap = this.raycaster.far - collision.distance
 					const offset = Math.min(overlap, magnitude)
 					positionDelta.addScaledVector(collision.face.normal, offset)
@@ -94,10 +95,45 @@ class Entity extends THREE.Object3D {
 		}
 	}
 
+	onCollision(collision) {  /* not implemented */ }
+
 	updateVelocity() {
 		this.velocity.copy(this.moveDirection).normalize().multiplyScalar(this.speed)  // velocity in object space
 		this.localToWorld(this.velocity).sub(this.position)                            // velocity in world space
 		return this.velocity.multiplyScalar(100).roundToZero().divideScalar(100)       // round tiny values to zero
+	}
+}
+
+const fireballTexture = new THREE.TextureLoader().load("sprites/fireball.png")
+fireballTexture.magFilter = THREE.NearestFilter
+
+class Fireball extends Entity {
+	constructor(origin, direction, isBig) {
+		super(0, 20)
+		this.isBig = isBig
+		this.name = isBig? "Big Fireball" : "Fireball"
+		this.position.copy(origin)
+		this.lookAt(origin.clone().add(direction))
+		this.position.addScaledVector(direction, 0.5)
+		this.scale.multiplyScalar(0.5)
+		this.updateMatrixWorld()
+		this.moveDirection.z = 1
+		this.updateVelocity()
+
+		this.spriteSheet = SpriteSheetProxy(fireballTexture)
+		this.sprite = new THREE.Sprite(new THREE.SpriteMaterial({map: this.spriteSheet}))
+		this.add(this.sprite)
+	}
+
+	onCollision(collision) {
+		this.parent.remove(this)
+	}
+
+	update(time) {
+		super.update(time)
+		let frame = Math.floor(time * 10) % 2
+		if (this.isBig) { frame += 2 }
+		this.spriteSheet.setFrame(frame)
 	}
 }
 
@@ -117,6 +153,15 @@ class Player extends Entity {
 	sprint(value) { this.speed *= (value > 0) ? 2 : 0.5; this.updateVelocity() }
 	turnLeft(value) { this.turnDirection += value }
 	turnRight(value) { this.turnDirection -= value }
+	shoot(value) {
+		if (value > 0) {
+			this.chargeStarted = this.lastTime
+		} else {
+			const chargeTime = this.lastTime - this.chargeStarted
+			const fireball = new Fireball(this.position, this.getWorldDirection(), chargeTime > 2)
+			scene.add(fireball)
+		}
+	}
 }
 
 const camera = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight, 0.01, 256);
@@ -146,6 +191,12 @@ function onKey(value) {
 	}
 }
 
+function onMouseButton(value) {
+	return (event) => {
+		player.shoot(value)
+	}
+}
+
 function onMouseMove(event) {
 	player.rotateY(-event.movementX / 2000)
 	player.updateVelocity()
@@ -154,6 +205,8 @@ function onMouseMove(event) {
 const eventHandlers = [
 	["keydown", onKey(1)],
 	["keyup", onKey(-1)],
+	["mousedown", onMouseButton(1)],
+	["mouseup", onMouseButton(-1)],
 	["mousemove", onMouseMove]
 ]
 
