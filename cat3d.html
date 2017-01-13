@@ -715,7 +715,7 @@ function SpriteSheetProxy(texture, frames) {
 }
 
 function addPortals(map, scene) {
-	const portalTiles = map.tiles().filter(t => t.entity == 0x18)
+	const portalTiles = map.tiles().filter(t => [0x18, 0x1F, 0x20, 0x21].includes(t.entity))
 	for (let tile of portalTiles) {
 		const portal = new Portal(tile.position)
 		portals.push(portal)
