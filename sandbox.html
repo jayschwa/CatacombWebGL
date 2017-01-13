@@ -13,12 +13,14 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r83/three.js" crossorigin="anonymous"></script>
 <script id="vertex" type="text/plain">
 void main() {
-	gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+	gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
 }
 </script>
 <script id="fragment" type="text/plain">
+uniform vec3 color;
+
 void main() {
-	gl_FragColor = vec4( 0.0, 0.0, 1.0, 1.0 );
+	gl_FragColor = vec4(color, 1.0);
 }
 </script>
 <script>
@@ -68,7 +70,10 @@ function render() {
 
 const material = new THREE.ShaderMaterial({
 	vertexShader: document.getElementById("vertex").textContent,
-	fragmentShader: document.getElementById("fragment").textContent
+	fragmentShader: document.getElementById("fragment").textContent,
+	uniforms: {
+		color: { value: new THREE.Color(0x00ff00) }
+	}
 })
 const box = new THREE.Mesh(new THREE.BoxBufferGeometry(1, 1, 1), material)
 box.position.z = -3
