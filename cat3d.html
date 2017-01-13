@@ -205,6 +205,9 @@ class Fireball extends Entity {
 
 		this.spriteSheet = SpriteSheetProxy(fireballTexture)
 		this.sprite = new THREE.Sprite(new THREE.SpriteMaterial({map: this.spriteSheet}))
+		if (!isBig) {
+			this.sprite.material.rotation = Math.floor(Math.random() * 4) * Math.PI / 2
+		}
 		this.add(this.sprite)
 	}
 
