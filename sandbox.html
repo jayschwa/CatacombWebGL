@@ -1,0 +1,64 @@
+<html>
+<head>
+	<title>Catacomb 3-D Test</title>
+	<link rel="icon" type="image/png" href="favicon.png"/>
+	<style>
+		body { margin: 0; }
+		#cat3d { width: 100%; height: 100%; overflow: hidden; }
+	</style>
+</head>
+<body>
+	<div id="cat3d"></div>
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r83/three.js" crossorigin="anonymous"></script>
+<script>
+"use strict";
+
+const gameContainer = document.getElementById("cat3d")
+
+const renderer = new THREE.WebGLRenderer({antialias: true})
+gameContainer.appendChild(renderer.domElement)
+
+const camera = new THREE.PerspectiveCamera(45, 0, 0.01, 256)
+const clock = new THREE.Clock()
+const scene = new THREE.Scene()
+
+function resizeView(width, height) {
+	renderer.setSize(width, height)
+	camera.aspect = width / height
+	camera.updateProjectionMatrix()
+}
+
+resizeView(gameContainer.clientWidth, gameContainer.clientHeight)
+
+let resizeNextFrame = false
+window.addEventListener("resize", () => {
+	if (!resizeNextFrame) {
+		window.requestAnimationFrame(() => {
+			resizeView(gameContainer.clientWidth, gameContainer.clientHeight)
+			resizeNextFrame = false
+		})
+		resizeNextFrame = true
+	}
+})
+
+function render() {
+	const time = clock.getElapsedTime()
+	const objectsToRemove = []
+	scene.traverse(obj => {
+		obj.update && obj.update(time)
+		if (obj.shouldRemove) {
+			objectsToRemove.push(obj)
+		}
+	})
+	objectsToRemove.forEach(obj => obj.parent.remove(obj))
+	renderer.render(scene, camera)
+	requestAnimationFrame(render)
+}
+
+const box = new THREE.Mesh(new THREE.BoxBufferGeometry(1, 1, 1), new THREE.MeshBasicMaterial({color: 0x00ff00}))
+box.position.z = -3
+scene.add(box)
+render()
+</script>
+</html>
