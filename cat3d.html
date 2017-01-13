@@ -399,7 +399,7 @@ const TELEPORTER_C = 0x21
 const TELEPORTER_SET = new Set([TELEPORTER_A, TELEPORTER_B, TELEPORTER_C])
 
 class ExplodingWall extends THREE.Object3D {
-	constructor() {
+	constructor(tileIndex) {
 		super()
 		const geometry = new THREE.BoxBufferGeometry(1, 1, 1)
 		geometry.rotateX(Math.PI / 2)
@@ -410,12 +410,21 @@ class ExplodingWall extends THREE.Object3D {
 		const material = new THREE.MeshBasicMaterial({map: texture})
 		this.box = new THREE.Mesh(geometry, material)
 		this.duration = 0.5
+		this.adjacentIndices = []
+		this.tileIndex = tileIndex
 	}
 
 	ignite(time) {
+		if (this.isExploding()) {
+			return
+		}
 		this.ignition = time
 		this.children.forEach(mesh => mesh.shouldRemove = true)
 		this.add(this.box)
+
+		// ignite adjacent
+		const adjacent = this.parent.children.filter(e => this.adjacentIndices.includes(e.tileIndex))
+		adjacent.forEach(wall => wall.ignite(time))
 	}
 
 	isExploding() {
@@ -596,7 +605,7 @@ function setupMaze(map, scene) {
 
 		// add explodeable wall geometry
 		if (tile.isExplodable()) {
-			const explodingWall = new ExplodingWall()
+			const explodingWall = new ExplodingWall(tile.index)
 			explodingWall.position.copy(tile.position)
 			adjacent.filter(a => a.isFloor()).forEach(floor => {
 				const dir = tile.directionTo(floor)
@@ -609,6 +618,7 @@ function setupMaze(map, scene) {
 				const mesh = new THREE.Mesh(bufferGeometry, material)
 				explodingWall.add(mesh)
 			})
+			explodingWall.adjacentIndices = adjacent.filter(e => e.isExplodable()).map(e => e.index)
 			explodable.add(explodingWall)
 		}
 
