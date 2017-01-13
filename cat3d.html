@@ -165,7 +165,7 @@ class Entity extends THREE.Object3D {
 				direction.setComponent(i, Math.sign(component))
 				this.raycaster.set(this.position, direction)
 				this.raycaster.far = this.size + magnitude
-				const collisions = this.raycaster.intersectObjects(maze.children)
+				const collisions = this.raycaster.intersectObject(maze, true)
 				if (collisions.length) {
 					this.onCollisions(collisions, time)
 				}
@@ -209,6 +209,16 @@ class Fireball extends Entity {
 	}
 
 	onCollisions(collisions, time) {
+		if (!this.removeAtTime) {
+			collisions.forEach(collision => {
+				for (let obj = collision.object; obj; obj = obj.parent) {
+					if (obj.onDamage) {
+						obj.onDamage(time)
+						break
+					}
+				}
+			})
+		}
 		this.removeAtTime = time
 		if (this.isBig) {
 			this.isBig = false
@@ -388,6 +398,48 @@ const TELEPORTER_B = 0x20
 const TELEPORTER_C = 0x21
 const TELEPORTER_SET = new Set([TELEPORTER_A, TELEPORTER_B, TELEPORTER_C])
 
+class ExplodingWall extends THREE.Object3D {
+	constructor() {
+		super()
+		const geometry = new THREE.BoxBufferGeometry(1, 1, 1)
+		geometry.rotateX(Math.PI / 2)
+		const texture = textureCache.get("walls/exploding.png", texture => {
+			this.box.material.map = new SpriteSheetProxy(texture)
+			this.box.material.needsUpdate = true
+		})
+		const material = new THREE.MeshBasicMaterial({map: texture})
+		this.box = new THREE.Mesh(geometry, material)
+		this.duration = 0.5
+	}
+
+	ignite(time) {
+		this.ignition = time
+		this.children.forEach(mesh => mesh.shouldRemove = true)
+		this.add(this.box)
+	}
+
+	isExploding() {
+		return !!this.ignition
+	}
+
+	onDamage(time) {
+		this.ignite(time)
+	}
+
+	update(time) {
+		if (this.isExploding()) {
+			const timeDelta = time - this.ignition
+			if (timeDelta > this.duration) {
+				this.shouldRemove = true
+			} else {
+				const texture = this.box.material.map
+				const frame = Math.floor(timeDelta * texture.frames / this.duration)
+				this.box.material.map.setFrame(frame)
+			}
+		}
+	}
+}
+
 class Tile {
 	constructor(map, index, position, layout, entity) {
 		this.map = map
@@ -513,8 +565,11 @@ class WallGeometry extends THREE.PlaneGeometry {
 
 const maze = new THREE.Group()
 maze.name = "Maze"
-const explodable = new THREE.Group()
+
 function setupMaze(map, scene) {
+	const immutable = new THREE.Group()
+	const explodable = new THREE.Group()
+
 	const floorGeometry = new THREE.Geometry()
 	const wallGeometry = new Map()
 
@@ -541,17 +596,20 @@ function setupMaze(map, scene) {
 
 		// add explodeable wall geometry
 		if (tile.isExplodable()) {
+			const explodingWall = new ExplodingWall()
+			explodingWall.position.copy(tile.position)
 			adjacent.filter(a => a.isFloor()).forEach(floor => {
 				const dir = tile.directionTo(floor)
 				const name = getWallName(tile.layout-7, dir)
-				const geometry = new WallGeometry(tile.position, dir)
+				const geometry = new WallGeometry(new THREE.Vector2(), dir)
 				const bufferGeometry = new THREE.BufferGeometry().fromGeometry(geometry)
 				const texture = textureCache.get("walls/" + name + ".png")
 				texture.anisotropy = renderer.getMaxAnisotropy()
-				const material = new THREE.MeshBasicMaterial({map: texture, transparent: true, opacity: 0.5})
+				const material = new THREE.MeshBasicMaterial({map: texture})
 				const mesh = new THREE.Mesh(bufferGeometry, material)
-				explodable.add(mesh)
+				explodingWall.add(mesh)
 			})
+			explodable.add(explodingWall)
 		}
 
 		// enqueue adjacent floor tiles that haven't been visited yet
@@ -564,7 +622,7 @@ function setupMaze(map, scene) {
 
 	// add floor geometry to scene
 	const material = new THREE.MeshBasicMaterial({color: 0x555555})
-	maze.add(new THREE.Mesh(new THREE.BufferGeometry().fromGeometry(floorGeometry), material))
+	immutable.add(new THREE.Mesh(new THREE.BufferGeometry().fromGeometry(floorGeometry), material))
 
 	// add aggregate wall geometries to scene
 	wallGeometry.forEach((geometry, name) => {
@@ -574,10 +632,9 @@ function setupMaze(map, scene) {
 		const material = new THREE.MeshBasicMaterial({map: texture})
 		const mesh = new THREE.Mesh(bufferGeometry, material)
 		mesh.name = name
-		maze.add(mesh)
+		immutable.add(mesh)
 	})
-	scene.add(maze)
-	scene.add(explodable)
+	scene.add(maze.add(immutable, explodable))
 }
 
 function setupPlayerSpawn(map) {
