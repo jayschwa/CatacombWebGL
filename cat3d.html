@@ -13,7 +13,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r83/three.js" crossorigin="anonymous"></script>
 <script id="vertex" type="text/plain">
 varying vec3 vNormal;
-varying vec3 vViewPosition;
+varying vec3 vModelPosition;
 
 #include <common>
 #include <uv_pars_vertex>
@@ -26,7 +26,7 @@ void main() {
 	#include <defaultnormal_vertex>
 
 	vNormal = normalize(transformedNormal);
-	vViewPosition = -mvPosition.xyz;
+	vModelPosition = transformed;
 
 	#include <uv_vertex>
 }
@@ -35,9 +35,12 @@ void main() {
 uniform bool clampColor;
 uniform vec3 diffuse;
 uniform float opacity;
+uniform int pixelate;
+
+uniform mat4 modelViewMatrix;
 
 varying vec3 vNormal;
-varying vec3 vViewPosition;
+varying vec3 vModelPosition;
 
 vec3 colorPalette[16];
 
@@ -113,6 +116,12 @@ void main() {
 
 	vec3 material = diffuseColor.rgb;
 
+	vec3 modelPosition = vModelPosition;
+	if (pixelate > 0) {
+		modelPosition = floor(modelPosition * float(pixelate)) / float(pixelate);
+	}
+	vec3 vViewPosition = -(modelViewMatrix * vec4(modelPosition, 1.0)).xyz;
+
 	#include <lights_template>
 
 	vec3 outgoingLight = reflectedLight.directDiffuse + reflectedLight.indirectDiffuse;
@@ -135,7 +144,7 @@ class CustomMaterial extends THREE.ShaderMaterial {
 			THREE.UniformsLib.fog,
 			THREE.UniformsLib.lights,
 			{
-				clampColor: {value: true}
+				clampColor: {value: true},
 			}
 		])
 		super({
@@ -162,12 +171,23 @@ class CustomMaterial extends THREE.ShaderMaterial {
 
 	get map() { return this.uniforms.map.value }
 	set map(value) { this.uniforms.map.value = value }
+
+	get pixelate() { return this.uniforms.pixelate.value }
+	set pixelate(value) { this.uniforms.pixelate.value = value }
 }
 
 function clampColor(bool) {
 	scene.traverse(obj => {
 		if (obj.material && obj.material.clampColor !== undefined) {
 			obj.material.clampColor = bool
+		}
+	})
+}
+
+function pixelate(value) {
+	scene.traverse(obj => {
+		if (obj.material && obj.material.pixelate !== undefined) {
+			obj.material.pixelate = value
 		}
 	})
 }
@@ -366,7 +386,7 @@ class Fireball extends Entity {
 		this.updateVelocity()
 
 		if (isBig) {
-			this.light = new THREE.PointLight(0xFF5555, 1, 2)
+			this.light = new THREE.PointLight(0xE55B00, 1, 2)
 			this.add(this.light)
 		}
 
@@ -849,7 +869,7 @@ class Portal extends THREE.Sprite {
 		this.name = "Portal"
 		this.position.copy(position)
 		this.fps = 8
-		this.light = new THREE.PointLight(0x0000FF /*0x7ACDFE*/, 1, 1)
+		this.light = new THREE.PointLight(0x0042DD, 1, 1)
 		this.add(this.light)
 	}
 
