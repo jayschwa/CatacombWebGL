@@ -16,9 +16,9 @@
 #include <uv_pars_vertex>
 
 void main() {
-	#include <uv_vertex>
 	#include <begin_vertex>
 	#include <project_vertex>
+	#include <uv_vertex>
 }
 </script>
 <script id="fragment" type="text/plain">
@@ -26,6 +26,7 @@ uniform vec3 diffuse;
 uniform float opacity;
 
 #include <common>
+#include <fog_pars_fragment>
 #include <map_pars_fragment>
 #include <uv_pars_fragment>
 
@@ -39,6 +40,8 @@ void main() {
 	reflectedLight.indirectDiffuse *= diffuseColor.rgb;
 	vec3 outgoingLight = reflectedLight.indirectDiffuse;
 	gl_FragColor = vec4(outgoingLight, diffuseColor.a);
+
+	#include <fog_fragment>
 }
 </script>
 <script>
@@ -90,12 +93,14 @@ class CustomMaterial extends THREE.ShaderMaterial {
 	constructor(params) {
 		params = params || {}
 		const uniforms = THREE.UniformsUtils.merge([
-			THREE.UniformsLib.common
+			THREE.UniformsLib.common,
+			THREE.UniformsLib.fog
 		])
 		super({
 			vertexShader: document.getElementById("vertex").textContent,
 			fragmentShader: document.getElementById("fragment").textContent,
-			uniforms: uniforms
+			uniforms: uniforms,
+			fog: true
 		})
 		this.setValues(params)
 	}
