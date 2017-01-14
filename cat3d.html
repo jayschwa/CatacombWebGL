@@ -94,7 +94,7 @@ void RE_Direct_Pixelated(const in IncidentLight directLight, const in GeometricC
 		irradiance *= PI; // punctual light
 	#endif
 
-	reflectedLight.directDiffuse += mix(irradiance * material, irradiance, 2.0/3.0);
+	reflectedLight.directDiffuse += mix(irradiance * material, irradiance, 0.5);
 }
 
 void RE_IndirectDiffuse_Pixelated(const in vec3 irradiance, const in GeometricContext geometry, const in vec3 material, inout ReflectedLight reflectedLight) {
@@ -412,7 +412,7 @@ class Fireball extends Entity {
 
 		this.light = new THREE.PointLight(0xFF6600, 0.5, 0.5)
 		if (isBig) { this.light.distance *= 2 }
-		this.add(this.light)
+		if (isBig) { this.add(this.light) }
 
 		this.spriteSheet = SpriteSheetProxy(fireballTexture)
 		this.sprite = new THREE.Sprite(new THREE.SpriteMaterial({map: this.spriteSheet}))
@@ -433,14 +433,15 @@ class Fireball extends Entity {
 				}
 			})
 		}
-		this.removeAtTime = time
-		if (this.isBig) {
-			this.isBig = false
-			this.removeAtTime += 0.075
-			this.moveDirection.z = 0
-			this.updateVelocity()
-			this.translateZ(-0.1)
+		if (!this.isBig) {
+			this.add(this.light)
 		}
+		this.removeAtTime = time + 0.075
+		this.isBig = false
+		this.removeAtTime += 0.075
+		this.moveDirection.z = 0
+		this.updateVelocity()
+		this.translateZ(-0.1)
 	}
 
 	update(time) {
@@ -956,7 +957,7 @@ function addPortals(map, scene) {
 	})
 }
 
-fetchMapAndRender("8_Access_Floor")
+fetchMapAndRender("11_Catacomb")
 
 </script>
 </html>
