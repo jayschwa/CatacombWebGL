@@ -85,14 +85,26 @@ function render() {
 	requestAnimationFrame(render)
 }
 
-const material = new THREE.ShaderMaterial({
-	vertexShader: document.getElementById("vertex").textContent,
-	fragmentShader: document.getElementById("fragment").textContent,
-	uniforms: THREE.UniformsLib.common
-})
+class CustomMaterial extends THREE.ShaderMaterial {
+	constructor(params) {
+		params = params || {}
+		const uniforms = THREE.UniformsUtils.merge([
+			THREE.UniformsLib.common
+		])
+		super({
+			vertexShader: document.getElementById("vertex").textContent,
+			fragmentShader: document.getElementById("fragment").textContent,
+			uniforms: uniforms
+		})
+		this.color = uniforms.diffuse.value = new THREE.Color(0xFFFFFF)
+		this.setValues(params)
+	}
+}
+const material = new CustomMaterial({color: 0xFF0000})
 const box = new THREE.Mesh(new THREE.BoxBufferGeometry(1, 1, 1), material)
 box.position.z = -3
 scene.add(box)
+scene.add(new THREE.AmbientLight())
 render()
 </script>
 </html>
