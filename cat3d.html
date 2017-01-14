@@ -11,8 +11,166 @@
 	<div id="cat3d"></div>
 </body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r83/three.js" crossorigin="anonymous"></script>
+<script id="vertex" type="text/plain">
+varying vec3 vNormal;
+varying vec3 vViewPosition;
+
+#include <common>
+#include <uv_pars_vertex>
+
+void main() {
+	#include <begin_vertex>
+	#include <project_vertex>
+
+	#include <beginnormal_vertex>
+	#include <defaultnormal_vertex>
+
+	vNormal = normalize(transformedNormal);
+	vViewPosition = -mvPosition.xyz;
+
+	#include <uv_vertex>
+}
+</script>
+<script id="fragment" type="text/plain">
+uniform bool clampColor;
+uniform vec3 diffuse;
+uniform float opacity;
+
+varying vec3 vNormal;
+varying vec3 vViewPosition;
+
+vec3 colorPalette[16];
+
+void initColorPalette() {
+	colorPalette[0] = vec3(0, 0, 0);
+	colorPalette[1] = vec3(0, 0, 2.0/3.0);
+	colorPalette[2] = vec3(0, 2.0/3.0, 0);
+	colorPalette[3] = vec3(0, 2.0/3.0, 2.0/3.0);
+	colorPalette[4] = vec3(2.0/3.0, 0, 0);
+	colorPalette[5] = vec3(2.0/3.0, 0, 2.0/3.0);
+	colorPalette[6] = vec3(2.0/3.0, 1.0/3.0, 0);
+	colorPalette[7] = vec3(2.0/3.0, 2.0/3.0, 2.0/3.0);
+	colorPalette[8] = vec3(1.0/3.0, 1.0/3.0, 1.0/3.0);
+	colorPalette[9] = vec3(1.0/3.0, 1.0/3.0, 1);
+	colorPalette[10] = vec3(1.0/3.0, 1, 1.0/3.0);
+	colorPalette[11] = vec3(1.0/3.0, 1, 1);
+	colorPalette[12] = vec3(1, 1.0/3.0, 1.0/3.0);
+	colorPalette[13] = vec3(1, 1.0/3.0, 1);
+	colorPalette[14] = vec3(1, 1, 1.0/3.0);
+	colorPalette[15] = vec3(1, 1, 1);
+}
+
+vec3 clampToPalette(const in vec3 color) {
+	float smallestDistance = 100000.0;
+	vec3 closestColor = color;
+	for (int i = 0; i < 16; i++) {
+		float distance = distance(color, colorPalette[i]);
+		if (distance < smallestDistance) {
+			smallestDistance = distance;
+			closestColor = colorPalette[i];
+		}
+	}
+	return closestColor;
+}
+
+#include <common>
+#include <bsdfs>
+#include <fog_pars_fragment>
+#include <lights_pars>
+#include <map_pars_fragment>
+#include <uv_pars_fragment>
+
+void RE_Direct_Pixelated(const in IncidentLight directLight, const in GeometricContext geometry, const in vec3 material, inout ReflectedLight reflectedLight) {
+
+	float dotNL = saturate(dot(geometry.normal, directLight.direction));
+	vec3 irradiance = dotNL * directLight.color;
+
+	#ifndef PHYSICALLY_CORRECT_LIGHTS
+		irradiance *= PI; // punctual light
+	#endif
+
+	reflectedLight.directDiffuse += irradiance * material;
+}
+
+void RE_IndirectDiffuse_Pixelated(const in vec3 irradiance, const in GeometricContext geometry, const in vec3 material, inout ReflectedLight reflectedLight) {
+	reflectedLight.indirectDiffuse += irradiance * material;  // FIXME: this is a color right now
+}
+
+#define RE_Direct          RE_Direct_Pixelated
+#define RE_IndirectDiffuse RE_IndirectDiffuse_Pixelated
+
+void main() {
+	initColorPalette();
+
+	vec4 diffuseColor = vec4(diffuse, opacity);
+
+	#include <map_fragment>
+
+	#include <normal_flip>
+	#include <normal_fragment>
+
+	ReflectedLight reflectedLight = ReflectedLight(vec3(0.0), vec3(0.0), vec3(0.0), vec3(0.0));
+
+	vec3 material = diffuseColor.rgb;
+
+	#include <lights_template>
+
+	vec3 outgoingLight = reflectedLight.directDiffuse + reflectedLight.indirectDiffuse;
+	gl_FragColor = vec4(outgoingLight, diffuseColor.a);
+
+	if (clampColor) {
+		gl_FragColor.rgb = clampToPalette(gl_FragColor.rgb);
+	}
+
+	#include <fog_fragment>
+}
+</script>
 <script>
 "use strict";
+
+class CustomMaterial extends THREE.ShaderMaterial {
+	constructor(params) {
+		const uniforms = THREE.UniformsUtils.merge([
+			THREE.UniformsLib.common,
+			THREE.UniformsLib.fog,
+			THREE.UniformsLib.lights,
+			{
+				clampColor: {value: true}
+			}
+		])
+		super({
+			vertexShader: document.getElementById("vertex").textContent,
+			fragmentShader: document.getElementById("fragment").textContent,
+			uniforms: uniforms,
+			fog: true,
+			lights: true
+		})
+		this.setValues(params)
+	}
+
+	get clampColor() { return this.uniforms.clampColor.value }
+	set clampColor(bool) { this.uniforms.clampColor.value = bool }
+
+	get color() { return this.uniforms.diffuse.value }
+	set color(value) {
+		if (value.isColor) {
+			this.uniforms.diffuse.value = value
+		} else {
+			this.uniforms.diffuse.value = new THREE.Color(value)
+		}
+	}
+
+	get map() { return this.uniforms.map.value }
+	set map(value) { this.uniforms.map.value = value }
+}
+
+function clampColor(bool) {
+	scene.traverse(obj => {
+		if (obj.material && obj.material.clampColor !== undefined) {
+			obj.material.clampColor = bool
+		}
+	})
+}
 
 THREE.Vector3.prototype.copy = function(v) {
 	this.x = v.x
@@ -41,11 +199,15 @@ function getWallName(type, direction) {
 const gameContainer = document.getElementById("cat3d")
 
 const renderer = new THREE.WebGLRenderer({antialias: true})
+renderer.physicallyCorrectLights = true
 gameContainer.appendChild(renderer.domElement)
 
 const camera = new THREE.PerspectiveCamera(45, 0, 0.01, 256)
 const clock = new THREE.Clock()
 const scene = new THREE.Scene()
+
+const ambient = new THREE.AmbientLight()
+scene.add(ambient)
 
 class TextureCache extends THREE.TextureLoader {
 	constructor() {
@@ -202,6 +364,11 @@ class Fireball extends Entity {
 		this.updateMatrixWorld()
 		this.moveDirection.z = 1
 		this.updateVelocity()
+
+		if (isBig) {
+			this.light = new THREE.PointLight(0xFF5555, 1, 2)
+			this.add(this.light)
+		}
 
 		this.spriteSheet = SpriteSheetProxy(fireballTexture)
 		this.sprite = new THREE.Sprite(new THREE.SpriteMaterial({map: this.spriteSheet}))
@@ -627,7 +794,7 @@ function setupMaze(map, scene) {
 				const bufferGeometry = new THREE.BufferGeometry().fromGeometry(geometry)
 				const texture = textureCache.get("walls/" + name + ".png")
 				texture.anisotropy = renderer.getMaxAnisotropy()
-				const material = new THREE.MeshBasicMaterial({map: texture})
+				const material = new CustomMaterial({map: texture})
 				const mesh = new THREE.Mesh(bufferGeometry, material)
 				explodingWall.add(mesh)
 			})
@@ -644,7 +811,7 @@ function setupMaze(map, scene) {
 	}
 
 	// add floor geometry to scene
-	const material = new THREE.MeshBasicMaterial({color: 0x555555})
+	const material = new CustomMaterial({color: 0x555555})
 	immutable.add(new THREE.Mesh(new THREE.BufferGeometry().fromGeometry(floorGeometry), material))
 
 	// add aggregate wall geometries to scene
@@ -652,7 +819,7 @@ function setupMaze(map, scene) {
 		const bufferGeometry = new THREE.BufferGeometry().fromGeometry(geometry)
 		const texture = textureCache.get("walls/" + name + ".png")
 		texture.anisotropy = renderer.getMaxAnisotropy()
-		const material = new THREE.MeshBasicMaterial({map: texture})
+		const material = new CustomMaterial({map: texture})
 		const mesh = new THREE.Mesh(bufferGeometry, material)
 		mesh.name = name
 		immutable.add(mesh)
@@ -682,6 +849,8 @@ class Portal extends THREE.Sprite {
 		this.name = "Portal"
 		this.position.copy(position)
 		this.fps = 8
+		this.light = new THREE.PointLight(0x0000FF /*0x7ACDFE*/, 1, 1)
+		this.add(this.light)
 	}
 
 	update(time) {
@@ -734,7 +903,7 @@ function addPortals(map, scene) {
 	})
 }
 
-fetchMapAndRender("13_Warrens")
+fetchMapAndRender("8_Access_Floor")
 
 </script>
 </html>
