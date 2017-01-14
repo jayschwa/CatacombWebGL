@@ -410,7 +410,7 @@ class Fireball extends Entity {
 		this.moveDirection.z = 1
 		this.updateVelocity()
 
-		this.light = new THREE.PointLight(0xE55B00, 1, 0.5)
+		this.light = new THREE.PointLight(0xFF6600, 0.5, 0.5)
 		if (isBig) { this.light.distance *= 2 }
 		this.add(this.light)
 
@@ -462,11 +462,17 @@ class Player extends Entity {
 		this.add(camera)
 		this.camera = camera
 
+		this.light = new THREE.PointLight(0xE55B00, 0, 0)
+		this.add(this.light)
+
 		textureCache.get("sprites/hand.png", texture => {
 			texture.repeat.y = 1.5
 			const spritesheet = SpriteSheetProxy(texture, 2)
 			this.hand = new THREE.Sprite(new THREE.SpriteMaterial({map: spritesheet}))
-			this.hand.setFrame = spritesheet.setFrame.bind(spritesheet)
+			this.hand.setFrame = (frame) => {
+				spritesheet.setFrame(frame)
+				this.light.intensity = frame
+			}
 			this.hand.scale.divideScalar(18)
 			this.hand.outPosition = new THREE.Vector3(-0.00265, -0.01375, 0.1)
 			this.hand.inPosition = new THREE.Vector3(-0.00265, -0.03, 0.05)
@@ -494,6 +500,7 @@ class Player extends Entity {
 			)
 			const frame = Math.ceil(chargeTime * 8) % 2
 			this.hand.setFrame(frame)
+			this.light.distance = Math.min(1, chargeTime) * 2.5
 		} else if (this.lastFire) {
 			const timeDelta = time - this.lastFire
 			this.hand.position.lerpVectors(
@@ -515,6 +522,7 @@ class Player extends Entity {
 		if (value > 0) {
 			this.chargeStarted = this.lastTime
 			this.hand.setFrame(1)
+			this.light.distance = 0
 		} else {
 			const chargeTime = this.lastTime - this.chargeStarted
 			const fireball = new Fireball(this.position, this.getWorldDirection(), chargeTime > 1)
@@ -855,7 +863,7 @@ function setupMaze(map, scene) {
 	}
 
 	// add floor geometry to scene
-	const material = new CustomMaterial({color: 0x555555})
+	const material = new CustomMaterial({color: 0x555555, clampColor: false, pixelate: 0})
 	immutable.add(new THREE.Mesh(new THREE.BufferGeometry().fromGeometry(floorGeometry), material))
 
 	// add aggregate wall geometries to scene
