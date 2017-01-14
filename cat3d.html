@@ -34,6 +34,8 @@ void main() {
 <script id="fragment" type="text/plain">
 uniform bool clampColor;
 uniform vec3 diffuse;
+uniform float interweaveMin;
+uniform float interweaveSteps;
 uniform float opacity;
 uniform int pixelate;
 
@@ -92,7 +94,7 @@ void RE_Direct_Pixelated(const in IncidentLight directLight, const in GeometricC
 		irradiance *= PI; // punctual light
 	#endif
 
-	reflectedLight.directDiffuse += irradiance * material;
+	reflectedLight.directDiffuse += mix(irradiance * material, irradiance, 2.0/3.0);
 }
 
 void RE_IndirectDiffuse_Pixelated(const in vec3 irradiance, const in GeometricContext geometry, const in vec3 material, inout ReflectedLight reflectedLight) {
@@ -117,14 +119,19 @@ void main() {
 	vec3 material = diffuseColor.rgb;
 
 	vec3 modelPosition = vModelPosition;
+	float interweave = 1.0;
 	if (pixelate > 0) {
-		modelPosition = floor(modelPosition * float(pixelate)) / float(pixelate);
+		modelPosition = floor(modelPosition * float(pixelate));
+		float interweaveStep = (1.0 - interweaveMin) / interweaveSteps;
+		interweave = interweaveMin + interweaveStep * mod(dot(modelPosition, vec3(1)), interweaveSteps);
+		modelPosition /= float(pixelate);
 	}
 	vec3 vViewPosition = -(modelViewMatrix * vec4(modelPosition, 1.0)).xyz;
 
 	#include <lights_template>
 
-	vec3 outgoingLight = reflectedLight.directDiffuse + reflectedLight.indirectDiffuse;
+	vec3 outgoingLight = reflectedLight.indirectDiffuse;
+	outgoingLight += reflectedLight.directDiffuse * interweave;
 	gl_FragColor = vec4(outgoingLight, diffuseColor.a);
 
 	if (clampColor) {
@@ -145,7 +152,9 @@ class CustomMaterial extends THREE.ShaderMaterial {
 			THREE.UniformsLib.lights,
 			{
 				clampColor: {value: true},
-				pixelate: {value: 32}
+				interweaveMin: {value: 2/3},
+				interweaveSteps: {value: 3},
+				pixelate: {value: 64}
 			}
 		])
 		super({
@@ -170,6 +179,12 @@ class CustomMaterial extends THREE.ShaderMaterial {
 		}
 	}
 
+	get interweaveMin() { return this.uniforms.interweaveMin.value }
+	set interweaveMin(value) { this.uniforms.interweaveMin.value = value }
+
+	get interweaveSteps() { return this.uniforms.interweaveSteps.value }
+	set interweaveSteps(value) { this.uniforms.interweaveSteps.value = value }
+
 	get map() { return this.uniforms.map.value }
 	set map(value) { this.uniforms.map.value = value }
 
@@ -181,6 +196,15 @@ function clampColor(bool) {
 	scene.traverse(obj => {
 		if (obj.material && obj.material.clampColor !== undefined) {
 			obj.material.clampColor = bool
+		}
+	})
+}
+
+function interweave(min, steps) {
+	scene.traverse(obj => {
+		if (obj.material && obj.material.interweaveMin !== undefined) {
+			obj.material.interweaveMin = min
+			obj.material.interweaveSteps = steps || 2
 		}
 	})
 }
@@ -386,10 +410,9 @@ class Fireball extends Entity {
 		this.moveDirection.z = 1
 		this.updateVelocity()
 
-		if (isBig) {
-			this.light = new THREE.PointLight(0xE55B00, 1, 2)
-			this.add(this.light)
-		}
+		this.light = new THREE.PointLight(0xE55B00, 1, 0.5)
+		if (isBig) { this.light.distance *= 2 }
+		this.add(this.light)
 
 		this.spriteSheet = SpriteSheetProxy(fireballTexture)
 		this.sprite = new THREE.Sprite(new THREE.SpriteMaterial({map: this.spriteSheet}))
@@ -870,7 +893,7 @@ class Portal extends THREE.Sprite {
 		this.name = "Portal"
 		this.position.copy(position)
 		this.fps = 8
-		this.light = new THREE.PointLight(0x0042DD, 1, 1)
+		this.light = new THREE.PointLight(0x0042DD, 1, 1.5)
 		this.add(this.light)
 	}
 
@@ -879,6 +902,7 @@ class Portal extends THREE.Sprite {
 			const n = Math.floor(time * this.fps) % this.material.map.frames
 			this.material.map.setFrame(n)
 		}
+		this.light.intensity = 0.5 + 0.2 * Math.abs(Math.sin(0.5 * time)) + 0.02 * Math.abs(Math.sin(this.fps * time))
 	}
 }
 
