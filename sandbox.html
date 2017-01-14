@@ -26,6 +26,7 @@ uniform vec3 diffuse;
 uniform float opacity;
 
 #include <common>
+#include <map_pars_fragment>
 #include <uv_pars_fragment>
 
 void main() {
@@ -96,11 +97,24 @@ class CustomMaterial extends THREE.ShaderMaterial {
 			fragmentShader: document.getElementById("fragment").textContent,
 			uniforms: uniforms
 		})
-		this.color = uniforms.diffuse.value = new THREE.Color(0xFFFFFF)
 		this.setValues(params)
 	}
+
+	get color() { return this.uniforms.diffuse.value }
+
+	set color(value) {
+		if (value.isColor) {
+			this.uniforms.color.diffuse = value
+		} else {
+			this.uniforms.color.diffuse = new THREE.Color(value)
+		}
+	}
+
+	get map() { return this.uniforms.map.value }
+
+	set map(value) { this.uniforms.map.value = value }
 }
-const material = new CustomMaterial({color: 0xFF0000})
+const material = new CustomMaterial({map: new THREE.TextureLoader().load("walls/slime_light.png")})
 const box = new THREE.Mesh(new THREE.BoxBufferGeometry(1, 1, 1), material)
 box.position.z = -3
 scene.add(box)
