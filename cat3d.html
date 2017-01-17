@@ -370,28 +370,28 @@ class Entity extends THREE.Object3D {
 
 		if (this.velocity.lengthSq()) {
 			const positionDelta = this.velocity.clone().multiplyScalar(timeDelta)
-			for (let i of [0, 1]) {
-				const component = positionDelta.getComponent(i)
-				const magnitude = Math.abs(component)
-				const direction = new THREE.Vector3()
-				direction.setComponent(i, Math.sign(component))
-				this.raycaster.set(this.position, direction)
-				this.raycaster.far = this.size + magnitude
-				const collisions = this.raycaster.intersectObject(maze, true)
-				if (collisions.length) {
-					this.onCollisions(collisions, time)
-				}
-				for (let collision of collisions) {
-					const overlap = this.raycaster.far - collision.distance
-					const offset = Math.min(overlap, magnitude)
+			const magnitude = positionDelta.length()
+			const direction = this.velocity.clone().normalize()
+			this.raycaster.set(this.position, direction)
+			this.raycaster.far = this.size + magnitude
+			let collisions = this.raycaster.intersectObject(maze, true)
+			
+			// FIXME: Three seems to have a terrible bug with sprite raytracing
+			collisions = collisions.filter(c => c.face || c.object.getWorldPosition().distanceTo(this.raycaster.ray.origin) <= this.raycaster.far)
+
+			if (collisions.length && this.onCollisions) {
+				this.onCollisions(collisions, time)
+			}
+			for (let collision of collisions) {
+				const overlap = this.raycaster.far - collision.distance
+				const offset = Math.min(overlap, magnitude)
+				if (collision.face) {
 					positionDelta.addScaledVector(collision.face.normal, offset)
 				}
 			}
 			this.position.add(positionDelta)
 		}
 	}
-
-	onCollisions() {  /* not implemented */ }
 
 	updateVelocity() {
 		this.velocity.copy(this.moveDirection).normalize().multiplyScalar(this.speed)  // velocity in object space
@@ -410,10 +410,22 @@ class Enemy extends Entity {
 		})
 	}
 
+	onDamage(time) {
+		if (!this.timeOfDeath) {
+			this.timeOfDeath = time
+		}
+	}
+
 	update(time) {
 		if (this.texture) {
-			const frame = Math.floor(this.speed * time) % 4
-			this.texture.setFrame(frame)
+			if (this.timeOfDeath) {
+				const timeAfterDeath = time - this.timeOfDeath
+				const frame = this.texture.frames - 4 + Math.min(3, Math.floor(8 * timeAfterDeath))
+				this.texture.setFrame(frame)
+			} else {
+				const frame = Math.floor(this.speed * time) % 4
+				this.texture.setFrame(frame)
+			}
 		}
 	}
 }
@@ -999,8 +1011,7 @@ function addEnemies(map, scene) {
 
 	orcs.forEach(orcTile => {
 		const orc = new Orc(orcTile.position)
-		scene.add(orc)
-		console.log(orc)
+		maze.add(orc)
 	})
 }
 
