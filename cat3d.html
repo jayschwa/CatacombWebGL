@@ -11,6 +11,7 @@
 	<div id="cat3d"></div>
 </body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r83/three.js" crossorigin="anonymous"></script>
+<script src="https://rawgit.com/mrdoob/stats.js/master/build/stats.min.js"></script>
 <script id="vertex" type="text/plain">
 varying vec3 vNormal;
 varying vec3 vModelPosition;
@@ -242,6 +243,10 @@ function getWallName(type, direction) {
 }
 
 const gameContainer = document.getElementById("cat3d")
+
+const stats = new Stats()
+stats.showPanel(0)
+gameContainer.appendChild(stats.dom)
 
 const renderer = new THREE.WebGLRenderer({antialias: true})
 renderer.physicallyCorrectLights = true
@@ -597,6 +602,7 @@ document.addEventListener("pointerlockchange", event => {
 })
 
 function render() {
+	stats.begin()
 	const time = clock.getElapsedTime()
 	const objectsToRemove = []
 	scene.traverse(obj => {
@@ -607,6 +613,7 @@ function render() {
 	})
 	objectsToRemove.forEach(obj => obj.parent.remove(obj))
 	renderer.render(scene, player.camera)
+	stats.end()
 	requestAnimationFrame(render)
 }
 
