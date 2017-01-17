@@ -401,10 +401,10 @@ class Entity extends THREE.Object3D {
 }
 
 class Enemy extends Entity {
-	constructor(sprite, size, speed, frames) {
+	constructor(sprite, size, speed, frameWidth, frames) {
 		super(size, speed)
 		textureCache.get(sprite, texture => {
-			this.texture = new SpriteSheetProxy(texture, frames)
+			this.texture = new SpriteSheetProxy(texture, frameWidth, frames)
 			this.sprite = new THREE.Sprite(new THREE.SpriteMaterial({fog: true, map: this.texture}))
 			this.add(this.sprite)
 		})
@@ -420,8 +420,11 @@ class Enemy extends Entity {
 
 class Orc extends Enemy {
 	constructor(position) {
-		super("sprites/orc.png", 0.5, 5, 10)
+		super("sprites/orc.png", 0.5, 5, 51)
 		this.position.copy(position)
+		const scale = 0.8
+		this.scale.multiplyScalar(scale)
+		this.translateZ(-(1-scale)/2)
 	}
 }
 
@@ -497,16 +500,16 @@ class Player extends Entity {
 		this.add(this.light)
 
 		textureCache.get("sprites/hand.png", texture => {
-			texture.repeat.y = 1.5
-			const spritesheet = SpriteSheetProxy(texture, 2)
+			const spritesheet = SpriteSheetProxy(texture, 88, 2)
+			spritesheet.repeat.y = 88/72
 			this.hand = new THREE.Sprite(new THREE.SpriteMaterial({map: spritesheet}))
 			this.hand.setFrame = (frame) => {
 				spritesheet.setFrame(frame)
 				this.light.intensity = frame
 			}
-			this.hand.scale.divideScalar(18)
-			this.hand.outPosition = new THREE.Vector3(-0.00265, -0.01375, 0.1)
-			this.hand.inPosition = new THREE.Vector3(-0.00265, -0.03, 0.05)
+			this.hand.scale.divideScalar(20)
+			this.hand.outPosition = new THREE.Vector3(-0.0032, -0.0165, 0.1)
+			this.hand.inPosition = new THREE.Vector3(-0.0032, -0.033, 0.05)
 			this.hand.position.copy(this.hand.inPosition)
 			this.add(this.hand)
 		})
@@ -948,7 +951,7 @@ class Portal extends THREE.Sprite {
 	}
 }
 
-function SpriteSheetProxy(texture, frames) {
+function SpriteSheetProxy(texture, frameWidth, frames) {
 	const offset = texture.offset.clone()
 	const repeat = texture.repeat.clone()
 	const proxy = new Proxy(texture, {
@@ -960,15 +963,17 @@ function SpriteSheetProxy(texture, frames) {
 			}
 		}
 	})
-	proxy.frames = frames || Math.floor(texture.image.width / texture.image.height)
+	proxy.frameWidth = frameWidth || texture.image.height
+	proxy.frames = frames || Math.floor(texture.image.width / frameWidth)
+	proxy.repeat.y = proxy.frameWidth / texture.image.height
+	proxy.frameUvWidth = proxy.frameWidth / texture.image.width
 	proxy.isSpriteSheet = true
 	proxy.setFrame = function(n) {
 		if (n < 0 || n >= this.frames) {
 			throw new RangeError("Invalid frame number")
 		}
-		const width = 1 / this.frames
-		this.offset.x = n * width
-		this.repeat.x = width
+		this.offset.x = n * this.frameUvWidth
+		this.repeat.x = this.frameUvWidth
 	}
 	proxy.setFrame(0)
 	return proxy
@@ -992,7 +997,6 @@ function addPortals(map, scene) {
 
 function addEnemies(map, scene) {
 	const orcs = map.tiles().filter(t => [0x17, 0x25, 0x2A].includes(t.entity))
-	console.log(orcs)
 
 	orcs.forEach(orcTile => {
 		const orc = new Orc(orcTile.position)
