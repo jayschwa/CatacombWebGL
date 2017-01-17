@@ -400,6 +400,31 @@ class Entity extends THREE.Object3D {
 	}
 }
 
+class Enemy extends Entity {
+	constructor(sprite, size, speed, frames) {
+		super(size, speed)
+		textureCache.get(sprite, texture => {
+			this.texture = new SpriteSheetProxy(texture, frames)
+			this.sprite = new THREE.Sprite(new THREE.SpriteMaterial({fog: true, map: this.texture}))
+			this.add(this.sprite)
+		})
+	}
+
+	update(time) {
+		if (this.texture) {
+			const frame = Math.floor(this.speed * time) % 4
+			this.texture.setFrame(frame)
+		}
+	}
+}
+
+class Orc extends Enemy {
+	constructor(position) {
+		super("sprites/orc.png", 0.5, 5, 10)
+		this.position.copy(position)
+	}
+}
+
 const fireballTexture = textureCache.get("sprites/fireball.png")
 
 class Fireball extends Entity {
@@ -785,6 +810,7 @@ function fetchMapAndRender(name) {
 		setupMaze(map, scene)
 		setupPlayerSpawn(map)
 		addPortals(map, scene)
+		addEnemies(map, scene)
 		render()
 	});
 }
@@ -964,7 +990,18 @@ function addPortals(map, scene) {
 	})
 }
 
-fetchMapAndRender("11_Catacomb")
+function addEnemies(map, scene) {
+	const orcs = map.tiles().filter(t => [0x17, 0x25, 0x2A].includes(t.entity))
+	console.log(orcs)
+
+	orcs.forEach(orcTile => {
+		const orc = new Orc(orcTile.position)
+		scene.add(orc)
+		console.log(orc)
+	})
+}
+
+fetchMapAndRender("0_Approach")
 
 </script>
 </html>

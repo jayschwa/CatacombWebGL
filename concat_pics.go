@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"image"
 	"image/color"
 	"image/png"
@@ -56,8 +57,11 @@ func (mi MultiImage) ColorModel() color.Model {
 }
 
 func main() {
-	outfilename := os.Args[1]
-	infilenames := os.Args[2:]
+	w := flag.Int("w", 64, "Fit pictures to this width")
+	h := flag.Int("h", 64, "Fit pictures to this height")
+	flag.Parse()
+	outfilename := flag.Args()[0]
+	infilenames := flag.Args()[1:]
 	var images MultiImage
 	for _, name := range infilenames {
 		f, err := os.Open(name)
@@ -68,7 +72,7 @@ func main() {
 		if err != nil {
 			panic(err)
 		}
-		img = ResizedCanvas{img, 128, 64}
+		img = ResizedCanvas{img, *w, *h}
 		images = append(images, img)
 		f.Close()
 	}
