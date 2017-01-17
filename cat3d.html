@@ -662,7 +662,7 @@ class ExplodingWall extends THREE.Object3D {
 		const geometry = new THREE.BoxBufferGeometry(1, 1, 1)
 		geometry.rotateX(Math.PI / 2)
 		const texture = textureCache.get("walls/exploding.png", texture => {
-			this.box.material.map = new SpriteSheetProxy(texture)
+			this.box.material.map = new SpriteSheetProxy(texture, 64, 3)
 			this.box.material.needsUpdate = true
 		})
 		const material = new THREE.MeshBasicMaterial({map: texture, transparent: true})
@@ -940,6 +940,12 @@ class Portal extends THREE.Sprite {
 		this.fps = 8
 		this.light = new THREE.PointLight(0x0042DD, 1, 1.5)
 		this.add(this.light)
+
+		textureCache.get("sprites/portal.png", texture => {
+			this.spritesheet = new SpriteSheetProxy(texture)
+			this.material.map = this.spritesheet
+			this.material.needsUpdate = true
+		})
 	}
 
 	update(time) {
@@ -964,7 +970,7 @@ function SpriteSheetProxy(texture, frameWidth, frames) {
 		}
 	})
 	proxy.frameWidth = frameWidth || texture.image.height
-	proxy.frames = frames || Math.floor(texture.image.width / frameWidth)
+	proxy.frames = frames || Math.floor(texture.image.width / proxy.frameWidth)
 	proxy.repeat.y = proxy.frameWidth / texture.image.height
 	proxy.frameUvWidth = proxy.frameWidth / texture.image.width
 	proxy.isSpriteSheet = true
@@ -986,13 +992,6 @@ function addPortals(map, scene) {
 		portals.push(portal)
 		scene.add(portal)
 	}
-	textureCache.get("sprites/portal.png", texture => {
-		portals.forEach(portal => {
-			const spritesheet = SpriteSheetProxy(texture)
-			portal.material.map = spritesheet
-			portal.material.needsUpdate = true
-		})
-	})
 }
 
 function addEnemies(map, scene) {
