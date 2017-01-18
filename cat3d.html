@@ -244,21 +244,6 @@ function getWallName(type, direction) {
 
 const gameContainer = document.getElementById("cat3d")
 
-const stats = new Stats()
-stats.showPanel(0)
-gameContainer.appendChild(stats.dom)
-
-const renderer = new THREE.WebGLRenderer({antialias: true})
-renderer.physicallyCorrectLights = true
-gameContainer.appendChild(renderer.domElement)
-
-const camera = new THREE.PerspectiveCamera(45, 0, 0.01, 256)
-const clock = new THREE.Clock()
-const scene = new THREE.Scene()
-
-const ambient = new THREE.AmbientLight()
-scene.add(ambient)
-
 class TextureCache extends THREE.TextureLoader {
 	constructor() {
 		super(...arguments)
@@ -319,29 +304,6 @@ class TextureCache extends THREE.TextureLoader {
 
 const textureCache = new TextureCache()
 
-function resizeView(width, height) {
-	renderer.setSize(width, height)
-	camera.aspect = width / height
-	camera.updateProjectionMatrix()
-}
-
-resizeView(gameContainer.clientWidth, gameContainer.clientHeight)
-
-let resizeNextFrame = false
-window.addEventListener("resize", () => {
-	if (!resizeNextFrame) {
-		window.requestAnimationFrame(() => {
-			resizeView(gameContainer.clientWidth, gameContainer.clientHeight)
-			resizeNextFrame = false
-		})
-		resizeNextFrame = true
-	}
-})
-
-renderer.domElement.addEventListener("click", event => {
-	renderer.domElement.requestPointerLock()
-})
-
 class Entity extends THREE.Object3D {
 	constructor(size, speed) {
 		super()
@@ -358,7 +320,7 @@ class Entity extends THREE.Object3D {
 		this.raycaster = new THREE.Raycaster()
 	}
 
-	update(time) {
+	update(time, maze) {
 		const timeDelta = time - this.lastTime
 		this.lastTime = time
 		if (!timeDelta) { return }
@@ -446,7 +408,7 @@ class Enemy extends Entity {
 			if (this.timeOfDeath) {
 				const timeAfterDeath = time - this.timeOfDeath
 				const deathStartFrame = this.texture.frames - this.spriteInfo.deathFrames
-				const frame = deathStartFrame + Math.floor(this.speed * timeAfterDeath)
+				const frame = deathStartFrame + Math.floor(8 * timeAfterDeath)
 				if (frame >= this.texture.frames && this.removeDead) {
 					this.shouldRemove = true
 				} else if (frame < this.texture.frames) {
@@ -468,9 +430,6 @@ class Orc extends Enemy {
 			attackFrames: 2,
 			deathFrames: 4
 		})
-		const scale = 0.8
-		this.scale.multiplyScalar(scale)
-		this.translateZ(-(1-scale)/2)
 	}
 
 	static entityIds() {
@@ -592,8 +551,8 @@ class Fireball extends Entity {
 		return true
 	}
 
-	update(time) {
-		super.update(time)
+	update(time, maze) {
+		super.update(time, maze)
 		let frame = Math.floor(time * 10) % 2
 		if (this.isBig) { frame += 2 }
 		this.spriteSheet.setFrame(frame)
@@ -604,12 +563,12 @@ class Fireball extends Entity {
 }
 
 class Player extends Entity {
-	constructor(camera) {
+	constructor() {
 		super(2/3, 5)
+		this.camera = new THREE.PerspectiveCamera(45, 0, 0.01, 256)
 		this.name = "Player"
-		camera.rotation.set(0, Math.PI, 0)
-		this.add(camera)
-		this.camera = camera
+		this.camera.rotation.set(0, Math.PI, 0)
+		this.add(this.camera)
 
 		this.light = new THREE.PointLight(0xE55B00, 0, 0)
 		this.add(this.light)
@@ -630,8 +589,8 @@ class Player extends Entity {
 		})
 	}
 
-	update(time) {
-		super.update(time)
+	update(time, maze) {
+		super.update(time, maze)
 		if (this.hand) {
 			this.updateHand(time)
 		}
@@ -675,7 +634,7 @@ class Player extends Entity {
 		} else {
 			const chargeTime = this.lastTime - this.chargeStarted
 			const fireball = new Fireball(this.position, this.getWorldDirection(), chargeTime > 1)
-			scene.add(fireball)
+			this.parent.add(fireball)
 			this.chargeStarted = 0
 			this.lastFire = this.lastTime
 			this.hand.setFrame(0)
@@ -691,74 +650,22 @@ class Player extends Entity {
 	}
 }
 
-const player = new Player(camera)
-scene.add(player)
+function bindsFor(player) {
+	return {
+		ArrowUp: player.moveForward.bind(player),
+		ArrowLeft: player.turnLeft.bind(player),
+		ArrowDown: player.moveBackward.bind(player),
+		ArrowRight: player.turnRight.bind(player),
 
-const binds = {
-	ArrowUp: player.moveForward.bind(player),
-	ArrowLeft: player.turnLeft.bind(player),
-	ArrowDown: player.moveBackward.bind(player),
-	ArrowRight: player.turnRight.bind(player),
+		KeyW: player.moveForward.bind(player),
+		KeyA: player.moveLeft.bind(player),
+		KeyS: player.moveBackward.bind(player),
+		KeyD: player.moveRight.bind(player),
 
-	KeyW: player.moveForward.bind(player),
-	KeyA: player.moveLeft.bind(player),
-	KeyS: player.moveBackward.bind(player),
-	KeyD: player.moveRight.bind(player),
-
-	ShiftLeft: player.sprint.bind(player)
-}
-
-function onKey(value) {
-	return (event) => {
-		const command = binds[event.code]
-		if (command && !event.repeat) {
-			command(value)
-		}
+		ShiftLeft: player.sprint.bind(player)
 	}
 }
 
-function onMouseButton(value) {
-	return (event) => {
-		player.shoot(value)
-	}
-}
-
-function onMouseMove(event) {
-	player.rotateY(-event.movementX / 2000)
-	player.updateVelocity()
-}
-
-const eventHandlers = [
-	["keydown", onKey(1)],
-	["keyup", onKey(-1)],
-	["mousedown", onMouseButton(1)],
-	["mouseup", onMouseButton(-1)],
-	["mousemove", onMouseMove]
-]
-
-document.addEventListener("pointerlockchange", event => {
-	if (document.pointerLockElement === renderer.domElement) {
-		eventHandlers.forEach(([e, f]) => document.addEventListener(e, f))
-	} else {
-		eventHandlers.forEach(([e, f]) => document.removeEventListener(e, f))
-	}
-})
-
-function render() {
-	stats.begin()
-	const time = clock.getElapsedTime()
-	const objectsToRemove = []
-	scene.traverse(obj => {
-		obj.update && obj.update(time)
-		if (obj.shouldRemove) {
-			objectsToRemove.push(obj)
-		}
-	})
-	objectsToRemove.forEach(obj => obj.parent.remove(obj))
-	renderer.render(scene, player.camera)
-	stats.end()
-	requestAnimationFrame(render)
-}
 
 const PLAYER_START_NORTH = 0x01
 const PLAYER_START_EAST = 0x02
@@ -914,25 +821,6 @@ class TileMap {
 	}
 }
 
-function fetchMapAndRender(name) {
-	fetch("maps/" + name + ".c3dmap")
-	.then(function(response) {
-		return response.arrayBuffer()
-	})
-	.then(function(buffer) {
-		const map = new TileMap(new Uint8Array(buffer))
-		console.log("map dimensions: " + map.width + "x" + map.height)
-		const hellish = map.layout.includes(7)
-		const fogColor = hellish ? 0x330000 : 0x000000  // hell gets red tint
-		scene.fog = new THREE.Fog(fogColor, 1, Math.max(40, 1.25 * Math.max(map.width, map.height)))
-		setupMaze(map, scene)
-		setupPlayerSpawn(map)
-		addPortals(map, scene)
-		addEnemies(map, scene)
-		render()
-	});
-}
-
 class FloorGeometry extends THREE.PlaneGeometry {
 	constructor(position) {
 		super(1, 1)
@@ -955,9 +843,6 @@ class WallGeometry extends THREE.PlaneGeometry {
 		this.translate(position.x, position.y, 0)
 	}
 }
-
-const maze = new THREE.Group()
-maze.name = "Maze"
 
 function setupMaze(map, scene) {
 	const immutable = new THREE.Group()
@@ -997,7 +882,7 @@ function setupMaze(map, scene) {
 				const geometry = new WallGeometry(new THREE.Vector2(), dir)
 				const bufferGeometry = new THREE.BufferGeometry().fromGeometry(geometry)
 				const texture = textureCache.get("walls/" + name + ".png")
-				texture.anisotropy = renderer.getMaxAnisotropy()
+				texture.anisotropy = 8
 				const material = new CustomMaterial({map: texture})
 				const mesh = new THREE.Mesh(bufferGeometry, material)
 				explodingWall.add(mesh)
@@ -1022,16 +907,16 @@ function setupMaze(map, scene) {
 	wallGeometry.forEach((geometry, name) => {
 		const bufferGeometry = new THREE.BufferGeometry().fromGeometry(geometry)
 		const texture = textureCache.get("walls/" + name + ".png")
-		texture.anisotropy = renderer.getMaxAnisotropy()
+		texture.anisotropy = 8
 		const material = new CustomMaterial({map: texture})
 		const mesh = new THREE.Mesh(bufferGeometry, material)
 		mesh.name = name
 		immutable.add(mesh)
 	})
-	scene.add(maze.add(immutable, explodable))
+	scene.add(immutable, explodable)
 }
 
-function setupPlayerSpawn(map) {
+function setupPlayerSpawn(map, player) {
 	const spawn = map.tiles().filter(t => PLAYER_START_SET.has(t.entity))[0]
 	player.position.copy(spawn.position)
 	const target = player.position.clone()
@@ -1043,8 +928,6 @@ function setupPlayerSpawn(map) {
 	}
 	player.lookAt(target)
 }
-
-const portals = []
 
 class Portal extends THREE.Sprite {
 
@@ -1104,7 +987,6 @@ function addPortals(map, scene) {
 	const portalTiles = map.tiles().filter(t => [0x18, 0x1F, 0x20, 0x21].includes(t.entity))
 	for (let tile of portalTiles) {
 		const portal = new Portal(tile.position)
-		portals.push(portal)
 		scene.add(portal)
 	}
 }
@@ -1114,11 +996,152 @@ function addEnemies(map, scene) {
 	const mapTiles = map.tiles()
 	enemies.forEach(enemy => {
 		const spawnPoints = mapTiles.filter(t => enemy.entityIds().includes(t.entity))
-		spawnPoints.forEach(spawn => maze.add(new enemy(spawn.position)))
+		spawnPoints.forEach(spawn => scene.add(new enemy(spawn.position)))
 	})
 }
 
-fetchMapAndRender("16_Chaos_Corridors")
+class Game {
+	constructor(container, mapName, player) {
+		this.container = container
+		this.mapName = mapName
+		this.player = player || new Player()
+
+		this.clock = new THREE.Clock()
+
+		this.renderer = new THREE.WebGLRenderer({antialias: true})
+		this.renderer.physicallyCorrectLights = true
+		container.appendChild(this.renderer.domElement)
+
+		this.scene = new THREE.Scene()
+		this.ambientLight = new THREE.AmbientLight()
+		this.scene.add(this.ambientLight)
+		this.scene.add(this.player)
+
+		this.maze = new THREE.Group()
+		this.maze.name = "Maze"
+
+		this.stats = new Stats()
+		this.stats.showPanel(0)
+		container.appendChild(this.stats.dom)
+	}
+
+	play() {
+		this.isActive = true
+		this.render()
+	}
+
+	pause() {
+		this.isActive = false
+	}
+
+	render() {
+		this.stats.begin()
+		const time = this.clock.getElapsedTime()
+		const objectsToRemove = []
+		this.scene.traverse(obj => {
+			obj.update && obj.update(time, this.maze)
+			if (obj.shouldRemove) {
+				objectsToRemove.push(obj)
+			}
+		})
+		objectsToRemove.forEach(obj => obj.parent.remove(obj))
+		this.renderer.render(this.scene, this.player.camera)
+		this.stats.end()
+		if (this.isActive) {
+			requestAnimationFrame(this.render.bind(this))
+		}
+	}
+
+	resizeView(width, height) {
+		this.renderer.setSize(width, height)
+		const cameras = [this.player.camera]
+		cameras.forEach(camera => {
+			camera.aspect = width / height
+			camera.updateProjectionMatrix()
+		})
+	}
+
+
+	setup() {
+		const that = this
+		fetch("maps/" + this.mapName + ".c3dmap")
+		.then(function(response) {
+			return response.arrayBuffer()
+		})
+		.then(function(buffer) {
+			// TODO: Game should not be aware of map format
+			const map = new TileMap(new Uint8Array(buffer))
+			console.log("map dimensions: " + map.width + "x" + map.height)
+			const hellish = map.layout.includes(7)
+			const fogColor = hellish ? 0x330000 : 0x000000  // hell gets red tint
+			that.scene.fog = new THREE.Fog(fogColor, 1, Math.max(40, 1.25 * Math.max(map.width, map.height)))
+			setupMaze(map, that.maze)
+			setupPlayerSpawn(map, that.player)
+			addPortals(map, that.maze)
+			addEnemies(map, that.maze)
+			that.scene.add(that.maze)
+			that.play()
+		})
+	}
+}
+
+const game = new Game(gameContainer, "18_Halls_of_Blood")
+
+game.resizeView(gameContainer.clientWidth, gameContainer.clientHeight, [game.player.camera])
+
+let resizeNextFrame = false
+window.addEventListener("resize", () => {
+	if (!resizeNextFrame) {
+		window.requestAnimationFrame(() => {
+			game.resizeView(gameContainer.clientWidth, gameContainer.clientHeight)
+			resizeNextFrame = false
+		})
+		resizeNextFrame = true
+	}
+})
+
+game.renderer.domElement.addEventListener("click", event => {
+	game.renderer.domElement.requestPointerLock()
+})
+
+function onKey(value) {
+	const binds = bindsFor(game.player)
+	return (event) => {
+		const command = binds[event.code]
+		if (command && !event.repeat) {
+			command(value)
+		}
+	}
+}
+
+function onMouseButton(value) {
+	return (event) => {
+		game.player.shoot(value)
+	}
+}
+
+function onMouseMove(event) {
+	game.player.rotateY(-event.movementX / 2000)
+	game.player.updateVelocity()
+}
+
+const eventHandlers = [
+	["keydown", onKey(1)],
+	["keyup", onKey(-1)],
+	["mousedown", onMouseButton(1)],
+	["mouseup", onMouseButton(-1)],
+	["mousemove", onMouseMove]
+]
+
+document.addEventListener("pointerlockchange", event => {
+	if (document.pointerLockElement === game.renderer.domElement) {
+		eventHandlers.forEach(([e, f]) => document.addEventListener(e, f))
+	} else {
+		eventHandlers.forEach(([e, f]) => document.removeEventListener(e, f))
+	}
+})
+
+game.setup()  // TODO: should be play()
 
 </script>
 </html>
