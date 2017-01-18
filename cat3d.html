@@ -422,8 +422,9 @@ function ancestorsAreEthereal(object) {
 }
 
 class Enemy extends Entity {
-	constructor(sprite, size, speed, frameWidth, frames) {
+	constructor(sprite, position, size, speed, frameWidth, frames) {
 		super(size, speed)
+		this.position.copy(position)
 		textureCache.get(sprite, texture => {
 			this.texture = new SpriteSheetProxy(texture, frameWidth, frames)
 			this.sprite = new THREE.Sprite(new THREE.SpriteMaterial({fog: true, map: this.texture}))
@@ -454,11 +455,16 @@ class Enemy extends Entity {
 
 class Orc extends Enemy {
 	constructor(position) {
-		super("sprites/orc.png", 0.5, 5, 51)
-		this.position.copy(position)
+		super("sprites/orc.png", position, 0.5, 5, 51)
 		const scale = 0.8
 		this.scale.multiplyScalar(scale)
 		this.translateZ(-(1-scale)/2)
+	}
+}
+
+class Troll extends Enemy {
+	constructor(position) {
+		super("sprites/troll.png", position, 0.75, 5, 64, 11)
 	}
 }
 
@@ -1028,15 +1034,18 @@ function addPortals(map, scene) {
 }
 
 function addEnemies(map, scene) {
-	const orcs = map.tiles().filter(t => [0x17, 0x25, 0x2A].includes(t.entity))
-
-	orcs.forEach(orcTile => {
-		const orc = new Orc(orcTile.position)
+	const mapTiles = map.tiles()
+	mapTiles.filter(t => [0x17, 0x25, 0x2A].includes(t.entity)).forEach(tile => {
+		const orc = new Orc(tile.position)
 		maze.add(orc)
+	})
+	mapTiles.filter(t => [0x16, 0x24, 0x29].includes(t.entity)).forEach(tile => {
+		const troll = new Troll(tile.position)
+		maze.add(troll)
 	})
 }
 
-fetchMapAndRender("0_Approach")
+fetchMapAndRender("4_Third_Floor")
 
 </script>
 </html>
