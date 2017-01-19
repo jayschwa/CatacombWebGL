@@ -18,7 +18,9 @@
   "homepage": "https://github.com/jayschwa/Cat3D-Tools#readme",
   "devDependencies": {
     "rollup": "^0.41.4",
-    "rollup-plugin-node-resolve": "^2.0.0"
+    "rollup-plugin-node-resolve": "^2.0.0",
+    "rollup-plugin-uglify": "^1.0.1",
+    "uglify-js": "git+https://github.com/mishoo/UglifyJS2.git#harmony"
   },
   "dependencies": {
     "three": "^0.83.0"
