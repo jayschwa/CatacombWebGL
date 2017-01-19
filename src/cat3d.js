@@ -1,4 +1,5 @@
 import * as THREE from "three"
+import { FloorGeometry, WallGeometry } from "./geometry"
 import { CustomMaterial } from "./material.js"
 import { Entity, SpriteSheetProxy, textureCache } from "./primitives.js"
 import { Bat, Demon, Mage, Orc, Troll } from "./enemies.js"
@@ -342,29 +343,6 @@ class TileMap {
 			tiles.push(this.tileAt(i))
 		}
 		return tiles
-	}
-}
-
-class FloorGeometry extends THREE.PlaneGeometry {
-	constructor(position) {
-		super(1, 1)
-		this.translate(position.x, position.y, -0.5)
-	}
-}
-
-class WallGeometry extends THREE.PlaneGeometry {
-	constructor(position, direction) {
-		super(1, 1)
-		this.rotateX(Math.PI / 2)
-		this.translate(0, -0.5, 0)
-		const coeffs = {
-			west: -1,
-			south: 0,
-			east: 1,
-			north: 2
-		}
-		this.rotateZ(coeffs[direction] * Math.PI / 2)
-		this.translate(position.x, position.y, 0)
 	}
 }
 
