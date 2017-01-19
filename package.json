@@ -1,0 +1,26 @@
+{
+  "name": "catacomb3d",
+  "version": "0.1.0",
+  "description": "Catacomb 3-D game recreated in JavaScript and WebGL",
+  "main": "cat3d.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jayschwa/Cat3D-Tools.git"
+  },
+  "author": "Jay Weisskopf",
+  "license": "GPL-2.0",
+  "bugs": {
+    "url": "https://github.com/jayschwa/Cat3D-Tools/issues"
+  },
+  "homepage": "https://github.com/jayschwa/Cat3D-Tools#readme",
+  "devDependencies": {
+    "rollup": "^0.41.4",
+    "rollup-plugin-node-resolve": "^2.0.0"
+  },
+  "dependencies": {
+    "three": "^0.83.0"
+  }
+}

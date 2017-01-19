@@ -1,18 +1,8 @@
-<html>
-<head>
-	<title>Catacomb 3-D Test</title>
-	<link rel="icon" type="image/png" href="favicon.png"/>
-	<style>
-		body { margin: 0; }
-		#cat3d { width: 100%; height: 100%; overflow: hidden; }
-	</style>
-</head>
-<body>
-	<div id="cat3d"></div>
-</body>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r83/three.js" crossorigin="anonymous"></script>
-<script src="https://rawgit.com/mrdoob/stats.js/master/build/stats.min.js"></script>
-<script id="vertex" type="text/plain">
+"use strict";
+
+import * as THREE from "three"
+
+const vertexShader = `
 varying vec3 vNormal;
 varying vec3 vModelPosition;
 
@@ -30,9 +20,9 @@ void main() {
 	vModelPosition = transformed;
 
 	#include <uv_vertex>
-}
-</script>
-<script id="fragment" type="text/plain">
+}`
+
+const fragmentShader = `
 uniform bool clampColor;
 uniform vec3 diffuse;
 uniform float interweaveMin;
@@ -141,9 +131,7 @@ void main() {
 
 	#include <fog_fragment>
 }
-</script>
-<script>
-"use strict";
+`
 
 class CustomMaterial extends THREE.ShaderMaterial {
 	constructor(params) {
@@ -159,8 +147,8 @@ class CustomMaterial extends THREE.ShaderMaterial {
 			}
 		])
 		super({
-			vertexShader: document.getElementById("vertex").textContent,
-			fragmentShader: document.getElementById("fragment").textContent,
+			vertexShader: vertexShader,
+			fragmentShader: fragmentShader,
 			uniforms: uniforms,
 			fog: true,
 			lights: true
@@ -241,8 +229,6 @@ function getWallName(type, direction) {
 	const suffix = ["north", "south"].includes(direction) ? "dark" : "light"
 	return wallTypeMap[type] + "_" + suffix
 }
-
-const gameContainer = document.getElementById("cat3d")
 
 class TextureCache extends THREE.TextureLoader {
 	constructor() {
@@ -340,7 +326,7 @@ class Entity extends THREE.Object3D {
 				const far = this.size + magnitude
 				this.raycaster.set(this.position, direction)
 				this.raycaster.far = far
-				
+
 				let collisions = this.raycaster.intersectObject(maze, true)
 
 				// FIXME: Three seems to have a terrible bug with sprite raytracing
@@ -1000,7 +986,7 @@ function addEnemies(map, scene) {
 	})
 }
 
-class Game {
+export class Game {
 	constructor(container, mapName, player) {
 		this.container = container
 		this.mapName = mapName
@@ -1019,10 +1005,27 @@ class Game {
 
 		this.maze = new THREE.Group()
 		this.maze.name = "Maze"
+	}
 
-		this.stats = new Stats()
-		this.stats.showPanel(0)
-		container.appendChild(this.stats.dom)
+	onKey(value) {
+		const binds = bindsFor(this.player)
+		return (event) => {
+			const command = binds[event.code]
+			if (command && !event.repeat) {
+				command(value)
+			}
+		}
+	}
+
+	onMouseButton(value) {
+		return (event) => {
+			this.player.shoot(value)
+		}
+	}
+
+	onMouseMove(event) {
+		this.player.rotateY(-event.movementX / 2000)
+		this.player.updateVelocity()
 	}
 
 	play() {
@@ -1035,7 +1038,6 @@ class Game {
 	}
 
 	render() {
-		this.stats.begin()
 		const time = this.clock.getElapsedTime()
 		const objectsToRemove = []
 		this.scene.traverse(obj => {
@@ -1046,7 +1048,6 @@ class Game {
 		})
 		objectsToRemove.forEach(obj => obj.parent.remove(obj))
 		this.renderer.render(this.scene, this.player.camera)
-		this.stats.end()
 		if (this.isActive) {
 			requestAnimationFrame(this.render.bind(this))
 		}
@@ -1063,6 +1064,22 @@ class Game {
 
 
 	setup() {
+		const eventHandlers = [
+			["keydown", this.onKey(1)],
+			["keyup", this.onKey(-1)],
+			["mousedown", this.onMouseButton(1)],
+			["mouseup", this.onMouseButton(-1)],
+			["mousemove", this.onMouseMove.bind(this)]
+		]
+
+		document.addEventListener("pointerlockchange", event => {
+			if (document.pointerLockElement === this.renderer.domElement) {
+				eventHandlers.forEach(([e, f]) => document.addEventListener(e, f))
+			} else {
+				eventHandlers.forEach(([e, f]) => document.removeEventListener(e, f))
+			}
+		})
+
 		const that = this
 		fetch("maps/" + this.mapName + ".c3dmap")
 		.then(function(response) {
@@ -1084,64 +1101,3 @@ class Game {
 		})
 	}
 }
-
-const game = new Game(gameContainer, "18_Halls_of_Blood")
-
-game.resizeView(gameContainer.clientWidth, gameContainer.clientHeight, [game.player.camera])
-
-let resizeNextFrame = false
-window.addEventListener("resize", () => {
-	if (!resizeNextFrame) {
-		window.requestAnimationFrame(() => {
-			game.resizeView(gameContainer.clientWidth, gameContainer.clientHeight)
-			resizeNextFrame = false
-		})
-		resizeNextFrame = true
-	}
-})
-
-game.renderer.domElement.addEventListener("click", event => {
-	game.renderer.domElement.requestPointerLock()
-})
-
-function onKey(value) {
-	const binds = bindsFor(game.player)
-	return (event) => {
-		const command = binds[event.code]
-		if (command && !event.repeat) {
-			command(value)
-		}
-	}
-}
-
-function onMouseButton(value) {
-	return (event) => {
-		game.player.shoot(value)
-	}
-}
-
-function onMouseMove(event) {
-	game.player.rotateY(-event.movementX / 2000)
-	game.player.updateVelocity()
-}
-
-const eventHandlers = [
-	["keydown", onKey(1)],
-	["keyup", onKey(-1)],
-	["mousedown", onMouseButton(1)],
-	["mouseup", onMouseButton(-1)],
-	["mousemove", onMouseMove]
-]
-
-document.addEventListener("pointerlockchange", event => {
-	if (document.pointerLockElement === game.renderer.domElement) {
-		eventHandlers.forEach(([e, f]) => document.addEventListener(e, f))
-	} else {
-		eventHandlers.forEach(([e, f]) => document.removeEventListener(e, f))
-	}
-})
-
-game.setup()  // TODO: should be play()
-
-</script>
-</html>
