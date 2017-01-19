@@ -1,5 +1,5 @@
 import * as THREE from "three"
-import { Entity, Portal } from "./entities"
+import { Entity, Fireball, Portal } from "./entities"
 import { FloorGeometry, WallGeometry } from "./geometry"
 import { CustomMaterial } from "./material"
 import { Bat, Demon, Mage, Orc, Troll } from "./enemies"
@@ -27,65 +27,6 @@ const wallTypeMap = {
 function getWallName(type, direction) {
 	const suffix = ["north", "south"].includes(direction) ? "dark" : "light"
 	return wallTypeMap[type] + "_" + suffix
-}
-
-const fireballTexture = textureCache.get("sprites/fireball.png")
-
-class Fireball extends Entity {
-	constructor(origin, direction, isBig) {
-		super(0, 30)
-		this.isBig = isBig
-		this.name = isBig? "Big Fireball" : "Fireball"
-		this.scale.divideScalar(3)
-		this.position.copy(origin)
-		this.lookAt(origin.clone().add(direction))
-		this.position.addScaledVector(direction, 2/3)
-		this.updateMatrixWorld()
-		this.moveDirection.z = 1
-		this.updateVelocity()
-
-		this.light = new THREE.PointLight(0xFF6600, 0.5, 0.5)
-		if (isBig) { this.light.distance *= 2 }
-		if (isBig) { this.add(this.light) }
-
-		this.spriteSheet = SpriteSheetProxy(fireballTexture)
-		this.sprite = new THREE.Sprite(new THREE.SpriteMaterial({map: this.spriteSheet}))
-		if (!isBig) {
-			this.sprite.material.rotation = Math.floor(Math.random() * 4) * Math.PI / 2
-		}
-		this.add(this.sprite)
-	}
-
-	onCollision(collision, time) {
-		if (!this.removeAtTime) {
-			for (let obj = collision.object; obj; obj = obj.parent) {
-				if (obj.onDamage) {
-					obj.onDamage(time)
-					break
-				}
-			}
-		}
-		if (!this.isBig) {
-			this.add(this.light)
-		}
-		this.removeAtTime = time + 0.075
-		this.isBig = false
-		this.removeAtTime += 0.075
-		this.moveDirection.z = 0
-		this.updateVelocity()
-		this.translateZ(-0.1)
-		return true
-	}
-
-	update(time, maze) {
-		super.update(time, maze)
-		let frame = Math.floor(time * 10) % 2
-		if (this.isBig) { frame += 2 }
-		this.spriteSheet.setFrame(frame)
-		if (time >= this.removeAtTime) {
-			this.shouldRemove = true
-		}
-	}
 }
 
 class Player extends Entity {

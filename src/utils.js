@@ -67,7 +67,8 @@ class TextureCache extends TextureLoader {
 			}
 			const texture = this.load(path,
 				(...args) => {
-					cachedTextures.set(path, queued)
+					const texture = args[0]
+					cachedTextures.set(path, texture)
 					queuedTextures.delete(path)
 					queued.onLoad.forEach(f => f && f(...args))
 				},

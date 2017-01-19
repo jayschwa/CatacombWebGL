@@ -1,4 +1,4 @@
-import { Object3D, PointLight, Raycaster, Sprite, Vector3 } from "three"
+import { Object3D, PointLight, Raycaster, Sprite, SpriteMaterial, Vector3 } from "three"
 import { SpriteSheetProxy, textureCache } from "./utils"
 
 export class Entity extends Object3D {
@@ -78,6 +78,67 @@ function ancestorsAreEthereal(object) {
 		}
 	}
 	return false
+}
+
+export class Fireball extends Entity {
+	constructor(origin, direction, isBig) {
+		super(0, 30)
+		this.isBig = isBig
+		this.name = isBig? "Big Fireball" : "Fireball"
+		this.scale.divideScalar(3)
+		this.position.copy(origin)
+		this.lookAt(origin.clone().add(direction))
+		this.position.addScaledVector(direction, 2/3)
+		this.updateMatrixWorld()
+		this.moveDirection.z = 1
+		this.updateVelocity()
+
+		this.light = new PointLight(0xFF6600, 0.5, 0.5)
+		if (isBig) { this.light.distance *= 2 }
+		if (isBig) { this.add(this.light) }
+
+		textureCache.get("sprites/fireball.png", texture => {
+			this.spriteSheet = SpriteSheetProxy(texture)
+			this.sprite = new Sprite(new SpriteMaterial({map: this.spriteSheet}))
+			if (!isBig) {
+				this.sprite.material.rotation = Math.floor(Math.random() * 4) * Math.PI / 2
+			}
+			this.add(this.sprite)
+		})
+	}
+
+	onCollision(collision, time) {
+		if (!this.removeAtTime) {
+			for (let obj = collision.object; obj; obj = obj.parent) {
+				if (obj.onDamage) {
+					obj.onDamage(time)
+					break
+				}
+			}
+		}
+		if (!this.isBig) {
+			this.add(this.light)
+		}
+		this.removeAtTime = time + 0.075
+		this.isBig = false
+		this.removeAtTime += 0.075
+		this.moveDirection.z = 0
+		this.updateVelocity()
+		this.translateZ(-0.1)
+		return true
+	}
+
+	update(time, maze) {
+		super.update(time, maze)
+		let frame = Math.floor(time * 10) % 2
+		if (this.isBig) { frame += 2 }
+		if (this.spriteSheet) {
+			this.spriteSheet.setFrame(frame)
+		}
+		if (time >= this.removeAtTime) {
+			this.shouldRemove = true
+		}
+	}
 }
 
 export class Portal extends Sprite {
