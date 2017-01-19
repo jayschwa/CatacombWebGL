@@ -1,4 +1,5 @@
-import { Object3D, Raycaster, Vector3 } from "three"
+import { Object3D, PointLight, Raycaster, Sprite, Vector3 } from "three"
+import { SpriteSheetProxy, textureCache } from "./utils"
 
 export class Entity extends Object3D {
 	constructor(size, speed) {
@@ -77,4 +78,29 @@ function ancestorsAreEthereal(object) {
 		}
 	}
 	return false
+}
+
+export class Portal extends Sprite {
+	constructor(position) {
+		super()
+		this.name = "Portal"
+		this.position.copy(position)
+		this.fps = 8
+		this.light = new PointLight(0x0042DD, 1, 1.5)
+		this.add(this.light)
+
+		textureCache.get("sprites/portal.png", texture => {
+			this.spritesheet = new SpriteSheetProxy(texture)
+			this.material.map = this.spritesheet
+			this.material.needsUpdate = true
+		})
+	}
+
+	update(time) {
+		if (this.material.map && this.material.map.isSpriteSheet) {
+			const n = Math.floor(time * this.fps) % this.material.map.frames
+			this.material.map.setFrame(n)
+		}
+		this.light.intensity = 0.5 + 0.2 * Math.abs(Math.sin(0.5 * time)) + 0.02 * Math.abs(Math.sin(this.fps * time))
+	}
 }

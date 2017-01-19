@@ -1,5 +1,5 @@
 import * as THREE from "three"
-import { Entity } from "./entities"
+import { Entity, Portal } from "./entities"
 import { FloorGeometry, WallGeometry } from "./geometry"
 import { CustomMaterial } from "./material"
 import { Bat, Demon, Mage, Orc, Troll } from "./enemies"
@@ -430,32 +430,6 @@ function setupPlayerSpawn(map, player) {
 		case PLAYER_START_WEST: target.x -= 1; break
 	}
 	player.lookAt(target)
-}
-
-class Portal extends THREE.Sprite {
-
-	constructor(position) {
-		super()
-		this.name = "Portal"
-		this.position.copy(position)
-		this.fps = 8
-		this.light = new THREE.PointLight(0x0042DD, 1, 1.5)
-		this.add(this.light)
-
-		textureCache.get("sprites/portal.png", texture => {
-			this.spritesheet = new SpriteSheetProxy(texture)
-			this.material.map = this.spritesheet
-			this.material.needsUpdate = true
-		})
-	}
-
-	update(time) {
-		if (this.material.map && this.material.map.isSpriteSheet) {
-			const n = Math.floor(time * this.fps) % this.material.map.frames
-			this.material.map.setFrame(n)
-		}
-		this.light.intensity = 0.5 + 0.2 * Math.abs(Math.sin(0.5 * time)) + 0.02 * Math.abs(Math.sin(this.fps * time))
-	}
 }
 
 function addPortals(map, scene) {
