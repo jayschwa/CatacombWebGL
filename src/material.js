@@ -5,6 +5,7 @@ varying vec3 vNormal;
 varying vec3 vModelPosition;
 
 #include <common>
+#include <fog_pars_vertex>
 #include <uv_pars_vertex>
 
 void main() {
@@ -17,6 +18,7 @@ void main() {
 	vNormal = normalize(transformedNormal);
 	vModelPosition = transformed;
 
+	#include <fog_vertex>
 	#include <uv_vertex>
 }`
 
