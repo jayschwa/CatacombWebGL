@@ -1,8 +1,9 @@
 import * as THREE from "three"
+import { Entity } from "./entities"
 import { FloorGeometry, WallGeometry } from "./geometry"
-import { CustomMaterial } from "./material.js"
-import { Entity, SpriteSheetProxy, textureCache } from "./primitives.js"
-import { Bat, Demon, Mage, Orc, Troll } from "./enemies.js"
+import { CustomMaterial } from "./material"
+import { Bat, Demon, Mage, Orc, Troll } from "./enemies"
+import { SpriteSheetProxy, textureCache } from "./utils"
 
 THREE.Vector3.prototype.copy = function(v) {
 	this.x = v.x

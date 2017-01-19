@@ -1,5 +1,6 @@
 import { Sprite, SpriteMaterial } from "three"
-import { Entity, SpriteSheetProxy, textureCache } from "./primitives.js"
+import { Entity } from "./entities"
+import { SpriteSheetProxy, textureCache } from "./utils"
 
 export class Enemy extends Entity {
 	constructor(sprite, position, size, speed, spriteInfo) {

@@ -128,8 +128,7 @@ void main() {
 	}
 
 	#include <fog_fragment>
-}
-`
+}`
 
 export class CustomMaterial extends ShaderMaterial {
 	constructor(params) {
