@@ -42,7 +42,7 @@ const TELEPORTER_C = 0x21
 const TELEPORTER_SET = new Set([TELEPORTER_A, TELEPORTER_B, TELEPORTER_C])
 
 class ExplodingWall extends THREE.Object3D {
-	constructor(tileIndex) {
+	constructor(position) {
 		super()
 		const geometry = new THREE.BoxBufferGeometry(1, 1, 1)
 		geometry.rotateX(Math.PI / 2)
@@ -51,10 +51,10 @@ class ExplodingWall extends THREE.Object3D {
 			this.box.material.needsUpdate = true
 		})
 		const material = new THREE.MeshBasicMaterial({map: texture, transparent: true})
+		this.position.copy(position)
 		this.box = new THREE.Mesh(geometry, material)
 		this.duration = 1/3
-		this.adjacentIndices = []
-		this.tileIndex = tileIndex
+		this.adjacent = []
 	}
 
 	ignite(time) {
@@ -67,9 +67,7 @@ class ExplodingWall extends THREE.Object3D {
 	}
 
 	igniteAdjacent(time) {
-		// FIXME: determine adjacents at initialization
-		const adjacent = this.parent.children.filter(e => this.adjacentIndices.includes(e.tileIndex))
-		adjacent.forEach(wall => wall.ignite(time))
+		this.adjacent.forEach(e => e.ignite(time))
 		this.adjacentsIgnited = true
 	}
 
@@ -185,14 +183,18 @@ class TileMap {
 }
 
 function setupMaze(map, scene) {
+	const mapTiles = map.tiles()
+
 	const immutable = new THREE.Group()
 	const explodable = new THREE.Group()
+
+	const explodingWalls = Array(map.size())
 
 	const floorGeometry = new THREE.Geometry()
 	const wallGeometry = new Map()
 
 	const visited = Array(map.size()).fill(false)
-	const queue = map.tiles().filter(isStartOrTeleport)
+	const queue = mapTiles.filter(isStartOrTeleport)
 	queue.forEach(tile => visited[tile.index] = true)
 
 	while (queue.length) {
@@ -214,8 +216,7 @@ function setupMaze(map, scene) {
 
 		// add explodeable wall geometry
 		if (tile.isExplodable()) {
-			const explodingWall = new ExplodingWall(tile.index)
-			explodingWall.position.copy(tile.position)
+			const explodingWall = new ExplodingWall(tile.position)
 			adjacent.filter(a => a.isFloor()).forEach(floor => {
 				const dir = tile.directionTo(floor)
 				const name = getWallName(tile.layout-7, dir)
@@ -227,7 +228,7 @@ function setupMaze(map, scene) {
 				const mesh = new THREE.Mesh(bufferGeometry, material)
 				explodingWall.add(mesh)
 			})
-			explodingWall.adjacentIndices = adjacent.filter(e => e.isExplodable()).map(e => e.index)
+			explodingWalls[tile.index] = explodingWall
 			explodable.add(explodingWall)
 		}
 
@@ -237,6 +238,18 @@ function setupMaze(map, scene) {
 			queue.push(tile)
 			visited[tile.index] = true
 		})
+	}
+
+	for (let i = 0; i < explodingWalls.length; i++) {
+		const expWall = explodingWalls[i]
+		if (expWall) {
+			const tile = mapTiles[i]
+			for (let k of tile.adjacentTiles().map(t => t.index)) {
+				if (explodingWalls[k]) {
+					expWall.adjacent.push(explodingWalls[k])
+				}
+			}
+		}
 	}
 
 	// add floor geometry to scene
