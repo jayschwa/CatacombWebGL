@@ -4,9 +4,10 @@ import { SpriteSheetProxy, textureCache } from "./utils"
 class Item extends Sprite {
 	constructor(position, ...itemFrames) {
 		super()
-		this.scale.multiplyScalar(2/3)
+		const scale = 0.6
+		this.scale.multiplyScalar(scale)
 		this.position.copy(position)
-		this.translateZ(-1/6)
+		this.translateZ(-(1-scale)/2)
 		this.itemFrames = itemFrames
 		this.material.fog = true
 		textureCache.get("sprites/items.png", texture => {
@@ -28,14 +29,12 @@ class Item extends Sprite {
 export class Bolt extends Item {
 	constructor(position) {
 		super(position, 0, 1)
-		this.material.fog = false
 	}
 }
 
 export class Nuke extends Item {
 	constructor(position) {
 		super(position, 2, 3)
-		this.material.fog = false
 	}
 }
 
