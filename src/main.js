@@ -2,6 +2,7 @@ import * as THREE from "three"
 import { Entity, Fireball, Portal } from "./entities"
 import { Bat, Demon, Mage, Orc, Troll } from "./enemies"
 import { FloorGeometry, WallGeometry } from "./geometry"
+import { Bolt, Nuke, Potion, RedKey, YellowKey, GreenKey, BlueKey, Scroll, Treasure } from "./items"
 import { CustomMaterial } from "./material"
 import { Player } from "./player"
 import { SpriteSheetProxy, textureCache } from "./utils"
@@ -299,6 +300,33 @@ function addEnemies(map, scene) {
 	})
 }
 
+function addItems(map, scene) {
+	const items = {
+		0x05: Bolt,
+		0x06: Nuke,
+		0x07: Potion,
+		0x08: RedKey,
+		0x09: YellowKey,
+		0x0A: GreenKey,
+		0x0B: BlueKey,
+		0x0C: Scroll,
+		0x0D: Scroll,
+		0x0E: Scroll,
+		0x0F: Scroll,
+		0x10: Scroll,
+		0x11: Scroll,
+		0x12: Scroll,
+		0x13: Scroll,
+		0x15: Treasure
+	}
+	map.tiles().forEach(tile => {
+		const item = items[tile.entity]
+		if (item) {
+			scene.add(new item(tile.position))
+		}
+	})
+}
+
 export class Game {
 	constructor(container, mapName, player) {
 		this.container = container
@@ -375,7 +403,6 @@ export class Game {
 		})
 	}
 
-
 	setup() {
 		const eventHandlers = [
 			["keydown", this.onKey(1)],
@@ -403,12 +430,13 @@ export class Game {
 			const map = new TileMap(new Uint8Array(buffer))
 			console.log("map dimensions: " + map.width + "x" + map.height)
 			const hellish = map.layout.includes(7)
-			const fogColor = hellish ? 0x330000 : 0x000000  // hell gets red tint
+			const fogColor = hellish ? 0x3300: 0x0000 // hell gets red tint
 			that.scene.fog = new THREE.Fog(fogColor, 1, Math.max(40, 1.25 * Math.max(map.width, map.height)))
 			setupMaze(map, that.maze)
 			setupPlayerSpawn(map, that.player)
 			addPortals(map, that.maze)
 			addEnemies(map, that.maze)
+			addItems(map, that.maze)
 			that.scene.add(that.maze)
 			that.play()
 		})
