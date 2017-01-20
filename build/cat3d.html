@@ -1,0 +1,37 @@
+<html>
+<head>
+	<title>Catacomb 3-D Test</title>
+	<link rel="icon" type="image/png" href="favicon.png"/>
+	<style>
+		body { margin: 0; }
+		#cat3d { width: 100%; height: 100%; overflow: hidden; }
+	</style>
+</head>
+<body>
+	<div id="cat3d"></div>
+</body>
+<script src="cat3d.js"></script>
+<script>
+const gameContainer = document.getElementById("cat3d")
+const game = new Catacomb3D.Game(gameContainer, "4_Third_Floor")
+game.resizeView(gameContainer.clientWidth, gameContainer.clientHeight, [game.player.camera])
+
+let resizeNextFrame = false
+window.addEventListener("resize", () => {
+	if (!resizeNextFrame) {
+		window.requestAnimationFrame(() => {
+			game.resizeView(gameContainer.clientWidth, gameContainer.clientHeight)
+			resizeNextFrame = false
+		})
+		resizeNextFrame = true
+	}
+})
+
+
+game.renderer.domElement.addEventListener("click", event => {
+	game.renderer.domElement.requestPointerLock()
+})
+
+game.setup()
+</script>
+</html>

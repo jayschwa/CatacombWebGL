@@ -1,3 +1,4 @@
 *.c3d
 *.exe
+node_modules
 pictures
