@@ -417,6 +417,8 @@ export class Game {
 				eventHandlers.forEach(([e, f]) => document.addEventListener(e, f))
 			} else {
 				eventHandlers.forEach(([e, f]) => document.removeEventListener(e, f))
+				this.player.moveDirection.set(0, 0, 0)
+				this.player.updateVelocity()
 			}
 		})
 
@@ -430,7 +432,7 @@ export class Game {
 			const map = new TileMap(new Uint8Array(buffer))
 			console.log("map dimensions: " + map.width + "x" + map.height)
 			const hellish = map.layout.includes(7)
-			const fogColor = hellish ? 0x3300: 0x0000 // hell gets red tint
+			const fogColor = hellish ? 0x3300 : 0x0000 // hell gets red tint
 			that.scene.fog = new THREE.Fog(fogColor, 1, Math.max(40, 1.25 * Math.max(map.width, map.height)))
 			setupMaze(map, that.maze)
 			setupPlayerSpawn(map, that.player)

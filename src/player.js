@@ -84,9 +84,11 @@ export class Player extends Entity {
 	turnRight(value) { this.turnDirection -= value }
 	shoot(value) {
 		if (value > 0) {
-			this.chargeStarted = this.lastTime
-			this.hand.setFrame(1)
-			this.light.distance = 0
+			if (!this.chargeStarted) {
+				this.chargeStarted = this.lastTime
+				this.hand.setFrame(1)
+				this.light.distance = 0
+			}
 		} else {
 			const chargeTime = this.lastTime - this.chargeStarted
 			const fireball = new Fireball(this.position, this.getWorldDirection(), chargeTime > 1)
