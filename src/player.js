@@ -1,5 +1,6 @@
 import { PerspectiveCamera, PointLight, Sprite, SpriteMaterial, Vector3 } from "three"
 import { Entity, Fireball } from "./entities"
+import { Item, Treasure } from "./items"
 import { SpriteSheetProxy, textureCache } from "./utils"
 
 export class Player extends Entity {
@@ -12,6 +13,9 @@ export class Player extends Entity {
 
 		this.light = new PointLight(0xE55B00, 0, 0)
 		this.add(this.light)
+
+		this.inventory = {}
+		this.score = 0
 
 		textureCache.get("sprites/hand.png", texture => {
 			const spritesheet = SpriteSheetProxy(texture, 88, 2)
@@ -27,6 +31,23 @@ export class Player extends Entity {
 			this.hand.position.copy(this.hand.inPosition)
 			this.add(this.hand)
 		})
+	}
+
+	onCollision(collision, time) {
+		const obj = collision.object
+		if (obj instanceof Item) {
+			if (obj instanceof Treasure) {
+				this.score += 100  // * level number
+			} else {
+				if (this.inventory[obj.name] === undefined) {
+					this.inventory[obj.name] = 0
+				}
+				this.inventory[obj.name]++
+			}
+			obj.shouldRemove = true
+			return false
+		}
+		return true
 	}
 
 	update(time, maze) {

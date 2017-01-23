@@ -1,10 +1,11 @@
 import { Sprite } from "three"
 import { SpriteSheetProxy, textureCache } from "./utils"
 
-class Item extends Sprite {
-	constructor(position, ...itemFrames) {
+export class Item extends Sprite {
+	constructor(name, position, ...itemFrames) {
 		super()
 		const scale = 0.6
+		this.name = name
 		this.scale.multiplyScalar(scale)
 		this.position.copy(position)
 		this.translateZ(-(1-scale)/2)
@@ -28,54 +29,54 @@ class Item extends Sprite {
 
 export class Bolt extends Item {
 	constructor(position) {
-		super(position, 0, 1)
+		super("bolt", position, 0, 1)
 	}
 }
 
 export class Nuke extends Item {
 	constructor(position) {
-		super(position, 2, 3)
+		super("nuke", position, 2, 3)
 	}
 }
 
 export class Potion extends Item {
 	constructor(position) {
-		super(position, 4)
+		super("potion", position, 4)
 	}
 }
 
 export class RedKey extends Item {
 	constructor(position) {
-		super(position, 5)
+		super("redKey", position, 5)
 	}
 }
 
 export class YellowKey extends Item {
 	constructor(position) {
-		super(position, 6)
+		super("yellowKey", position, 6)
 	}
 }
 
 export class GreenKey extends Item {
 	constructor(position) {
-		super(position, 7)
+		super("greenKey", position, 7)
 	}
 }
 
 export class BlueKey extends Item {
 	constructor(position) {
-		super(position, 8)
+		super("blueKey", position, 8)
 	}
 }
 
 export class Scroll extends Item {
 	constructor(position) {
-		super(position, 9)
+		super("scroll", position, 9)
 	}
 }
 
 export class Treasure extends Item {
 	constructor(position) {
-		super(position, 10)
+		super("treasure", position, 10)
 	}
 }
