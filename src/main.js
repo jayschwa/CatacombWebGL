@@ -148,7 +148,7 @@ class Tile {
 	}
 
 	isFloor() {
-		return !(this.isDoor || this.isWall() || this.isExplodable())
+		return !(this.isDoor() || this.isWall() || this.isExplodable())
 	}
 
 	isWall() {
