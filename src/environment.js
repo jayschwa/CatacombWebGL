@@ -27,4 +27,18 @@ export class Door extends Mesh {
 			this.material.map.setFrame(frame)
 		}
 	}
+
+	/**
+	 * Mark this and connected door tiles for removal.
+	 * @return {boolean} true if successful, false if this door is already marked
+	 */
+	unlock() {
+		if (this.shouldRemove) {
+			return false
+		} else {
+			this.shouldRemove = true
+			this.adjacent.forEach(door => door.unlock())
+			return true
+		}
+	}
 }

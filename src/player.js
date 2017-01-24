@@ -1,5 +1,6 @@
 import { PerspectiveCamera, PointLight, Sprite, SpriteMaterial, Vector3 } from "three"
 import { Entity, Fireball } from "./entities"
+import { Door } from "./environment"
 import { Item, Treasure } from "./items"
 import { SpriteSheetProxy, textureCache } from "./utils"
 
@@ -36,18 +37,41 @@ export class Player extends Entity {
 	onCollision(collision, time) {
 		const obj = collision.object
 		if (obj instanceof Item) {
-			if (obj instanceof Treasure) {
-				this.score += 100  // * level number
-			} else {
-				if (this.inventory[obj.name] === undefined) {
-					this.inventory[obj.name] = 0
-				}
-				this.inventory[obj.name]++
-			}
-			obj.shouldRemove = true
+			this.pickupItem(obj)
 			return false
+		} else if (obj instanceof Door) {
+			return !this.unlockDoor(obj)
 		}
 		return true
+	}
+
+	/** Mark item for removal from scene and add to player's inventory. **/
+	pickupItem(item) {
+		if (item instanceof Treasure) {
+			this.score += 100  // * level number
+		} else {
+			if (this.inventory[item.name] === undefined) {
+				this.inventory[item.name] = 0
+			}
+			this.inventory[item.name] += 1
+		}
+		item.shouldRemove = true
+	}
+
+	/**
+	 * Unlock door if player has matching key in inventory.
+	 * @return {boolean} true if successful, false if player does not have matching key
+	 */
+	unlockDoor(door) {
+		const keyName = door.color + "Key"
+		if (this.inventory[keyName]) {
+			if (door.unlock()) {
+				this.inventory[keyName] -= 1
+			}
+			return true
+		} else {
+			return false
+		}
 	}
 
 	update(time, maze) {
