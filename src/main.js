@@ -1,6 +1,7 @@
 import * as THREE from "three"
 import { Entity, Fireball, Portal } from "./entities"
 import { Bat, Demon, Mage, Orc, Troll } from "./enemies"
+import { Door } from "./environment"
 import { FloorGeometry, WallGeometry } from "./geometry"
 import { Bolt, Nuke, Potion, RedKey, YellowKey, GreenKey, BlueKey, Scroll, Treasure } from "./items"
 import { CustomMaterial } from "./material"
@@ -16,14 +17,21 @@ THREE.Vector3.prototype.copy = function(v) {
 	return this
 }
 
+const doorTypeMap = {
+	0x14: "red",
+	0x18: "yellow",
+	0x1C: "green",
+	0x20: "blue"
+}
+
 const wallTypeMap = {
-	1: "stone",
-	2: "slime",
-	3: "white",
-	4: "blood",
-	5: "tar",
-	6: "gold",
-	7: "hell"
+	0x01: "stone",
+	0x02: "slime",
+	0x03: "white",
+	0x04: "blood",
+	0x05: "tar",
+	0x06: "gold",
+	0x07: "hell"
 }
 
 function getWallName(type, direction) {
@@ -135,8 +143,12 @@ class Tile {
 		return null
 	}
 
+	isDoor() {
+		return doorTypeMap[this.layout] !== undefined
+	}
+
 	isFloor() {
-		return !(this.isWall() || this.isExplodable())
+		return !(this.isDoor || this.isWall() || this.isExplodable())
 	}
 
 	isWall() {
@@ -189,6 +201,7 @@ function setupMaze(map, scene) {
 	const immutable = new THREE.Group()
 	const explodable = new THREE.Group()
 
+	const doors = Array(map.size())
 	const explodingWalls = Array(map.size())
 
 	const floorGeometry = new THREE.Geometry()
@@ -215,10 +228,18 @@ function setupMaze(map, scene) {
 			wallGeometry.get(name).merge(new WallGeometry(wall.position, dir))
 		})
 
+		// doors
+		if (tile.isDoor()) {
+			const color = doorTypeMap[tile.layout]
+			const door = new Door(color, tile.position)
+			doors[tile.index] = door
+			scene.add(door)
+		}
+
 		// add explodeable wall geometry
 		if (tile.isExplodable()) {
 			const explodingWall = new ExplodingWall(tile.position)
-			adjacent.filter(a => a.isFloor()).forEach(floor => {
+			adjacent.filter(a => a.isDoor() || a.isFloor()).forEach(floor => {
 				const dir = tile.directionTo(floor)
 				const name = getWallName(tile.layout-7, dir)
 				const geometry = new WallGeometry(new THREE.Vector2(), dir)
@@ -239,6 +260,18 @@ function setupMaze(map, scene) {
 			queue.push(tile)
 			visited[tile.index] = true
 		})
+	}
+
+	for (let i = 0; i < doors.length; i++) {
+		const door = doors[i]
+		if (door) {
+			const tile = mapTiles[i]
+			for (let k of tile.adjacentTiles().map(t => t.index)) {
+				if (doors[k] && doors[k].color == door.color) {
+					door.adjacent.push(doors[k])
+				}
+			}
+		}
 	}
 
 	for (let i = 0; i < explodingWalls.length; i++) {
