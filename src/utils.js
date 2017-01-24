@@ -1,29 +1,45 @@
 import { NearestFilter, TextureLoader } from "three"
 
 export function SpriteSheetProxy(texture, frameWidth, frames) {
-	const offset = texture.offset.clone()
-	const repeat = texture.repeat.clone()
-	const proxy = new Proxy(texture, {
-		get: function(obj, prop) {
-			switch (prop) {
-				case "offset": return offset
-				case "repeat": return repeat
-				default: return obj[prop]
-			}
-		}
-	})
-	proxy.frameWidth = frameWidth || texture.image.height
-	proxy.frames = frames || Math.floor(texture.image.width / proxy.frameWidth)
-	proxy.repeat.y = Math.max(1, proxy.frameWidth / texture.image.height)
-	proxy.frameUvWidth = proxy.frameWidth / texture.image.width
-	proxy.isSpriteSheet = true
-	proxy.setFrame = function(n) {
+	const p = {
+		offset: texture.offset.clone(),
+		repeat: texture.repeat.clone()
+	}
+	p.frameWidth = frameWidth || texture.image.height
+	p.frames = frames || Math.floor(texture.image.width / p.frameWidth)
+	p.repeat.y = Math.max(1, p.frameWidth / texture.image.height)
+	p.frameUvWidth = p.frameWidth / texture.image.width
+	p.isSpriteSheet = true
+	p.offsetRepeatUniform = null
+	p.setFrame = function(n) {
 		if (n < 0 || n >= this.frames) {
 			throw new RangeError("Invalid frame number")
 		}
 		this.offset.x = n * this.frameUvWidth
 		this.repeat.x = this.frameUvWidth
+
+		// Custom materials can set this property so the corresponding uniform stays synced
+		if (this.offsetRepeatUniform) {
+			this.offsetRepeatUniform.set(this.offset.x, this.offset.y, this.repeat.x, this.repeat.y)
+		}
 	}
+	const proxy = new Proxy(texture, {
+		get: function(obj, prop) {
+			if (p.hasOwnProperty(prop)) {
+				return p[prop]
+			} else {
+				return obj[prop]
+			}
+		},
+		set: function(obj, prop, value) {
+			if (p.hasOwnProperty(prop)) {
+				p[prop] = value
+			} else {
+				obj[prop] = value
+			}
+			return true
+		}
+	})
 	proxy.setFrame(0)
 	return proxy
 }

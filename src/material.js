@@ -174,7 +174,12 @@ export class CustomMaterial extends ShaderMaterial {
 	set interweaveSteps(value) { this.uniforms.interweaveSteps.value = value }
 
 	get map() { return this.uniforms.map.value }
-	set map(value) { this.uniforms.map.value = value }
+	set map(value) {
+		if (value.isSpriteSheet) {
+			value.offsetRepeatUniform = this.uniforms.offsetRepeat.value
+		}
+		this.uniforms.map.value = value
+	}
 
 	get pixelate() { return this.uniforms.pixelate.value }
 	set pixelate(value) { this.uniforms.pixelate.value = value }
