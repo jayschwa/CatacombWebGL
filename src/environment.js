@@ -1,4 +1,5 @@
 import { BoxBufferGeometry, Mesh, MeshBasicMaterial } from "three"
+import { CustomMaterial } from "./material"
 import { SpriteSheetProxy, textureCache } from "./utils"
 
 // TODO: Move exploding wall here
@@ -7,7 +8,7 @@ export class Door extends Mesh {
 	constructor(color, position) {
 		const geometry = new BoxBufferGeometry(1, 1, 1)
 		geometry.rotateX(Math.PI / 2)
-		const material = new MeshBasicMaterial()
+		const material = new CustomMaterial()
 		textureCache.get("walls/" + color + "_door.png", texture => {
 			texture.anisotropy = 8
 			const spritesheet = new SpriteSheetProxy(texture)
