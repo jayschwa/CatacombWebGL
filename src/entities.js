@@ -165,3 +165,17 @@ export class Portal extends Sprite {
 		this.light.intensity = 0.5 + 0.2 * Math.abs(Math.sin(0.5 * time)) + 0.02 * Math.abs(Math.sin(this.fps * time))
 	}
 }
+
+export class Teleporter extends Portal {
+	constructor(position, sibling) {
+		super(position)
+		if (sibling) {
+			this.sibling = sibling
+			if (sibling.sibling) {
+				throw new Error("Teleporter already has a sibling")
+			} else {
+				sibling.sibling = this
+			}
+		}
+	}
+}

@@ -1,5 +1,5 @@
 import * as THREE from "three"
-import { Entity, Fireball, Portal } from "./entities"
+import { Entity, Fireball, Portal, Teleporter } from "./entities"
 import { Bat, Demon, Mage, Orc, Troll } from "./enemies"
 import { Door } from "./environment"
 import { FloorGeometry, WallGeometry } from "./geometry"
@@ -318,9 +318,20 @@ function setupPlayerSpawn(map, player) {
 
 function addPortals(map, scene) {
 	const portalTiles = map.tiles().filter(t => [0x18, 0x1F, 0x20, 0x21].includes(t.entity))
+	const teleporters = {}
 	for (let tile of portalTiles) {
-		const portal = new Portal(tile.position)
-		scene.add(portal)
+		if (tile.entity == 0x18) {
+			scene.add(new Portal(tile.position))
+		} else {
+			const sibling = teleporters[tile.entity]
+			if (sibling) {
+				scene.add(new Teleporter(tile.position, sibling))
+			} else {
+				const teleporter = new Teleporter(tile.position)
+				scene.add(teleporter)
+				teleporters[tile.entity] = teleporter
+			}
+		}
 	}
 }
 

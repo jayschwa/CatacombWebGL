@@ -1,5 +1,5 @@
 import { PerspectiveCamera, PointLight, Sprite, SpriteMaterial, Vector3 } from "three"
-import { Entity, Fireball } from "./entities"
+import { Entity, Fireball, Teleporter } from "./entities"
 import { Door } from "./environment"
 import { Item, Treasure } from "./items"
 import { SpriteSheetProxy, textureCache } from "./utils"
@@ -41,6 +41,9 @@ export class Player extends Entity {
 			return false
 		} else if (obj instanceof Door) {
 			return !this.unlockDoor(obj)
+		} else if (obj instanceof Teleporter) {
+			this.position.copy(obj.sibling.position).add(this.getWorldDirection().multiplyScalar(2/3))
+			return false
 		}
 		return true
 	}
