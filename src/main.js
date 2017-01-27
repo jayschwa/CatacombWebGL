@@ -6,6 +6,7 @@ import { FloorGeometry, WallGeometry } from "./geometry"
 import { Bolt, Nuke, Potion, RedKey, YellowKey, GreenKey, BlueKey, Scroll, Treasure } from "./items"
 import { CustomMaterial } from "./material"
 import { Player } from "./player"
+import { Transition } from "./transition"
 import { SpriteSheetProxy, textureCache } from "./utils"
 
 THREE.Vector3.prototype.copy = function(v) {
@@ -390,6 +391,11 @@ export class Game {
 
 		this.maze = new THREE.Group()
 		this.maze.name = "Maze"
+
+		// transition stuff
+		this.fbo1 = new THREE.WebGLRenderTarget(window.innerWidth, window.innerHeight, {minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, format: THREE.RGBFormat, stencilBuffer: false})
+		this.fbo2 = new THREE.WebGLRenderTarget(window.innerWidth, window.innerHeight, {minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, format: THREE.RGBFormat, stencilBuffer: false})
+		this.transition = new Transition(window.innerWidth, window.innerHeight, this.fbo1, this.fbo2)
 	}
 
 	onKey(value) {
@@ -432,14 +438,40 @@ export class Game {
 			}
 		})
 		objectsToRemove.forEach(obj => obj.parent.remove(obj))
-		this.renderer.render(this.scene, this.player.camera)
+
+		if (this.player.teleportTo) {
+			this.transitionStart = time
+
+			// render to first FBO
+			this.renderer.render(this.scene, this.player.camera, this.fbo1, true)
+
+			this.player.position.copy(this.player.teleportTo)
+			this.player.teleportTo = null
+
+			// render to second FBO
+			this.renderer.render(this.scene, this.player.camera, this.fbo2, true)
+		}
+
+		const transitionDelta = time - this.transitionStart
+		const transitionDuration = 0.5
+		if (transitionDelta < transitionDuration) {
+			this.player.frozen = true
+			this.transition.setMix(transitionDelta / transitionDuration)
+			this.transition.material.uniforms.tex1.value = this.fbo1.texture
+			this.transition.material.uniforms.tex2.value = this.fbo2.texture
+			this.renderer.render(this.transition.scene, this.transition.camera)
+		} else {
+			this.player.frozen = false
+			this.renderer.render(this.scene, this.player.camera)
+		}
+
 		if (this.isActive) {
 			requestAnimationFrame(this.render.bind(this))
 		}
 	}
 
 	resizeView(width, height) {
-		this.renderer.setSize(width, height)
+		[this.renderer, this.fbo1, this.fbo2, this.transition].forEach(e => e.setSize(width, height))
 		const cameras = [this.player.camera]
 		cameras.forEach(camera => {
 			camera.aspect = width / height

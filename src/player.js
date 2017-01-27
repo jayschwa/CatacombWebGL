@@ -42,7 +42,7 @@ export class Player extends Entity {
 		} else if (obj instanceof Door) {
 			return !this.unlockDoor(obj)
 		} else if (obj instanceof Teleporter) {
-			this.position.copy(obj.sibling.position).add(this.getWorldDirection().multiplyScalar(2/3))
+			this.teleportTo = obj.sibling.position.clone().add(this.velocity.clone().normalize().multiplyScalar(2/3))
 			return false
 		}
 		return true

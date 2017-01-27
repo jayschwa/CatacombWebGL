@@ -27,7 +27,7 @@ export class Entity extends Object3D {
 			this.updateVelocity()
 		}
 
-		if (this.velocity.lengthSq()) {
+		if (this.velocity.lengthSq() && !this.frozen) {
 			let collided = false
 			const positionDelta = this.velocity.clone().multiplyScalar(timeDelta)
 			do {
