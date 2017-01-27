@@ -453,7 +453,7 @@ export class Game {
 		}
 
 		const transitionDelta = time - this.transitionStart
-		const transitionDuration = 0.5
+		const transitionDuration = 2.0
 		if (transitionDelta < transitionDuration) {
 			this.player.frozen = true
 			this.transition.setMix(transitionDelta / transitionDuration)
