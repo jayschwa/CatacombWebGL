@@ -14,7 +14,7 @@
 <script>
 const gameContainer = document.getElementById("cat3d")
 const game = new Catacomb3D.Game(gameContainer, "7_Tower_Two")
-game.resizeView(gameContainer.clientWidth, gameContainer.clientHeight, [game.player.camera])
+game.resizeView(gameContainer.clientWidth, gameContainer.clientHeight)
 
 let resizeNextFrame = false
 window.addEventListener("resize", () => {
