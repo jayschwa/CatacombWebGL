@@ -41192,6 +41192,8 @@ void main() {
 }`;
 
 const fragmentShader$1 = `
+uniform float aspectRatio;
+uniform float pixelate;
 uniform sampler2D tex1;
 uniform sampler2D tex2;
 uniform float weight;
@@ -41302,12 +41304,11 @@ float pnoise(vec2 P, vec2 rep)
 void main() {
 	vec4 color1 = texture2D(tex1, vUv);
 	vec4 color2 = texture2D(tex2, vUv);
-	vec2 pixel = gl_FragCoord.xy;
-	pixel = floor(pixel * 64.0);
-	pixel /= 64.0;
-	float noise = step(1.0-2.0*weight, cnoise(pixel));
-	gl_FragColor.rgb = vec3(noise); // mix(color1, color2, noise);
-	gl_FragColor.a = 1.0;
+	vec2 pixel = vUv * vec2(pixelate * aspectRatio, pixelate);
+	pixel = floor(pixel) + vec2(0.5);
+	float noise = cnoise(pixel);
+	noise = step(1.0-2.0*weight, noise);
+	gl_FragColor = mix(color1, color2, noise);
 }`;
 
 class TransitionMaterial extends ShaderMaterial {
@@ -41315,6 +41316,8 @@ class TransitionMaterial extends ShaderMaterial {
 		const uniforms = UniformsUtils.merge([
 			UniformsLib.common,
 			{
+				aspectRatio: {value: 1.0},
+				pixelate: {value: 256.0},
 				tex1: {value: tex1},
 				tex2: {value: tex2},
 				weight: {value: 0.0}
@@ -41344,6 +41347,7 @@ class Transition {
 	}
 
 	setSize(width, height) {
+		this.material.uniforms.aspectRatio.value = width/height;
 		this.camera.left = -width/2;
 		this.camera.right = width/2;
 		this.camera.top = height/2;
@@ -41797,7 +41801,7 @@ class Game {
 		}
 
 		const transitionDelta = time - this.transitionStart;
-		const transitionDuration = 2.0;
+		const transitionDuration = 0.5;
 		if (transitionDelta < transitionDuration) {
 			this.player.frozen = true;
 			this.transition.setMix(transitionDelta / transitionDuration);
