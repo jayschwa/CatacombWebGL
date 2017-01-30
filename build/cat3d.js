@@ -41339,7 +41339,7 @@ class Transition {
 		this.fbo2 = fbo2;
 		this.camera = new OrthographicCamera(-width/2, width/2, height/2, -height/2, -10, 10);
 		this.material = new TransitionMaterial(fbo1.texture, fbo2.texture);
-		this.plane = new Mesh(new PlaneBufferGeometry(width, height), this.material);
+		this.plane = new Mesh(new PlaneBufferGeometry(1, 1), this.material);
 		this.scene = new Scene();
 		this.scene.add(this.camera, this.plane);
 	}
@@ -41355,7 +41355,7 @@ class Transition {
 		this.camera.top = height/2;
 		this.camera.bottom = -height/2;
 		this.camera.updateProjectionMatrix();
-		// TODO: update plane size
+		this.plane.scale.set(width, height, 1);
 	}
 }
 
