@@ -41319,7 +41319,7 @@ class TransitionMaterial extends ShaderMaterial {
 			UniformsLib.common,
 			{
 				aspectRatio: {value: 1.0},
-				pixelate: {value: 256.0},
+				pixelate: {value: 128.0},
 				tex1: {value: tex1},
 				tex2: {value: tex2},
 				weight: {value: 0.0}
@@ -41797,14 +41797,14 @@ class Game {
 
 			this.player.position.copy(this.player.teleportTo);
 			this.player.teleportTo = null;
-
-			// render to second FBO
-			this.renderer.render(this.scene, this.player.camera, this.fbo2, true);
 		}
 
 		const transitionDelta = time - this.transitionStart;
-		const transitionDuration = 0.5;
+		const transitionDuration = 2/3;
 		if (transitionDelta < transitionDuration) {
+			// render to second FBO
+			this.renderer.render(this.scene, this.player.camera, this.fbo2, true);
+
 			this.player.frozen = true;
 			this.transition.setMix(transitionDelta / transitionDuration);
 			this.transition.material.uniforms.tex1.value = this.fbo1.texture;
