@@ -447,14 +447,14 @@ export class Game {
 
 			this.player.position.copy(this.player.teleportTo)
 			this.player.teleportTo = null
-
-			// render to second FBO
-			this.renderer.render(this.scene, this.player.camera, this.fbo2, true)
 		}
 
 		const transitionDelta = time - this.transitionStart
-		const transitionDuration = 0.5
+		const transitionDuration = 2/3
 		if (transitionDelta < transitionDuration) {
+			// render to second FBO
+			this.renderer.render(this.scene, this.player.camera, this.fbo2, true)
+
 			this.player.frozen = true
 			this.transition.setMix(transitionDelta / transitionDuration)
 			this.transition.material.uniforms.tex1.value = this.fbo1.texture
