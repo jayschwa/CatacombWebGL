@@ -1,5 +1,7 @@
 import { BoxBufferGeometry, Mesh, OrthographicCamera, PlaneBufferGeometry, Scene, ShaderMaterial, UniformsLib, UniformsUtils } from "three"
 
+// TODO: Sort out copyright of https://github.com/stegu/webgl-noise
+
 const vertexShader = `
 #define USE_MAP = 1;
 #include <uv_pars_vertex>

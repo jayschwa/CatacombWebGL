@@ -41181,6 +41181,8 @@ class Player extends Entity {
 	}
 }
 
+// TODO: Sort out copyright of https://github.com/stegu/webgl-noise
+
 const vertexShader$1 = `
 #define USE_MAP = 1;
 #include <uv_pars_vertex>
