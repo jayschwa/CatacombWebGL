@@ -1,4 +1,5 @@
-import { Sprite } from "three"
+import { Audio, AudioLoader, PositionalAudio, Sprite } from "three"
+import { audioListener, audioLoader } from "./audio"
 import { SpriteSheetProxy, textureCache } from "./utils"
 
 export class Item extends Sprite {
@@ -11,11 +12,23 @@ export class Item extends Sprite {
 		this.translateZ(-(1-scale)/2)
 		this.itemFrames = itemFrames
 		this.material.fog = true
+		audioLoader.load("sounds/adlib/pickup_" + this.name + ".wav", buffer => {
+			this.pickupSound = new PositionalAudio(audioListener)
+			this.pickupSound.setBuffer(buffer)
+			this.add(this.pickupSound)
+		})
 		textureCache.get("sprites/items.png", texture => {
 			this.material.map = new SpriteSheetProxy(texture, 40, 11)
 			this.material.map.setFrame(this.itemFrames[0])
 			this.material.needsUpdate = true
 		})
+	}
+
+	pickup() {
+		if (this.pickupSound) {
+			this.pickupSound.play()
+		}
+		this.shouldRemove = true
 	}
 
 	update(time) {

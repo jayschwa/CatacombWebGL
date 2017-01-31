@@ -1,4 +1,5 @@
-import { Object3D, PointLight, Raycaster, Sprite, SpriteMaterial, Vector3 } from "three"
+import { Object3D, PointLight, PositionalAudio, Raycaster, Sprite, SpriteMaterial, Vector3 } from "three"
+import { audioListener, audioLoader } from "./audio"
 import { SpriteSheetProxy, textureCache } from "./utils"
 
 export class Entity extends Object3D {
@@ -93,6 +94,18 @@ export class Fireball extends Entity {
 		this.moveDirection.z = 1
 		this.updateVelocity()
 
+		audioLoader.load("sounds/adlib/" + (isBig ? "big_" : "") + "shoot.wav", buffer => {
+			this.fireSound = new PositionalAudio(audioListener)
+			this.fireSound.setBuffer(buffer)
+			this.add(this.fireSound)
+			this.fireSound.play()
+		})
+		audioLoader.load("sounds/adlib/wall_hit.wav", buffer => {
+			this.hitSound = new PositionalAudio(audioListener)
+			this.hitSound.setBuffer(buffer)
+			this.add(this.hitSound)
+		})
+
 		this.light = new PointLight(0xFF6600, 0.5, 0.5)
 		if (isBig) { this.light.distance *= 2 }
 		if (isBig) { this.add(this.light) }
@@ -109,11 +122,16 @@ export class Fireball extends Entity {
 
 	onCollision(collision, time) {
 		if (!this.removeAtTime) {
+			let damagedSomething = false
 			for (let obj = collision.object; obj; obj = obj.parent) {
 				if (obj.onDamage) {
 					obj.onDamage(time)
+					damagedSomething = true
 					break
 				}
+			}
+			if (!damagedSomething && this.hitSound) {
+				this.hitSound.play()
 			}
 		}
 		if (!this.isBig) {

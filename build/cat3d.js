@@ -40297,6 +40297,9 @@ AudioAnalyser.prototype.getData = function () {
 
 //
 
+const audioListener = new AudioListener();
+const audioLoader = new AudioLoader();
+
 function SpriteSheetProxy(texture, frameWidth, frames) {
 	const p = {
 		offset: texture.offset.clone(),
@@ -40494,6 +40497,18 @@ class Fireball extends Entity {
 		this.moveDirection.z = 1;
 		this.updateVelocity();
 
+		audioLoader.load("sounds/adlib/" + (isBig ? "big_" : "") + "shoot.wav", buffer => {
+			this.fireSound = new PositionalAudio(audioListener);
+			this.fireSound.setBuffer(buffer);
+			this.add(this.fireSound);
+			this.fireSound.play();
+		});
+		audioLoader.load("sounds/adlib/wall_hit.wav", buffer => {
+			this.hitSound = new PositionalAudio(audioListener);
+			this.hitSound.setBuffer(buffer);
+			this.add(this.hitSound);
+		});
+
 		this.light = new PointLight(0xFF6600, 0.5, 0.5);
 		if (isBig) { this.light.distance *= 2; }
 		if (isBig) { this.add(this.light); }
@@ -40510,11 +40525,16 @@ class Fireball extends Entity {
 
 	onCollision(collision, time) {
 		if (!this.removeAtTime) {
+			let damagedSomething = false;
 			for (let obj = collision.object; obj; obj = obj.parent) {
 				if (obj.onDamage) {
 					obj.onDamage(time);
+					damagedSomething = true;
 					break
 				}
+			}
+			if (!damagedSomething && this.hitSound) {
+				this.hitSound.play();
 			}
 		}
 		if (!this.isBig) {
@@ -40959,11 +40979,23 @@ class Item extends Sprite {
 		this.translateZ(-(1-scale)/2);
 		this.itemFrames = itemFrames;
 		this.material.fog = true;
+		audioLoader.load("sounds/adlib/pickup_" + this.name + ".wav", buffer => {
+			this.pickupSound = new PositionalAudio(audioListener);
+			this.pickupSound.setBuffer(buffer);
+			this.add(this.pickupSound);
+		});
 		textureCache.get("sprites/items.png", texture => {
 			this.material.map = new SpriteSheetProxy(texture, 40, 11);
 			this.material.map.setFrame(this.itemFrames[0]);
 			this.material.needsUpdate = true;
 		});
+	}
+
+	pickup() {
+		if (this.pickupSound) {
+			this.pickupSound.play();
+		}
+		this.shouldRemove = true;
 	}
 
 	update(time) {
@@ -41032,6 +41064,10 @@ class Treasure extends Item {
 class Player extends Entity {
 	constructor() {
 		super(2/3, 5);
+
+		this.audioListener = audioListener;
+		this.add(this.audioListener);
+
 		this.camera = new PerspectiveCamera(45, 0, 0.01, 256);
 		this.name = "Player";
 		this.camera.rotation.set(0, Math.PI, 0);
@@ -41078,12 +41114,13 @@ class Player extends Entity {
 		if (item instanceof Treasure) {
 			this.score += 100;  // * level number
 		} else {
+			// play sound
 			if (this.inventory[item.name] === undefined) {
 				this.inventory[item.name] = 0;
 			}
 			this.inventory[item.name] += 1;
 		}
-		item.shouldRemove = true;
+		item.pickup();
 	}
 
 	/**
@@ -41180,8 +41217,6 @@ class Player extends Entity {
 		}
 	}
 }
-
-// TODO: Sort out copyright of https://github.com/stegu/webgl-noise
 
 const vertexShader$1 = `
 #define USE_MAP = 1;

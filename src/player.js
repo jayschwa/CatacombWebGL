@@ -1,4 +1,5 @@
 import { PerspectiveCamera, PointLight, Sprite, SpriteMaterial, Vector3 } from "three"
+import { audioListener } from "./audio"
 import { Entity, Fireball, Teleporter } from "./entities"
 import { Door } from "./environment"
 import { Item, Treasure } from "./items"
@@ -7,6 +8,10 @@ import { SpriteSheetProxy, textureCache } from "./utils"
 export class Player extends Entity {
 	constructor() {
 		super(2/3, 5)
+
+		this.audioListener = audioListener
+		this.add(this.audioListener)
+
 		this.camera = new PerspectiveCamera(45, 0, 0.01, 256)
 		this.name = "Player"
 		this.camera.rotation.set(0, Math.PI, 0)
@@ -53,12 +58,13 @@ export class Player extends Entity {
 		if (item instanceof Treasure) {
 			this.score += 100  // * level number
 		} else {
+			// play sound
 			if (this.inventory[item.name] === undefined) {
 				this.inventory[item.name] = 0
 			}
 			this.inventory[item.name] += 1
 		}
-		item.shouldRemove = true
+		item.pickup()
 	}
 
 	/**
