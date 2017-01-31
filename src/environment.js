@@ -1,4 +1,5 @@
-import { BoxBufferGeometry, Mesh, MeshBasicMaterial } from "three"
+import { BoxBufferGeometry, Mesh, MeshBasicMaterial, PositionalAudio } from "three"
+import { audioListener, audioLoader } from "./audio"
 import { CustomMaterial } from "./material"
 import { SpriteSheetProxy, textureCache } from "./utils"
 
@@ -20,6 +21,12 @@ export class Door extends Mesh {
 		this.frequency = 9 + 0.5 * Math.random()
 		this.position.copy(position)
 		this.adjacent = []
+
+		audioLoader.load("sounds/adlib/use_key.wav", buffer => {
+			this.unlockSound = new PositionalAudio(audioListener)
+			this.unlockSound.setBuffer(buffer)
+			this.add(this.unlockSound)
+		})
 	}
 
 	update(time) {
@@ -33,12 +40,15 @@ export class Door extends Mesh {
 	 * Mark this and connected door tiles for removal.
 	 * @return {boolean} true if successful, false if this door is already marked
 	 */
-	unlock() {
+	unlock(silent) {
 		if (this.shouldRemove) {
 			return false
 		} else {
+			if (!silent) {
+				this.unlockSound.play()
+			}
 			this.shouldRemove = true
-			this.adjacent.forEach(door => door.unlock())
+			this.adjacent.forEach(door => door.unlock(true))
 			return true
 		}
 	}
