@@ -1,5 +1,5 @@
-import { PerspectiveCamera, PointLight, Sprite, SpriteMaterial, Vector3 } from "three"
-import { audioListener } from "./audio"
+import { Audio, PerspectiveCamera, PointLight, Sprite, SpriteMaterial, Vector3 } from "three"
+import { audioListener, audioLoader } from "./audio"
 import { Entity, Fireball, Teleporter } from "./entities"
 import { Door } from "./environment"
 import { Item, Treasure } from "./items"
@@ -22,6 +22,17 @@ export class Player extends Entity {
 
 		this.inventory = {}
 		this.score = 0
+
+		this.footstepIdx = 0
+		this.footsteps = []
+		for (let i = 0; i < 2; i++) {
+			audioLoader.load("sounds/adlib/footstep" + i + ".wav", buffer => {
+				const footstep = new Audio(audioListener)
+				footstep.setBuffer(buffer)
+				footstep.setVolume(1/3)
+				this.footsteps.push(footstep)
+			})
+		}
 
 		textureCache.get("sprites/hand.png", texture => {
 			const spritesheet = SpriteSheetProxy(texture, 88, 2)
@@ -87,6 +98,16 @@ export class Player extends Entity {
 		super.update(time, maze)
 		if (this.hand) {
 			this.updateHand(time)
+		}
+		if (this.velocity.lengthSq() && !this.frozen) {
+			const delta = time - this.lastStep
+			if (delta > (7 / 3) / this.speed) {
+				this.footsteps[this.footstepIdx].play()
+				this.footstepIdx = (this.footstepIdx + 1) % this.footsteps.length
+				this.lastStep = time
+			}
+		} else {
+			this.lastStep = time
 		}
 	}
 
