@@ -40906,8 +40906,6 @@ class CustomMaterial extends ShaderMaterial {
 	set pixelate(value) { this.uniforms.pixelate.value = value; }
 }
 
-// TODO: Move exploding wall here
-
 class Door extends Mesh {
 	constructor(color, position) {
 		const geometry = new BoxBufferGeometry(1, 1, 1);
@@ -41908,8 +41906,10 @@ class Game {
 		document.addEventListener("pointerlockchange", event => {
 			if (document.pointerLockElement === this.renderer.domElement) {
 				eventHandlers.forEach(([e, f]) => document.addEventListener(e, f));
+				this.container.classList.add("playing");
 			} else {
 				eventHandlers.forEach(([e, f]) => document.removeEventListener(e, f));
+				this.container.classList.remove("playing");
 				this.player.moveDirection.set(0, 0, 0);
 				this.player.updateVelocity();
 			}

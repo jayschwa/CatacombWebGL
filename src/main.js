@@ -491,8 +491,10 @@ export class Game {
 		document.addEventListener("pointerlockchange", event => {
 			if (document.pointerLockElement === this.renderer.domElement) {
 				eventHandlers.forEach(([e, f]) => document.addEventListener(e, f))
+				this.container.classList.add("playing")
 			} else {
 				eventHandlers.forEach(([e, f]) => document.removeEventListener(e, f))
+				this.container.classList.remove("playing")
 				this.player.moveDirection.set(0, 0, 0)
 				this.player.updateVelocity()
 			}
