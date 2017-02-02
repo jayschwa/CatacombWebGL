@@ -12,8 +12,13 @@
 </body>
 <script src="cat3d.js"></script>
 <script>
+const queryParams = {}
+location.search.substr(1).split("&").forEach(pair => {
+	const tokens = pair.split("=").map(decodeURIComponent)
+	queryParams[tokens[0]] = tokens[1]
+})
 const gameContainer = document.getElementById("cat3d")
-const game = new Catacomb3D.Game(gameContainer, "13_Lower_Reaches")
+const game = new Catacomb3D.Game(gameContainer, queryParams.map || "1_The_Approach")
 game.resizeView(gameContainer.clientWidth, gameContainer.clientHeight)
 
 let resizeNextFrame = false
