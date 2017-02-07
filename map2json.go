@@ -1,5 +1,9 @@
 package main
 
+// TODO: entities
+// TODO: replace portal floor with surrounding values?
+// TODO: omit unreachable tiles?
+
 import (
 	"bufio"
 	"encoding/json"
@@ -128,15 +132,19 @@ func main() {
 			if s, ok := byteToLetter[b]; ok {
 				m.Layout[h] += s
 			} else {
-				s := string(nextRune)
+				s := " "
+				def := ByteToDef[b]
+				if len(def.Value) > 0 {
+					s = string(nextRune)
+					letterToDef[s] = def
+					if nextRune == 'Z' {
+						nextRune = 'a'
+					} else {
+						nextRune += 1
+					}
+				}
 				m.Layout[h] += s
 				byteToLetter[b] = s
-				letterToDef[s] = ByteToDef[b]
-				if nextRune == 'Z' {
-					nextRune = 'a'
-				} else {
-					nextRune += 1
-				}
 			}
 		}
 	}
