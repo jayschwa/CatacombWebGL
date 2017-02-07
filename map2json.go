@@ -12,6 +12,9 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"path/filepath"
+	"strconv"
+	"strings"
 )
 
 type C3DMap struct {
@@ -80,12 +83,13 @@ func Description(desc string) LayoutDef {
 }
 
 type JsonMap struct {
-	Title    string               `json:"title"`
-	Width    uint                 `json:"width"`
-	Height   uint                 `json:"height"`
-	Layout   []string             `json:"layout"`
-	Legend   map[string]LayoutDef `json:"legend"`
-	Entities []Entity             `json:"entities"`
+	Title       string               `json:"title"`
+	LevelNumber int                  `json:"levelNumber"`
+	Width       uint                 `json:"width"`
+	Height      uint                 `json:"height"`
+	Layout      []string             `json:"layout"`
+	Legend      map[string]LayoutDef `json:"legend"`
+	Entities    []Entity             `json:"entities"`
 }
 
 var LayoutDict = map[byte]LayoutDef{
@@ -142,7 +146,7 @@ var EntityDict = map[byte]Entity{
 	0x12: Entity{Type: "Scroll", Value: 7},
 	0x13: Entity{Type: "Scroll", Value: 8},
 	0x14: Entity{Type: "Grelminar"},
-	0x15: Entity{Type: "Treasure", Value: 100},
+	0x15: Entity{Type: "Treasure"},
 
 	0x16: Entity{Type: "Troll"},
 	0x17: Entity{Type: "Orc"},
@@ -183,10 +187,25 @@ func main() {
 	byteToLetter := make(map[byte]string)
 	letterToDef := make(map[string]LayoutDef)
 
+	c3dname := filepath.Base(flag.Arg(0))
+	c3dname = c3dname[:len(c3dname)-len(filepath.Ext(c3dname))]
+	nameTokens := strings.SplitN(strings.Replace(c3dname, "_", " ", -1), " ", 2)
+	levelNo, err := strconv.Atoi(nameTokens[0])
+	if err != nil {
+		panic(err)
+	}
+
+	// Treasure is worth more on later levels
+	treasure := EntityDict[0x15]
+	treasure.Value = levelNo * 100
+	EntityDict[0x15] = treasure
+
 	m := JsonMap{
-		Width:  c3dmap.Width,
-		Height: c3dmap.Height,
-		Layout: make([]string, c3dmap.Height),
+		Title:       nameTokens[1],
+		LevelNumber: levelNo,
+		Width:       c3dmap.Width,
+		Height:      c3dmap.Height,
+		Layout:      make([]string, c3dmap.Height),
 	}
 	for h := 0; h < int(m.Height); h++ {
 		for w := 0; w < int(m.Width); w++ {
@@ -230,7 +249,6 @@ func main() {
 	m.Legend = letterToDef
 
 	var out []byte
-	var err error
 	if *indent {
 		out, err = json.MarshalIndent(m, "", "\t")
 	} else {
