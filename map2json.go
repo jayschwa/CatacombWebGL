@@ -1,6 +1,5 @@
 package main
 
-// TODO: replace portal floor with surrounding values?
 // TODO: omit unreachable tiles?
 // TODO: fog
 
@@ -24,6 +23,15 @@ type C3DMap struct {
 
 func (m C3DMap) Area() uint {
 	return m.Width * m.Height
+}
+
+func (m C3DMap) Adjacent(index int) (indices []int) {
+	for _, i := range []int{index - 1, index + 1, index - int(m.Width), index + int(m.Width)} {
+		if i >= 0 && i < int(m.Area()) {
+			indices = append(indices, i)
+		}
+	}
+	return
 }
 
 func ReadC3DMap(filename string) C3DMap {
@@ -220,7 +228,7 @@ func main() {
 				}
 				entity.Position = Vec2{w, h}
 				if entity.Type == "WarpGate" {
-					levelNo = int(b - 0xB4)
+					levelNo = int(b - 0xB4) // Plane 0 value denotes destination
 					if levelNo == 0 {
 						levelNo = m.LevelNumber + 1
 					}
@@ -228,6 +236,20 @@ func main() {
 						panic("warp gate number out of bounds")
 					}
 					entity.Value = levelNo
+
+					// Set plane 0 value to adjacent floor description
+					var adjacentFloor byte
+					for _, i := range c3dmap.Adjacent(idx) {
+						f := c3dmap.Layout[i]
+						if f >= 0xB4 {
+							if adjacentFloor == 0 {
+								adjacentFloor = f
+							} else if adjacentFloor != f {
+								panic("adjacent floor assumption is incorrect")
+							}
+						}
+					}
+					b = adjacentFloor
 				}
 				m.Entities = append(m.Entities, entity)
 			}
