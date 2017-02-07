@@ -1,6 +1,5 @@
 package main
 
-// TODO: set portal values
 // TODO: replace portal floor with surrounding values?
 // TODO: omit unreachable tiles?
 // TODO: fog
@@ -210,9 +209,10 @@ func main() {
 	for h := 0; h < int(m.Height); h++ {
 		for w := 0; w < int(m.Width); w++ {
 			idx := w + h*int(m.Width)
+			b := c3dmap.Layout[idx]
+			e := c3dmap.Entities[idx]
 
 			// Entity (plane 2)
-			e := c3dmap.Entities[idx]
 			if e > 0 {
 				entity, exists := EntityDict[e]
 				if !exists {
@@ -220,13 +220,19 @@ func main() {
 				}
 				entity.Position = Vec2{w, h}
 				if entity.Type == "WarpGate" {
-					// set destination and alter floor tile
+					levelNo = int(b - 0xB4)
+					if levelNo == 0 {
+						levelNo = m.LevelNumber + 1
+					}
+					if levelNo < 0 || levelNo > 20 {
+						panic("warp gate number out of bounds")
+					}
+					entity.Value = levelNo
 				}
 				m.Entities = append(m.Entities, entity)
 			}
 
 			// Layout (plane 0)
-			b := c3dmap.Layout[idx]
 			if s, ok := byteToLetter[b]; ok {
 				m.Layout[h] += s
 			} else {
