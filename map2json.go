@@ -1,8 +1,9 @@
 package main
 
-// TODO: entities
+// TODO: set portal values
 // TODO: replace portal floor with surrounding values?
 // TODO: omit unreachable tiles?
+// TODO: fog
 
 import (
 	"bufio"
@@ -79,14 +80,15 @@ func Description(desc string) LayoutDef {
 }
 
 type JsonMap struct {
-	Name   string               `json:"name"`
-	Width  uint                 `json:"width"`
-	Height uint                 `json:"height"`
-	Layout []string             `json:"layout"`
-	Legend map[string]LayoutDef `json:"legend"`
+	Title    string               `json:"title"`
+	Width    uint                 `json:"width"`
+	Height   uint                 `json:"height"`
+	Layout   []string             `json:"layout"`
+	Legend   map[string]LayoutDef `json:"legend"`
+	Entities []Entity             `json:"entities"`
 }
 
-var ByteToDef = map[byte]LayoutDef{
+var LayoutDict = map[byte]LayoutDef{
 	0x01: Wall("stone"),
 	0x02: Wall("slime"),
 	0x03: Wall("white"),
@@ -109,12 +111,73 @@ var ByteToDef = map[byte]LayoutDef{
 	0x20: Door("blue"),
 }
 
+type Vec2 [2]int
+
+type Entity struct {
+	Type          string      `json:"type"`
+	Position      Vec2        `json:"position"`
+	Direction     *Vec2       `json:"direction,omitempty"`
+	Value         interface{} `json:"value,omitempty"`
+	MinDifficulty int         `json:"minDifficulty,omitempty"`
+}
+
+var EntityDict = map[byte]Entity{
+	0x01: Entity{Type: "PlayerStart", Direction: &Vec2{0, -1}}, // North
+	0x02: Entity{Type: "PlayerStart", Direction: &Vec2{1, 0}},  // East
+	0x03: Entity{Type: "PlayerStart", Direction: &Vec2{0, 1}},  // South
+	0x04: Entity{Type: "PlayerStart", Direction: &Vec2{-1, 0}}, // West
+	0x05: Entity{Type: "Bolt"},
+	0x06: Entity{Type: "Nuke"},
+	0x07: Entity{Type: "Potion"},
+	0x08: Entity{Type: "RedKey"},
+	0x09: Entity{Type: "YellowKey"},
+	0x0A: Entity{Type: "GreenKey"},
+	0x0B: Entity{Type: "BlueKey"},
+	0x0C: Entity{Type: "Scroll", Value: 1},
+	0x0D: Entity{Type: "Scroll", Value: 2},
+	0x0E: Entity{Type: "Scroll", Value: 3},
+	0x0F: Entity{Type: "Scroll", Value: 4},
+	0x10: Entity{Type: "Scroll", Value: 5},
+	0x11: Entity{Type: "Scroll", Value: 6},
+	0x12: Entity{Type: "Scroll", Value: 7},
+	0x13: Entity{Type: "Scroll", Value: 8},
+	0x14: Entity{Type: "Grelminar"},
+	0x15: Entity{Type: "Treasure", Value: 100},
+
+	0x16: Entity{Type: "Troll"},
+	0x17: Entity{Type: "Orc"},
+	0x18: Entity{Type: "WarpGate"},
+	0x19: Entity{Type: "Bat"},
+	0x1A: Entity{Type: "Demon"},
+	0x1B: Entity{Type: "Mage"},
+	0x1C: Entity{Type: "Nemesis"},
+	0x1D: Entity{Type: "Fireball", Direction: &Vec2{0, 1}}, // North-South
+	0x1E: Entity{Type: "Fireball", Direction: &Vec2{1, 0}}, // East-West
+
+	0x1F: Entity{Type: "Teleport", Value: 1},
+	0x20: Entity{Type: "Teleport", Value: 2},
+	0x21: Entity{Type: "Teleport", Value: 3},
+
+	0x24: Entity{Type: "Troll", MinDifficulty: 1},
+	0x25: Entity{Type: "Orc", MinDifficulty: 1},
+	0x26: Entity{Type: "Bat", MinDifficulty: 1},
+	0x27: Entity{Type: "Demon", MinDifficulty: 1},
+	0x28: Entity{Type: "Mage", MinDifficulty: 1},
+
+	0x29: Entity{Type: "Troll", MinDifficulty: 2},
+	0x2A: Entity{Type: "Orc", MinDifficulty: 2},
+	0x2B: Entity{Type: "Bat", MinDifficulty: 2},
+	0x2C: Entity{Type: "Demon", MinDifficulty: 2},
+	0x2D: Entity{Type: "Mage", MinDifficulty: 2},
+}
+
 func main() {
+	indent := flag.Bool("indent", false, "indent JSON output")
 	flag.Parse()
 	c3dmap := ReadC3DMap(flag.Arg(0))
 	descriptions := ReadDescriptions(flag.Arg(1))
 	for i, desc := range descriptions {
-		ByteToDef[byte(0xB4+i)] = Description(desc)
+		LayoutDict[byte(0xB4+i)] = Description(desc)
 	}
 	nextRune := 'A'
 	byteToLetter := make(map[byte]string)
@@ -128,12 +191,28 @@ func main() {
 	for h := 0; h < int(m.Height); h++ {
 		for w := 0; w < int(m.Width); w++ {
 			idx := w + h*int(m.Width)
+
+			// Entity (plane 2)
+			e := c3dmap.Entities[idx]
+			if e > 0 {
+				entity, exists := EntityDict[e]
+				if !exists {
+					panic(fmt.Sprint("unknown entity ", e, " at ", w, h))
+				}
+				entity.Position = Vec2{w, h}
+				if entity.Type == "WarpGate" {
+					// set destination and alter floor tile
+				}
+				m.Entities = append(m.Entities, entity)
+			}
+
+			// Layout (plane 0)
 			b := c3dmap.Layout[idx]
 			if s, ok := byteToLetter[b]; ok {
 				m.Layout[h] += s
 			} else {
 				s := " "
-				def := ByteToDef[b]
+				def := LayoutDict[b]
 				if len(def.Value) > 0 {
 					s = string(nextRune)
 					letterToDef[s] = def
@@ -150,7 +229,13 @@ func main() {
 	}
 	m.Legend = letterToDef
 
-	out, err := json.MarshalIndent(m, "", "\t")
+	var out []byte
+	var err error
+	if *indent {
+		out, err = json.MarshalIndent(m, "", "\t")
+	} else {
+		out, err = json.Marshal(m)
+	}
 	if err != nil {
 		panic(err)
 	}
