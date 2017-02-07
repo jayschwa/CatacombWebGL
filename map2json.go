@@ -188,7 +188,7 @@ func main() {
 	letterToDef := make(map[string]LayoutDef)
 
 	c3dname := filepath.Base(flag.Arg(0))
-	c3dname = c3dname[:len(c3dname)-len(filepath.Ext(c3dname))]
+	c3dname = strings.TrimSuffix(c3dname, filepath.Ext(c3dname))
 	nameTokens := strings.SplitN(strings.Replace(c3dname, "_", " ", -1), " ", 2)
 	levelNo, err := strconv.Atoi(nameTokens[0])
 	if err != nil {
