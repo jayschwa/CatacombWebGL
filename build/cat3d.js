@@ -41925,7 +41925,7 @@ class Game {
 			const map = new TileMap(new Uint8Array(buffer));
 			console.log("map dimensions: " + map.width + "x" + map.height);
 			const hellish = map.layout.includes(7);
-			const fogColor = hellish ? 0x3300 : 0x0000; // hell gets red tint
+			const fogColor = hellish ? 0x330000 : 0x000000; // hell gets red tint
 			that.scene.fog = new Fog(fogColor, 1, Math.max(40, 1.25 * Math.max(map.width, map.height)));
 			setupMaze(map, that.maze);
 			setupPlayerSpawn(map, that.player);
