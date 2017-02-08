@@ -1,7 +1,6 @@
 package main
 
 // TODO: omit unreachable tiles?
-// TODO: fog
 
 import (
 	"bufio"
@@ -97,6 +96,7 @@ type JsonMap struct {
 	Layout      []string             `json:"layout"`
 	Legend      map[string]LayoutDef `json:"legend"`
 	Entities    []Entity             `json:"entities"`
+	Fog         *Fog                 `json:"fog"`
 }
 
 var LayoutDict = map[byte]LayoutDef{
@@ -180,6 +180,12 @@ var EntityDict = map[byte]Entity{
 	0x2B: Entity{Type: "Bat", MinDifficulty: 2},
 	0x2C: Entity{Type: "Demon", MinDifficulty: 2},
 	0x2D: Entity{Type: "Mage", MinDifficulty: 2},
+}
+
+type Fog struct {
+	Color uint32  `json:"color"`
+	Near  float32 `json:"near"`
+	Far   float32 `json:"far"`
 }
 
 func main() {
@@ -275,6 +281,25 @@ func main() {
 		}
 	}
 	m.Legend = letterToDef
+
+	// Fog
+	far := float32(m.Width)
+	if m.Height > m.Width {
+		far = float32(m.Height)
+	}
+	far *= 1.25
+	if far < 40 {
+		far = 40
+	}
+	fog := Fog{
+		Color: 0x000000,
+		Near:  1,
+		Far:   far,
+	}
+	if m.LevelNumber >= 19 {
+		fog.Color = 0xFF0000
+	}
+	m.Fog = &fog
 
 	var out []byte
 	if *indent {
