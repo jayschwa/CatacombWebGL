@@ -4,6 +4,7 @@ import { Bat, Demon, Mage, Orc, Troll } from "./enemies"
 import { Door } from "./environment"
 import { FloorGeometry, WallGeometry } from "./geometry"
 import { Bolt, Nuke, Potion, RedKey, YellowKey, GreenKey, BlueKey, Scroll, Treasure } from "./items"
+import { addStaticMeshes } from "./map"
 import { CustomMaterial } from "./material"
 import { Player } from "./player"
 import { Transition } from "./transition"
@@ -501,22 +502,22 @@ export class Game {
 		})
 
 		const that = this
-		fetch("maps/" + this.mapName + ".c3dmap")
+		fetch("maps/" + this.mapName + ".map.json")
 		.then(function(response) {
-			return response.arrayBuffer()
+			return response.json()
 		})
-		.then(function(buffer) {
-			// TODO: Game should not be aware of map format
-			const map = new TileMap(new Uint8Array(buffer))
+		.then(function(map) {
+			console.log(map)
 			console.log("map dimensions: " + map.width + "x" + map.height)
-			const hellish = map.layout.includes(7)
-			const fogColor = hellish ? 0x330000 : 0x000000 // hell gets red tint
-			that.scene.fog = new THREE.Fog(fogColor, 1, Math.max(40, 1.25 * Math.max(map.width, map.height)))
-			setupMaze(map, that.maze)
-			setupPlayerSpawn(map, that.player)
-			addPortals(map, that.maze)
-			addEnemies(map, that.maze)
-			addItems(map, that.maze)
+			if (map.fog) {
+				that.scene.fog = new THREE.Fog(map.fog.color, map.fog.near, map.fog.far)
+			}
+			addStaticMeshes(map, that.maze) //setupMaze(map, that.maze)
+			that.player.position.set(0, 0, 0) //setupPlayerSpawn(map, that.player)
+			that.player.lookAt(new THREE.Vector3(map.width, map.height, 0))
+			//addPortals(map, that.maze)
+			//addEnemies(map, that.maze)
+			//addItems(map, that.maze)
 			that.scene.add(that.maze)
 			that.play()
 		})
