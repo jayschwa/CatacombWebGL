@@ -40919,6 +40919,7 @@ class Treasure extends Item {
 }
 
 function addStaticMeshes(map, parent) {
+	const doors = {};
 	const floor = new Geometry();
 	const walls = {};
 
@@ -40945,6 +40946,7 @@ function addStaticMeshes(map, parent) {
 		for (let y = 0; y < map.height; y++) {
 			const position = new Vector2(x, y);
 			const tile = map.getTile(x, y);
+
 			if (tile.type == "wall") {
 				const adjacent = map.adjacentTiles(x, y);
 				const variants = {
@@ -40961,7 +40963,18 @@ function addStaticMeshes(map, parent) {
 						}
 					});
 				});
-			} else {
+			} else if (tile.type == "door") {
+				const door = new Door(tile.value, position);
+				const adjacent = [doors[[x-1,y]], doors[[x,y-1]]];
+				adjacent.filter(d => d && d.color == door.color).forEach(d => {
+					door.adjacent.push(d);
+					d.adjacent.push(door);
+				});
+				doors[[x,y]] = door;
+				parent.add(door);
+			}
+
+			if (tile.type != "wall") {
 				floor.merge(new FloorGeometry(position));
 			}
 		}
