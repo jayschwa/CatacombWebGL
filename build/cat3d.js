@@ -40973,6 +40973,23 @@ class Treasure extends Item {
 	}
 }
 
+function connectAdjacent(objects, obj, x, y, filterFunc) {
+	let adjacent = [
+		objects[[x-1, y]],
+		objects[[x+1, y]],
+		objects[[x, y-1]],
+		objects[[x, y+1]]
+	].filter(Boolean);
+	if (filterFunc) {
+		adjacent = adjacent.filter(filterFunc);
+	}
+	adjacent.forEach(neighbor => {
+		obj.adjacent.push(neighbor);
+		neighbor.adjacent.push(obj);
+	});
+	objects[[x, y]] = obj;
+}
+
 function createWallMeshes(geometryDict) {
 	return Object.keys(geometryDict).map(name => {
 		const geometry = new BufferGeometry().fromGeometry(geometryDict[name]);
@@ -41021,7 +41038,7 @@ function addStaticMeshes(map, parent) {
 				};
 				const exploding = tile.type == "exploding_wall";
 				const geometry = exploding ? {} : walls;
-				const translate = exploding ? new Vector2(0, 0) : position;
+				const translate = exploding ? new Vector2(0, 0) : position; // FIXME
 				Object.keys(variants).forEach(v => {
 					const name = tile.value + "_" + v;
 					const faces = variants[v];
@@ -41035,22 +41052,12 @@ function addStaticMeshes(map, parent) {
 				if (exploding) {
 					const wall = new ExplodingWall(position);
 					wall.add(...createWallMeshes(geometry));
-					const adjacent = [explodingWalls[[x-1,y]], explodingWalls[[x,y-1]]];
-					adjacent.filter(Boolean).forEach(w => {
-						wall.adjacent.push(w);
-						w.adjacent.push(wall);
-					});
-					explodingWalls[[x,y]] = wall;
+					connectAdjacent(explodingWalls, wall, x, y);
 					parent.add(wall);
 				}
 			} else if (tile.type == "door") {
 				const door = new Door(tile.value, position);
-				const adjacent = [doors[[x-1,y]], doors[[x,y-1]]];
-				adjacent.filter(d => d && d.color == door.color).forEach(d => {
-					door.adjacent.push(d);
-					d.adjacent.push(door);
-				});
-				doors[[x,y]] = door;
+				connectAdjacent(doors, door, x, y, d => d.color == door.color);
 				parent.add(door);
 			}
 
