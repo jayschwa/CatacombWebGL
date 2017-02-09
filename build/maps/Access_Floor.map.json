@@ -70,12 +70,22 @@
 			"value": "Gate of Stone"
 		}
 	},
+	"playerStart": {
+		"position": [
+			10,
+			9
+		],
+		"direction": [
+			0,
+			1
+		]
+	},
 	"entities": [
 		{
 			"type": "WarpGate",
 			"position": [
 				4,
-				1
+				18
 			],
 			"value": 16
 		},
@@ -83,26 +93,15 @@
 			"type": "WarpGate",
 			"position": [
 				18,
-				4
+				15
 			],
 			"value": 14
-		},
-		{
-			"type": "PlayerStart",
-			"position": [
-				10,
-				10
-			],
-			"direction": [
-				0,
-				-1
-			]
 		},
 		{
 			"type": "WarpGate",
 			"position": [
 				1,
-				15
+				4
 			],
 			"value": 12
 		},
@@ -110,7 +109,7 @@
 			"type": "WarpGate",
 			"position": [
 				15,
-				18
+				1
 			],
 			"value": 10
 		}

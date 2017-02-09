@@ -306,15 +306,12 @@ function setupMaze(map, scene) {
 }
 
 function setupPlayerSpawn(map, player) {
-	const spawn = map.tiles().filter(t => PLAYER_START_SET.has(t.entity))[0]
-	player.position.copy(spawn.position)
+	const pos = map.playerStart.position
+	const dir = map.playerStart.direction
+	player.position.set(pos[0], pos[1], 0)
 	const target = player.position.clone()
-	switch (spawn.entity) {
-		case PLAYER_START_NORTH: target.y += 1; break
-		case PLAYER_START_EAST: target.x += 1; break
-		case PLAYER_START_SOUTH: target.y -= 1; break
-		case PLAYER_START_WEST: target.x -= 1; break
-	}
+	target.x += dir[0]
+	target.y += dir[1]
 	player.lookAt(target)
 }
 
@@ -512,9 +509,8 @@ export class Game {
 			if (map.fog) {
 				that.scene.fog = new THREE.Fog(map.fog.color, map.fog.near, map.fog.far)
 			}
-			addStaticMeshes(map, that.maze) //setupMaze(map, that.maze)
-			that.player.position.set(0, 0, 0) //setupPlayerSpawn(map, that.player)
-			that.player.lookAt(new THREE.Vector3(map.width, map.height, 0))
+			addStaticMeshes(map, that.maze)
+			setupPlayerSpawn(map, that.player)
 			//addPortals(map, that.maze)
 			//addEnemies(map, that.maze)
 			//addItems(map, that.maze)

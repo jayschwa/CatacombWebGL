@@ -41344,6 +41344,16 @@ Vector3.prototype.copy = function(v) {
 	return this
 };
 
+function setupPlayerSpawn(map, player) {
+	const pos = map.playerStart.position;
+	const dir = map.playerStart.direction;
+	player.position.set(pos[0], pos[1], 0);
+	const target = player.position.clone();
+	target.x += dir[0];
+	target.y += dir[1];
+	player.lookAt(target);
+}
+
 class Game {
 	constructor(container, mapName, player) {
 		this.container = container;
@@ -41483,9 +41493,8 @@ class Game {
 			if (map.fog) {
 				that.scene.fog = new Fog(map.fog.color, map.fog.near, map.fog.far);
 			}
-			addStaticMeshes(map, that.maze); //setupMaze(map, that.maze)
-			that.player.position.set(0, 0, 0); //setupPlayerSpawn(map, that.player)
-			that.player.lookAt(new Vector3(map.width, map.height, 0));
+			addStaticMeshes(map, that.maze);
+			setupPlayerSpawn(map, that.player);
 			//addPortals(map, that.maze)
 			//addEnemies(map, that.maze)
 			//addItems(map, that.maze)

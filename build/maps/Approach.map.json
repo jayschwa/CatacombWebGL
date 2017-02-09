@@ -75,59 +75,58 @@
 			"value": "Hidden Gate Room"
 		}
 	},
+	"playerStart": {
+		"position": [
+			13,
+			23
+		],
+		"direction": [
+			-1,
+			0
+		]
+	},
 	"entities": [
 		{
 			"type": "Scroll",
 			"position": [
 				9,
-				4
+				23
 			],
 			"value": 1
-		},
-		{
-			"type": "PlayerStart",
-			"position": [
-				13,
-				4
-			],
-			"direction": [
-				-1,
-				0
-			]
 		},
 		{
 			"type": "Orc",
 			"position": [
 				29,
-				5
+				22
 			]
 		},
 		{
 			"type": "Orc",
 			"position": [
 				21,
-				9
+				18
 			]
 		},
 		{
 			"type": "Orc",
 			"position": [
 				4,
-				13
+				14
 			]
 		},
 		{
 			"type": "Orc",
 			"position": [
 				35,
-				13
+				14
 			]
 		},
 		{
 			"type": "WarpGate",
 			"position": [
 				38,
-				14
+				13
 			],
 			"value": 2
 		},
@@ -135,49 +134,49 @@
 			"type": "Orc",
 			"position": [
 				20,
-				15
+				12
 			]
 		},
 		{
 			"type": "Potion",
 			"position": [
 				24,
-				16
+				11
 			]
 		},
 		{
 			"type": "Potion",
 			"position": [
 				25,
-				16
+				11
 			]
 		},
 		{
 			"type": "Orc",
 			"position": [
 				8,
-				17
+				10
 			]
 		},
 		{
 			"type": "Potion",
 			"position": [
 				24,
-				17
+				10
 			]
 		},
 		{
 			"type": "Potion",
 			"position": [
 				25,
-				17
+				10
 			]
 		},
 		{
 			"type": "Treasure",
 			"position": [
 				16,
-				18
+				9
 			],
 			"value": 100
 		},
@@ -185,21 +184,21 @@
 			"type": "Potion",
 			"position": [
 				24,
-				18
+				9
 			]
 		},
 		{
 			"type": "Potion",
 			"position": [
 				25,
-				18
+				9
 			]
 		},
 		{
 			"type": "WarpGate",
 			"position": [
 				12,
-				19
+				8
 			],
 			"value": 9
 		},
@@ -207,7 +206,7 @@
 			"type": "Treasure",
 			"position": [
 				16,
-				19
+				8
 			],
 			"value": 100
 		},
@@ -215,28 +214,28 @@
 			"type": "Potion",
 			"position": [
 				24,
-				19
+				8
 			]
 		},
 		{
 			"type": "Potion",
 			"position": [
 				25,
-				19
+				8
 			]
 		},
 		{
 			"type": "Orc",
 			"position": [
 				29,
-				21
+				6
 			]
 		},
 		{
 			"type": "Orc",
 			"position": [
 				18,
-				22
+				5
 			]
 		}
 	],
