@@ -1,0 +1,303 @@
+{
+	"title": "Nemesis's Keep",
+	"levelNumber": 2,
+	"width": 40,
+	"height": 28,
+	"layout": [
+		"AAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+		"ACCCCCCCCCADDDDDDDDDDDDDDDDDACCCCCCCCCCA",
+		"ACCCCCCCCCEDDDDDDDDDDDDDDDDDECCCCCCCCCCA",
+		"ACCCCCCCCCEDDDDDDDDDDDDDDDDDECCCCCCCCCCA",
+		"ACCCCCCCCCEDDDDDDDDDDDDDDDDDECCCCCCCCCCA",
+		"ACCCCCCCCCEDDDDDDDDDDDDDDDDDECCCCCCCCCCA",
+		"BCCCCCCCCCFDDDDDDDDDDDDDDDDDFCCCCCCCCCCA",
+		"ACCCCCCFFFFFFFFFFFEEEEFFFFFFFFFFCCCCCCCB",
+		"ACCCCCCFGGGGGGGGGGGGGGGGGGGGGGFFCCCCCCCA",
+		"ACCCCCCFGGGGGGGGGGGGGGGGGGGGGGFFCCCCCCCA",
+		"ACCCCCCFGGGGGGGGGGGGGGGGGGGGGGFFFFFFFFFA",
+		"FFFFFFFFGGGGGGGGGGGGGGGGGGGGGGGHHHHHHHHH",
+		"IJJJJJJEGGGGGGGGGGGGGGGGGGGGGGGHKKKKKKKH",
+		"IJJJJJJEGGGGGGLLLLGGGGGLLLLGGGGMKKKKKKKH",
+		"IJJJJJJEGGGGGGLLLLGGGGGLLLLGGGGMKKKKKKKH",
+		"IJJJJJJEGGGGGGLLLLGGGGGLLLLGGGGMKKKKKKKH",
+		"IJJJJJJEGGGGGGLLLLGGGGGLLLLGGGGHKKKKKKKH",
+		"IJJJJJJEGGGGGGGGGGGGGGGGGGGGGGGHHHHHHHHH",
+		"FFFFFFFFGGGGGGGGGGGGGGGGGGGGGGFFFFFFFFFF",
+		"FCCCCCCFGGGGGGGGGGGGGGGGGGGGGGFFCCCCCCCF",
+		"FCCCCCCFGGGGGGGGGGGGGGGGGGGGGGFFCCCCCCCF",
+		"FCCCCCCFGGGGGGGGGGGGGGGGGGGGGGFFCCCCCCCF",
+		"FCCCCCCFFFFFFFFFFFEEEEFFFFFFFFFFCCCCCCCF",
+		"FCCCCCCCCCFNNNNNNNNNNNNNNNNNFCCCCCCCCCCF",
+		"FCCCCCCCCCENNNNNNNNNNNNNNNNNECCCCCCCCCCF",
+		"FCCCCCCCCCENNNNNNNNNNNNNNNNNECCCCCCCCCCF",
+		"FCCCCCCCCCENNNNNNNNNNNNNNNNNECCCCCCCCCCF",
+		"FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"
+	],
+	"legend": {
+		"A": {
+			"type": "wall",
+			"value": "slime"
+		},
+		"B": {
+			"type": "wall",
+			"value": "blood"
+		},
+		"C": {
+			"type": "floor",
+			"value": "Guard Post"
+		},
+		"D": {
+			"type": "floor",
+			"value": "Northern Passage"
+		},
+		"E": {
+			"type": "floor"
+		},
+		"F": {
+			"type": "wall",
+			"value": "stone"
+		},
+		"G": {
+			"type": "floor",
+			"value": "Main Hall"
+		},
+		"H": {
+			"type": "wall",
+			"value": "gold"
+		},
+		"I": {
+			"type": "wall",
+			"value": "tar"
+		},
+		"J": {
+			"type": "floor",
+			"value": "Keep Entrance"
+		},
+		"K": {
+			"type": "floor",
+			"value": "Gate Room"
+		},
+		"L": {
+			"type": "wall",
+			"value": "white"
+		},
+		"M": {
+			"type": "door",
+			"value": "red"
+		},
+		"N": {
+			"type": "floor",
+			"value": "Southern Passage"
+		}
+	},
+	"playerStart": {
+		"position": [
+			2,
+			13
+		],
+		"direction": [
+			1,
+			0
+		]
+	},
+	"entities": [
+		{
+			"type": "Treasure",
+			"position": [
+				37,
+				25
+			],
+			"value": 200
+		},
+		{
+			"type": "Potion",
+			"position": [
+				2,
+				24
+			]
+		},
+		{
+			"type": "Orc",
+			"position": [
+				6,
+				24
+			]
+		},
+		{
+			"type": "Orc",
+			"position": [
+				17,
+				23
+			]
+		},
+		{
+			"type": "Orc",
+			"position": [
+				35,
+				22
+			]
+		},
+		{
+			"type": "Orc",
+			"position": [
+				4,
+				21
+			]
+		},
+		{
+			"type": "Orc",
+			"position": [
+				36,
+				19
+			]
+		},
+		{
+			"type": "RedKey",
+			"position": [
+				5,
+				18
+			]
+		},
+		{
+			"type": "Nuke",
+			"position": [
+				34,
+				18
+			]
+		},
+		{
+			"type": "Potion",
+			"position": [
+				37,
+				18
+			]
+		},
+		{
+			"type": "Potion",
+			"position": [
+				38,
+				18
+			]
+		},
+		{
+			"type": "Orc",
+			"position": [
+				12,
+				15
+			]
+		},
+		{
+			"type": "Orc",
+			"position": [
+				21,
+				13
+			]
+		},
+		{
+			"type": "WarpGate",
+			"position": [
+				35,
+				13
+			],
+			"value": 3
+		},
+		{
+			"type": "Nuke",
+			"position": [
+				36,
+				13
+			]
+		},
+		{
+			"type": "Bolt",
+			"position": [
+				37,
+				13
+			]
+		},
+		{
+			"type": "Potion",
+			"position": [
+				38,
+				13
+			]
+		},
+		{
+			"type": "Bolt",
+			"position": [
+				33,
+				8
+			]
+		},
+		{
+			"type": "Potion",
+			"position": [
+				37,
+				8
+			]
+		},
+		{
+			"type": "Potion",
+			"position": [
+				38,
+				8
+			]
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				3,
+				7
+			],
+			"value": 200
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				5,
+				5
+			],
+			"value": 200
+		},
+		{
+			"type": "Orc",
+			"position": [
+				36,
+				5
+			]
+		},
+		{
+			"type": "Potion",
+			"position": [
+				2,
+				3
+			]
+		},
+		{
+			"type": "Orc",
+			"position": [
+				5,
+				3
+			]
+		},
+		{
+			"type": "Orc",
+			"position": [
+				34,
+				3
+			]
+		},
+		{
+			"type": "Orc",
+			"position": [
+				8,
+				2
+			]
+		}
+	],
+	"fog": {
+		"color": 0,
+		"near": 1,
+		"far": 50
+	}
+}
