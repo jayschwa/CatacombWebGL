@@ -40924,11 +40924,12 @@ function addStaticMeshes(map, parent) {
 
 	// TODO: attach these methods somewhere else
 	map.getTile = function(x, y) {
-		if (x < 0 || y < 0 || x >= this.width || y >= this.height) {
+		try {
+			const symbol = this.layout[this.height-1-y][x];
+			return this.legend[symbol]
+		} catch (ex) {
 			return null
 		}
-		const symbol = this.layout[this.height-1-y][x];
-		return this.legend[symbol]
 	};
 
 	map.adjacentTiles = function(x, y) {
