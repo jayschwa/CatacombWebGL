@@ -1,4 +1,4 @@
-import { BoxBufferGeometry, Mesh, MeshBasicMaterial, PositionalAudio } from "three"
+import { BoxBufferGeometry, Mesh, MeshBasicMaterial, Object3D, PositionalAudio } from "three"
 import { audioListener, audioLoader } from "./audio"
 import { CustomMaterial } from "./material"
 import { SpriteSheetProxy, textureCache } from "./utils"
@@ -50,6 +50,61 @@ export class Door extends Mesh {
 			this.shouldRemove = true
 			this.adjacent.forEach(door => door.unlock(true))
 			return true
+		}
+	}
+}
+
+export class ExplodingWall extends Object3D {
+	constructor(position) {
+		super()
+		const geometry = new BoxBufferGeometry(1, 1, 1)
+		geometry.rotateX(Math.PI / 2)
+		const texture = textureCache.get("walls/exploding.png", texture => {
+			this.box.material.map = new SpriteSheetProxy(texture, 64, 3)
+			this.box.material.needsUpdate = true
+		})
+		const material = new MeshBasicMaterial({map: texture, transparent: true})
+		this.position.copy(position)
+		this.box = new Mesh(geometry, material)
+		this.duration = 1/3
+		this.adjacent = []
+	}
+
+	ignite(time) {
+		if (this.isExploding()) {
+			return
+		}
+		this.ignition = time
+		this.children.forEach(mesh => mesh.shouldRemove = true)
+		this.add(this.box)
+	}
+
+	igniteAdjacent(time) {
+		this.adjacent.forEach(e => e.ignite(time))
+		this.adjacentsIgnited = true
+	}
+
+	isExploding() {
+		return !!this.ignition
+	}
+
+	onDamage(time) {
+		this.ignite(time)
+	}
+
+	update(time) {
+		if (this.isExploding()) {
+			const timeDelta = time - this.ignition
+			if (timeDelta > this.duration) {
+				this.shouldRemove = true
+			} else {
+				const texture = this.box.material.map
+				const frame = Math.floor(timeDelta * texture.frames / this.duration)
+				this.box.material.map.setFrame(frame)
+				if (!this.adjacentsIgnited && timeDelta > this.duration / texture.frames) {
+					this.igniteAdjacent(time)
+				}
+			}
 		}
 	}
 }

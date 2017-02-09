@@ -1,7 +1,7 @@
 import * as THREE from "three"
 import { Entity, Fireball, Portal, Teleporter } from "./entities"
 import { Bat, Demon, Mage, Orc, Troll } from "./enemies"
-import { Door } from "./environment"
+import { Door, ExplodingWall } from "./environment"
 import { FloorGeometry, WallGeometry } from "./geometry"
 import { Bolt, Nuke, Potion, RedKey, YellowKey, GreenKey, BlueKey, Scroll, Treasure } from "./items"
 import { addStaticMeshes } from "./map"
@@ -51,61 +51,6 @@ const TELEPORTER_A = 0x1F
 const TELEPORTER_B = 0x20
 const TELEPORTER_C = 0x21
 const TELEPORTER_SET = new Set([TELEPORTER_A, TELEPORTER_B, TELEPORTER_C])
-
-class ExplodingWall extends THREE.Object3D {
-	constructor(position) {
-		super()
-		const geometry = new THREE.BoxBufferGeometry(1, 1, 1)
-		geometry.rotateX(Math.PI / 2)
-		const texture = textureCache.get("walls/exploding.png", texture => {
-			this.box.material.map = new SpriteSheetProxy(texture, 64, 3)
-			this.box.material.needsUpdate = true
-		})
-		const material = new THREE.MeshBasicMaterial({map: texture, transparent: true})
-		this.position.copy(position)
-		this.box = new THREE.Mesh(geometry, material)
-		this.duration = 1/3
-		this.adjacent = []
-	}
-
-	ignite(time) {
-		if (this.isExploding()) {
-			return
-		}
-		this.ignition = time
-		this.children.forEach(mesh => mesh.shouldRemove = true)
-		this.add(this.box)
-	}
-
-	igniteAdjacent(time) {
-		this.adjacent.forEach(e => e.ignite(time))
-		this.adjacentsIgnited = true
-	}
-
-	isExploding() {
-		return !!this.ignition
-	}
-
-	onDamage(time) {
-		this.ignite(time)
-	}
-
-	update(time) {
-		if (this.isExploding()) {
-			const timeDelta = time - this.ignition
-			if (timeDelta > this.duration) {
-				this.shouldRemove = true
-			} else {
-				const texture = this.box.material.map
-				const frame = Math.floor(timeDelta * texture.frames / this.duration)
-				this.box.material.map.setFrame(frame)
-				if (!this.adjacentsIgnited && timeDelta > this.duration / texture.frames) {
-					this.igniteAdjacent(time)
-				}
-			}
-		}
-	}
-}
 
 class Tile {
 	constructor(map, index, position, layout, entity) {

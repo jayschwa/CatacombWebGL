@@ -40835,6 +40835,61 @@ class Door extends Mesh {
 	}
 }
 
+class ExplodingWall extends Object3D {
+	constructor(position) {
+		super();
+		const geometry = new BoxBufferGeometry(1, 1, 1);
+		geometry.rotateX(Math.PI / 2);
+		const texture = textureCache.get("walls/exploding.png", texture => {
+			this.box.material.map = new SpriteSheetProxy(texture, 64, 3);
+			this.box.material.needsUpdate = true;
+		});
+		const material = new MeshBasicMaterial({map: texture, transparent: true});
+		this.position.copy(position);
+		this.box = new Mesh(geometry, material);
+		this.duration = 1/3;
+		this.adjacent = [];
+	}
+
+	ignite(time) {
+		if (this.isExploding()) {
+			return
+		}
+		this.ignition = time;
+		this.children.forEach(mesh => mesh.shouldRemove = true);
+		this.add(this.box);
+	}
+
+	igniteAdjacent(time) {
+		this.adjacent.forEach(e => e.ignite(time));
+		this.adjacentsIgnited = true;
+	}
+
+	isExploding() {
+		return !!this.ignition
+	}
+
+	onDamage(time) {
+		this.ignite(time);
+	}
+
+	update(time) {
+		if (this.isExploding()) {
+			const timeDelta = time - this.ignition;
+			if (timeDelta > this.duration) {
+				this.shouldRemove = true;
+			} else {
+				const texture = this.box.material.map;
+				const frame = Math.floor(timeDelta * texture.frames / this.duration);
+				this.box.material.map.setFrame(frame);
+				if (!this.adjacentsIgnited && timeDelta > this.duration / texture.frames) {
+					this.igniteAdjacent(time);
+				}
+			}
+		}
+	}
+}
+
 class FloorGeometry extends PlaneGeometry {
 	constructor(position) {
 		super(1, 1);
@@ -40918,8 +40973,19 @@ class Treasure extends Item {
 	}
 }
 
+function createWallMeshes(geometryDict) {
+	return Object.keys(geometryDict).map(name => {
+		const geometry = new BufferGeometry().fromGeometry(geometryDict[name]);
+		const texture = textureCache.get("walls/" + name + ".png");
+		texture.anisotropy = 8;
+		const material = new CustomMaterial({map: texture});
+		return new Mesh(geometry, material)
+	})
+}
+
 function addStaticMeshes(map, parent) {
 	const doors = {};
+	const explodingWalls = {};
 	const floor = new Geometry();
 	const walls = {};
 
@@ -40947,22 +41013,36 @@ function addStaticMeshes(map, parent) {
 			const position = new Vector2(x, y);
 			const tile = map.getTile(x, y);
 
-			if (tile.type == "wall") {
+			if (tile.type.includes("wall")) {
 				const adjacent = map.adjacentTiles(x, y);
 				const variants = {
 					light: ["east", "west"],
 					dark: ["north", "south"]
 				};
+				const exploding = tile.type == "exploding_wall";
+				const geometry = exploding ? {} : walls;
+				const translate = exploding ? new Vector2(0, 0) : position;
 				Object.keys(variants).forEach(v => {
 					const name = tile.value + "_" + v;
 					const faces = variants[v];
 					faces.forEach(face => {
-						if (adjacent[face] && adjacent[face].type != "wall") {
-							walls[name] = walls[name] || new Geometry();
-							walls[name].merge(new WallGeometry(position, face));
+						if (adjacent[face] && adjacent[face].type != tile.type) {
+							geometry[name] = geometry[name] || new Geometry();
+							geometry[name].merge(new WallGeometry(translate, face));
 						}
 					});
 				});
+				if (exploding) {
+					const wall = new ExplodingWall(position);
+					wall.add(...createWallMeshes(geometry));
+					const adjacent = [explodingWalls[[x-1,y]], explodingWalls[[x,y-1]]];
+					adjacent.filter(Boolean).forEach(w => {
+						wall.adjacent.push(w);
+						w.adjacent.push(wall);
+					});
+					explodingWalls[[x,y]] = wall;
+					parent.add(wall);
+				}
 			} else if (tile.type == "door") {
 				const door = new Door(tile.value, position);
 				const adjacent = [doors[[x-1,y]], doors[[x,y-1]]];
@@ -40985,13 +41065,7 @@ function addStaticMeshes(map, parent) {
 	parent.add(new Mesh(new BufferGeometry().fromGeometry(floor), material));
 
 	// add aggregate wall geometries to scene
-	Object.keys(walls).forEach(name => {
-		const geometry = new BufferGeometry().fromGeometry(walls[name]);
-		const texture = textureCache.get("walls/" + name + ".png");
-		texture.anisotropy = 8;
-		const material = new CustomMaterial({map: texture});
-		parent.add(new Mesh(geometry, material));
-	});
+	parent.add(...createWallMeshes(walls));
 }
 
 class Player extends Entity {
