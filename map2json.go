@@ -69,7 +69,7 @@ func ReadDescriptions(filename string) (descriptions []string) {
 
 type LayoutDef struct {
 	Type  string `json:"type"`
-	Value string `json:"value"`
+	Value string `json:"value,omitempty"`
 }
 
 func Wall(name string) LayoutDef {
@@ -84,8 +84,8 @@ func Door(color string) LayoutDef {
 	return LayoutDef{"door", color}
 }
 
-func Description(desc string) LayoutDef {
-	return LayoutDef{"description", desc}
+func Floor(desc string) LayoutDef {
+	return LayoutDef{"floor", desc}
 }
 
 type JsonMap struct {
@@ -96,7 +96,7 @@ type JsonMap struct {
 	Layout      []string             `json:"layout"`
 	Legend      map[string]LayoutDef `json:"legend"`
 	Entities    []Entity             `json:"entities"`
-	Fog         *Fog                 `json:"fog"`
+	Fog         *Fog                 `json:"fog,omitempty"`
 }
 
 var LayoutDict = map[byte]LayoutDef{
@@ -120,6 +120,8 @@ var LayoutDict = map[byte]LayoutDef{
 	0x18: Door("yellow"),
 	0x1C: Door("green"),
 	0x20: Door("blue"),
+
+	0xB4: Floor(""),
 }
 
 type Vec2 [2]int
@@ -194,7 +196,7 @@ func main() {
 	c3dmap := ReadC3DMap(flag.Arg(0))
 	descriptions := ReadDescriptions(flag.Arg(1))
 	for i, desc := range descriptions {
-		LayoutDict[byte(0xB4+i)] = Description(desc)
+		LayoutDict[byte(0xB4+i)] = Floor(desc)
 	}
 	nextRune := 'A'
 	byteToLetter := make(map[byte]string)
@@ -264,16 +266,13 @@ func main() {
 			if s, ok := byteToLetter[b]; ok {
 				m.Layout[h] += s
 			} else {
-				s := " "
 				def := LayoutDict[b]
-				if len(def.Value) > 0 {
-					s = string(nextRune)
-					letterToDef[s] = def
-					if nextRune == 'Z' {
-						nextRune = 'a'
-					} else {
-						nextRune += 1
-					}
+				s := string(nextRune)
+				letterToDef[s] = def
+				if nextRune == 'Z' {
+					nextRune = 'a'
+				} else {
+					nextRune += 1
 				}
 				m.Layout[h] += s
 				byteToLetter[b] = s
