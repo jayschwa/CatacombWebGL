@@ -40947,16 +40947,19 @@ function addStaticMeshes(map, parent) {
 			const tile = map.getTile(x, y);
 			if (tile.type == "wall") {
 				const adjacent = map.adjacentTiles(x, y);
-				const faces = Object.keys(adjacent).filter(face => adjacent[face] && adjacent[face].type != "wall");
-				faces.filter(face => ["east", "west"].includes(face)).forEach(face => {
-					const name = tile.value + "_light";
-					walls[name] = walls[name] || new Geometry();
-					walls[name].merge(new WallGeometry(position, face));
-				});
-				faces.filter(face => ["north", "south"].includes(face)).forEach(face => {
-					const name = tile.value + "_dark";
-					walls[name] = walls[name] || new Geometry();
-					walls[name].merge(new WallGeometry(position, face));
+				const variants = {
+					light: ["east", "west"],
+					dark: ["north", "south"]
+				};
+				Object.keys(variants).forEach(v => {
+					const name = tile.value + "_" + v;
+					const faces = variants[v];
+					faces.forEach(face => {
+						if (adjacent[face] && adjacent[face].type != "wall") {
+							walls[name] = walls[name] || new Geometry();
+							walls[name].merge(new WallGeometry(position, face));
+						}
+					});
 				});
 			} else {
 				floor.merge(new FloorGeometry(position));
