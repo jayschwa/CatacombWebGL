@@ -1,0 +1,949 @@
+{
+	"title": "Nemesis's Lair",
+	"levelNumber": 20,
+	"width": 64,
+	"height": 63,
+	"layout": [
+		"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+		"ABBBBBACCCCCCCCCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADDDA",
+		"ABBBBBACCCCCCCCCAAAAAAAAAAAAAACCCCCCCCCCCACCCCCCCCCCCCCCCCCEDDDA",
+		"ABBBBBACCCCCCCCCAAAAAAAAAAAAAACCCCCCCCCCCACCCCCCCCCCCCCCCCCEDDDA",
+		"ABBBBBAAAACCCAAAAAAAAAAAAAAAAACCAAAACCAAAAAACCAAAACCAAAAFFFADDDA",
+		"AAEEAAAAAACCCAACCCCCCCCCCCCCCCCCAAAACCCCCCCCCCACCCCCAAAAFFFAAAAA",
+		"ACCCCCCCCCCCCAACCCCCCCCCCCCCCCCCAAAACCCCCCCCCCACCCCCAAGGGGGGGGGA",
+		"ACCCCCCCCCCCCAACCCCCCCCCCCCCCCCCAAAAAAAAAAAAAAAAAAAAAAGGGGGGGGGA",
+		"ACCCCCCCCCCCCAACCAAAAAAAACCCAAAAACCCAAAAAAAAAAAAAAAAAAGGGGGGGGGA",
+		"ACCCAAAAAACCCCCCCAAAAAAAACCCAAAAACCCAHHHHHHHHHHHHHHAAAGGGGGGGGGA",
+		"ACCCAAAAAACCCCCCCAACCCCCCCCCCCCCCCCCAHHHHHHHHHHHHHHAAAAAAAAAAAAA",
+		"ACCCAAAAAACCCCCCCAACCCCCCCCCCCCCCCCCAHHHHHHHHHHHHHHAAAAAAAAAAAAA",
+		"ACCCAAAAAAAAAAAAAAACCCCCCCCCCCCCCCCCAHHHHHHHHHHHHHHHHHAAAAAAIIIA",
+		"ACCFAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHHHHHHHHHHHHHHHHHAAAAAAIIIA",
+		"AFFFJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJKHHHHHHHHHHHHHHHLLHHFFFIIIIIIA",
+		"AFFFJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJKHHHHHHHHHHHHHHHHLHHFFFIIIIIIA",
+		"AFFFJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJKHHHHHHHHHHHHHHHLLHHFFFIIIIIIA",
+		"ACCFAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHHHHHHHHHHHHHHHHHAAAFFAIIIA",
+		"ACCCAAAAAAAAAAAAAAAAAAMMMMMMANNNNNNNAHHHHHHHHHHHHHHHHHAAAFFAIIIA",
+		"ACCCAAAAACCCCCCCCCCAAAMMMMMMAFFFFFFFAHHHHHHHHHHHHHHAAAAAAFFAAAAA",
+		"ACCCAAAAACCCCCCCCCCCCEMMMMMMANNNNNNNAHHHHHHHHHHHHHHAAAACCCCCCCAA",
+		"ACCCCCCCCCCCCCCCCCCCCEMMMMMMANNNNNNNAHHHHHHHHHHHHHHAAAACCCCCCCAA",
+		"ACCCCCCCCCCCAAAACCCAAAMMMMMMANNNNNNNAAAAAAAAAAAAAAAAAAAAAACCAAAA",
+		"ACCCCCCCCCCCAAAACCCAAAMMMMMMANNNNNNNAAAAAACCACCCCCCCCCCAAACCAAAA",
+		"AAAAAAAAACCCAAAACCCAAAMMMMMMAAAAEEAAAAAAAACCACCCCCCCCCCAAACCAAAA",
+		"AAAACCCAACCCAAAAAAAAAAAAAAAAAAAACCCCCCCCAACCACCAAAAAACCCCCCCAAAA",
+		"AAAACCCCCCCCCCAAOOOOOOOOOAAAAAAACCCCCCCCCCCCACCAAAAAACCCCCCCAAAA",
+		"AAAACCCCCCCCCCAAOOOOOOOOOAAAAAAAAAAAAACCCCCCACCAACCCCCCAAACCAAAA",
+		"AAAACCCCCCCCCCAAOOOOOOOOOAACCAACCCCCCCCCAACCAAAAACCCCCCAAACCAAAA",
+		"AAAACCCAAAAACCAAOOOOOOOOOAACCAACCCCCCCCCAACCCCACCCCAAAAACCCCAAAA",
+		"AAAACCCAAAAACCAAAEEAAAAAAAACCAACCAACCAAAAACCCCACCCCAAAAACCCCAAAA",
+		"AACCCCCCCAAACCAAACCAAAAAAAACCAACCAACCAAAAACCAAAAACCACCAAAAAAAAAA",
+		"AACCCCCCCACCCCCCCCCACCCCCCCCCAACCAAAAACCCCCCAAAAACCACCCCCCCCCCAA",
+		"AACCCCCCCACCCCCCCCCACCCCCCCCCAACCCCAAACCCCCCACCAACCACCCCCCCCCCAA",
+		"AAAAACCAAACCAAAAAAAACCAAAAACCAACCCCAAACCAAAAACCCCCCCCCAAACCACCAA",
+		"AAAAAEEAAACCAPPPPPAACCAAAAACCAAAACCAAACCAACCACCCCCCCCCAAACCACCAA",
+		"AAAQQQQQQACCAPPPPPAACCAACCCCCCCAACCAAACCAACCAAAAAAAAAAAAACCACCAA",
+		"AAAQQQQQQACCAPPPPPAACCAACCCCCCCAACCACCCCCCCCAAAAAAACCCCAACCACCAA",
+		"AAAQQQQQQACCEPPPPPAACCAACCAAAAAAACCACCCCCCCCAACCAAACCCCAACCACCAA",
+		"AAAQQQQQQACCEPPPPPAACCAACCAAAAAAACCAAAAAAACCAACCAAACCAAAACCACCAA",
+		"AAAQQQQQQAAAAPPPPPECCCAACCAAAAAAACCAAAAAAACCAACCACCCCCCCCCCCCCAA",
+		"AAAQQQQQQAAAAPPPPPECCCAACCAACCACCCCCCAACCCCCCCCCACCCCCCCCCCCCCAA",
+		"AAAQQQQQQACCEPPPPPAACCAACCAACCACCCCCCAACCCCCCCCCAAACCAACCAAAAAAA",
+		"AAAAAAAAAACCEPPPPPAAAAAACCAACCAAAAACCAAAAAAAAACCAAACCAACCAAAAAAA",
+		"AAAAAAAAAACCAPPPPPACCAAACCAACCAAAAACCAAAAAAAAACCAAACCAACCAAAAAAA",
+		"ARRRRRRACCCCAAAAAAACCCCCCCCCCCAACCCCCAAAAACCCCCCCCACCAACCAAAAAAA",
+		"ARRRRRRACCCCACCCCCACCCCCCCCCCCAACCCCCAAAAACCCCCCCCACCAACCCCCAAAA",
+		"ARRRRRRECCAAACCCCCACCAAAAAAACCAAAAACCCCCCAAACCAAAAACCAACCCCCAAAA",
+		"ARRRRRRECCAAAACCAAACCAAAAAACCCCAAAACCCCCCCAACCAAAAACCAAAAACCCCAA",
+		"ARRRRRRAAAAAAACCCCCCCCCCCAACCCCAAAAAAAAACCAACCAAAAACCAAAAACCCCAA",
+		"ARRRRRRAAAAAAACCCCCCCCCCCAAACCAAACCCCCAACCAACCCCCCCCCAAAAACCAAAA",
+		"ARRRRRRAAACCAACCAAAAAAAAAAAACCAAACCCCCAACCAACCCCCCCCCAACCCCCAAAA",
+		"ARRRRRRAAACCCCCCCCCAAAACCAAACCAAACCACCAACCAACCAAAAAAAAACCCCCAAAA",
+		"ARRRRRRAAACCCCCCCCCAAAACCAAACCAAACCACCAACCAACCCCCCAAAAAAAAAAAAAA",
+		"AAAEEAAAAACCAAAAAAAAAAACCAAACCAAACCACCAACCAACCCCCCAAAAAACCACCCCA",
+		"AAACCAAAAACCAAAAAAACCCCCCCCCCCCCCCCACCCCCCAAAAACCAAAAAAACCACCCCA",
+		"AAAEEAAAAAEEAAAAAAACCCCCCCCCCCCCCCCACCCCCCAAAAACCAACCCCCCCAAACCA",
+		"ARRRRRASSSSSSSSSAAACCAACCAAAAAAAACCAAAAACCCCCAACCCCCCCCCCCAAACCA",
+		"ARRRRRASSSSSSSSSAAACCAACCAACCAACCCCCCCCACCCCCAACCCCCCAAACCACCCCA",
+		"ARRRRRASSSSSSSSSAAACCAAAAAACCAACCCCCCCCAAAAAAAACCAACCAAAAAACCCAA",
+		"ARRRRRASSSSSSSSSAAACCCCCCCCCCAACCAAAACCAAACCCCCCCAACCCCCCCCCCAAA",
+		"ARRRRRASSSSSSSSSAAACCCCCCCCCCAACCAAAACCAAACCCCCCCAACCCCCCCCCCAAA",
+		"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+	],
+	"legend": {
+		"A": {
+			"type": "wall",
+			"value": "hell"
+		},
+		"B": {
+			"type": "floor",
+			"value": "Demon Library"
+		},
+		"C": {
+			"type": "floor",
+			"value": "Twisty Little Passages, All Alike"
+		},
+		"D": {
+			"type": "floor",
+			"value": "Fiend Ready Room"
+		},
+		"E": {
+			"type": "floor"
+		},
+		"F": {
+			"type": "exploding_wall",
+			"value": "hell"
+		},
+		"G": {
+			"type": "floor",
+			"value": "Hidden Stores"
+		},
+		"H": {
+			"type": "floor",
+			"value": "Nemesis's Throne Room"
+		},
+		"I": {
+			"type": "floor",
+			"value": "Nemesis's Workshop"
+		},
+		"J": {
+			"type": "floor",
+			"value": "Entry Hallway"
+		},
+		"K": {
+			"type": "door",
+			"value": "red"
+		},
+		"L": {
+			"type": "wall",
+			"value": "white"
+		},
+		"M": {
+			"type": "floor",
+			"value": "Lycanthrope Lunch Hall"
+		},
+		"N": {
+			"type": "floor",
+			"value": "Nether Planes Pub"
+		},
+		"O": {
+			"type": "floor",
+			"value": "Mephisto Massage Clinic"
+		},
+		"P": {
+			"type": "floor",
+			"value": "Demon Meeting Hall"
+		},
+		"Q": {
+			"type": "floor",
+			"value": "Demon Playroom"
+		},
+		"R": {
+			"type": "floor",
+			"value": "Fiend Feasting Pit"
+		},
+		"S": {
+			"type": "floor",
+			"value": "Lord O' Dark Lounge"
+		}
+	},
+	"playerStart": {
+		"position": [
+			5,
+			47
+		],
+		"direction": [
+			1,
+			0
+		]
+	},
+	"entities": [
+		{
+			"type": "Demon",
+			"position": [
+				2,
+				61
+			]
+		},
+		{
+			"type": "Demon",
+			"position": [
+				3,
+				60
+			]
+		},
+		{
+			"type": "Demon",
+			"position": [
+				8,
+				60
+			]
+		},
+		{
+			"type": "Demon",
+			"position": [
+				13,
+				60
+			],
+			"minDifficulty": 2
+		},
+		{
+			"type": "Demon",
+			"position": [
+				46,
+				60
+			]
+		},
+		{
+			"type": "Demon",
+			"position": [
+				58,
+				60
+			],
+			"minDifficulty": 1
+		},
+		{
+			"type": "Demon",
+			"position": [
+				39,
+				59
+			],
+			"minDifficulty": 1
+		},
+		{
+			"type": "Demon",
+			"position": [
+				62,
+				59
+			]
+		},
+		{
+			"type": "Demon",
+			"position": [
+				23,
+				57
+			],
+			"minDifficulty": 2
+		},
+		{
+			"type": "Demon",
+			"position": [
+				20,
+				56
+			]
+		},
+		{
+			"type": "Demon",
+			"position": [
+				28,
+				56
+			],
+			"minDifficulty": 2
+		},
+		{
+			"type": "Demon",
+			"position": [
+				41,
+				56
+			],
+			"minDifficulty": 1
+		},
+		{
+			"type": "Potion",
+			"position": [
+				56,
+				56
+			]
+		},
+		{
+			"type": "Potion",
+			"position": [
+				57,
+				56
+			]
+		},
+		{
+			"type": "Potion",
+			"position": [
+				58,
+				56
+			]
+		},
+		{
+			"type": "Potion",
+			"position": [
+				59,
+				56
+			]
+		},
+		{
+			"type": "Potion",
+			"position": [
+				60,
+				56
+			]
+		},
+		{
+			"type": "Potion",
+			"position": [
+				56,
+				55
+			]
+		},
+		{
+			"type": "Potion",
+			"position": [
+				57,
+				55
+			]
+		},
+		{
+			"type": "Potion",
+			"position": [
+				58,
+				55
+			]
+		},
+		{
+			"type": "Potion",
+			"position": [
+				59,
+				55
+			]
+		},
+		{
+			"type": "Potion",
+			"position": [
+				60,
+				55
+			]
+		},
+		{
+			"type": "Demon",
+			"position": [
+				34,
+				54
+			],
+			"minDifficulty": 1
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				56,
+				54
+			],
+			"value": 2000
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				57,
+				54
+			],
+			"value": 2000
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				58,
+				54
+			],
+			"value": 2000
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				59,
+				54
+			],
+			"value": 2000
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				60,
+				54
+			],
+			"value": 2000
+		},
+		{
+			"type": "Nuke",
+			"position": [
+				54,
+				53
+			]
+		},
+		{
+			"type": "Nuke",
+			"position": [
+				55,
+				53
+			]
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				56,
+				53
+			],
+			"value": 2000
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				57,
+				53
+			],
+			"value": 2000
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				58,
+				53
+			],
+			"value": 2000
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				59,
+				53
+			],
+			"value": 2000
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				60,
+				53
+			],
+			"value": 2000
+		},
+		{
+			"type": "Bolt",
+			"position": [
+				61,
+				53
+			]
+		},
+		{
+			"type": "Bolt",
+			"position": [
+				62,
+				53
+			]
+		},
+		{
+			"type": "Demon",
+			"position": [
+				15,
+				52
+			]
+		},
+		{
+			"type": "Demon",
+			"position": [
+				41,
+				52
+			],
+			"minDifficulty": 2
+		},
+		{
+			"type": "Demon",
+			"position": [
+				48,
+				52
+			]
+		},
+		{
+			"type": "Demon",
+			"position": [
+				20,
+				50
+			],
+			"minDifficulty": 1
+		},
+		{
+			"type": "Demon",
+			"position": [
+				27,
+				50
+			]
+		},
+		{
+			"type": "Demon",
+			"position": [
+				2,
+				49
+			],
+			"minDifficulty": 1
+		},
+		{
+			"type": "Demon",
+			"position": [
+				42,
+				49
+			]
+		},
+		{
+			"type": "Demon",
+			"position": [
+				45,
+				49
+			],
+			"minDifficulty": 2
+		},
+		{
+			"type": "Scroll",
+			"position": [
+				15,
+				47
+			],
+			"value": 7
+		},
+		{
+			"type": "RedKey",
+			"position": [
+				31,
+				47
+			]
+		},
+		{
+			"type": "Demon",
+			"position": [
+				35,
+				47
+			]
+		},
+		{
+			"type": "Nemesis",
+			"position": [
+				50,
+				47
+			]
+		},
+		{
+			"type": "Grelminar",
+			"position": [
+				62,
+				47
+			]
+		},
+		{
+			"type": "Demon",
+			"position": [
+				2,
+				45
+			],
+			"minDifficulty": 1
+		},
+		{
+			"type": "Demon",
+			"position": [
+				53,
+				45
+			],
+			"minDifficulty": 2
+		},
+		{
+			"type": "Potion",
+			"position": [
+				30,
+				44
+			]
+		},
+		{
+			"type": "Potion",
+			"position": [
+				31,
+				44
+			]
+		},
+		{
+			"type": "Potion",
+			"position": [
+				32,
+				44
+			]
+		},
+		{
+			"type": "Potion",
+			"position": [
+				33,
+				44
+			]
+		},
+		{
+			"type": "Potion",
+			"position": [
+				34,
+				44
+			]
+		},
+		{
+			"type": "Demon",
+			"position": [
+				25,
+				42
+			]
+		},
+		{
+			"type": "Demon",
+			"position": [
+				31,
+				42
+			]
+		},
+		{
+			"type": "Demon",
+			"position": [
+				33,
+				42
+			]
+		},
+		{
+			"type": "Demon",
+			"position": [
+				55,
+				42
+			],
+			"minDifficulty": 2
+		},
+		{
+			"type": "Demon",
+			"position": [
+				31,
+				41
+			]
+		},
+		{
+			"type": "Demon",
+			"position": [
+				24,
+				40
+			]
+		},
+		{
+			"type": "Demon",
+			"position": [
+				31,
+				40
+			],
+			"minDifficulty": 2
+		},
+		{
+			"type": "Demon",
+			"position": [
+				59,
+				40
+			]
+		},
+		{
+			"type": "Demon",
+			"position": [
+				25,
+				38
+			],
+			"minDifficulty": 2
+		},
+		{
+			"type": "Demon",
+			"position": [
+				53,
+				38
+			]
+		},
+		{
+			"type": "Demon",
+			"position": [
+				21,
+				36
+			],
+			"minDifficulty": 2
+		},
+		{
+			"type": "Demon",
+			"position": [
+				45,
+				36
+			],
+			"minDifficulty": 2
+		},
+		{
+			"type": "Demon",
+			"position": [
+				10,
+				35
+			],
+			"minDifficulty": 1
+		},
+		{
+			"type": "Demon",
+			"position": [
+				21,
+				35
+			],
+			"minDifficulty": 2
+		},
+		{
+			"type": "Demon",
+			"position": [
+				18,
+				34
+			]
+		},
+		{
+			"type": "Demon",
+			"position": [
+				22,
+				34
+			]
+		},
+		{
+			"type": "Demon",
+			"position": [
+				38,
+				34
+			]
+		},
+		{
+			"type": "Demon",
+			"position": [
+				27,
+				33
+			]
+		},
+		{
+			"type": "Demon",
+			"position": [
+				32,
+				33
+			],
+			"minDifficulty": 1
+		},
+		{
+			"type": "Demon",
+			"position": [
+				57,
+				32
+			],
+			"minDifficulty": 2
+		},
+		{
+			"type": "Demon",
+			"position": [
+				33,
+				28
+			]
+		},
+		{
+			"type": "Demon",
+			"position": [
+				45,
+				28
+			],
+			"minDifficulty": 2
+		},
+		{
+			"type": "Demon",
+			"position": [
+				3,
+				25
+			],
+			"minDifficulty": 2
+		},
+		{
+			"type": "Demon",
+			"position": [
+				4,
+				25
+			],
+			"minDifficulty": 2
+		},
+		{
+			"type": "Demon",
+			"position": [
+				29,
+				25
+			]
+		},
+		{
+			"type": "Demon",
+			"position": [
+				60,
+				25
+			]
+		},
+		{
+			"type": "Demon",
+			"position": [
+				6,
+				24
+			]
+		},
+		{
+			"type": "Demon",
+			"position": [
+				16,
+				24
+			]
+		},
+		{
+			"type": "Demon",
+			"position": [
+				14,
+				22
+			]
+		},
+		{
+			"type": "Demon",
+			"position": [
+				4,
+				21
+			]
+		},
+		{
+			"type": "Demon",
+			"position": [
+				16,
+				20
+			],
+			"minDifficulty": 2
+		},
+		{
+			"type": "Demon",
+			"position": [
+				15,
+				16
+			]
+		},
+		{
+			"type": "Demon",
+			"position": [
+				55,
+				16
+			]
+		},
+		{
+			"type": "Demon",
+			"position": [
+				3,
+				13
+			]
+		},
+		{
+			"type": "Demon",
+			"position": [
+				5,
+				13
+			],
+			"minDifficulty": 1
+		},
+		{
+			"type": "Demon",
+			"position": [
+				36,
+				11
+			]
+		},
+		{
+			"type": "Demon",
+			"position": [
+				56,
+				10
+			],
+			"minDifficulty": 2
+		},
+		{
+			"type": "Demon",
+			"position": [
+				47,
+				8
+			]
+		},
+		{
+			"type": "Demon",
+			"position": [
+				61,
+				7
+			]
+		},
+		{
+			"type": "Demon",
+			"position": [
+				57,
+				6
+			]
+		},
+		{
+			"type": "Demon",
+			"position": [
+				42,
+				5
+			]
+		},
+		{
+			"type": "Demon",
+			"position": [
+				3,
+				4
+			],
+			"minDifficulty": 1
+		},
+		{
+			"type": "Demon",
+			"position": [
+				5,
+				4
+			],
+			"minDifficulty": 2
+		},
+		{
+			"type": "Demon",
+			"position": [
+				11,
+				3
+			],
+			"minDifficulty": 2
+		},
+		{
+			"type": "Demon",
+			"position": [
+				14,
+				3
+			]
+		},
+		{
+			"type": "Demon",
+			"position": [
+				28,
+				3
+			]
+		},
+		{
+			"type": "Demon",
+			"position": [
+				4,
+				2
+			]
+		},
+		{
+			"type": "Demon",
+			"position": [
+				11,
+				2
+			]
+		},
+		{
+			"type": "Demon",
+			"position": [
+				52,
+				2
+			]
+		}
+	],
+	"fog": {
+		"color": 16711680,
+		"near": 1,
+		"far": 80
+	}
+}

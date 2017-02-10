@@ -1,0 +1,380 @@
+{
+	"title": "Lower Dungeon",
+	"levelNumber": 11,
+	"width": 40,
+	"height": 28,
+	"layout": [
+		"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+		"ABBBBBBBBBBBBBBBBBBBAAAAAAAAAAAABBBAAAAA",
+		"ABBBBBBBBBBBBBBBBBBBAAAAAACAAAAABBBAAAAA",
+		"ABBBAAAAAAAAAAAAABBBAAAACDDDAAAABBBAAAAA",
+		"ABBBAAAAAACEEEAAABBBAAAAADDDCAAABBBAAAAA",
+		"ABBBAAAAAAAEEECAABBBBBBBFDDDFBBBBBBAAAAA",
+		"ABBBBBAAAAAEEEGHABBBBBBBFDDDFBBBBBBAAAAA",
+		"ABBBBBABBBFEEEIHABBBAAAAADDDAAAABBBAAAAA",
+		"ABBBBBABBBFEEEGHABBBAAAAADDDAAAABBBAAAAA",
+		"AAAABBABBAAEEECAABBBAAAAAAACAAAABBBAAAAA",
+		"AAAABBABBAAEEEAJJFFFJJAAAAAAAAAABBBAAAAA",
+		"AAAAFFABBAAAAAAJKKKKKJAAAAAAAAAABBBAALLA",
+		"AMMMMMABBBBBBBBFKKKKKFBBBBAAAAAAFFFAALLA",
+		"AMMMMMABBBBBBBBFKKKKKFBBBBAAALLLLLLLLLLA",
+		"AMMMMMABBBBBBBBFKKKKKFBBBBAAALLLLLLLLLLA",
+		"AMMMMMAAAAFFAAAJKKKKKJABBBAAALLLLLLLLLLA",
+		"AMMMMMAAAANNACAJJFFFJJABBBALLLLLLLLLLLOA",
+		"AMMMMMAANNNNNNCAAPPPAAABBBALLLLLLLLLLLOA",
+		"AMMMMMACNNNNNNAPPPPPPPABBBALLLLLLLLLOOOA",
+		"AMMMMMAANNNNNNAPPPPPPPABBBALLAAAAAAAAAAA",
+		"AMMMMMACNNNNNNAPPPPPPPABBBALLAQQQQQQQQAA",
+		"AMMAAAAAACCACAAAAAAAAAABBBALLAQQQQQQQQAA",
+		"AMMAAAAAAAAAAAAAAAAAAAABBBALLAQQQQQQQQAA",
+		"ARRAAASSSSSSSSSSSAAAAAABBBALLAAATTTAAAAA",
+		"ASSAAASSSSSSSSSSSAAAABBBBBAAAAAABBBAAAAA",
+		"ASSSSSSSSAAAAAAAAAAAABBBBBBBBBBBBBBAAAAA",
+		"ASSSSSSSSAAAAAAAAAAAABBBBBBBBBBBBBBAAAAA",
+		"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+	],
+	"legend": {
+		"A": {
+			"type": "wall",
+			"value": "slime"
+		},
+		"B": {
+			"type": "floor",
+			"value": "Dungeon Hallway"
+		},
+		"C": {
+			"type": "wall",
+			"value": "blood"
+		},
+		"D": {
+			"type": "floor",
+			"value": "Smelly Room"
+		},
+		"E": {
+			"type": "floor",
+			"value": "Inquisition Room"
+		},
+		"F": {
+			"type": ""
+		},
+		"G": {
+			"type": "exploding_wall",
+			"value": "slime"
+		},
+		"H": {
+			"type": "floor",
+			"value": "Hidden Area"
+		},
+		"I": {
+			"type": "exploding_wall",
+			"value": "slime"
+		},
+		"J": {
+			"type": "wall",
+			"value": "stone"
+		},
+		"K": {
+			"type": "floor",
+			"value": "Intersection"
+		},
+		"L": {
+			"type": "floor",
+			"value": "Charnel Pit"
+		},
+		"M": {
+			"type": "floor",
+			"value": "Fireball Hall"
+		},
+		"N": {
+			"type": "floor",
+			"value": "Torture Chamber"
+		},
+		"O": {
+			"type": "wall",
+			"value": "tar"
+		},
+		"P": {
+			"type": "floor",
+			"value": "Holding Cell"
+		},
+		"Q": {
+			"type": "floor",
+			"value": "Gate Room"
+		},
+		"R": {
+			"type": "door",
+			"value": "blue"
+		},
+		"S": {
+			"type": "floor",
+			"value": "Winding Tunnel"
+		},
+		"T": {
+			"type": "door",
+			"value": "red"
+		}
+	},
+	"playerStart": {
+		"position": [
+			18,
+			14
+		],
+		"direction": [
+			0,
+			1
+		]
+	},
+	"entities": [
+		{
+			"type": "Troll",
+			"position": [
+				18,
+				25
+			],
+			"minDifficulty": 2
+		},
+		{
+			"type": "Troll",
+			"position": [
+				33,
+				23
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				26,
+				22
+			],
+			"minDifficulty": 1
+		},
+		{
+			"type": "Troll",
+			"position": [
+				2,
+				21
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				18,
+				21
+			],
+			"minDifficulty": 1
+		},
+		{
+			"type": "Troll",
+			"position": [
+				12,
+				20
+			]
+		},
+		{
+			"type": "Potion",
+			"position": [
+				15,
+				20
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				33,
+				18
+			],
+			"minDifficulty": 1
+		},
+		{
+			"type": "Fireball",
+			"position": [
+				5,
+				14
+			],
+			"direction": [
+				1,
+				0
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				10,
+				14
+			],
+			"minDifficulty": 1
+		},
+		{
+			"type": "Troll",
+			"position": [
+				24,
+				14
+			],
+			"minDifficulty": 2
+		},
+		{
+			"type": "Troll",
+			"position": [
+				30,
+				13
+			]
+		},
+		{
+			"type": "Fireball",
+			"position": [
+				1,
+				12
+			],
+			"direction": [
+				1,
+				0
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				35,
+				12
+			],
+			"minDifficulty": 2
+		},
+		{
+			"type": "Troll",
+			"position": [
+				31,
+				11
+			],
+			"minDifficulty": 2
+		},
+		{
+			"type": "Fireball",
+			"position": [
+				3,
+				10
+			],
+			"direction": [
+				1,
+				0
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				28,
+				9
+			],
+			"minDifficulty": 1
+		},
+		{
+			"type": "Troll",
+			"position": [
+				10,
+				8
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				15,
+				8
+			],
+			"minDifficulty": 2
+		},
+		{
+			"type": "Orc",
+			"position": [
+				18,
+				8
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				21,
+				8
+			],
+			"minDifficulty": 2
+		},
+		{
+			"type": "Troll",
+			"position": [
+				24,
+				8
+			],
+			"minDifficulty": 2
+		},
+		{
+			"type": "Orc",
+			"position": [
+				30,
+				7
+			],
+			"minDifficulty": 2
+		},
+		{
+			"type": "Troll",
+			"position": [
+				32,
+				6
+			],
+			"minDifficulty": 2
+		},
+		{
+			"type": "Orc",
+			"position": [
+				35,
+				6
+			],
+			"minDifficulty": 2
+		},
+		{
+			"type": "WarpGate",
+			"position": [
+				36,
+				6
+			],
+			"value": 9
+		},
+		{
+			"type": "Troll",
+			"position": [
+				10,
+				4
+			]
+		},
+		{
+			"type": "Scroll",
+			"position": [
+				16,
+				4
+			],
+			"value": 4
+		},
+		{
+			"type": "BlueKey",
+			"position": [
+				27,
+				4
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				22,
+				2
+			]
+		},
+		{
+			"type": "RedKey",
+			"position": [
+				8,
+				1
+			]
+		}
+	],
+	"fog": {
+		"color": 0,
+		"near": 1,
+		"far": 50
+	}
+}

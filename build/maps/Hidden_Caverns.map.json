@@ -1,0 +1,303 @@
+{
+	"title": "Hidden Caverns",
+	"levelNumber": 15,
+	"width": 40,
+	"height": 28,
+	"layout": [
+		"AAAAAAABAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAA",
+		"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACCCAAAAA",
+		"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAACCCCCCAAAA",
+		"AAAAAAADDDDDDDDDDDDDDDAAAAAAACCCCCCCCAAA",
+		"BAAAAADDDDDDDDDDDDDDDDDDAAECCCCCCCCCAAAA",
+		"AAAADDDDDDAAAAAADDDDDDDDDDEECCCCCAAAAAAA",
+		"AAAADDDDAAAAAAAEEEAAAAADDDDECCAAAAAAAAAA",
+		"AAAADDDAAAAAAFFFFFAAAAAADDDAAAAAAAAAAAAA",
+		"AAADDDDAAAAAAFFFFAAAAAAAADDAAAAAAAAAAAAA",
+		"AAADDDDAAAAAFFFFAAAAAAAAADDDAAAAAAAAAAAA",
+		"AAADDDDAAAAFFFFAAAAAAAAADDDDAAAGGGGAAAAA",
+		"AAADDDDAAAFFFFFAAAADDDDDDDDAAGGGGGGAAAAA",
+		"AAADDDDAAAFFFFFAAAADDDDDDDAAAGGGGGGAAAAA",
+		"BAAADDDDAAAFFFAAAADDDDDDAAAAAGGGGGGAAAAA",
+		"AAAADDDDAAAAAAAAAADDDDAAAAAAAGGGGGGAAAAA",
+		"AAAAADDDDAAAAAAAADDDDAAAAAAAAGGGGGAAAAAA",
+		"AAAAAADDDDAAAAAAADDDDDDDDDDEGGGGGAAAAAAA",
+		"AAAAAADDDDAAAHHAADDDDDDDDDDEGGGGAAAAAAAA",
+		"AAAAADDDDDDAAHHHADDDDDDAAAAAGGAAAAAAAAAA",
+		"AAADDDDDDDDAAHHHADDDDAAAAAAAAAADDDAAAAAA",
+		"AAIEEDDAAEEAAJJJADDDDAAAAAAAAAADDDAAAAAA",
+		"AIIIIAAAAKKAAJJJAADDDDDAAAAAAAADDDAAAAAA",
+		"AIIIIAAAAKKAAJJJAAADDDDDDAAAADDDDDAAAAAA",
+		"AIIIIAAKKKKKKKJJAAAADDDDDDDDDDDDDAAAAAAA",
+		"AAIIAAKKKKKKKKKKAAAAADDDDDDDDDDAAAAAAAAA",
+		"AAAAAAKKKKKKKKKKAAAAAAAAAAAAAAAAAAAAAAAA",
+		"AAAAAAAKKKKKKKAAAAAAAAAAAAAAAAAAAAAAAAAA",
+		"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+	],
+	"legend": {
+		"A": {
+			"type": "wall",
+			"value": "slime"
+		},
+		"B": {
+			"type": "wall",
+			"value": "blood"
+		},
+		"C": {
+			"type": "floor",
+			"value": "Orc Cave"
+		},
+		"D": {
+			"type": "floor",
+			"value": "Hidden Caverns"
+		},
+		"E": {
+			"type": "floor"
+		},
+		"F": {
+			"type": "floor",
+			"value": "Troll Cave"
+		},
+		"G": {
+			"type": "floor",
+			"value": "Bat Cavern"
+		},
+		"H": {
+			"type": "floor",
+			"value": "Hidden Scroll Room"
+		},
+		"I": {
+			"type": "floor",
+			"value": "Small Cave"
+		},
+		"J": {
+			"type": "exploding_wall",
+			"value": "slime"
+		},
+		"K": {
+			"type": "floor",
+			"value": "Gate Cave"
+		}
+	},
+	"playerStart": {
+		"position": [
+			32,
+			8
+		],
+		"direction": [
+			0,
+			-1
+		]
+	},
+	"entities": [
+		{
+			"type": "Orc",
+			"position": [
+				33,
+				26
+			],
+			"minDifficulty": 1
+		},
+		{
+			"type": "Troll",
+			"position": [
+				13,
+				24
+			],
+			"minDifficulty": 1
+		},
+		{
+			"type": "Orc",
+			"position": [
+				32,
+				24
+			],
+			"minDifficulty": 1
+		},
+		{
+			"type": "Orc",
+			"position": [
+				33,
+				24
+			],
+			"minDifficulty": 1
+		},
+		{
+			"type": "Orc",
+			"position": [
+				34,
+				24
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				10,
+				23
+			],
+			"minDifficulty": 2
+		},
+		{
+			"type": "Troll",
+			"position": [
+				17,
+				23
+			]
+		},
+		{
+			"type": "Orc",
+			"position": [
+				30,
+				23
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				13,
+				19
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				11,
+				17
+			],
+			"minDifficulty": 1
+		},
+		{
+			"type": "Bat",
+			"position": [
+				31,
+				17
+			],
+			"minDifficulty": 2
+		},
+		{
+			"type": "Bat",
+			"position": [
+				34,
+				17
+			],
+			"minDifficulty": 2
+		},
+		{
+			"type": "Troll",
+			"position": [
+				13,
+				16
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				10,
+				15
+			],
+			"minDifficulty": 2
+		},
+		{
+			"type": "Troll",
+			"position": [
+				13,
+				15
+			],
+			"minDifficulty": 2
+		},
+		{
+			"type": "Bat",
+			"position": [
+				32,
+				15
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				12,
+				14
+			],
+			"minDifficulty": 1
+		},
+		{
+			"type": "Bat",
+			"position": [
+				30,
+				14
+			],
+			"minDifficulty": 1
+		},
+		{
+			"type": "Bat",
+			"position": [
+				33,
+				14
+			],
+			"minDifficulty": 1
+		},
+		{
+			"type": "Bat",
+			"position": [
+				31,
+				12
+			]
+		},
+		{
+			"type": "Bat",
+			"position": [
+				32,
+				11
+			],
+			"minDifficulty": 2
+		},
+		{
+			"type": "Scroll",
+			"position": [
+				14,
+				9
+			],
+			"value": 8
+		},
+		{
+			"type": "Potion",
+			"position": [
+				2,
+				5
+			]
+		},
+		{
+			"type": "Potion",
+			"position": [
+				3,
+				5
+			]
+		},
+		{
+			"type": "Potion",
+			"position": [
+				2,
+				4
+			]
+		},
+		{
+			"type": "Potion",
+			"position": [
+				3,
+				4
+			]
+		},
+		{
+			"type": "WarpGate",
+			"position": [
+				12,
+				2
+			],
+			"value": 9
+		}
+	],
+	"fog": {
+		"color": 0,
+		"near": 1,
+		"far": 50
+	}
+}

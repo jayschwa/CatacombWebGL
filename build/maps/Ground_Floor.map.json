@@ -1,0 +1,631 @@
+{
+	"title": "Ground Floor",
+	"levelNumber": 3,
+	"width": 40,
+	"height": 28,
+	"layout": [
+		"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBB",
+		"ACCCCCCCAAAAAAAAAAAADDDDDDDDDDDDEFFFFFFB",
+		"ACCCCCCCAGGGGGGGGGGEDDDDDDDDDDDDEFFFFFFB",
+		"ACCCCCCCAGGGGGGGGGGEDDDDDDDDDDDDBFFFFFFB",
+		"ACCCCCCCEGGGGGGGGGAADDDDDDDDDDDDBBBBBBBB",
+		"ACCCCCCCEGGGGGGGGGABBHHHBBBBBBBBIJJKLLCB",
+		"ACCCCCCCEGGGGGGGGGABJJJJJJJJJJJJJJJKLLLB",
+		"ACCCCCCCAGGGGGGGGGABJJJJJJJJJJJJJJJBLLLB",
+		"ACCCCCCCAGGGGGGGGGABJJJJJJJJJJJJJJJILLLB",
+		"ACCCCCCCAAAAEEEAAAABBMMMBBBBIBBBBBBBLLLB",
+		"ACCCCCCCANNNNNNNNAAAAOOOAAAAAAAAAAAALLLB",
+		"AAAAAAAAANNNNNNNNNEOOOOOOOOOAAAAPPPAAAAA",
+		"AAAAAAAAANNNNNNNNNEOOOOOOOOOAAAAPPPAPPPA",
+		"AQQQQQQQQNNNNNNNNAAOOOOORROOSTTAPPPAPPPA",
+		"AQQQQQQQQNNNNNNNNAAOOOOOOROOSTTAPPPAPPPA",
+		"AQQQQQQQQNNNNNNNNAAOOOOORROOSTTAPPPAPPPA",
+		"AAAAAAAAANNNNNNNNNEOOOOOOOOOAAAAPPPAPPPA",
+		"ARRRRRRRANNNNNNNNNEOOOOOOOOOAPPPPPPAPPPA",
+		"ARUUUULRANNNNNNNNAAAAOOOAAAAAPPPPPPAPPPA",
+		"ARUUUULRAAAAEEEAAAAAAEEEAAAAAPPPPPPAPPPA",
+		"ARVVRULRRRRRWWWRRAPPPPPPPPPPPPPPAAAAPPPA",
+		"RRWWRRRRWWWWWWWWRAPPPPPPPPPPPPPPAPPPPPPA",
+		"RWWWWWWWWWWWWWWWRAPPPPPPPPPPPPPPAPPPPPPA",
+		"RWWWWWWWWWWWWWWWRAPPPAAAAAAAAAAAAPPPPPPA",
+		"RWWWWWWWWWWWWWWWRAPPPPPPPPPPPPPPPPPPAAXA",
+		"RWWWWWWWWWWWWWWWRAPPPPPPPPPPPPPPPPPPAYYB",
+		"RWWWWWWWWWWWWWWWRAPPPPPPPPPPPPPPPPPPAYYB",
+		"RRRRRRRRRRRRRRRRRAAAAAAAAAAAAAAAAAAAABBB"
+	],
+	"legend": {
+		"A": {
+			"type": "wall",
+			"value": "stone"
+		},
+		"B": {
+			"type": "wall",
+			"value": "slime"
+		},
+		"C": {
+			"type": "floor",
+			"value": "Meeting Room"
+		},
+		"D": {
+			"type": "floor",
+			"value": "Kitchen"
+		},
+		"E": {
+			"type": "floor"
+		},
+		"F": {
+			"type": "floor",
+			"value": "Food Stores"
+		},
+		"G": {
+			"type": "floor",
+			"value": "Feasting Hall"
+		},
+		"H": {
+			"type": "exploding_wall",
+			"value": "slime"
+		},
+		"I": {
+			"type": "wall",
+			"value": "blood"
+		},
+		"J": {
+			"type": "floor",
+			"value": "Dusty Corridor"
+		},
+		"K": {
+			"type": "exploding_wall",
+			"value": "slime"
+		},
+		"L": {
+			"type": "floor",
+			"value": "Hidden Storage Room"
+		},
+		"M": {
+			"type": "door",
+			"value": "red"
+		},
+		"N": {
+			"type": "floor",
+			"value": "Greeting Chamber"
+		},
+		"O": {
+			"type": "floor",
+			"value": "Audience Chamber"
+		},
+		"P": {
+			"type": "floor",
+			"value": "Side Passage"
+		},
+		"Q": {
+			"type": "floor",
+			"value": "Entrance Hallway"
+		},
+		"R": {
+			"type": "wall",
+			"value": "white"
+		},
+		"S": {
+			"type": "door",
+			"value": "blue"
+		},
+		"T": {
+			"type": "floor",
+			"value": "Gate Room"
+		},
+		"U": {
+			"type": "floor",
+			"value": "Musty Chamber"
+		},
+		"V": {
+			"type": "exploding_wall",
+			"value": "white"
+		},
+		"W": {
+			"type": "floor",
+			"value": "Grand Ballroom"
+		},
+		"X": {
+			"type": "exploding_wall",
+			"value": "stone"
+		},
+		"Y": {
+			"type": "floor",
+			"value": "Secret Gate Room"
+		}
+	},
+	"playerStart": {
+		"position": [
+			2,
+			13
+		],
+		"direction": [
+			1,
+			0
+		]
+	},
+	"entities": [
+		{
+			"type": "Orc",
+			"position": [
+				30,
+				26
+			]
+		},
+		{
+			"type": "Orc",
+			"position": [
+				34,
+				26
+			]
+		},
+		{
+			"type": "Potion",
+			"position": [
+				37,
+				26
+			]
+		},
+		{
+			"type": "Potion",
+			"position": [
+				38,
+				26
+			]
+		},
+		{
+			"type": "Bolt",
+			"position": [
+				2,
+				25
+			]
+		},
+		{
+			"type": "Bolt",
+			"position": [
+				6,
+				25
+			]
+		},
+		{
+			"type": "Orc",
+			"position": [
+				23,
+				25
+			]
+		},
+		{
+			"type": "Potion",
+			"position": [
+				37,
+				25
+			]
+		},
+		{
+			"type": "Potion",
+			"position": [
+				38,
+				25
+			]
+		},
+		{
+			"type": "Orc",
+			"position": [
+				11,
+				23
+			]
+		},
+		{
+			"type": "Bolt",
+			"position": [
+				38,
+				22
+			]
+		},
+		{
+			"type": "Orc",
+			"position": [
+				4,
+				21
+			]
+		},
+		{
+			"type": "Orc",
+			"position": [
+				16,
+				21
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				30,
+				21
+			]
+		},
+		{
+			"type": "Bolt",
+			"position": [
+				38,
+				21
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				23,
+				20
+			]
+		},
+		{
+			"type": "Orc",
+			"position": [
+				6,
+				19
+			]
+		},
+		{
+			"type": "Potion",
+			"position": [
+				36,
+				19
+			]
+		},
+		{
+			"type": "Potion",
+			"position": [
+				37,
+				19
+			]
+		},
+		{
+			"type": "Potion",
+			"position": [
+				38,
+				19
+			]
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				36,
+				18
+			],
+			"value": 300
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				37,
+				18
+			],
+			"value": 300
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				38,
+				18
+			],
+			"value": 300
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				36,
+				17
+			],
+			"value": 300
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				37,
+				17
+			],
+			"value": 300
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				38,
+				17
+			],
+			"value": 300
+		},
+		{
+			"type": "Orc",
+			"position": [
+				13,
+				16
+			]
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				32,
+				16
+			],
+			"value": 300
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				33,
+				16
+			],
+			"value": 300
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				34,
+				16
+			],
+			"value": 300
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				32,
+				15
+			],
+			"value": 300
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				33,
+				15
+			],
+			"value": 300
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				34,
+				15
+			],
+			"value": 300
+		},
+		{
+			"type": "BlueKey",
+			"position": [
+				36,
+				15
+			]
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				32,
+				14
+			],
+			"value": 300
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				33,
+				14
+			],
+			"value": 300
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				34,
+				14
+			],
+			"value": 300
+		},
+		{
+			"type": "Orc",
+			"position": [
+				37,
+				14
+			]
+		},
+		{
+			"type": "Orc",
+			"position": [
+				8,
+				13
+			]
+		},
+		{
+			"type": "WarpGate",
+			"position": [
+				30,
+				13
+			],
+			"value": 4
+		},
+		{
+			"type": "Orc",
+			"position": [
+				33,
+				11
+			]
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				2,
+				9
+			],
+			"value": 300
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				3,
+				9
+			],
+			"value": 300
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				4,
+				9
+			],
+			"value": 300
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				5,
+				9
+			],
+			"value": 300
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				6,
+				9
+			],
+			"value": 300
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				2,
+				8
+			],
+			"value": 300
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				3,
+				8
+			],
+			"value": 300
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				4,
+				8
+			],
+			"value": 300
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				5,
+				8
+			],
+			"value": 300
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				6,
+				8
+			],
+			"value": 300
+		},
+		{
+			"type": "Orc",
+			"position": [
+				30,
+				8
+			]
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				5,
+				7
+			],
+			"value": 300
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				6,
+				7
+			],
+			"value": 300
+		},
+		{
+			"type": "Orc",
+			"position": [
+				25,
+				5
+			]
+		},
+		{
+			"type": "Orc",
+			"position": [
+				34,
+				5
+			]
+		},
+		{
+			"type": "Potion",
+			"position": [
+				2,
+				4
+			]
+		},
+		{
+			"type": "Orc",
+			"position": [
+				3,
+				4
+			]
+		},
+		{
+			"type": "Orc",
+			"position": [
+				14,
+				3
+			]
+		},
+		{
+			"type": "Potion",
+			"position": [
+				2,
+				2
+			]
+		},
+		{
+			"type": "Orc",
+			"position": [
+				3,
+				2
+			]
+		},
+		{
+			"type": "Orc",
+			"position": [
+				8,
+				2
+			]
+		},
+		{
+			"type": "Orc",
+			"position": [
+				24,
+				2
+			]
+		},
+		{
+			"type": "WarpGate",
+			"position": [
+				37,
+				1
+			],
+			"value": 8
+		}
+	],
+	"fog": {
+		"color": 0,
+		"near": 1,
+		"far": 50
+	}
+}

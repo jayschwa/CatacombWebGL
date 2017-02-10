@@ -1,0 +1,347 @@
+{
+	"title": "The Labyrinth",
+	"levelNumber": 18,
+	"width": 61,
+	"height": 40,
+	"layout": [
+		"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+		"AABBBCCBBBCCBBBCCBBBCCBBBAABBBAABBBCCBBBAABBBCCBBBCCBBBCCBBBA",
+		"AABBBCCBBBCCBBBCCBBBCCBBBAABBBAABBBCCBBBAABBBCCBBBCCBBBCCBBBA",
+		"AABBBCCBBBCCBBBCCBBBCCBBBAABBBAABBBCCBBBAABBBCCBBBCCBBBCCBBBA",
+		"AACCCAAAAAAACCCAAAAAAAAAAAACCCAAAAAAACCCAACCCAAAAAAACCCAAAAAA",
+		"AACCCAAAAAAACCCAAAAAAAAAAAACCCAAAAAAACACAACCCAAAAAAACCCAAAAAA",
+		"AABBBAABBBCCBBBCCBBBAABBBCCBBBAABBBCCBBBCCBBBAABBBCCBBBCCBBBA",
+		"AABBBAABBBCCBBBCCBBBAABBBCCBBBAABBBCCBBBCCBBBAABBBCCBBBCCBBBA",
+		"AABBBAABBBCCBBBCCBBBAABBBCCBBBAABBBCCBBBCCBBBAABBBCCBBBCCBBBA",
+		"AAAAAAAAAAAAAAAAACCCAACCCAAAAAAACCCAAAAAAAAAAAACCCAAAAAAACCCA",
+		"AAAAAAAAAAAAAAAAACCCAACCCAAAAAAACCCAAAAAAAAAAAACCCAAAAAAACCCA",
+		"AABBBCCBBBCCBBBAABBBAABBBCCBBBAABBBAABBBCCBBBAADDDAABBBAABBBA",
+		"AABBBCCBBBCCBBBAABBBAABBBCCBBBAABBBAABBBCCBBBAADDDAABBBAABBBA",
+		"AABBBCCBBBCCBBBAABBBAABBBCCBBBAABBBAABBBCCBBBAADDDAABBBAABBBA",
+		"AAAAAAACCCAAAAAAACCCAACCCAAAAAAACCCAACCCAACCCAAAAAAACCCAACCCA",
+		"AAAAAAACCCAAAAAAACCCAACCCAAAAAAACCCAACCCAACCCAAAAAAACCCAACCCA",
+		"AABBBAABBBAABBBAABBBCCBBBAABBBCCBBBCCBBBAABBBAABBBCCBBBAABBBA",
+		"AABBBAABBBAABBBAABBBCCBBBAABBBCCBBBCCBBBAABBBAABBBCCBBBAABBBA",
+		"AABBBAABBBAABBBAABBBCCBBBAABBBCCBBBCCBBBAABBBAABBBCCBBBAABBBA",
+		"AACCCAACCCAACCCAACCCAAAAAAACCCAACCCAAAAAAACCCAACCCAAAAAAACCCA",
+		"AACCCAACCCAACCCAACCCAAAAAAACCCAACCCAAAAAAACCCAACCCAAAAAAACCCA",
+		"AABBBCCBBBCCBBBCCBBBAABBBCCBBBAABBBCCBBBAABBBCCBBBAABBBCCBBBA",
+		"AABBBCCBBBCCBBBCCBBBAABBBCCBBBAABBBCCBBBAABBBCCBBBAABBBCCBBBA",
+		"AABBBCCBBBCCBBBCCBBBAABBBCCBBBAABBBCCBBBAABBBCCBBBAABBBCCBBBA",
+		"AAAAAAACCCAAAAAAACCCAACCCAAAAAAAAAAAAAAAAAAAAAACCCAACCCAAAAAA",
+		"AAAAAAACCCAAAAAAACCCAACCCAAAAAAAAAAAAAAAAAAAAAACCCAACCCAAAAAA",
+		"AABBBAABBBCCBBBAABBBAABBBCCBBBAEFFFFFFFFFFFFFECBBBAABBBCCBBBA",
+		"AABBBAABBBCCBBBAABBBAABBBCCBBBAEFFFFFFFFFFFFFECBBBAABBBCCBBBA",
+		"AABBBAABBBCCBBBAABBBAABBBCCBBBAEFFFGGFFGGFFFFECBBBAABBBCCBBBA",
+		"AACCCAAAAAAACCCAACCCAAAAAAACCCAAFFFFGGGGFFFFFAAAAAAAAAAAACACA",
+		"AAACCAAAAAAACCCAACCCAAAAAAACCCAAFFFFGGGGFFFFFAAAAAAAAAAAACCCA",
+		"AABBBCCBBBAABBBAABBBAABBBCCBBBAEFFFGGFFGGFFFFECBBBCCBBBCCBBBA",
+		"AABBBCCBBBAABBBAABBBAABBBCCBBBAEFFFFFFFFFFFFFECBBBCCBBBCCBBBA",
+		"AABBBCCBBBAABBBAABBBAABBBCCBBBAEFFFFFFFFFFFFFECBBBCCBBBCCBBBA",
+		"AAAAAAACCCAACACAAAAAAAAAAAACCCAACCCAAAAAAACCCAACCCAACCCAAAAAA",
+		"AAAAAAACCCAACCCAAAAAAAAAAAACCCAACCCAAAAAAACCCAACCCAACCCAAAAAA",
+		"AABBBCCBBBCCBBBCCBBBCCBBBCCBBBAABBBAABBBCABBBAABBBAABBBCCBBBA",
+		"AABBBCCBBBCCBBBCCBBBCCBBBCCBBBAABBBAABBBCCBBBAABBBAABBBCCBBBA",
+		"AABBBCCBBBCCBBBCCBBBCCBBBCCBBBAABBBAABBBCCBBBAABBBAABBBCCBBBA",
+		"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+	],
+	"legend": {
+		"A": {
+			"type": "wall",
+			"value": "gold"
+		},
+		"B": {
+			"type": "floor",
+			"value": "Familiar Small Square Room"
+		},
+		"C": {
+			"type": "exploding_wall",
+			"value": "gold"
+		},
+		"D": {
+			"type": "floor",
+			"value": "Gate Room"
+		},
+		"E": {
+			"type": "floor"
+		},
+		"F": {
+			"type": "floor",
+			"value": "Room with X-Shaped Stone"
+		},
+		"G": {
+			"type": "wall",
+			"value": "white"
+		}
+	},
+	"playerStart": {
+		"position": [
+			33,
+			22
+		],
+		"direction": [
+			0,
+			1
+		]
+	},
+	"entities": [
+		{
+			"type": "Mage",
+			"position": [
+				4,
+				37
+			]
+		},
+		{
+			"type": "Mage",
+			"position": [
+				13,
+				37
+			]
+		},
+		{
+			"type": "Mage",
+			"position": [
+				33,
+				37
+			]
+		},
+		{
+			"type": "Mage",
+			"position": [
+				54,
+				37
+			]
+		},
+		{
+			"type": "Bolt",
+			"position": [
+				2,
+				32
+			]
+		},
+		{
+			"type": "Bolt",
+			"position": [
+				3,
+				32
+			]
+		},
+		{
+			"type": "Mage",
+			"position": [
+				38,
+				32
+			]
+		},
+		{
+			"type": "Bolt",
+			"position": [
+				2,
+				31
+			]
+		},
+		{
+			"type": "Bolt",
+			"position": [
+				3,
+				31
+			]
+		},
+		{
+			"type": "Mage",
+			"position": [
+				18,
+				31
+			]
+		},
+		{
+			"type": "Mage",
+			"position": [
+				8,
+				27
+			]
+		},
+		{
+			"type": "Mage",
+			"position": [
+				28,
+				27
+			]
+		},
+		{
+			"type": "WarpGate",
+			"position": [
+				48,
+				27
+			],
+			"value": 19
+		},
+		{
+			"type": "Mage",
+			"position": [
+				53,
+				27
+			]
+		},
+		{
+			"type": "Potion",
+			"position": [
+				2,
+				23
+			]
+		},
+		{
+			"type": "Potion",
+			"position": [
+				3,
+				23
+			]
+		},
+		{
+			"type": "Mage",
+			"position": [
+				13,
+				23
+			]
+		},
+		{
+			"type": "Potion",
+			"position": [
+				2,
+				22
+			]
+		},
+		{
+			"type": "Mage",
+			"position": [
+				53,
+				22
+			]
+		},
+		{
+			"type": "Mage",
+			"position": [
+				23,
+				17
+			]
+		},
+		{
+			"type": "Potion",
+			"position": [
+				2,
+				13
+			]
+		},
+		{
+			"type": "Potion",
+			"position": [
+				3,
+				13
+			]
+		},
+		{
+			"type": "Mage",
+			"position": [
+				8,
+				13
+			]
+		},
+		{
+			"type": "Potion",
+			"position": [
+				2,
+				12
+			]
+		},
+		{
+			"type": "Potion",
+			"position": [
+				37,
+				11
+			]
+		},
+		{
+			"type": "Potion",
+			"position": [
+				38,
+				11
+			]
+		},
+		{
+			"type": "Potion",
+			"position": [
+				35,
+				10
+			]
+		},
+		{
+			"type": "Potion",
+			"position": [
+				40,
+				10
+			]
+		},
+		{
+			"type": "Potion",
+			"position": [
+				35,
+				9
+			]
+		},
+		{
+			"type": "Potion",
+			"position": [
+				40,
+				9
+			]
+		},
+		{
+			"type": "Potion",
+			"position": [
+				37,
+				8
+			]
+		},
+		{
+			"type": "Potion",
+			"position": [
+				38,
+				8
+			]
+		},
+		{
+			"type": "Mage",
+			"position": [
+				3,
+				7
+			]
+		},
+		{
+			"type": "Mage",
+			"position": [
+				28,
+				7
+			]
+		},
+		{
+			"type": "Mage",
+			"position": [
+				23,
+				2
+			]
+		},
+		{
+			"type": "Mage",
+			"position": [
+				38,
+				2
+			]
+		}
+	],
+	"fog": {
+		"color": 0,
+		"near": 1,
+		"far": 76.25
+	}
+}

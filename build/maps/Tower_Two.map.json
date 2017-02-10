@@ -1,0 +1,831 @@
+{
+	"title": "Tower Two",
+	"levelNumber": 7,
+	"width": 40,
+	"height": 28,
+	"layout": [
+		"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+		"ABBBBBBBBBBBBBBBBBACCCAAACCCCCCCCCCCADDA",
+		"ABBBBBBBBBBBBBBBBBACCCAAACCCCCCCCCCCADDA",
+		"ABBAAAAAAAAAAAAABBACCCAAACCCCCCCCCCCADDA",
+		"ABBAAAAAAAAAAAAABBACCCAAACCAAAAACCCCADDA",
+		"ABBAABBBBBBBBBAABBACCCAAACCAAAAACCCCADDA",
+		"AAAAABBBBBBBBBAABBACCCAAACCEEDDACCCCADDA",
+		"ADDAABBBBBBBBBAABBACCCAAACCEEDDAACCAAEEA",
+		"AEEAABBBBBBBBBAABBACCCAAACCEEDDAACCAAEEA",
+		"ABBAABBBBBBBBBAABBACCCAAACCEEDDACCCCCCCA",
+		"ABBAAAAAAAAAEEAABBACCCCCCCCEEDDACCCCCCCA",
+		"ABBBBBBBBBBBBBBBBBACCCCCCCCAAAAACCCCCCCA",
+		"ABBBBBBBBBBBBBBBBBACCCCCCCCADDDACCCCCCCA",
+		"AAAAAAAAAAAAAAAAAAAAAAAAAAAADDDAAAAAAAAA",
+		"AAFFFAFFFAFFFAAGGGGGAAAAAAAADDDAAAAAAAAA",
+		"AAFFFAFFFAFFFAAGDDDGAHHHHHHAEEEAHHHHHHHA",
+		"AAFFFAFFFAFFFAAGIIIGAHHHHHHAEEEAHHHHHHHA",
+		"AFFFFFFFFFFFFFAGIIIGAHHAAHHAHHHAHHAAHHHA",
+		"AFFFFFFFFFFFFFAGJJJGAHHAAHHHHHHHHHAAHHHA",
+		"AFFFFFFFFFFFFFAGJJJGAHHAAHHHHHHHHHAAHHHA",
+		"AAAAAEEAAAAAAAAGJJJGAHHAAAAAAAAAAAAAHHHA",
+		"AGGGGIIGGGGGGGGGJJJGAHHAAAAAAAAAAAAAHHHA",
+		"AKKGGIIGGGGGGGJJJJJGAHHAAHHHHHHHHHAAHHHA",
+		"AKKGGIIGGGGGGGJJJJJGAHHAAHHHHHHHHHAAHHHA",
+		"AKKKKKKKKKKKLJJJJJJGAHHAAHHAHHHAHHAAHHHA",
+		"AKKKKKKKKKKKLJJJJJJGAHHHHHHAHHHAHHHHHHHA",
+		"AKKKKKKKKKKKLJJJJJJGAHHHHHHAHHHAHHHHHHHA",
+		"AGGGGGGGGGGGGGGGGGGGAAAAAAAAAAAAAAAAAAAA"
+	],
+	"legend": {
+		"A": {
+			"type": "wall",
+			"value": "slime"
+		},
+		"B": {
+			"type": "floor",
+			"value": "Hall of Magicks"
+		},
+		"C": {
+			"type": "floor",
+			"value": "Hall of Gold"
+		},
+		"D": {
+			"type": "floor",
+			"value": "Hidden Area"
+		},
+		"E": {
+			"type": "exploding_wall",
+			"value": "slime"
+		},
+		"F": {
+			"type": "floor",
+			"value": "Room of Small Gates"
+		},
+		"G": {
+			"type": "wall",
+			"value": "white"
+		},
+		"H": {
+			"type": "floor",
+			"value": "Hall of Healing"
+		},
+		"I": {
+			"type": "exploding_wall",
+			"value": "white"
+		},
+		"J": {
+			"type": "floor",
+			"value": "Gate Room"
+		},
+		"K": {
+			"type": "floor",
+			"value": "Hallway"
+		},
+		"L": {
+			"type": "door",
+			"value": "red"
+		}
+	},
+	"playerStart": {
+		"position": [
+			1,
+			2
+		],
+		"direction": [
+			1,
+			0
+		]
+	},
+	"entities": [
+		{
+			"type": "Troll",
+			"position": [
+				5,
+				26
+			]
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				37,
+				26
+			],
+			"value": 700
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				38,
+				26
+			],
+			"value": 700
+		},
+		{
+			"type": "Troll",
+			"position": [
+				1,
+				25
+			],
+			"minDifficulty": 2
+		},
+		{
+			"type": "Troll",
+			"position": [
+				8,
+				25
+			],
+			"minDifficulty": 2
+		},
+		{
+			"type": "Teleport",
+			"position": [
+				20,
+				25
+			],
+			"value": 2
+		},
+		{
+			"type": "Troll",
+			"position": [
+				26,
+				25
+			],
+			"minDifficulty": 1
+		},
+		{
+			"type": "Troll",
+			"position": [
+				29,
+				25
+			]
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				37,
+				25
+			],
+			"value": 700
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				38,
+				25
+			],
+			"value": 700
+		},
+		{
+			"type": "Troll",
+			"position": [
+				34,
+				24
+			],
+			"minDifficulty": 2
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				37,
+				24
+			],
+			"value": 700
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				38,
+				24
+			],
+			"value": 700
+		},
+		{
+			"type": "Bolt",
+			"position": [
+				1,
+				23
+			]
+		},
+		{
+			"type": "Bolt",
+			"position": [
+				2,
+				23
+			]
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				37,
+				23
+			],
+			"value": 700
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				38,
+				23
+			],
+			"value": 700
+		},
+		{
+			"type": "Bolt",
+			"position": [
+				1,
+				22
+			]
+		},
+		{
+			"type": "Bolt",
+			"position": [
+				2,
+				22
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				16,
+				22
+			],
+			"minDifficulty": 1
+		},
+		{
+			"type": "Troll",
+			"position": [
+				26,
+				22
+			],
+			"minDifficulty": 2
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				37,
+				22
+			],
+			"value": 700
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				38,
+				22
+			],
+			"value": 700
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				29,
+				21
+			],
+			"value": 700
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				30,
+				21
+			],
+			"value": 700
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				37,
+				21
+			],
+			"value": 700
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				38,
+				21
+			],
+			"value": 700
+		},
+		{
+			"type": "Nuke",
+			"position": [
+				1,
+				20
+			]
+		},
+		{
+			"type": "Bolt",
+			"position": [
+				2,
+				20
+			]
+		},
+		{
+			"type": "Teleport",
+			"position": [
+				9,
+				20
+			],
+			"value": 1
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				29,
+				20
+			],
+			"value": 700
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				30,
+				20
+			],
+			"value": 700
+		},
+		{
+			"type": "Troll",
+			"position": [
+				20,
+				19
+			],
+			"minDifficulty": 2
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				29,
+				19
+			],
+			"value": 700
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				30,
+				19
+			],
+			"value": 700
+		},
+		{
+			"type": "Nuke",
+			"position": [
+				1,
+				18
+			]
+		},
+		{
+			"type": "Nuke",
+			"position": [
+				2,
+				18
+			]
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				29,
+				18
+			],
+			"value": 700
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				30,
+				18
+			],
+			"value": 700
+		},
+		{
+			"type": "Nuke",
+			"position": [
+				1,
+				17
+			]
+		},
+		{
+			"type": "Nuke",
+			"position": [
+				2,
+				17
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				16,
+				17
+			],
+			"minDifficulty": 2
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				29,
+				17
+			],
+			"value": 700
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				30,
+				17
+			],
+			"value": 700
+		},
+		{
+			"type": "Troll",
+			"position": [
+				35,
+				17
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				1,
+				16
+			],
+			"minDifficulty": 1
+		},
+		{
+			"type": "Troll",
+			"position": [
+				22,
+				16
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				25,
+				16
+			],
+			"minDifficulty": 2
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				32,
+				16
+			],
+			"value": 700
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				33,
+				16
+			],
+			"value": 700
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				34,
+				16
+			],
+			"value": 700
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				35,
+				16
+			],
+			"value": 700
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				36,
+				16
+			],
+			"value": 700
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				37,
+				16
+			],
+			"value": 700
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				38,
+				16
+			],
+			"value": 700
+		},
+		{
+			"type": "Troll",
+			"position": [
+				5,
+				15
+			]
+		},
+		{
+			"type": "Potion",
+			"position": [
+				28,
+				15
+			]
+		},
+		{
+			"type": "Potion",
+			"position": [
+				29,
+				15
+			]
+		},
+		{
+			"type": "Potion",
+			"position": [
+				30,
+				15
+			]
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				32,
+				15
+			],
+			"value": 700
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				33,
+				15
+			],
+			"value": 700
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				34,
+				15
+			],
+			"value": 700
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				35,
+				15
+			],
+			"value": 700
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				36,
+				15
+			],
+			"value": 700
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				37,
+				15
+			],
+			"value": 700
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				38,
+				15
+			],
+			"value": 700
+		},
+		{
+			"type": "Potion",
+			"position": [
+				28,
+				14
+			]
+		},
+		{
+			"type": "Potion",
+			"position": [
+				29,
+				14
+			]
+		},
+		{
+			"type": "Potion",
+			"position": [
+				30,
+				14
+			]
+		},
+		{
+			"type": "Potion",
+			"position": [
+				28,
+				13
+			]
+		},
+		{
+			"type": "Potion",
+			"position": [
+				29,
+				13
+			]
+		},
+		{
+			"type": "Potion",
+			"position": [
+				30,
+				13
+			]
+		},
+		{
+			"type": "Nuke",
+			"position": [
+				16,
+				12
+			]
+		},
+		{
+			"type": "Nuke",
+			"position": [
+				17,
+				12
+			]
+		},
+		{
+			"type": "Nuke",
+			"position": [
+				18,
+				12
+			]
+		},
+		{
+			"type": "Teleport",
+			"position": [
+				3,
+				11
+			],
+			"value": 1
+		},
+		{
+			"type": "Teleport",
+			"position": [
+				7,
+				11
+			],
+			"value": 2
+		},
+		{
+			"type": "Teleport",
+			"position": [
+				11,
+				11
+			],
+			"value": 3
+		},
+		{
+			"type": "Troll",
+			"position": [
+				26,
+				11
+			],
+			"minDifficulty": 1
+		},
+		{
+			"type": "Troll",
+			"position": [
+				37,
+				11
+			],
+			"minDifficulty": 1
+		},
+		{
+			"type": "Troll",
+			"position": [
+				29,
+				10
+			]
+		},
+		{
+			"type": "WarpGate",
+			"position": [
+				17,
+				9
+			],
+			"value": 9
+		},
+		{
+			"type": "Troll",
+			"position": [
+				21,
+				8
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				29,
+				8
+			],
+			"minDifficulty": 2
+		},
+		{
+			"type": "Troll",
+			"position": [
+				37,
+				8
+			]
+		},
+		{
+			"type": "Orc",
+			"position": [
+				14,
+				5
+			],
+			"minDifficulty": 1
+		},
+		{
+			"type": "Troll",
+			"position": [
+				37,
+				5
+			],
+			"minDifficulty": 2
+		},
+		{
+			"type": "RedKey",
+			"position": [
+				2,
+				4
+			]
+		},
+		{
+			"type": "Orc",
+			"position": [
+				16,
+				4
+			],
+			"minDifficulty": 1
+		},
+		{
+			"type": "Orc",
+			"position": [
+				5,
+				2
+			],
+			"minDifficulty": 2
+		},
+		{
+			"type": "Orc",
+			"position": [
+				10,
+				2
+			],
+			"minDifficulty": 1
+		},
+		{
+			"type": "Orc",
+			"position": [
+				16,
+				2
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				23,
+				2
+			],
+			"minDifficulty": 1
+		},
+		{
+			"type": "Teleport",
+			"position": [
+				29,
+				2
+			],
+			"value": 3
+		},
+		{
+			"type": "Troll",
+			"position": [
+				35,
+				2
+			],
+			"minDifficulty": 1
+		}
+	],
+	"fog": {
+		"color": 0,
+		"near": 1,
+		"far": 50
+	}
+}
