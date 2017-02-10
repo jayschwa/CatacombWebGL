@@ -51,10 +51,6 @@ export class Orc extends Enemy {
 			deathFrames: 4
 		})
 	}
-
-	static entityIds() {
-		return [0x17, 0x25, 0x2A]
-	}
 }
 
 export class Troll extends Enemy {
@@ -65,10 +61,6 @@ export class Troll extends Enemy {
 			attackFrames: 3,
 			deathFrames: 4
 		})
-	}
-
-	static entityIds() {
-		return [0x16, 0x24, 0x29]
 	}
 }
 
@@ -86,10 +78,6 @@ export class Bat extends Enemy {
 		this.translateZ(-0.1)
 		this.removeDead = true
 	}
-
-	static entityIds() {
-		return [0x19, 0x26, 0x2B]
-	}
 }
 
 export class Mage extends Enemy {
@@ -102,10 +90,6 @@ export class Mage extends Enemy {
 		})
 		this.scale.x = 56/64
 	}
-
-	static entityIds() {
-		return [0x1B, 0x28, 0x2D]
-	}
 }
 
 export class Demon extends Enemy {
@@ -116,9 +100,5 @@ export class Demon extends Enemy {
 			attackFrames: 3,
 			deathFrames: 4
 		})
-	}
-
-	static entityIds() {
-		return [0x1A, 0x27, 0x2C]
 	}
 }
