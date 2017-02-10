@@ -30,6 +30,24 @@ function createWallMeshes(geometryDict) {
 	})
 }
 
+function mergeWallGeometry(tile, adjacentTiles, geometryDict, position) {
+	geometryDict = geometryDict || {}
+	const variants = {
+		light: ["east", "west"],
+		dark: ["north", "south"]
+	}
+	Object.keys(variants).forEach(v => {
+		const name = tile.value + "_" + v
+		variants[v].forEach(face => {
+			if (adjacentTiles[face] && adjacentTiles[face].type != tile.type) {
+				geometryDict[name] = geometryDict[name] || new Geometry()
+				geometryDict[name].merge(new WallGeometry(face, position))
+			}
+		})
+	})
+	return geometryDict
+}
+
 export function addStaticMeshes(map, parent) {
 	const doors = {}
 	const explodingWalls = {}
@@ -59,37 +77,18 @@ export function addStaticMeshes(map, parent) {
 		for (let y = 0; y < map.height; y++) {
 			const position = new Vector2(x, y)
 			const tile = map.getTile(x, y)
-
-			if (tile.type.includes("wall")) {
-				const adjacent = map.adjacentTiles(x, y)
-				const variants = {
-					light: ["east", "west"],
-					dark: ["north", "south"]
-				}
-				const exploding = tile.type == "exploding_wall"
-				const geometry = exploding ? {} : walls
-				Object.keys(variants).forEach(v => {
-					const name = tile.value + "_" + v
-					const faces = variants[v]
-					faces.forEach(face => {
-						if (adjacent[face] && adjacent[face].type != tile.type) {
-							geometry[name] = geometry[name] || new Geometry()
-							geometry[name].merge(new WallGeometry(face, exploding ? null : position))
-						}
-					})
-				})
-				if (exploding) {
-					const wall = new ExplodingWall(position)
-					wall.add(...createWallMeshes(geometry))
-					connectAdjacent(explodingWalls, wall, x, y)
-					parent.add(wall)
-				}
+			if (tile.type == "wall") {
+				mergeWallGeometry(tile, map.adjacentTiles(x, y), walls, position)
+			} else if (tile.type == "exploding_wall") {
+				const wall = new ExplodingWall(position)
+				wall.add(...createWallMeshes(mergeWallGeometry(tile, map.adjacentTiles(x, y))))
+				connectAdjacent(explodingWalls, wall, x, y)
+				parent.add(wall)
 			} else if (tile.type == "door") {
 				const door = new Door(tile.value, position)
 				connectAdjacent(doors, door, x, y, d => d.color == door.color)
 				parent.add(door)
 			}
-
 			if (tile.type != "wall") {
 				floor.merge(new FloorGeometry(position))
 			}
