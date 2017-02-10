@@ -14,6 +14,29 @@ import (
 	"strings"
 )
 
+var MapNames = []string{
+	"Approach",
+	"Nemesis's_Keep",
+	"Ground_Floor",
+	"Second_Floor",
+	"Third_Floor",
+	"Tower_One",
+	"Tower_Two",
+	"Secret_Halls",
+	"Access_Floor",
+	"Dungeon",
+	"Lower_Dungeon",
+	"Catacomb",
+	"Lower_Reaches",
+	"Warrens",
+	"Hidden_Caverns",
+	"Fens_of_Insanity",
+	"Chaos_Corridors",
+	"Labyrinth",
+	"Halls_of_Blood",
+	"Nemesis's_Lair",
+}
+
 type C3DMap struct {
 	Width, Height uint
 	Layout        []byte
@@ -252,7 +275,7 @@ func main() {
 					if levelNo < 0 || levelNo > 20 {
 						panic(fmt.Sprintf("warp gate at %v is out of bounds (0x%x)", position, b))
 					}
-					entity.Value = levelNo
+					entity.Value = MapNames[levelNo-1]
 
 					// Set plane 0 value to adjacent floor description
 					var adjacentFloor byte

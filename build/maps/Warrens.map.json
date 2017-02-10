@@ -128,7 +128,7 @@
 				27,
 				25
 			],
-			"value": 9
+			"value": "Access_Floor"
 		},
 		{
 			"type": "Potion",
@@ -317,7 +317,7 @@
 				37,
 				16
 			],
-			"value": 15
+			"value": "Hidden_Caverns"
 		},
 		{
 			"type": "Bat",

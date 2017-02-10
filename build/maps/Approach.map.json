@@ -128,7 +128,7 @@
 				38,
 				13
 			],
-			"value": 2
+			"value": "Nemesis's_Keep"
 		},
 		{
 			"type": "Orc",
@@ -200,7 +200,7 @@
 				12,
 				8
 			],
-			"value": 9
+			"value": "Access_Floor"
 		},
 		{
 			"type": "Treasure",

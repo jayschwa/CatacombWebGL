@@ -84,7 +84,7 @@
 				36,
 				26
 			],
-			"value": 9
+			"value": "Access_Floor"
 		},
 		{
 			"type": "Treasure",
@@ -184,7 +184,7 @@
 				23,
 				23
 			],
-			"value": 20
+			"value": "Nemesis's_Lair"
 		},
 		{
 			"type": "Demon",
@@ -199,7 +199,7 @@
 				19,
 				22
 			],
-			"value": 9
+			"value": "Access_Floor"
 		},
 		{
 			"type": "Demon",
@@ -257,7 +257,7 @@
 				34,
 				12
 			],
-			"value": 9
+			"value": "Access_Floor"
 		},
 		{
 			"type": "Treasure",
@@ -303,7 +303,7 @@
 				35,
 				10
 			],
-			"value": 9
+			"value": "Access_Floor"
 		},
 		{
 			"type": "WarpGate",
@@ -311,7 +311,7 @@
 				37,
 				10
 			],
-			"value": 9
+			"value": "Access_Floor"
 		},
 		{
 			"type": "Treasure",
@@ -403,7 +403,7 @@
 				38,
 				4
 			],
-			"value": 9
+			"value": "Access_Floor"
 		},
 		{
 			"type": "Demon",
@@ -432,7 +432,7 @@
 				12,
 				1
 			],
-			"value": 9
+			"value": "Access_Floor"
 		},
 		{
 			"type": "Treasure",

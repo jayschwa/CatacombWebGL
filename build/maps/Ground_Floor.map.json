@@ -439,7 +439,7 @@
 				30,
 				13
 			],
-			"value": 4
+			"value": "Second_Floor"
 		},
 		{
 			"type": "Orc",
@@ -620,7 +620,7 @@
 				37,
 				1
 			],
-			"value": 8
+			"value": "Secret_Halls"
 		}
 	],
 	"fog": {

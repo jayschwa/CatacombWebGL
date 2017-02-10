@@ -201,7 +201,7 @@
 				28,
 				26
 			],
-			"value": 17
+			"value": "Chaos_Corridors"
 		},
 		{
 			"type": "Troll",
@@ -821,7 +821,7 @@
 				2,
 				3
 			],
-			"value": 9
+			"value": "Access_Floor"
 		},
 		{
 			"type": "Troll",
