@@ -68,14 +68,13 @@ export function addStaticMeshes(map, parent) {
 				}
 				const exploding = tile.type == "exploding_wall"
 				const geometry = exploding ? {} : walls
-				const translate = exploding ? new Vector2(0, 0) : position // FIXME
 				Object.keys(variants).forEach(v => {
 					const name = tile.value + "_" + v
 					const faces = variants[v]
 					faces.forEach(face => {
 						if (adjacent[face] && adjacent[face].type != tile.type) {
 							geometry[name] = geometry[name] || new Geometry()
-							geometry[name].merge(new WallGeometry(translate, face))
+							geometry[name].merge(new WallGeometry(face, exploding ? null : position))
 						}
 					})
 				})
