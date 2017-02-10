@@ -69,11 +69,11 @@ export class Player extends Entity {
 		if (item instanceof Treasure) {
 			this.score += 100  // * level number
 		} else {
-			// play sound
-			if (this.inventory[item.name] === undefined) {
-				this.inventory[item.name] = 0
+			const name = item.name[0].toLowerCase() + item.name.slice(1) // FIXME
+			if (this.inventory[name] === undefined) {
+				this.inventory[name] = 0
 			}
-			this.inventory[item.name] += 1
+			this.inventory[name] += 1
 		}
 		item.pickup()
 	}

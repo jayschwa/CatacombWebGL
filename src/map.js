@@ -111,7 +111,7 @@ export function spawnEntities(map, parent) {
 		const position = new Vector3(entity.position[0], entity.position[1], 0)
 		const entityClass = entityClasses[entity.type]
 		if (entityClass) {
-			parent.add(new entityClass(position))
+			parent.add(new entityClass(entity))
 		} else {
 			console.warn("class not found for", entity.type, "at", position)
 		}

@@ -40602,9 +40602,10 @@ class Teleporter extends Portal {
 }
 
 class Enemy extends Entity {
-	constructor(sprite, position, size, speed, spriteInfo) {
+	constructor(sprite, props, size, speed, spriteInfo) {
 		super(size, speed);
-		this.position.copy(position);
+		const pos = props.position;
+		this.position.set(pos[0], pos[1], pos[2] || 0);
 		this.spriteInfo = spriteInfo;
 		textureCache.get(sprite, texture => {
 			const totalFrames = spriteInfo.walkFrames + spriteInfo.attackFrames + spriteInfo.deathFrames;
@@ -40641,8 +40642,8 @@ class Enemy extends Entity {
 }
 
 class Orc extends Enemy {
-	constructor(position) {
-		super("sprites/orc.png", position, 0.5, 5, {
+	constructor(props) {
+		super("sprites/orc.png", props, 0.5, 5, {
 			frameWidth: 51,
 			walkFrames: 4,
 			attackFrames: 2,
@@ -40656,8 +40657,8 @@ class Orc extends Enemy {
 }
 
 class Troll extends Enemy {
-	constructor(position) {
-		super("sprites/troll.png", position, 0.75, 5, {
+	constructor(props) {
+		super("sprites/troll.png", props, 0.75, 5, {
 			frameWidth: 64,
 			walkFrames: 4,
 			attackFrames: 3,
@@ -40671,8 +40672,8 @@ class Troll extends Enemy {
 }
 
 class Bat extends Enemy {
-	constructor(position) {
-		super("sprites/bat.png", position, 0.5, 10, {
+	constructor(props) {
+		super("sprites/bat.png", props, 0.5, 10, {
 			frameWidth: 40,
 			walkFrames: 4,
 			attackFrames: 0,
@@ -40691,8 +40692,8 @@ class Bat extends Enemy {
 }
 
 class Mage extends Enemy {
-	constructor(position) {
-		super("sprites/mage.png", position, 0.5, 5, {
+	constructor(props) {
+		super("sprites/mage.png", props, 0.5, 5, {
 			frameWidth: 56,
 			walkFrames: 2,
 			attackFrames: 1,
@@ -40707,8 +40708,8 @@ class Mage extends Enemy {
 }
 
 class Demon extends Enemy {
-	constructor(position) {
-		super("sprites/demon.png", position, 0.75, 5, {
+	constructor(props) {
+		super("sprites/demon.png", props, 0.75, 5, {
 			frameWidth: 64,
 			walkFrames: 4,
 			attackFrames: 3,
@@ -41041,12 +41042,13 @@ class WallGeometry extends PlaneGeometry {
 }
 
 class Item extends Sprite {
-	constructor(name, position, ...itemFrames) {
+	constructor(props, ...itemFrames) {
 		super();
+		this.name = props.type;
+		const pos = props.position;
+		this.position.set(pos[0], pos[1], pos[2] || 0);
 		const scale = 0.6;
-		this.name = name;
 		this.scale.multiplyScalar(scale);
-		this.position.copy(position);
 		this.translateZ(-(1-scale)/2);
 		this.itemFrames = itemFrames;
 		this.material.fog = true;
@@ -41078,59 +41080,23 @@ class Item extends Sprite {
 	}
 }
 
-class Bolt extends Item {
-	constructor(position) {
-		super("bolt", position, 0, 1);
+function simpleItem(...itemFrames) {
+	return class extends Item {
+		constructor(props) {
+			super(props, ...itemFrames);
+		}
 	}
 }
 
-class Nuke extends Item {
-	constructor(position) {
-		super("nuke", position, 2, 3);
-	}
-}
-
-class Potion extends Item {
-	constructor(position) {
-		super("potion", position, 4);
-	}
-}
-
-class RedKey extends Item {
-	constructor(position) {
-		super("redKey", position, 5);
-	}
-}
-
-class YellowKey extends Item {
-	constructor(position) {
-		super("yellowKey", position, 6);
-	}
-}
-
-class GreenKey extends Item {
-	constructor(position) {
-		super("greenKey", position, 7);
-	}
-}
-
-class BlueKey extends Item {
-	constructor(position) {
-		super("blueKey", position, 8);
-	}
-}
-
-class Scroll extends Item {
-	constructor(position) {
-		super("scroll", position, 9);
-	}
-}
-
-class Treasure extends Item {
-	constructor(position) {
-		super("treasure", position, 10);
-	}
-}
+const Bolt = simpleItem(0, 1);
+const Nuke = simpleItem(2, 3);
+const Potion = simpleItem(4);
+const RedKey = simpleItem(5);
+const YellowKey = simpleItem(6);
+const GreenKey = simpleItem(7);
+const BlueKey = simpleItem(8);
+const Scroll = simpleItem(9);
+const Treasure = simpleItem(10);
 
 
 var items = Object.freeze({
@@ -41251,7 +41217,7 @@ function spawnEntities(map, parent) {
 		const position = new Vector3(entity.position[0], entity.position[1], 0);
 		const entityClass = entityClasses[entity.type];
 		if (entityClass) {
-			parent.add(new entityClass(position));
+			parent.add(new entityClass(entity));
 		} else {
 			console.warn("class not found for", entity.type, "at", position);
 		}
@@ -41322,11 +41288,11 @@ class Player extends Entity {
 		if (item instanceof Treasure) {
 			this.score += 100;  // * level number
 		} else {
-			// play sound
-			if (this.inventory[item.name] === undefined) {
-				this.inventory[item.name] = 0;
+			const name = item.name[0].toLowerCase() + item.name.slice(1); // FIXME
+			if (this.inventory[name] === undefined) {
+				this.inventory[name] = 0;
 			}
-			this.inventory[item.name] += 1;
+			this.inventory[name] += 1;
 		}
 		item.pickup();
 	}
