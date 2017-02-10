@@ -55,7 +55,7 @@
 			"value": "Inquisition Room"
 		},
 		"F": {
-			"type": ""
+			"type": "floor"
 		},
 		"G": {
 			"type": "exploding_wall",

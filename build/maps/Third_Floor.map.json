@@ -51,7 +51,7 @@
 			"value": "blue"
 		},
 		"E": {
-			"type": ""
+			"type": "floor"
 		},
 		"F": {
 			"type": "exploding_wall",

@@ -258,6 +258,9 @@ func main() {
 		for w := 0; w < int(m.Width); w++ {
 			idx := w + h*int(m.Width)
 			b := c3dmap.Layout[idx]
+			if b == 0 {
+				b = 0xB4 // convert zero to bare floor
+			}
 			e := c3dmap.Entities[idx]
 			position := Vec2{w, int(m.Height) - 1 - h}
 
@@ -269,7 +272,7 @@ func main() {
 				entity.Position = position
 				if entity.Type == "WarpGate" {
 					levelNo = int(b - 0xB4) // Plane 0 value denotes destination
-					if b == 0 || levelNo == 0 {
+					if levelNo == 0 {
 						levelNo = m.LevelNumber + 1
 					}
 					if levelNo < 0 || levelNo > 20 {
@@ -300,7 +303,10 @@ func main() {
 			if s, ok := byteToLetter[b]; ok {
 				m.Layout[h] += s
 			} else {
-				def := LayoutDict[b]
+				def, exist := LayoutDict[b]
+				if !exist {
+					panic(fmt.Sprintf("LayoutDef for 0x%x at %v does not exist", b, position))
+				}
 				s := string(nextRune)
 				letterToDef[s] = def
 				if nextRune == 'Z' {

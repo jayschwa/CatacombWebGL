@@ -59,7 +59,7 @@
 			"value": "Entrance to Chaos"
 		},
 		"G": {
-			"type": ""
+			"type": "floor"
 		},
 		"H": {
 			"type": "wall",

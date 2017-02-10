@@ -55,7 +55,7 @@
 			"value": "green"
 		},
 		"F": {
-			"type": ""
+			"type": "floor"
 		},
 		"G": {
 			"type": "door",
