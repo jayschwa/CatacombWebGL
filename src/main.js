@@ -4,7 +4,7 @@ import { Bat, Demon, Mage, Orc, Troll } from "./enemies"
 import { Door, ExplodingWall } from "./environment"
 import { FloorGeometry, WallGeometry } from "./geometry"
 import { Bolt, Nuke, Potion, RedKey, YellowKey, GreenKey, BlueKey, Scroll, Treasure } from "./items"
-import { addStaticMeshes } from "./map"
+import { constructLayout, spawnEntities } from "./map"
 import { CustomMaterial } from "./material"
 import { Player } from "./player"
 import { Transition } from "./transition"
@@ -450,15 +450,12 @@ export class Game {
 		})
 		.then(function(map) {
 			console.log(map)
-			console.log("map dimensions: " + map.width + "x" + map.height)
 			if (map.fog) {
 				that.scene.fog = new THREE.Fog(map.fog.color, map.fog.near, map.fog.far)
 			}
-			addStaticMeshes(map, that.maze)
+			constructLayout(map, that.maze)
+			spawnEntities(map, that.maze)
 			setupPlayerSpawn(map, that.player)
-			//addPortals(map, that.maze)
-			//addEnemies(map, that.maze)
-			//addItems(map, that.maze)
 			that.scene.add(that.maze)
 			that.play()
 		})

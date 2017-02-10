@@ -1,6 +1,8 @@
-import { BufferGeometry, Geometry, Mesh, Scene, Vector2 } from "three"
+import { BufferGeometry, Geometry, Mesh, Scene, Vector2, Vector3 } from "three"
+import * as enemies from "./enemies"
 import { Door, ExplodingWall } from "./environment"
 import { FloorGeometry, WallGeometry } from "./geometry"
+import * as items from "./items"
 import { CustomMaterial } from "./material"
 import { textureCache } from "./utils"
 
@@ -48,7 +50,7 @@ function mergeWallGeometry(tile, adjacentTiles, geometryDict, position) {
 	return geometryDict
 }
 
-export function addStaticMeshes(map, parent) {
+export function constructLayout(map, parent) {
 	const doors = {}
 	const explodingWalls = {}
 	const floor = new Geometry()
@@ -101,4 +103,17 @@ export function addStaticMeshes(map, parent) {
 
 	// add aggregate wall geometries to scene
 	parent.add(...createWallMeshes(walls))
+}
+
+export function spawnEntities(map, parent) {
+	const entityClasses = Object.assign({}, enemies, items)
+	map.entities.forEach(entity => {
+		const position = new Vector3(entity.position[0], entity.position[1], 0)
+		const entityClass = entityClasses[entity.type]
+		if (entityClass) {
+			parent.add(new entityClass(position))
+		} else {
+			console.warn("class not found for", entity.type, "at", position)
+		}
+	})
 }
