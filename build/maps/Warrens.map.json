@@ -1,0 +1,472 @@
+{
+	"title": "The Warrens",
+	"levelNumber": 14,
+	"width": 40,
+	"height": 28,
+	"layout": [
+		"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+		"AAAAAAAAAAAAAAAABBBBBBBBAACCCCCAAAAAAAAA",
+		"AAAADDDDAAAAAAABBBBBBBBBBACEEECAAEEEAAAA",
+		"AAADDDDDDAAAABBBBBBBBBBBBACEEECAAEEEEAAA",
+		"AAADDDDDDAABBBBBBBBAABBBBACEEEEAAAEEEAAA",
+		"AAAADDDDDABBBBBBBBBAAAAAAACCEEEEEEEEEEFA",
+		"AAAAADDDAABBBAAABBBBAAAAAAAAAEEEEEEAEEFA",
+		"AAAAAGGAABBBAAAABBBBBBAAAAAAAEEEEEAAAFFA",
+		"AAAABBBAABBBAAAAABBBBBBAAAAAEEEEEAAAAFFA",
+		"AAAABBBAABBBAAAAAABBBBBAAAAEEEEAAAAAAFFA",
+		"AAABBBAAABBAAAAAAABBBBBAAAAEEEEAAAAAHHHA",
+		"AAABBAAAABBAAAAAAAABBBBBAAAAEEEEEAAAHHHA",
+		"AAABBAAAABBAAAAAAAABBBBBAAAAAEEEEEEAAAAA",
+		"AAABBBAABBBAAAAAAAABBBBBAAAAAAEEEEEAAAAA",
+		"AAABBBBBBBBBAAAAAIIIBBBIIIAAAAAAEEEEAAAA",
+		"AAAABBBBBBBBAAAAAIJJJJJJJIAAAAAAEEEEAAAA",
+		"AAAAAAABBBBBBBBBBBJJJJJJJEEEEEEEEEEEAAAA",
+		"AAAAAAABBBBBBBBBBBJJJJJJJEEEEEEEEEEEAAAA",
+		"AAKKKAAGGAAAAAAAAIJJJJJJJIAAAEEEEEEAAAAA",
+		"AKKKKAAKKAAAAAAAAIIIGGGIIIAAAEEEEAAAAAAA",
+		"AKKKKKKKKAAAAAAAAAILLLLLIAAAAEEEAAAAAAAA",
+		"AKKKKKKKKAAAKKKKAAILLLLLIAAEEEEEAAAAAAAA",
+		"AKKKKKKKKAAKKKKKAAILLLLLIAEEEEEEAAAAAAAA",
+		"AAAKKKKKKKKKKKKAAAILLLLLIAEEEEEEAAAAAAAA",
+		"AAAAAKKKKKKKKKKAAAILLLLLIAEEEEAAAAAAAAAA",
+		"AAAAAAAAAAAAAAAAAAILLLLLIAAEEAAAAAAAAAAA",
+		"AAAAAAAAAAAAAAAAAAILLLLLIAAAAAAAAAAAAAAA",
+		"AAAAAAAAAAAAAAAAAAIIIIIIIAAAAAAAAAAAAAAA"
+	],
+	"legend": {
+		"A": {
+			"type": "wall",
+			"value": "tar"
+		},
+		"B": {
+			"type": "floor",
+			"value": "Warrens of the Trolls"
+		},
+		"C": {
+			"type": "wall",
+			"value": "white"
+		},
+		"D": {
+			"type": "floor",
+			"value": "Small Bat Cavern"
+		},
+		"E": {
+			"type": "floor",
+			"value": "Bat-filled Caves"
+		},
+		"F": {
+			"type": "exploding_wall",
+			"value": "tar"
+		},
+		"G": {
+			"type": ""
+		},
+		"H": {
+			"type": "floor",
+			"value": "Hidden Gate Room"
+		},
+		"I": {
+			"type": "wall",
+			"value": "gold"
+		},
+		"J": {
+			"type": "floor",
+			"value": "Bottom of Well"
+		},
+		"K": {
+			"type": "floor",
+			"value": "Troll Cave"
+		},
+		"L": {
+			"type": "floor",
+			"value": "Brick Chamber"
+		}
+	},
+	"playerStart": {
+		"position": [
+			21,
+			2
+		],
+		"direction": [
+			0,
+			1
+		]
+	},
+	"entities": [
+		{
+			"type": "Bat",
+			"position": [
+				4,
+				25
+			]
+		},
+		{
+			"type": "Bat",
+			"position": [
+				7,
+				25
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				19,
+				25
+			],
+			"minDifficulty": 1
+		},
+		{
+			"type": "Troll",
+			"position": [
+				22,
+				25
+			]
+		},
+		{
+			"type": "WarpGate",
+			"position": [
+				27,
+				25
+			],
+			"value": 9
+		},
+		{
+			"type": "Potion",
+			"position": [
+				28,
+				25
+			]
+		},
+		{
+			"type": "Potion",
+			"position": [
+				29,
+				25
+			]
+		},
+		{
+			"type": "Bat",
+			"position": [
+				4,
+				24
+			],
+			"minDifficulty": 1
+		},
+		{
+			"type": "Bat",
+			"position": [
+				6,
+				24
+			],
+			"minDifficulty": 2
+		},
+		{
+			"type": "Troll",
+			"position": [
+				23,
+				24
+			]
+		},
+		{
+			"type": "Bat",
+			"position": [
+				28,
+				24
+			]
+		},
+		{
+			"type": "Bat",
+			"position": [
+				34,
+				24
+			],
+			"minDifficulty": 1
+		},
+		{
+			"type": "Scroll",
+			"position": [
+				3,
+				23
+			],
+			"value": 3
+		},
+		{
+			"type": "Bat",
+			"position": [
+				6,
+				23
+			],
+			"minDifficulty": 1
+		},
+		{
+			"type": "Bat",
+			"position": [
+				8,
+				23
+			],
+			"minDifficulty": 2
+		},
+		{
+			"type": "Troll",
+			"position": [
+				12,
+				23
+			],
+			"minDifficulty": 2
+		},
+		{
+			"type": "Troll",
+			"position": [
+				15,
+				23
+			]
+		},
+		{
+			"type": "Bat",
+			"position": [
+				35,
+				23
+			]
+		},
+		{
+			"type": "Bat",
+			"position": [
+				6,
+				22
+			]
+		},
+		{
+			"type": "Bat",
+			"position": [
+				29,
+				22
+			]
+		},
+		{
+			"type": "Bat",
+			"position": [
+				30,
+				22
+			],
+			"minDifficulty": 2
+		},
+		{
+			"type": "Bat",
+			"position": [
+				5,
+				21
+			]
+		},
+		{
+			"type": "Bat",
+			"position": [
+				34,
+				21
+			]
+		},
+		{
+			"type": "Bat",
+			"position": [
+				30,
+				20
+			],
+			"minDifficulty": 1
+		},
+		{
+			"type": "Bat",
+			"position": [
+				32,
+				20
+			],
+			"minDifficulty": 2
+		},
+		{
+			"type": "Troll",
+			"position": [
+				11,
+				19
+			],
+			"minDifficulty": 1
+		},
+		{
+			"type": "Troll",
+			"position": [
+				18,
+				19
+			],
+			"minDifficulty": 1
+		},
+		{
+			"type": "Bat",
+			"position": [
+				29,
+				16
+			],
+			"minDifficulty": 2
+		},
+		{
+			"type": "Bat",
+			"position": [
+				30,
+				16
+			]
+		},
+		{
+			"type": "WarpGate",
+			"position": [
+				37,
+				16
+			],
+			"value": 15
+		},
+		{
+			"type": "Bat",
+			"position": [
+				33,
+				13
+			]
+		},
+		{
+			"type": "Bat",
+			"position": [
+				34,
+				13
+			],
+			"minDifficulty": 2
+		},
+		{
+			"type": "Troll",
+			"position": [
+				9,
+				12
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				21,
+				11
+			],
+			"minDifficulty": 1
+		},
+		{
+			"type": "Bat",
+			"position": [
+				34,
+				11
+			],
+			"minDifficulty": 1
+		},
+		{
+			"type": "Troll",
+			"position": [
+				11,
+				10
+			],
+			"minDifficulty": 2
+		},
+		{
+			"type": "Bat",
+			"position": [
+				30,
+				9
+			]
+		},
+		{
+			"type": "Bat",
+			"position": [
+				31,
+				8
+			],
+			"minDifficulty": 2
+		},
+		{
+			"type": "Troll",
+			"position": [
+				2,
+				7
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				3,
+				6
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				4,
+				5
+			],
+			"minDifficulty": 2
+		},
+		{
+			"type": "Troll",
+			"position": [
+				6,
+				5
+			],
+			"minDifficulty": 1
+		},
+		{
+			"type": "Troll",
+			"position": [
+				13,
+				5
+			]
+		},
+		{
+			"type": "Bat",
+			"position": [
+				28,
+				5
+			]
+		},
+		{
+			"type": "Bat",
+			"position": [
+				29,
+				5
+			],
+			"minDifficulty": 2
+		},
+		{
+			"type": "Troll",
+			"position": [
+				12,
+				4
+			]
+		},
+		{
+			"type": "Bat",
+			"position": [
+				27,
+				4
+			],
+			"minDifficulty": 2
+		},
+		{
+			"type": "Bat",
+			"position": [
+				30,
+				4
+			],
+			"minDifficulty": 1
+		},
+		{
+			"type": "Troll",
+			"position": [
+				9,
+				3
+			],
+			"minDifficulty": 2
+		}
+	],
+	"fog": {
+		"color": 0,
+		"near": 1,
+		"far": 50
+	}
+}

@@ -246,11 +246,11 @@ func main() {
 				entity.Position = position
 				if entity.Type == "WarpGate" {
 					levelNo = int(b - 0xB4) // Plane 0 value denotes destination
-					if levelNo == 0 {
+					if b == 0 || levelNo == 0 {
 						levelNo = m.LevelNumber + 1
 					}
 					if levelNo < 0 || levelNo > 20 {
-						panic("warp gate number out of bounds")
+						panic(fmt.Sprintf("warp gate at %v is out of bounds (0x%x)", position, b))
 					}
 					entity.Value = levelNo
 
