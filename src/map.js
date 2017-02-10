@@ -12,7 +12,7 @@ function connectAdjacent(objects, obj, x, y, filterFunc) {
 		objects[[x, y+1]]
 	]
 	.filter(e => e !== undefined)
-	.filter(filterFunc || e => true)
+	.filter(filterFunc || (e => true))
 	.forEach(neighbor => {
 		obj.adjacent.push(neighbor)
 		neighbor.adjacent.push(obj)
