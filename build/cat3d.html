@@ -5,8 +5,16 @@
 	<style>
 		body { margin: 0; }
 		#cat3d { width: 100%; height: 100%; overflow: hidden; }
-		#menu { position: absolute; }
-		.playing #menu { display: none; }
+		#hud, #menu { position: absolute; left: 0; right: 0; }
+		.playing #menu { visibility: hidden; }
+		#location {
+			color: white;
+			font-family: sans-serif;
+			font-size: large;
+			position: absolute;
+			left: 50%;
+			transform: translateX(-50%);
+		}
 	</style>
 </head>
 <body>
@@ -17,6 +25,9 @@
 				<option value="Nemesis's_Keep">2. Nemesis's Keep</option>
 				<option value="Access_Floor">9. Access Floor</option>
 			</select>
+		</div>
+		<div id="hud">
+			<span id="location"></span>
 		</div>
 	</div>
 </body>
@@ -35,7 +46,8 @@ mapSelect.addEventListener("change", event => {
 })
 
 const gameContainer = document.getElementById("cat3d")
-const game = new Catacomb3D.Game(gameContainer, mapSelect.value)
+const gameLocation = document.getElementById("location")
+const game = new Catacomb3D.Game(gameContainer, gameLocation, mapSelect.value)
 game.resizeView(gameContainer.clientWidth, gameContainer.clientHeight)
 
 let resizeNextFrame = false

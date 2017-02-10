@@ -24,8 +24,10 @@ function setupPlayerSpawn(map, player) {
 }
 
 export class Game {
-	constructor(container, mapName, player) {
+	constructor(container, location, mapName, player) {
 		this.container = container
+		this.location = location
+
 		this.mapName = mapName
 		this.player = player || new Player()
 
@@ -116,6 +118,14 @@ export class Game {
 			this.renderer.render(this.scene, this.player.camera)
 		}
 
+		const pos = this.player.position
+		const tile = this.map.getTile(Math.round(pos.x), Math.round(pos.y))
+		if (tile && tile.type == "floor") {
+			this.location.innerText = tile.value || ""
+		} else {
+			this.location.innerText = ""
+		}
+
 		if (this.isActive) {
 			requestAnimationFrame(this.render.bind(this))
 		}
@@ -157,7 +167,7 @@ export class Game {
 			return response.json()
 		})
 		.then(function(map) {
-			console.log(map)
+			that.map = map
 			if (map.fog) {
 				that.scene.fog = new THREE.Fog(map.fog.color, map.fog.near, map.fog.far)
 			}
