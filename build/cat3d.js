@@ -40563,10 +40563,11 @@ class Fireball extends Entity {
 }
 
 class Portal extends Sprite {
-	constructor(position) {
+	constructor(props) {
 		super();
 		this.name = "Portal";
-		this.position.copy(position);
+		const pos = props.position;
+		this.position.set(pos[0], pos[1], pos[2] || 0);
 		this.fps = 8;
 		this.light = new PointLight(0x0042DD, 1, 1.5);
 		this.add(this.light);
@@ -40588,8 +40589,8 @@ class Portal extends Sprite {
 }
 
 class Teleporter extends Portal {
-	constructor(position, sibling) {
-		super(position);
+	constructor(props, sibling) {
+		super(props);
 		if (sibling) {
 			this.sibling = sibling;
 			if (sibling.sibling) {
@@ -40600,6 +40601,8 @@ class Teleporter extends Portal {
 		}
 	}
 }
+
+class WarpGate extends Portal {}
 
 class Enemy extends Entity {
 	constructor(sprite, props, size, speed, spriteInfo) {
@@ -41192,12 +41195,19 @@ function constructLayout(map, parent) {
 }
 
 function spawnEntities(map, parent) {
-	const entityClasses = Object.assign({}, enemies, items);
+	const entityClasses = Object.assign({}, enemies, items, {Teleport: Teleporter, WarpGate: WarpGate});
+	const teleporters = {};
 	map.entities.forEach(entity => {
 		const position = new Vector3(entity.position[0], entity.position[1], 0);
 		const entityClass = entityClasses[entity.type];
 		if (entityClass) {
-			parent.add(new entityClass(entity));
+			if (entityClass == Teleporter) {
+				const teleporter = new entityClass(entity, teleporters[entity.value]);
+				teleporters[entity.value] = teleporter;
+				parent.add(teleporter);
+			} else {
+				parent.add(new entityClass(entity));
+			}
 		} else {
 			console.warn("class not found for", entity.type, "at", position);
 		}

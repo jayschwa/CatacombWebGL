@@ -1,5 +1,6 @@
 import { BufferGeometry, Geometry, Mesh, Scene, Vector2, Vector3 } from "three"
 import * as enemies from "./enemies"
+import { Teleporter, WarpGate } from "./entities"
 import { Door, ExplodingWall } from "./environment"
 import { FloorGeometry, WallGeometry } from "./geometry"
 import * as items from "./items"
@@ -106,12 +107,19 @@ export function constructLayout(map, parent) {
 }
 
 export function spawnEntities(map, parent) {
-	const entityClasses = Object.assign({}, enemies, items)
+	const entityClasses = Object.assign({}, enemies, items, {Teleport: Teleporter, WarpGate: WarpGate})
+	const teleporters = {}
 	map.entities.forEach(entity => {
 		const position = new Vector3(entity.position[0], entity.position[1], 0)
 		const entityClass = entityClasses[entity.type]
 		if (entityClass) {
-			parent.add(new entityClass(entity))
+			if (entityClass == Teleporter) {
+				const teleporter = new entityClass(entity, teleporters[entity.value])
+				teleporters[entity.value] = teleporter
+				parent.add(teleporter)
+			} else {
+				parent.add(new entityClass(entity))
+			}
 		} else {
 			console.warn("class not found for", entity.type, "at", position)
 		}
