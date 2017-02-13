@@ -186,16 +186,9 @@ export class Portal extends Sprite {
 }
 
 export class Teleporter extends Portal {
-	constructor(props, sibling) {
+	constructor(props) {
 		super(props)
-		if (sibling) {
-			this.sibling = sibling
-			if (sibling.sibling) {
-				throw new Error("Teleporter already has a sibling")
-			} else {
-				sibling.sibling = this
-			}
-		}
+		this.destination = new Vector3(props.value[0], props.value[1], 0)
 	}
 }
 

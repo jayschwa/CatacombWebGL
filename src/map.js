@@ -107,19 +107,12 @@ export function constructLayout(map, parent) {
 }
 
 export function spawnEntities(map, parent) {
-	const entityClasses = Object.assign({}, enemies, items, {Teleport: Teleporter, WarpGate: WarpGate})
-	const teleporters = {}
+	const entityClasses = Object.assign({}, enemies, items, {Teleporter: Teleporter, WarpGate: WarpGate})
 	map.entities.forEach(entity => {
 		const position = new Vector3(entity.position[0], entity.position[1], 0)
 		const entityClass = entityClasses[entity.type]
 		if (entityClass) {
-			if (entityClass == Teleporter) {
-				const teleporter = new entityClass(entity, teleporters[entity.value])
-				teleporters[entity.value] = teleporter
-				parent.add(teleporter)
-			} else {
-				parent.add(new entityClass(entity))
-			}
+			parent.add(new entityClass(entity))
 		} else {
 			console.warn("class not found for", entity.type, "at", position)
 		}

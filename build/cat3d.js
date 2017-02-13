@@ -40589,16 +40589,9 @@ class Portal extends Sprite {
 }
 
 class Teleporter extends Portal {
-	constructor(props, sibling) {
+	constructor(props) {
 		super(props);
-		if (sibling) {
-			this.sibling = sibling;
-			if (sibling.sibling) {
-				throw new Error("Teleporter already has a sibling")
-			} else {
-				sibling.sibling = this;
-			}
-		}
+		this.destination = new Vector3(props.value[0], props.value[1], 0);
 	}
 }
 
@@ -41195,19 +41188,12 @@ function constructLayout(map, parent) {
 }
 
 function spawnEntities(map, parent) {
-	const entityClasses = Object.assign({}, enemies, items, {Teleport: Teleporter, WarpGate: WarpGate});
-	const teleporters = {};
+	const entityClasses = Object.assign({}, enemies, items, {Teleporter: Teleporter, WarpGate: WarpGate});
 	map.entities.forEach(entity => {
 		const position = new Vector3(entity.position[0], entity.position[1], 0);
 		const entityClass = entityClasses[entity.type];
 		if (entityClass) {
-			if (entityClass == Teleporter) {
-				const teleporter = new entityClass(entity, teleporters[entity.value]);
-				teleporters[entity.value] = teleporter;
-				parent.add(teleporter);
-			} else {
-				parent.add(new entityClass(entity));
-			}
+			parent.add(new entityClass(entity));
 		} else {
 			console.warn("class not found for", entity.type, "at", position);
 		}
@@ -41267,7 +41253,8 @@ class Player extends Entity {
 		} else if (obj instanceof Door) {
 			return !this.unlockDoor(obj)
 		} else if (obj instanceof Teleporter) {
-			this.teleportTo = obj.sibling.position.clone().add(this.velocity.clone().normalize().multiplyScalar(2/3));
+			const forward = this.velocity.clone().normalize().multiplyScalar(2/3);
+			this.teleportTo = obj.destination.clone().add(forward);
 			return false
 		}
 		return true

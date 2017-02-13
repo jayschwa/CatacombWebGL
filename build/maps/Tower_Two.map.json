@@ -134,12 +134,15 @@
 			"minDifficulty": 2
 		},
 		{
-			"type": "Teleport",
+			"type": "Teleporter",
 			"position": [
 				20,
 				25
 			],
-			"value": 2
+			"value": [
+				7,
+				11
+			]
 		},
 		{
 			"type": "Troll",
@@ -319,12 +322,15 @@
 			]
 		},
 		{
-			"type": "Teleport",
+			"type": "Teleporter",
 			"position": [
 				9,
 				20
 			],
-			"value": 1
+			"value": [
+				3,
+				11
+			]
 		},
 		{
 			"type": "Treasure",
@@ -668,28 +674,37 @@
 			]
 		},
 		{
-			"type": "Teleport",
+			"type": "Teleporter",
 			"position": [
 				3,
 				11
 			],
-			"value": 1
+			"value": [
+				9,
+				20
+			]
 		},
 		{
-			"type": "Teleport",
+			"type": "Teleporter",
 			"position": [
 				7,
 				11
 			],
-			"value": 2
+			"value": [
+				20,
+				25
+			]
 		},
 		{
-			"type": "Teleport",
+			"type": "Teleporter",
 			"position": [
 				11,
 				11
 			],
-			"value": 3
+			"value": [
+				29,
+				2
+			]
 		},
 		{
 			"type": "Troll",
@@ -807,12 +822,15 @@
 			"minDifficulty": 1
 		},
 		{
-			"type": "Teleport",
+			"type": "Teleporter",
 			"position": [
 				29,
 				2
 			],
-			"value": 3
+			"value": [
+				11,
+				11
+			]
 		},
 		{
 			"type": "Troll",

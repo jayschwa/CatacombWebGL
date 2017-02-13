@@ -102,12 +102,15 @@
 			"minDifficulty": 1
 		},
 		{
-			"type": "Teleport",
+			"type": "Teleporter",
 			"position": [
 				26,
 				24
 			],
-			"value": 1
+			"value": [
+				36,
+				23
+			]
 		},
 		{
 			"type": "Troll",
@@ -118,12 +121,15 @@
 			"minDifficulty": 2
 		},
 		{
-			"type": "Teleport",
+			"type": "Teleporter",
 			"position": [
 				36,
 				23
 			],
-			"value": 1
+			"value": [
+				26,
+				24
+			]
 		},
 		{
 			"type": "Troll",
@@ -142,12 +148,15 @@
 			"minDifficulty": 1
 		},
 		{
-			"type": "Teleport",
+			"type": "Teleporter",
 			"position": [
 				12,
 				21
 			],
-			"value": 2
+			"value": [
+				24,
+				10
+			]
 		},
 		{
 			"type": "Troll",
@@ -158,12 +167,15 @@
 			"minDifficulty": 2
 		},
 		{
-			"type": "Teleport",
+			"type": "Teleporter",
 			"position": [
 				3,
 				19
 			],
-			"value": 3
+			"value": [
+				11,
+				13
+			]
 		},
 		{
 			"type": "Troll",
@@ -206,12 +218,15 @@
 			"minDifficulty": 1
 		},
 		{
-			"type": "Teleport",
+			"type": "Teleporter",
 			"position": [
 				11,
 				13
 			],
-			"value": 3
+			"value": [
+				3,
+				19
+			]
 		},
 		{
 			"type": "Bat",
@@ -252,12 +267,15 @@
 			]
 		},
 		{
-			"type": "Teleport",
+			"type": "Teleporter",
 			"position": [
 				24,
 				10
 			],
-			"value": 2
+			"value": [
+				12,
+				21
+			]
 		},
 		{
 			"type": "Troll",
