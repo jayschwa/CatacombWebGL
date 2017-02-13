@@ -92,14 +92,14 @@ export class Game {
 		})
 		objectsToRemove.forEach(obj => obj.parent.remove(obj))
 
-		if (this.player.teleportTo) {
+		if (this.player.warpToPosition) {
 			this.transitionStart = time
 
 			// render to first FBO
 			this.renderer.render(this.scene, this.player.camera, this.fbo1, true)
 
-			this.player.position.copy(this.player.teleportTo)
-			this.player.teleportTo = null
+			this.player.position.copy(this.player.warpToPosition)
+			this.player.warpToPosition = null
 		}
 
 		const transitionDelta = time - this.transitionStart

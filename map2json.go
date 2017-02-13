@@ -187,9 +187,9 @@ var EntityDict = map[byte]Entity{
 	0x1D: Entity{Type: "Fireball", Direction: &Vec2{0, 1}}, // North-South
 	0x1E: Entity{Type: "Fireball", Direction: &Vec2{1, 0}}, // East-West
 
-	0x1F: Entity{Type: "Teleporter", Value: 1},
-	0x20: Entity{Type: "Teleporter", Value: 2},
-	0x21: Entity{Type: "Teleporter", Value: 3},
+	0x1F: Entity{Type: "JumpGate", Value: 1},
+	0x20: Entity{Type: "JumpGate", Value: 2},
+	0x21: Entity{Type: "JumpGate", Value: 3},
 
 	0x24: Entity{Type: "Troll", MinDifficulty: 1},
 	0x25: Entity{Type: "Orc", MinDifficulty: 1},
@@ -255,7 +255,7 @@ func main() {
 		Layout:      make([]string, c3dmap.Height),
 	}
 
-	teleporters := make(map[interface{}]int) // Index of existing teleporters
+	jumpGates := make(map[interface{}]int) // Index of existing jump gates
 
 	for h := 0; h < int(m.Height); h++ {
 		for w := 0; w < int(m.Width); w++ {
@@ -273,14 +273,14 @@ func main() {
 				m.PlayerStart.Position = position
 			} else if entity, exists := EntityDict[e]; exists {
 				entity.Position = position
-				if entity.Type == "Teleporter" {
-					if t, exists := teleporters[entity.Value]; exists {
-						// Sibling teleporter exists
-						teleporters[entity.Value] = -1 // munge value so a third teleporter blows up
-						entity.Value = m.Entities[t].Position
-						m.Entities[t].Value = entity.Position
+				if entity.Type == "JumpGate" {
+					if g, exists := jumpGates[entity.Value]; exists {
+						// Sibling gate exists
+						jumpGates[entity.Value] = -1 // Munge value so a third gate blows up
+						entity.Value = m.Entities[g].Position
+						m.Entities[g].Value = entity.Position
 					} else {
-						teleporters[entity.Value] = len(m.Entities)
+						jumpGates[entity.Value] = len(m.Entities)
 					}
 				} else if entity.Type == "WarpGate" {
 					levelNo = int(b - 0xB4) // Plane 0 value denotes destination

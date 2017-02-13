@@ -185,7 +185,7 @@ export class Portal extends Sprite {
 	}
 }
 
-export class Teleporter extends Portal {
+export class JumpGate extends Portal {
 	constructor(props) {
 		super(props)
 		this.destination = new Vector3(props.value[0], props.value[1], 0)

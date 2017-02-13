@@ -1,6 +1,6 @@
 import { Audio, PerspectiveCamera, PointLight, Sprite, SpriteMaterial, Vector3 } from "three"
 import { audioListener, audioLoader } from "./audio"
-import { Entity, Fireball, Teleporter } from "./entities"
+import { Entity, Fireball, JumpGate } from "./entities"
 import { Door } from "./environment"
 import { Item, Treasure } from "./items"
 import { SpriteSheetProxy, textureCache } from "./utils"
@@ -57,9 +57,9 @@ export class Player extends Entity {
 			return false
 		} else if (obj instanceof Door) {
 			return !this.unlockDoor(obj)
-		} else if (obj instanceof Teleporter) {
+		} else if (obj instanceof JumpGate) {
 			const forward = this.velocity.clone().normalize().multiplyScalar(2/3)
-			this.teleportTo = obj.destination.clone().add(forward)
+			this.warpToPosition = obj.destination.clone().add(forward)
 			return false
 		}
 		return true

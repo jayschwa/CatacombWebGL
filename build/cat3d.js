@@ -40588,7 +40588,7 @@ class Portal extends Sprite {
 	}
 }
 
-class Teleporter extends Portal {
+class JumpGate extends Portal {
 	constructor(props) {
 		super(props);
 		this.destination = new Vector3(props.value[0], props.value[1], 0);
@@ -41188,7 +41188,7 @@ function constructLayout(map, parent) {
 }
 
 function spawnEntities(map, parent) {
-	const entityClasses = Object.assign({}, enemies, items, {Teleporter: Teleporter, WarpGate: WarpGate});
+	const entityClasses = Object.assign({}, enemies, items, {JumpGate: JumpGate, WarpGate: WarpGate});
 	map.entities.forEach(entity => {
 		const position = new Vector3(entity.position[0], entity.position[1], 0);
 		const entityClass = entityClasses[entity.type];
@@ -41252,9 +41252,9 @@ class Player extends Entity {
 			return false
 		} else if (obj instanceof Door) {
 			return !this.unlockDoor(obj)
-		} else if (obj instanceof Teleporter) {
+		} else if (obj instanceof JumpGate) {
 			const forward = this.velocity.clone().normalize().multiplyScalar(2/3);
-			this.teleportTo = obj.destination.clone().add(forward);
+			this.warpToPosition = obj.destination.clone().add(forward);
 			return false
 		}
 		return true
@@ -41643,14 +41643,14 @@ class Game {
 		});
 		objectsToRemove.forEach(obj => obj.parent.remove(obj));
 
-		if (this.player.teleportTo) {
+		if (this.player.warpToPosition) {
 			this.transitionStart = time;
 
 			// render to first FBO
 			this.renderer.render(this.scene, this.player.camera, this.fbo1, true);
 
-			this.player.position.copy(this.player.teleportTo);
-			this.player.teleportTo = null;
+			this.player.position.copy(this.player.warpToPosition);
+			this.player.warpToPosition = null;
 		}
 
 		const transitionDelta = time - this.transitionStart;

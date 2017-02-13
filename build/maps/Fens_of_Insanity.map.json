@@ -102,7 +102,7 @@
 			"minDifficulty": 1
 		},
 		{
-			"type": "Teleporter",
+			"type": "JumpGate",
 			"position": [
 				26,
 				24
@@ -121,7 +121,7 @@
 			"minDifficulty": 2
 		},
 		{
-			"type": "Teleporter",
+			"type": "JumpGate",
 			"position": [
 				36,
 				23
@@ -148,7 +148,7 @@
 			"minDifficulty": 1
 		},
 		{
-			"type": "Teleporter",
+			"type": "JumpGate",
 			"position": [
 				12,
 				21
@@ -167,7 +167,7 @@
 			"minDifficulty": 2
 		},
 		{
-			"type": "Teleporter",
+			"type": "JumpGate",
 			"position": [
 				3,
 				19
@@ -218,7 +218,7 @@
 			"minDifficulty": 1
 		},
 		{
-			"type": "Teleporter",
+			"type": "JumpGate",
 			"position": [
 				11,
 				13
@@ -267,7 +267,7 @@
 			]
 		},
 		{
-			"type": "Teleporter",
+			"type": "JumpGate",
 			"position": [
 				24,
 				10

@@ -127,7 +127,7 @@
 			"value": 1900
 		},
 		{
-			"type": "Teleporter",
+			"type": "JumpGate",
 			"position": [
 				4,
 				24
@@ -247,7 +247,7 @@
 			]
 		},
 		{
-			"type": "Teleporter",
+			"type": "JumpGate",
 			"position": [
 				23,
 				12
