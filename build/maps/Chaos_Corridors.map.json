@@ -1,0 +1,351 @@
+{
+	"title": "Chaos Corridors",
+	"levelNumber": 17,
+	"width": 40,
+	"height": 28,
+	"layout": [
+		"AAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBB",
+		"ACCACCCCCCCCCCCCCCABDDDDDDDDDDBBBBBBDDBB",
+		"ACCACCCCCCCCCCCCCCABDDDDDDDDDDDDDDDDDDDB",
+		"ACCACCACCAAAACCAAAABDDDDBDDBDDDDDDDDDDDB",
+		"ACCACCACCAAAACCAAAABDDDDBBBBDDBBBDDBDDBB",
+		"ACCCCCACCAACCCCCCCABDDDDEDDBBBBBBDDBBBBB",
+		"ACCCCCACCCCCCCCCCCABDDDDEDDBBBDDDDDDDBBB",
+		"ACCAAAACCCCCCCCCCCABDDDDBBBBBDDDDDDDDBBB",
+		"AAAAAAAAACCAAAACCAABBBBBBBDDBDDDBBBBBBBB",
+		"AACCCCCAACCAAAACCAABBBDDBBDDBBDDBBBBBDDB",
+		"AACCCCCCCCCACCCCCAFFBBDDDDDDDDDDDDDDDDDB",
+		"AACCACCCCCCACCCCCAFFBBDDDDDDDDDDDDDDDDDB",
+		"ACCCACCAACCAAGGAAAFFBBDDBBBBDDBBBDDBBBBB",
+		"ACCCACCAACCAAFFFFFFFGDDDBBBBDDBBBDDBBBBB",
+		"AAAAAAAAAAAAAFFFFFFFGDDDBBBBBBBBBBBBBBBB",
+		"HHHHHHHHHHHHHFFFIIIIJJIIIIIIIIIIIIIIIIII",
+		"HKKKKKHHKKKKHFFFIIIIJJIIIIIIIIJJIIIIIIII",
+		"HKKKKKHHKKKKHGGHHIIIJJIIJJJJJJJJJJJJIIII",
+		"HKKHHHHHHKKHHKKHHIJJJJJIJJJJJJJJJJJJIJJI",
+		"HKKKKKKKHKKKKKKHHIJJJJJIIIJJIIIIJJIIIJJI",
+		"HKKKKKKKHKKKKKHHIIJJIIIIJJJJJJIIJJIIIJJI",
+		"HKKHHKKHHKKHHHHIJJJJIIIIJJJJJJJIJJJJJJJI",
+		"HHHHHKKKKKKKKKHIJJJJIIIIJJIJJJJIJJJJJJII",
+		"HKKHHKKKKKKKKKHIIJJJJJJJJJJJJIIIJJIJJIII",
+		"HKKHHKKHHHHHKKHHHIJJJJJJJJJJIIIIIIIJJIII",
+		"HKKKKKKKHKKKKKKKHIJJIIIJJJIIILLMNOPJJJJI",
+		"HKKKKKKKHKKKKKKKHIIIIIIJJIIIILLMNOPJJJJI",
+		"HHHHHHHHHHHHHHHHHIIIIIIIIIIIIIIIIIIIIIII"
+	],
+	"legend": {
+		"A": {
+			"type": "wall",
+			"value": "stone"
+		},
+		"B": {
+			"type": "wall",
+			"value": "white"
+		},
+		"C": {
+			"type": "floor",
+			"value": "Graysoul's Run"
+		},
+		"D": {
+			"type": "floor",
+			"value": "Purespirit Path"
+		},
+		"E": {
+			"type": "exploding_wall",
+			"value": "white"
+		},
+		"F": {
+			"type": "floor",
+			"value": "Entrance to Chaos"
+		},
+		"G": {
+			"type": "floor"
+		},
+		"H": {
+			"type": "wall",
+			"value": "slime"
+		},
+		"I": {
+			"type": "wall",
+			"value": "gold"
+		},
+		"J": {
+			"type": "floor",
+			"value": "Goldenlight Way"
+		},
+		"K": {
+			"type": "floor",
+			"value": "Darksoul's Reach"
+		},
+		"L": {
+			"type": "floor",
+			"value": "Gate Room"
+		},
+		"M": {
+			"type": "door",
+			"value": "blue"
+		},
+		"N": {
+			"type": "door",
+			"value": "green"
+		},
+		"O": {
+			"type": "door",
+			"value": "yellow"
+		},
+		"P": {
+			"type": "door",
+			"value": "red"
+		}
+	},
+	"playerStart": {
+		"position": [
+			16,
+			14
+		],
+		"direction": [
+			-1,
+			0
+		]
+	},
+	"entities": [
+		{
+			"type": "RedKey",
+			"position": [
+				1,
+				26
+			]
+		},
+		{
+			"type": "Mage",
+			"position": [
+				26,
+				26
+			]
+		},
+		{
+			"type": "Mage",
+			"position": [
+				11,
+				25
+			],
+			"minDifficulty": 1
+		},
+		{
+			"type": "BlueKey",
+			"position": [
+				37,
+				25
+			]
+		},
+		{
+			"type": "Mage",
+			"position": [
+				2,
+				23
+			],
+			"minDifficulty": 2
+		},
+		{
+			"type": "Mage",
+			"position": [
+				4,
+				23
+			]
+		},
+		{
+			"type": "Mage",
+			"position": [
+				21,
+				23
+			],
+			"minDifficulty": 1
+		},
+		{
+			"type": "Mage",
+			"position": [
+				15,
+				22
+			],
+			"minDifficulty": 2
+		},
+		{
+			"type": "Potion",
+			"position": [
+				25,
+				22
+			]
+		},
+		{
+			"type": "Potion",
+			"position": [
+				26,
+				22
+			]
+		},
+		{
+			"type": "Mage",
+			"position": [
+				22,
+				21
+			],
+			"minDifficulty": 1
+		},
+		{
+			"type": "Potion",
+			"position": [
+				25,
+				21
+			]
+		},
+		{
+			"type": "Potion",
+			"position": [
+				26,
+				21
+			]
+		},
+		{
+			"type": "Mage",
+			"position": [
+				32,
+				20
+			],
+			"minDifficulty": 2
+		},
+		{
+			"type": "Mage",
+			"position": [
+				10,
+				18
+			]
+		},
+		{
+			"type": "Mage",
+			"position": [
+				6,
+				16
+			],
+			"minDifficulty": 1
+		},
+		{
+			"type": "Mage",
+			"position": [
+				36,
+				16
+			],
+			"minDifficulty": 1
+		},
+		{
+			"type": "Mage",
+			"position": [
+				11,
+				11
+			],
+			"minDifficulty": 1
+		},
+		{
+			"type": "Mage",
+			"position": [
+				2,
+				10
+			],
+			"minDifficulty": 1
+		},
+		{
+			"type": "Mage",
+			"position": [
+				31,
+				9
+			]
+		},
+		{
+			"type": "Mage",
+			"position": [
+				37,
+				9
+			],
+			"minDifficulty": 2
+		},
+		{
+			"type": "YellowKey",
+			"position": [
+				38,
+				9
+			]
+		},
+		{
+			"type": "Mage",
+			"position": [
+				4,
+				7
+			]
+		},
+		{
+			"type": "Mage",
+			"position": [
+				27,
+				7
+			],
+			"minDifficulty": 1
+		},
+		{
+			"type": "Mage",
+			"position": [
+				36,
+				5
+			]
+		},
+		{
+			"type": "GreenKey",
+			"position": [
+				1,
+				4
+			]
+		},
+		{
+			"type": "Mage",
+			"position": [
+				9,
+				4
+			]
+		},
+		{
+			"type": "Mage",
+			"position": [
+				4,
+				2
+			],
+			"minDifficulty": 1
+		},
+		{
+			"type": "Mage",
+			"position": [
+				12,
+				2
+			],
+			"minDifficulty": 1
+		},
+		{
+			"type": "Scroll",
+			"position": [
+				38,
+				2
+			],
+			"value": 6
+		},
+		{
+			"type": "WarpGate",
+			"position": [
+				29,
+				1
+			],
+			"value": "Labyrinth"
+		}
+	],
+	"fog": {
+		"color": 0,
+		"near": 1,
+		"far": 50
+	}
+}

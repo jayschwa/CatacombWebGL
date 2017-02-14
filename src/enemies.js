@@ -3,9 +3,10 @@ import { Entity } from "./entities"
 import { SpriteSheetProxy, textureCache } from "./utils"
 
 export class Enemy extends Entity {
-	constructor(sprite, position, size, speed, spriteInfo) {
+	constructor(sprite, props, size, speed, spriteInfo) {
 		super(size, speed)
-		this.position.copy(position)
+		const pos = props.position
+		this.position.set(pos[0], pos[1], pos[2] || 0)
 		this.spriteInfo = spriteInfo
 		textureCache.get(sprite, texture => {
 			const totalFrames = spriteInfo.walkFrames + spriteInfo.attackFrames + spriteInfo.deathFrames
@@ -42,38 +43,30 @@ export class Enemy extends Entity {
 }
 
 export class Orc extends Enemy {
-	constructor(position) {
-		super("sprites/orc.png", position, 0.5, 5, {
+	constructor(props) {
+		super("sprites/orc.png", props, 0.5, 5, {
 			frameWidth: 51,
 			walkFrames: 4,
 			attackFrames: 2,
 			deathFrames: 4
 		})
 	}
-
-	static entityIds() {
-		return [0x17, 0x25, 0x2A]
-	}
 }
 
 export class Troll extends Enemy {
-	constructor(position) {
-		super("sprites/troll.png", position, 0.75, 5, {
+	constructor(props) {
+		super("sprites/troll.png", props, 0.75, 5, {
 			frameWidth: 64,
 			walkFrames: 4,
 			attackFrames: 3,
 			deathFrames: 4
 		})
 	}
-
-	static entityIds() {
-		return [0x16, 0x24, 0x29]
-	}
 }
 
 export class Bat extends Enemy {
-	constructor(position) {
-		super("sprites/bat.png", position, 0.5, 10, {
+	constructor(props) {
+		super("sprites/bat.png", props, 0.5, 10, {
 			frameWidth: 40,
 			walkFrames: 4,
 			attackFrames: 0,
@@ -85,15 +78,11 @@ export class Bat extends Enemy {
 		this.translateZ(-0.1)
 		this.removeDead = true
 	}
-
-	static entityIds() {
-		return [0x19, 0x26, 0x2B]
-	}
 }
 
 export class Mage extends Enemy {
-	constructor(position) {
-		super("sprites/mage.png", position, 0.5, 5, {
+	constructor(props) {
+		super("sprites/mage.png", props, 0.5, 5, {
 			frameWidth: 56,
 			walkFrames: 2,
 			attackFrames: 1,
@@ -101,23 +90,15 @@ export class Mage extends Enemy {
 		})
 		this.scale.x = 56/64
 	}
-
-	static entityIds() {
-		return [0x1B, 0x28, 0x2D]
-	}
 }
 
 export class Demon extends Enemy {
-	constructor(position) {
-		super("sprites/demon.png", position, 0.75, 5, {
+	constructor(props) {
+		super("sprites/demon.png", props, 0.75, 5, {
 			frameWidth: 64,
 			walkFrames: 4,
 			attackFrames: 3,
 			deathFrames: 4
 		})
-	}
-
-	static entityIds() {
-		return [0x1A, 0x27, 0x2C]
 	}
 }

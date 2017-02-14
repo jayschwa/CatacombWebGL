@@ -1,0 +1,122 @@
+{
+	"title": "Access Floor",
+	"levelNumber": 9,
+	"width": 20,
+	"height": 20,
+	"layout": [
+		"AAABBBBBBBAAAAAAAAAA",
+		"AAABCCCCCBAAAAAAAAAA",
+		"AAABCCCCCBAAAAAAAAAA",
+		"AAAAADDDAAAAAAAAAEFF",
+		"AAAAGGGGGGGGGGGGAHHF",
+		"AAAAGGGGGGGGGGGGDHHE",
+		"AAAAGGGGGGGGGGGGDHHF",
+		"AAAAGGGGGGGGGGGGDHHF",
+		"AAAAGGGAAGGAAGGGAHHE",
+		"AAAAGGGAAGGAAGGGAEFF",
+		"FFFAGGGAAGGAAGGGAAAA",
+		"FIIAGGGAAAAAAGGGAAAA",
+		"FIIDGGGAAAAAAGGGAAAA",
+		"FIIDGGGGGGGGGGGGAAAA",
+		"FIIDGGGGGGGGGGGGAAAA",
+		"FIIAGGGGGGGGGGGGAAAA",
+		"FFFAAAAAAAAADDDAAAAA",
+		"AAAAAAAAAAJKKKKKJAAA",
+		"AAAAAAAAAAJKKKKKJAAA",
+		"AAAAAAAAAAJJJJJJJAAA"
+	],
+	"legend": {
+		"A": {
+			"type": "wall",
+			"value": "white"
+		},
+		"B": {
+			"type": "wall",
+			"value": "tar"
+		},
+		"C": {
+			"type": "floor",
+			"value": "Gate of Tar"
+		},
+		"D": {
+			"type": "floor"
+		},
+		"E": {
+			"type": "wall",
+			"value": "blood"
+		},
+		"F": {
+			"type": "wall",
+			"value": "slime"
+		},
+		"G": {
+			"type": "floor",
+			"value": "Access Floor"
+		},
+		"H": {
+			"type": "floor",
+			"value": "Gate of Horror"
+		},
+		"I": {
+			"type": "floor",
+			"value": "Gate of Slime"
+		},
+		"J": {
+			"type": "wall",
+			"value": "stone"
+		},
+		"K": {
+			"type": "floor",
+			"value": "Gate of Stone"
+		}
+	},
+	"playerStart": {
+		"position": [
+			10,
+			9
+		],
+		"direction": [
+			0,
+			1
+		]
+	},
+	"entities": [
+		{
+			"type": "WarpGate",
+			"position": [
+				4,
+				18
+			],
+			"value": "Fens_of_Insanity"
+		},
+		{
+			"type": "WarpGate",
+			"position": [
+				18,
+				15
+			],
+			"value": "Warrens"
+		},
+		{
+			"type": "WarpGate",
+			"position": [
+				1,
+				4
+			],
+			"value": "Catacomb"
+		},
+		{
+			"type": "WarpGate",
+			"position": [
+				15,
+				1
+			],
+			"value": "Dungeon"
+		}
+	],
+	"fog": {
+		"color": 0,
+		"near": 1,
+		"far": 40
+	}
+}

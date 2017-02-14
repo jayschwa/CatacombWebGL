@@ -1,0 +1,465 @@
+{
+	"title": "Halls of Blood",
+	"levelNumber": 19,
+	"width": 40,
+	"height": 28,
+	"layout": [
+		"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+		"AABBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAACCCAA",
+		"ABBBBBBBADDDDDDDDDCCCACCCAAAAAAAAAACCCAA",
+		"ABBBBBBBADDDDDDDDDCCCACCCAAAAADDDDDDDDAA",
+		"ABBBBBBBADDAADDAAACCCACCCAAAAADDDDDDDDAA",
+		"AABBBBBAADDAADDAAACCCACCCCCDDDDDAAAAAAAA",
+		"AABBBBBDDDDAADDAAAAAAACCCCCDDDDDAAAAAAAA",
+		"AAABBBBDDDDAADDAAAAAAAAAAAAAAADDDDDDDDAA",
+		"AAAAAAAAAAAAAEEEEEEEEEEEAAAAAADDDDDDDDAA",
+		"AAAAAAAAAAAAAAEEEEEEEEEAAAAAAAAAAAADDAAA",
+		"AAAAAAAAAAAAAAAEEEEEEEAAAAADDDDDDDDDDAAA",
+		"AAAAAFFFFAAAAAAAEEEEEAAAAAADDDDDDDDDDAAA",
+		"AAAAFFFFFFAAAAAAADDAAAAAAAAAAADDAAADDAAA",
+		"AAAFFFFFFFFAAAAAADDAABBBBBAAAADDAAADDAAA",
+		"AAAFFFFFFFFAAAAAADDAABBBBBADDDDDDACCCCAA",
+		"AAAFFFGGFFFDDDDDDDDAABBBBBADDDDDDACCCCAA",
+		"AAAFFFGGFFFDDDDDDDDAABBBBBAADDAAAAAAAAAA",
+		"AAAFFFFFFFFAAAAAADDAABBBBBAADDADDCCCACCA",
+		"AAAFFFFFFFFAAAAAADDAAAADDAAADDADDCCCACCA",
+		"AAAAFFFFFFAAACCAADDAAAADDAAADDADDAAAACCA",
+		"AAAAAAHHAAAAACCDDDDDDAADDADDDDADDDDDDDDA",
+		"AAAAAAHHAAAAACCDDDDDDAADDADDDDADDDDDDDDA",
+		"AAAAAAHHAAAAACCAAAAAAAADDAAADDDDDAAAAAAA",
+		"AAAAAAHHAAAAADDAADDAAAADDAAADDDDDAACCCCA",
+		"AAHHHHHHAAAAAAAAADDDDDDDDDDDDDADDAACCCCA",
+		"AAHHHHHHAAAACCCCCDDDDDDDDDDDDDADDDDDDAAA",
+		"AAAAAAAAAAAACCCCCDDAAAAAAAAAAAADDDDDDAAA",
+		"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+	],
+	"legend": {
+		"A": {
+			"type": "wall",
+			"value": "hell"
+		},
+		"B": {
+			"type": "floor",
+			"value": "Jump Gate Room"
+		},
+		"C": {
+			"type": "floor",
+			"value": "Dead End"
+		},
+		"D": {
+			"type": "floor",
+			"value": "Glowing Hallway"
+		},
+		"E": {
+			"type": "floor",
+			"value": "Execution Chamber"
+		},
+		"F": {
+			"type": "floor",
+			"value": "Summoning Chamber"
+		},
+		"G": {
+			"type": "wall",
+			"value": "tar"
+		},
+		"H": {
+			"type": "floor",
+			"value": "Halls Of Blood"
+		}
+	},
+	"playerStart": {
+		"position": [
+			2,
+			3
+		],
+		"direction": [
+			1,
+			0
+		]
+	},
+	"entities": [
+		{
+			"type": "WarpGate",
+			"position": [
+				36,
+				26
+			],
+			"value": "Access_Floor"
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				18,
+				25
+			],
+			"value": 1900
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				19,
+				25
+			],
+			"value": 1900
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				35,
+				25
+			],
+			"value": 1900
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				36,
+				25
+			],
+			"value": 1900
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				37,
+				25
+			],
+			"value": 1900
+		},
+		{
+			"type": "JumpGate",
+			"position": [
+				4,
+				24
+			],
+			"value": [
+				23,
+				12
+			]
+		},
+		{
+			"type": "Demon",
+			"position": [
+				5,
+				24
+			]
+		},
+		{
+			"type": "Demon",
+			"position": [
+				19,
+				24
+			]
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				20,
+				24
+			],
+			"value": 1900
+		},
+		{
+			"type": "Demon",
+			"position": [
+				23,
+				24
+			]
+		},
+		{
+			"type": "Demon",
+			"position": [
+				37,
+				24
+			]
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				20,
+				23
+			],
+			"value": 1900
+		},
+		{
+			"type": "WarpGate",
+			"position": [
+				23,
+				23
+			],
+			"value": "Nemesis's_Lair"
+		},
+		{
+			"type": "Demon",
+			"position": [
+				33,
+				23
+			]
+		},
+		{
+			"type": "WarpGate",
+			"position": [
+				19,
+				22
+			],
+			"value": "Access_Floor"
+		},
+		{
+			"type": "Demon",
+			"position": [
+				25,
+				22
+			]
+		},
+		{
+			"type": "Demon",
+			"position": [
+				5,
+				21
+			]
+		},
+		{
+			"type": "Demon",
+			"position": [
+				17,
+				18
+			]
+		},
+		{
+			"type": "Demon",
+			"position": [
+				35,
+				16
+			]
+		},
+		{
+			"type": "Demon",
+			"position": [
+				7,
+				14
+			]
+		},
+		{
+			"type": "Demon",
+			"position": [
+				36,
+				13
+			]
+		},
+		{
+			"type": "JumpGate",
+			"position": [
+				23,
+				12
+			],
+			"value": [
+				4,
+				24
+			]
+		},
+		{
+			"type": "WarpGate",
+			"position": [
+				34,
+				12
+			],
+			"value": "Access_Floor"
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				35,
+				12
+			],
+			"value": 1900
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				36,
+				12
+			],
+			"value": 1900
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				37,
+				12
+			],
+			"value": 1900
+		},
+		{
+			"type": "Demon",
+			"position": [
+				28,
+				11
+			]
+		},
+		{
+			"type": "Demon",
+			"position": [
+				34,
+				10
+			]
+		},
+		{
+			"type": "WarpGate",
+			"position": [
+				35,
+				10
+			],
+			"value": "Access_Floor"
+		},
+		{
+			"type": "WarpGate",
+			"position": [
+				37,
+				10
+			],
+			"value": "Access_Floor"
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				33,
+				9
+			],
+			"value": 1900
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				34,
+				9
+			],
+			"value": 1900
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				37,
+				9
+			],
+			"value": 1900
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				38,
+				9
+			],
+			"value": 1900
+		},
+		{
+			"type": "Demon",
+			"position": [
+				37,
+				8
+			]
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				38,
+				8
+			],
+			"value": 1900
+		},
+		{
+			"type": "Demon",
+			"position": [
+				27,
+				7
+			]
+		},
+		{
+			"type": "Demon",
+			"position": [
+				14,
+				6
+			]
+		},
+		{
+			"type": "Demon",
+			"position": [
+				23,
+				6
+			]
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				35,
+				4
+			],
+			"value": 1900
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				36,
+				4
+			],
+			"value": 1900
+		},
+		{
+			"type": "WarpGate",
+			"position": [
+				38,
+				4
+			],
+			"value": "Access_Floor"
+		},
+		{
+			"type": "Demon",
+			"position": [
+				17,
+				3
+			]
+		},
+		{
+			"type": "Demon",
+			"position": [
+				36,
+				3
+			]
+		},
+		{
+			"type": "Demon",
+			"position": [
+				14,
+				2
+			]
+		},
+		{
+			"type": "WarpGate",
+			"position": [
+				12,
+				1
+			],
+			"value": "Access_Floor"
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				14,
+				1
+			],
+			"value": 1900
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				15,
+				1
+			],
+			"value": 1900
+		}
+	],
+	"fog": {
+		"color": 16711680,
+		"near": 1,
+		"far": 50
+	}
+}

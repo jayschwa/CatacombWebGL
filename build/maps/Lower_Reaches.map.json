@@ -1,0 +1,937 @@
+{
+	"title": "Lower Reaches",
+	"levelNumber": 13,
+	"width": 40,
+	"height": 29,
+	"layout": [
+		"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+		"AAAAAAAAAAAAAAAAAAABBABBABBACCABBABBAAAA",
+		"AAAAAAAAAAAAAAAAAAABBABBABBACCABBABBAAAA",
+		"AAAAAAAAAAADDDDAAAAEEAEEAEEAEEAEEAEEAAAA",
+		"AAAAAAAAADDDDDDABEFFFFFFFFFFFFFFFFFFAAAA",
+		"AAAAAAAADDDDDDDABEFFFFFFFFFFFFFFFFFFEBBA",
+		"AAAAADDDDDDDDAAAAAFFAAAAAAAAAAAAAAFFEBBA",
+		"AAAADDDDDDDAAAABBEFFAAFFFFFFFFFFFAFFAAAA",
+		"AADDDDDDDDDDAAABBEFFAAFFFFFFFFFFFAFFEBBA",
+		"AADDDDAADDDDAAAAAAFFAAFFAAAEEAAFFAFFEBBA",
+		"AADDDDAAADDDDAABBEFFAAFFEBABBAAFFAFFAAAA",
+		"AADDDAAAAADDDAABBEFFAAFFEBAAABEFFAFFEBBA",
+		"ADDDDAAAAADDDDAAAAFFAAFFAAAAABEFFAFFEBBA",
+		"ADDDAAAAADDDDDABBEFFAAFFFFAAAAAFFAFFAAAA",
+		"ADDDAAAAADDDDDABBEFFAAFFFFEBABEFFAFFEBBA",
+		"ADDDAAAAAADDDDAAAAFFAAAAFFEBABEFFAFFEBBA",
+		"ADDDDAAAAADDDDABBEFFEBBAFFAAAAAFFAFFAAAA",
+		"ADDDDEGGAAADDDABBEFFEBBAFFEBABEFFAFFEHHA",
+		"AADDDEGGGAADDDAAAAAAAAAAFFEBABEFFAFFEHHA",
+		"AAAAAAGGGGAADDDDDDDDDDDAFFAAAAAFFAFFAAAA",
+		"AAAAAAAGGGGADDDDDDDDDDDAFFEBABEFFAFFEBBA",
+		"AAAAAAAAGGGAAAADDDDDDDDAFFEBABEFFAFFEBBA",
+		"AAAGGGGGGGGGAAAAAIIAADDAFFAAAAAFFAFFAAAA",
+		"AAGGGGGGGGGGGGAAAIIAADDAFFEBABEFFFFFEBBA",
+		"AGGGGGGGGGGGGGGAIIIIADDAFFEBABEFFFFFEBBA",
+		"AGGGGGGAAAAGGGGAIIIIADDDDDAAAAAEEAEEAAAA",
+		"AGGGGGAAAAGGGGGAAIIIADDDDDAAAAABBABBAAAA",
+		"AAGGGAAAAAGGGGAAAAAAAAAAAAAAAAABBABBAAAA",
+		"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+	],
+	"legend": {
+		"A": {
+			"type": "wall",
+			"value": "slime"
+		},
+		"B": {
+			"type": "floor",
+			"value": "Small Room"
+		},
+		"C": {
+			"type": "floor",
+			"value": "Gate Room"
+		},
+		"D": {
+			"type": "floor",
+			"value": "Dark, Slimy Tunnels"
+		},
+		"E": {
+			"type": "door",
+			"value": "green"
+		},
+		"F": {
+			"type": "floor",
+			"value": "Hall of Doors"
+		},
+		"G": {
+			"type": "floor",
+			"value": "Dark, Slimy Gate Room"
+		},
+		"H": {
+			"type": "floor",
+			"value": "Sign says, \"Read three scrolls.\""
+		},
+		"I": {
+			"type": "floor",
+			"value": "Wet, Slimy Tunnel"
+		}
+	},
+	"playerStart": {
+		"position": [
+			14,
+			24
+		],
+		"direction": [
+			-1,
+			0
+		]
+	},
+	"entities": [
+		{
+			"type": "Troll",
+			"position": [
+				19,
+				27
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				20,
+				27
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				22,
+				27
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				23,
+				27
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				25,
+				27
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				26,
+				27
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				31,
+				27
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				32,
+				27
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				34,
+				27
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				35,
+				27
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				19,
+				26
+			]
+		},
+		{
+			"type": "GreenKey",
+			"position": [
+				20,
+				26
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				22,
+				26
+			]
+		},
+		{
+			"type": "GreenKey",
+			"position": [
+				23,
+				26
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				25,
+				26
+			]
+		},
+		{
+			"type": "GreenKey",
+			"position": [
+				26,
+				26
+			]
+		},
+		{
+			"type": "WarpGate",
+			"position": [
+				28,
+				26
+			],
+			"value": "Chaos_Corridors"
+		},
+		{
+			"type": "Troll",
+			"position": [
+				31,
+				26
+			]
+		},
+		{
+			"type": "GreenKey",
+			"position": [
+				32,
+				26
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				34,
+				26
+			]
+		},
+		{
+			"type": "GreenKey",
+			"position": [
+				35,
+				26
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				16,
+				24
+			]
+		},
+		{
+			"type": "GreenKey",
+			"position": [
+				16,
+				23
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				37,
+				23
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				38,
+				23
+			]
+		},
+		{
+			"type": "GreenKey",
+			"position": [
+				37,
+				22
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				38,
+				22
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				8,
+				21
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				15,
+				21
+			]
+		},
+		{
+			"type": "GreenKey",
+			"position": [
+				16,
+				21
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				16,
+				20
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				37,
+				20
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				38,
+				20
+			]
+		},
+		{
+			"type": "GreenKey",
+			"position": [
+				37,
+				19
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				38,
+				19
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				4,
+				18
+			],
+			"minDifficulty": 1
+		},
+		{
+			"type": "Troll",
+			"position": [
+				15,
+				18
+			]
+		},
+		{
+			"type": "GreenKey",
+			"position": [
+				16,
+				18
+			]
+		},
+		{
+			"type": "GreenKey",
+			"position": [
+				25,
+				18
+			]
+		},
+		{
+			"type": "Orc",
+			"position": [
+				27,
+				18
+			]
+		},
+		{
+			"type": "GreenKey",
+			"position": [
+				28,
+				18
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				11,
+				17
+			],
+			"minDifficulty": 2
+		},
+		{
+			"type": "Troll",
+			"position": [
+				15,
+				17
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				16,
+				17
+			]
+		},
+		{
+			"type": "Orc",
+			"position": [
+				25,
+				17
+			]
+		},
+		{
+			"type": "GreenKey",
+			"position": [
+				29,
+				17
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				37,
+				17
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				38,
+				17
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				29,
+				16
+			]
+		},
+		{
+			"type": "GreenKey",
+			"position": [
+				37,
+				16
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				38,
+				16
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				15,
+				15
+			]
+		},
+		{
+			"type": "GreenKey",
+			"position": [
+				16,
+				15
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				2,
+				14
+			]
+		},
+		{
+			"type": "Fireball",
+			"position": [
+				13,
+				14
+			],
+			"direction": [
+				1,
+				0
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				15,
+				14
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				16,
+				14
+			]
+		},
+		{
+			"type": "GreenKey",
+			"position": [
+				27,
+				14
+			]
+		},
+		{
+			"type": "GreenKey",
+			"position": [
+				29,
+				14
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				37,
+				14
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				38,
+				14
+			]
+		},
+		{
+			"type": "Orc",
+			"position": [
+				27,
+				13
+			]
+		},
+		{
+			"type": "GreenKey",
+			"position": [
+				37,
+				13
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				38,
+				13
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				13,
+				12
+			],
+			"minDifficulty": 1
+		},
+		{
+			"type": "Troll",
+			"position": [
+				15,
+				12
+			]
+		},
+		{
+			"type": "GreenKey",
+			"position": [
+				16,
+				12
+			]
+		},
+		{
+			"type": "GreenKey",
+			"position": [
+				21,
+				12
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				22,
+				12
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				15,
+				11
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				16,
+				11
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				21,
+				11
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				22,
+				11
+			]
+		},
+		{
+			"type": "GreenKey",
+			"position": [
+				27,
+				11
+			]
+		},
+		{
+			"type": "GreenKey",
+			"position": [
+				29,
+				11
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				37,
+				11
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				38,
+				11
+			]
+		},
+		{
+			"type": "Orc",
+			"position": [
+				27,
+				10
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				29,
+				10
+			]
+		},
+		{
+			"type": "GreenKey",
+			"position": [
+				37,
+				10
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				38,
+				10
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				17,
+				8
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				21,
+				8
+			],
+			"minDifficulty": 1
+		},
+		{
+			"type": "Orc",
+			"position": [
+				27,
+				8
+			]
+		},
+		{
+			"type": "GreenKey",
+			"position": [
+				29,
+				8
+			]
+		},
+		{
+			"type": "GreenKey",
+			"position": [
+				37,
+				8
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				38,
+				8
+			]
+		},
+		{
+			"type": "GreenKey",
+			"position": [
+				27,
+				7
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				29,
+				7
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				37,
+				7
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				38,
+				7
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				10,
+				6
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				5,
+				5
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				7,
+				5
+			],
+			"minDifficulty": 2
+		},
+		{
+			"type": "Orc",
+			"position": [
+				27,
+				5
+			]
+		},
+		{
+			"type": "GreenKey",
+			"position": [
+				29,
+				5
+			]
+		},
+		{
+			"type": "GreenKey",
+			"position": [
+				37,
+				5
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				38,
+				5
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				22,
+				4
+			],
+			"minDifficulty": 2
+		},
+		{
+			"type": "GreenKey",
+			"position": [
+				27,
+				4
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				29,
+				4
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				37,
+				4
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				38,
+				4
+			]
+		},
+		{
+			"type": "WarpGate",
+			"position": [
+				2,
+				3
+			],
+			"value": "Access_Floor"
+		},
+		{
+			"type": "Troll",
+			"position": [
+				4,
+				3
+			],
+			"minDifficulty": 1
+		},
+		{
+			"type": "Fireball",
+			"position": [
+				14,
+				3
+			],
+			"direction": [
+				1,
+				0
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				13,
+				2
+			],
+			"minDifficulty": 1
+		},
+		{
+			"type": "GreenKey",
+			"position": [
+				18,
+				2
+			]
+		},
+		{
+			"type": "GreenKey",
+			"position": [
+				31,
+				2
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				32,
+				2
+			]
+		},
+		{
+			"type": "GreenKey",
+			"position": [
+				34,
+				2
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				35,
+				2
+			]
+		},
+		{
+			"type": "Scroll",
+			"position": [
+				10,
+				1
+			],
+			"value": 5
+		},
+		{
+			"type": "Potion",
+			"position": [
+				11,
+				1
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				31,
+				1
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				32,
+				1
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				34,
+				1
+			]
+		},
+		{
+			"type": "Troll",
+			"position": [
+				35,
+				1
+			]
+		}
+	],
+	"fog": {
+		"color": 0,
+		"near": 1,
+		"far": 50
+	}
+}

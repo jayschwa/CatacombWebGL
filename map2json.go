@@ -14,6 +14,29 @@ import (
 	"strings"
 )
 
+var MapNames = []string{
+	"Approach",
+	"Nemesis's_Keep",
+	"Ground_Floor",
+	"Second_Floor",
+	"Third_Floor",
+	"Tower_One",
+	"Tower_Two",
+	"Secret_Halls",
+	"Access_Floor",
+	"Dungeon",
+	"Lower_Dungeon",
+	"Catacomb",
+	"Lower_Reaches",
+	"Warrens",
+	"Hidden_Caverns",
+	"Fens_of_Insanity",
+	"Chaos_Corridors",
+	"Labyrinth",
+	"Halls_of_Blood",
+	"Nemesis's_Lair",
+}
+
 type C3DMap struct {
 	Width, Height uint
 	Layout        []byte
@@ -95,6 +118,7 @@ type JsonMap struct {
 	Height      uint                 `json:"height"`
 	Layout      []string             `json:"layout"`
 	Legend      map[string]LayoutDef `json:"legend"`
+	PlayerStart PlayerStart          `json:"playerStart"`
 	Entities    []Entity             `json:"entities"`
 	Fog         *Fog                 `json:"fog,omitempty"`
 }
@@ -135,10 +159,6 @@ type Entity struct {
 }
 
 var EntityDict = map[byte]Entity{
-	0x01: Entity{Type: "PlayerStart", Direction: &Vec2{0, -1}}, // North
-	0x02: Entity{Type: "PlayerStart", Direction: &Vec2{1, 0}},  // East
-	0x03: Entity{Type: "PlayerStart", Direction: &Vec2{0, 1}},  // South
-	0x04: Entity{Type: "PlayerStart", Direction: &Vec2{-1, 0}}, // West
 	0x05: Entity{Type: "Bolt"},
 	0x06: Entity{Type: "Nuke"},
 	0x07: Entity{Type: "Potion"},
@@ -167,9 +187,9 @@ var EntityDict = map[byte]Entity{
 	0x1D: Entity{Type: "Fireball", Direction: &Vec2{0, 1}}, // North-South
 	0x1E: Entity{Type: "Fireball", Direction: &Vec2{1, 0}}, // East-West
 
-	0x1F: Entity{Type: "Teleport", Value: 1},
-	0x20: Entity{Type: "Teleport", Value: 2},
-	0x21: Entity{Type: "Teleport", Value: 3},
+	0x1F: Entity{Type: "JumpGate", Value: 1},
+	0x20: Entity{Type: "JumpGate", Value: 2},
+	0x21: Entity{Type: "JumpGate", Value: 3},
 
 	0x24: Entity{Type: "Troll", MinDifficulty: 1},
 	0x25: Entity{Type: "Orc", MinDifficulty: 1},
@@ -182,6 +202,18 @@ var EntityDict = map[byte]Entity{
 	0x2B: Entity{Type: "Bat", MinDifficulty: 2},
 	0x2C: Entity{Type: "Demon", MinDifficulty: 2},
 	0x2D: Entity{Type: "Mage", MinDifficulty: 2},
+}
+
+type PlayerStart struct {
+	Position  Vec2 `json:"position"`
+	Direction Vec2 `json:"direction"`
+}
+
+var StartDict = map[byte]PlayerStart{
+	0x01: PlayerStart{Direction: Vec2{0, 1}},  // North
+	0x02: PlayerStart{Direction: Vec2{1, 0}},  // East
+	0x03: PlayerStart{Direction: Vec2{0, -1}}, // South
+	0x04: PlayerStart{Direction: Vec2{-1, 0}}, // West
 }
 
 type Fog struct {
@@ -222,28 +254,43 @@ func main() {
 		Height:      c3dmap.Height,
 		Layout:      make([]string, c3dmap.Height),
 	}
+
+	jumpGates := make(map[interface{}]int) // Index of existing jump gates
+
 	for h := 0; h < int(m.Height); h++ {
 		for w := 0; w < int(m.Width); w++ {
 			idx := w + h*int(m.Width)
 			b := c3dmap.Layout[idx]
+			if b == 0 {
+				b = 0xB4 // convert zero to bare floor
+			}
 			e := c3dmap.Entities[idx]
+			position := Vec2{w, int(m.Height) - 1 - h}
 
 			// Entity (plane 2)
-			if e > 0 {
-				entity, exists := EntityDict[e]
-				if !exists {
-					panic(fmt.Sprint("unknown entity ", e, " at ", w, h))
-				}
-				entity.Position = Vec2{w, h}
-				if entity.Type == "WarpGate" {
+			if start, exists := StartDict[e]; exists {
+				m.PlayerStart = start
+				m.PlayerStart.Position = position
+			} else if entity, exists := EntityDict[e]; exists {
+				entity.Position = position
+				if entity.Type == "JumpGate" {
+					if g, exists := jumpGates[entity.Value]; exists {
+						// Sibling gate exists
+						jumpGates[entity.Value] = -1 // Munge value so a third gate blows up
+						entity.Value = m.Entities[g].Position
+						m.Entities[g].Value = entity.Position
+					} else {
+						jumpGates[entity.Value] = len(m.Entities)
+					}
+				} else if entity.Type == "WarpGate" {
 					levelNo = int(b - 0xB4) // Plane 0 value denotes destination
 					if levelNo == 0 {
 						levelNo = m.LevelNumber + 1
 					}
 					if levelNo < 0 || levelNo > 20 {
-						panic("warp gate number out of bounds")
+						panic(fmt.Sprintf("warp gate at %v is out of bounds (0x%x)", position, b))
 					}
-					entity.Value = levelNo
+					entity.Value = MapNames[levelNo-1]
 
 					// Set plane 0 value to adjacent floor description
 					var adjacentFloor byte
@@ -260,13 +307,18 @@ func main() {
 					b = adjacentFloor
 				}
 				m.Entities = append(m.Entities, entity)
+			} else if e != 0 {
+				panic(fmt.Sprint("unknown entity ", e, " at ", w, h))
 			}
 
 			// Layout (plane 0)
 			if s, ok := byteToLetter[b]; ok {
 				m.Layout[h] += s
 			} else {
-				def := LayoutDict[b]
+				def, exist := LayoutDict[b]
+				if !exist {
+					panic(fmt.Sprintf("LayoutDef for 0x%x at %v does not exist", b, position))
+				}
 				s := string(nextRune)
 				letterToDef[s] = def
 				if nextRune == 'Z' {

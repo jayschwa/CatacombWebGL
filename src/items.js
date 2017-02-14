@@ -3,12 +3,13 @@ import { audioListener, audioLoader } from "./audio"
 import { SpriteSheetProxy, textureCache } from "./utils"
 
 export class Item extends Sprite {
-	constructor(name, position, ...itemFrames) {
+	constructor(props, ...itemFrames) {
 		super()
+		this.name = props.type
+		const pos = props.position
+		this.position.set(pos[0], pos[1], pos[2] || 0)
 		const scale = 0.6
-		this.name = name
 		this.scale.multiplyScalar(scale)
-		this.position.copy(position)
 		this.translateZ(-(1-scale)/2)
 		this.itemFrames = itemFrames
 		this.material.fog = true
@@ -40,56 +41,20 @@ export class Item extends Sprite {
 	}
 }
 
-export class Bolt extends Item {
-	constructor(position) {
-		super("bolt", position, 0, 1)
+function simpleItem(...itemFrames) {
+	return class extends Item {
+		constructor(props) {
+			super(props, ...itemFrames)
+		}
 	}
 }
 
-export class Nuke extends Item {
-	constructor(position) {
-		super("nuke", position, 2, 3)
-	}
-}
-
-export class Potion extends Item {
-	constructor(position) {
-		super("potion", position, 4)
-	}
-}
-
-export class RedKey extends Item {
-	constructor(position) {
-		super("redKey", position, 5)
-	}
-}
-
-export class YellowKey extends Item {
-	constructor(position) {
-		super("yellowKey", position, 6)
-	}
-}
-
-export class GreenKey extends Item {
-	constructor(position) {
-		super("greenKey", position, 7)
-	}
-}
-
-export class BlueKey extends Item {
-	constructor(position) {
-		super("blueKey", position, 8)
-	}
-}
-
-export class Scroll extends Item {
-	constructor(position) {
-		super("scroll", position, 9)
-	}
-}
-
-export class Treasure extends Item {
-	constructor(position) {
-		super("treasure", position, 10)
-	}
-}
+export const Bolt = simpleItem(0, 1)
+export const Nuke = simpleItem(2, 3)
+export const Potion = simpleItem(4)
+export const RedKey = simpleItem(5)
+export const YellowKey = simpleItem(6)
+export const GreenKey = simpleItem(7)
+export const BlueKey = simpleItem(8)
+export const Scroll = simpleItem(9)
+export const Treasure = simpleItem(10)

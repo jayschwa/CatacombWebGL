@@ -5,35 +5,46 @@
 	<style>
 		body { margin: 0; }
 		#cat3d { width: 100%; height: 100%; overflow: hidden; }
-		#menu { position: absolute; }
-		.playing #menu { display: none; }
+		#hud, #menu { position: absolute; left: 0; right: 0; }
+		.playing #menu { visibility: hidden; }
+		#location {
+			color: white;
+			font-family: sans-serif;
+			font-size: large;
+			position: absolute;
+			left: 50%;
+			transform: translateX(-50%);
+		}
 	</style>
 </head>
 <body>
 	<div id="cat3d">
 		<div id="menu">
 			<select id="map-select" name="map">
-				<option value="1_The_Approach">1. The Approach</option>
-				<option value="2_Nemesis's_Keep">2. Nemesis's Keep</option>
-				<option value="3_Ground_Floor">3. Ground Floor</option>
-				<option value="4_Second_Floor">4. Second Floor</option>
-				<option value="5_Third_Floor">5. Third Floor</option>
-				<option value="6_Tower_One">6. Tower One</option>
-				<option value="7_Tower_Two">7. Tower Two</option>
-				<option value="8_Secret_Halls">8. Secret Halls</option>
-				<option value="9_Access_Floor">9. Access Floor</option>
-				<option value="10_The_Dungeon">10. The Dungeon</option>
-				<option value="11_Lower_Dungeon">11. Lower Dungeon</option>
-				<option value="12_Catacomb">12. Catacomb</option>
-				<option value="13_Lower_Reaches">13. Lower Reaches</option>
-				<option value="14_The_Warrens">14. The Warrens</option>
-				<option value="15_Hidden_Caverns">15. Hidden Caverns</option>
-				<option value="16_The_Fens_of_Insanity">16. The Fens of Insanity</option>
-				<option value="17_Chaos_Corridors">17. Chaos Corridors</option>
-				<option value="18_The_Labyrinth">18. The Labyrinth</option>
-				<option value="19_Halls_of_Blood">19. Halls of Blood</option>
-				<option value="20_Nemesis's_Lair">20. Nemesis's Lair</option>
+				<option value="Approach">1. The Approach</option>
+				<option value="Nemesis's_Keep">2. Nemesis's Keep</option>
+				<option value="Ground_Floor">3. Ground Floor</option>
+				<option value="Second_Floor">4. Second Floor</option>
+				<option value="Third_Floor">5. Third Floor</option>
+				<option value="Tower_One">6. Tower One</option>
+				<option value="Tower_Two">7. Tower Two</option>
+				<option value="Secret_Halls">8. Secret Halls</option>
+				<option value="Access_Floor">9. Access Floor</option>
+				<option value="Dungeon">10. The Dungeon</option>
+				<option value="Lower_Dungeon">11. Lower Dungeon</option>
+				<option value="Catacomb">12. Catacomb</option>
+				<option value="Lower_Reaches">13. Lower Reaches</option>
+				<option value="Warrens">14. The Warrens</option>
+				<option value="Hidden_Caverns">15. Hidden Caverns</option>
+				<option value="Fens_of_Insanity">16. The Fens of Insanity</option>
+				<option value="Chaos_Corridors">17. Chaos Corridors</option>
+				<option value="Labyrinth">18. The Labyrinth</option>
+				<option value="Halls_of_Blood">19. Halls of Blood</option>
+				<option value="Nemesis's_Lair">20. Nemesis's Lair</option>
 			</select>
+		</div>
+		<div id="hud">
+			<span id="location"></span>
 		</div>
 	</div>
 </body>
@@ -46,13 +57,14 @@ location.search.substr(1).split("&").forEach(pair => {
 })
 
 const mapSelect = document.getElementById("map-select")
-mapSelect.value = queryParams.map || "1_The_Approach"
+mapSelect.value = queryParams.map || "Approach"
 mapSelect.addEventListener("change", event => {
 	location.search = "?map=" + encodeURIComponent(mapSelect.value)
 })
 
 const gameContainer = document.getElementById("cat3d")
-const game = new Catacomb3D.Game(gameContainer, mapSelect.value)
+const gameLocation = document.getElementById("location")
+const game = new Catacomb3D.Game(gameContainer, gameLocation, mapSelect.value)
 game.resizeView(gameContainer.clientWidth, gameContainer.clientHeight)
 
 let resizeNextFrame = false

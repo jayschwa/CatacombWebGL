@@ -1,0 +1,247 @@
+{
+	"title": "The Approach",
+	"levelNumber": 1,
+	"width": 40,
+	"height": 28,
+	"layout": [
+		"AAAAAAAAAAABBBBAAAAAAAAAAAAAAAAAAAAAAAAA",
+		"ACCCCCCCCCCDDDDCCCCCCCCCCCCCCCCCCCCCCCCA",
+		"CDDDDDDDDDDDDDDDDCCDDDDDDDDDDDDCCCCCCCCA",
+		"CDDDDDDDDDDDDDDDDCCDDDDDDDDDDDDCCCCCCCCA",
+		"CDDDDDDDDDDDDDDDDCCDDDDDDDDDDDDCCCCCCCCA",
+		"CDDDDDDDDDDDDDDDDCCDDDDDDDDDDDDCCCCCCCCA",
+		"CDDDDDDDDDDDDDDDDCCDDDDDDDDDDDDCCCCCCCCA",
+		"CDDDDDDDDDDDDDDDDCCDDDDDDDDDDDDCCCCCCCCA",
+		"CDDDDCCCCCCCCCCCCCCDDDDCCCCCDDDCCCCCCCCA",
+		"CDDDDCCCCCCCCCCCCCCDDDDCCCCCDDDCCCCCCCCA",
+		"CDDDDCCCCCCCCCCCCCCDDDDCCCCCDDDCCCCCCCCA",
+		"CDDDDDDDDDDDDDDCCCCDDDDCCCCCDDDCCAAAAAAA",
+		"CDDDDDDDDDDDDDDCCCCDDDDCCCCCDDDDEEEEEEEF",
+		"CDDDDDDDDDDDDDDCCCCDDDDCCCCCDDDDEEEEEEEF",
+		"CDDDDDDDDDDDDDDCCCCDDDDCCCCCDDDDEEEEEEEF",
+		"CDDDDDDDDDDDDDDCCCCDDDDCCCCCDDDDEEEEEEEF",
+		"CCCCCCDDDDDCCCCCCCCDDDDCGGCCDDDDEEEEEEEF",
+		"ACCCCCDDDDDCCCHHHCCDDDDCGGHHDDDCCAAAAAAA",
+		"ACCCCCDDDDDCCCHCIICDDDDCGGHHDDDCCCCCCCCA",
+		"ACCCCCDDDDDCJJJCIIHDDDDCGGCCDDDCCCCCCCCA",
+		"ACCCCCDDDDDCCCCCCCCDDDDCCCCCDDDCCCCCCCCA",
+		"ACDDDDDDDDDDDDDDDDDDDDDCCCCCDDDCCCCCCCCA",
+		"ACDDDDDDDDDDDDDDDDDDDDDCCCCCDDDCCCCCCCCA",
+		"ACDDDDDDDDDDDDDDDDDDDDDCCCCCDDDCCCCCCCCA",
+		"ACDDDDDDDDDDDDDDDDDDDDDCCCCCCCCCCCCCCCCA",
+		"ACDDDDDDDDDDDDDDDDDDDDDCCCCCCCCCCCCCCCCA",
+		"ACCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCA",
+		"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+	],
+	"legend": {
+		"A": {
+			"type": "wall",
+			"value": "stone"
+		},
+		"B": {
+			"type": "wall",
+			"value": "tar"
+		},
+		"C": {
+			"type": "wall",
+			"value": "slime"
+		},
+		"D": {
+			"type": "floor",
+			"value": "Path to Keep"
+		},
+		"E": {
+			"type": "floor",
+			"value": "Keep Entrance"
+		},
+		"F": {
+			"type": "wall",
+			"value": "white"
+		},
+		"G": {
+			"type": "floor",
+			"value": "Buried Healing Potions"
+		},
+		"H": {
+			"type": "exploding_wall",
+			"value": "slime"
+		},
+		"I": {
+			"type": "floor",
+			"value": "Hidden Treasure Room"
+		},
+		"J": {
+			"type": "floor",
+			"value": "Hidden Gate Room"
+		}
+	},
+	"playerStart": {
+		"position": [
+			13,
+			23
+		],
+		"direction": [
+			-1,
+			0
+		]
+	},
+	"entities": [
+		{
+			"type": "Scroll",
+			"position": [
+				9,
+				23
+			],
+			"value": 1
+		},
+		{
+			"type": "Orc",
+			"position": [
+				29,
+				22
+			]
+		},
+		{
+			"type": "Orc",
+			"position": [
+				21,
+				18
+			]
+		},
+		{
+			"type": "Orc",
+			"position": [
+				4,
+				14
+			]
+		},
+		{
+			"type": "Orc",
+			"position": [
+				35,
+				14
+			]
+		},
+		{
+			"type": "WarpGate",
+			"position": [
+				38,
+				13
+			],
+			"value": "Nemesis's_Keep"
+		},
+		{
+			"type": "Orc",
+			"position": [
+				20,
+				12
+			]
+		},
+		{
+			"type": "Potion",
+			"position": [
+				24,
+				11
+			]
+		},
+		{
+			"type": "Potion",
+			"position": [
+				25,
+				11
+			]
+		},
+		{
+			"type": "Orc",
+			"position": [
+				8,
+				10
+			]
+		},
+		{
+			"type": "Potion",
+			"position": [
+				24,
+				10
+			]
+		},
+		{
+			"type": "Potion",
+			"position": [
+				25,
+				10
+			]
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				16,
+				9
+			],
+			"value": 100
+		},
+		{
+			"type": "Potion",
+			"position": [
+				24,
+				9
+			]
+		},
+		{
+			"type": "Potion",
+			"position": [
+				25,
+				9
+			]
+		},
+		{
+			"type": "WarpGate",
+			"position": [
+				12,
+				8
+			],
+			"value": "Access_Floor"
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				16,
+				8
+			],
+			"value": 100
+		},
+		{
+			"type": "Potion",
+			"position": [
+				24,
+				8
+			]
+		},
+		{
+			"type": "Potion",
+			"position": [
+				25,
+				8
+			]
+		},
+		{
+			"type": "Orc",
+			"position": [
+				29,
+				6
+			]
+		},
+		{
+			"type": "Orc",
+			"position": [
+				18,
+				5
+			]
+		}
+	],
+	"fog": {
+		"color": 0,
+		"near": 1,
+		"far": 50
+	}
+}

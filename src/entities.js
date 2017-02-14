@@ -160,10 +160,11 @@ export class Fireball extends Entity {
 }
 
 export class Portal extends Sprite {
-	constructor(position) {
+	constructor(props) {
 		super()
 		this.name = "Portal"
-		this.position.copy(position)
+		const pos = props.position
+		this.position.set(pos[0], pos[1], pos[2] || 0)
 		this.fps = 8
 		this.light = new PointLight(0x0042DD, 1, 1.5)
 		this.add(this.light)
@@ -184,16 +185,11 @@ export class Portal extends Sprite {
 	}
 }
 
-export class Teleporter extends Portal {
-	constructor(position, sibling) {
-		super(position)
-		if (sibling) {
-			this.sibling = sibling
-			if (sibling.sibling) {
-				throw new Error("Teleporter already has a sibling")
-			} else {
-				sibling.sibling = this
-			}
-		}
+export class JumpGate extends Portal {
+	constructor(props) {
+		super(props)
+		this.destination = new Vector3(props.value[0], props.value[1], 0)
 	}
 }
+
+export class WarpGate extends Portal {}

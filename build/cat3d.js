@@ -40563,10 +40563,11 @@ class Fireball extends Entity {
 }
 
 class Portal extends Sprite {
-	constructor(position) {
+	constructor(props) {
 		super();
 		this.name = "Portal";
-		this.position.copy(position);
+		const pos = props.position;
+		this.position.set(pos[0], pos[1], pos[2] || 0);
 		this.fps = 8;
 		this.light = new PointLight(0x0042DD, 1, 1.5);
 		this.add(this.light);
@@ -40587,24 +40588,20 @@ class Portal extends Sprite {
 	}
 }
 
-class Teleporter extends Portal {
-	constructor(position, sibling) {
-		super(position);
-		if (sibling) {
-			this.sibling = sibling;
-			if (sibling.sibling) {
-				throw new Error("Teleporter already has a sibling")
-			} else {
-				sibling.sibling = this;
-			}
-		}
+class JumpGate extends Portal {
+	constructor(props) {
+		super(props);
+		this.destination = new Vector3(props.value[0], props.value[1], 0);
 	}
 }
 
+class WarpGate extends Portal {}
+
 class Enemy extends Entity {
-	constructor(sprite, position, size, speed, spriteInfo) {
+	constructor(sprite, props, size, speed, spriteInfo) {
 		super(size, speed);
-		this.position.copy(position);
+		const pos = props.position;
+		this.position.set(pos[0], pos[1], pos[2] || 0);
 		this.spriteInfo = spriteInfo;
 		textureCache.get(sprite, texture => {
 			const totalFrames = spriteInfo.walkFrames + spriteInfo.attackFrames + spriteInfo.deathFrames;
@@ -40641,38 +40638,30 @@ class Enemy extends Entity {
 }
 
 class Orc extends Enemy {
-	constructor(position) {
-		super("sprites/orc.png", position, 0.5, 5, {
+	constructor(props) {
+		super("sprites/orc.png", props, 0.5, 5, {
 			frameWidth: 51,
 			walkFrames: 4,
 			attackFrames: 2,
 			deathFrames: 4
 		});
 	}
-
-	static entityIds() {
-		return [0x17, 0x25, 0x2A]
-	}
 }
 
 class Troll extends Enemy {
-	constructor(position) {
-		super("sprites/troll.png", position, 0.75, 5, {
+	constructor(props) {
+		super("sprites/troll.png", props, 0.75, 5, {
 			frameWidth: 64,
 			walkFrames: 4,
 			attackFrames: 3,
 			deathFrames: 4
 		});
 	}
-
-	static entityIds() {
-		return [0x16, 0x24, 0x29]
-	}
 }
 
 class Bat extends Enemy {
-	constructor(position) {
-		super("sprites/bat.png", position, 0.5, 10, {
+	constructor(props) {
+		super("sprites/bat.png", props, 0.5, 10, {
 			frameWidth: 40,
 			walkFrames: 4,
 			attackFrames: 0,
@@ -40684,15 +40673,11 @@ class Bat extends Enemy {
 		this.translateZ(-0.1);
 		this.removeDead = true;
 	}
-
-	static entityIds() {
-		return [0x19, 0x26, 0x2B]
-	}
 }
 
 class Mage extends Enemy {
-	constructor(position) {
-		super("sprites/mage.png", position, 0.5, 5, {
+	constructor(props) {
+		super("sprites/mage.png", props, 0.5, 5, {
 			frameWidth: 56,
 			walkFrames: 2,
 			attackFrames: 1,
@@ -40700,26 +40685,28 @@ class Mage extends Enemy {
 		});
 		this.scale.x = 56/64;
 	}
-
-	static entityIds() {
-		return [0x1B, 0x28, 0x2D]
-	}
 }
 
 class Demon extends Enemy {
-	constructor(position) {
-		super("sprites/demon.png", position, 0.75, 5, {
+	constructor(props) {
+		super("sprites/demon.png", props, 0.75, 5, {
 			frameWidth: 64,
 			walkFrames: 4,
 			attackFrames: 3,
 			deathFrames: 4
 		});
 	}
-
-	static entityIds() {
-		return [0x1A, 0x27, 0x2C]
-	}
 }
+
+
+var enemies = Object.freeze({
+	Enemy: Enemy,
+	Orc: Orc,
+	Troll: Troll,
+	Bat: Bat,
+	Mage: Mage,
+	Demon: Demon
+});
 
 const vertexShader = `
 varying vec3 vNormal;
@@ -40955,6 +40942,61 @@ class Door extends Mesh {
 	}
 }
 
+class ExplodingWall extends Object3D {
+	constructor(position) {
+		super();
+		const geometry = new BoxBufferGeometry(1, 1, 1);
+		geometry.rotateX(Math.PI / 2);
+		const texture = textureCache.get("walls/exploding.png", texture => {
+			this.box.material.map = new SpriteSheetProxy(texture, 64, 3);
+			this.box.material.needsUpdate = true;
+		});
+		const material = new MeshBasicMaterial({map: texture, transparent: true});
+		this.position.copy(position);
+		this.box = new Mesh(geometry, material);
+		this.duration = 1/3;
+		this.adjacent = [];
+	}
+
+	ignite(time) {
+		if (this.isExploding()) {
+			return
+		}
+		this.ignition = time;
+		this.children.forEach(mesh => mesh.shouldRemove = true);
+		this.add(this.box);
+	}
+
+	igniteAdjacent(time) {
+		this.adjacent.forEach(e => e.ignite(time));
+		this.adjacentsIgnited = true;
+	}
+
+	isExploding() {
+		return !!this.ignition
+	}
+
+	onDamage(time) {
+		this.ignite(time);
+	}
+
+	update(time) {
+		if (this.isExploding()) {
+			const timeDelta = time - this.ignition;
+			if (timeDelta > this.duration) {
+				this.shouldRemove = true;
+			} else {
+				const texture = this.box.material.map;
+				const frame = Math.floor(timeDelta * texture.frames / this.duration);
+				this.box.material.map.setFrame(frame);
+				if (!this.adjacentsIgnited && timeDelta > this.duration / texture.frames) {
+					this.igniteAdjacent(time);
+				}
+			}
+		}
+	}
+}
+
 class FloorGeometry extends PlaneGeometry {
 	constructor(position) {
 		super(1, 1);
@@ -40963,28 +41005,26 @@ class FloorGeometry extends PlaneGeometry {
 }
 
 class WallGeometry extends PlaneGeometry {
-	constructor(position, direction) {
+	constructor(direction, position) {
 		super(1, 1);
 		this.rotateX(Math.PI / 2);
 		this.translate(0, -0.5, 0);
-		const coeffs = {
-			west: -1,
-			south: 0,
-			east: 1,
-			north: 2
-		};
-		this.rotateZ(coeffs[direction] * Math.PI / 2);
-		this.translate(position.x, position.y, 0);
+		const directions = ["south", "east", "north", "west"];
+		this.rotateZ(directions.indexOf(direction) * Math.PI / 2);
+		if (position) {
+			this.translate(position.x, position.y, 0);
+		}
 	}
 }
 
 class Item extends Sprite {
-	constructor(name, position, ...itemFrames) {
+	constructor(props, ...itemFrames) {
 		super();
+		this.name = props.type;
+		const pos = props.position;
+		this.position.set(pos[0], pos[1], pos[2] || 0);
 		const scale = 0.6;
-		this.name = name;
 		this.scale.multiplyScalar(scale);
-		this.position.copy(position);
 		this.translateZ(-(1-scale)/2);
 		this.itemFrames = itemFrames;
 		this.material.fog = true;
@@ -41016,58 +41056,148 @@ class Item extends Sprite {
 	}
 }
 
-class Bolt extends Item {
-	constructor(position) {
-		super("bolt", position, 0, 1);
+function simpleItem(...itemFrames) {
+	return class extends Item {
+		constructor(props) {
+			super(props, ...itemFrames);
+		}
 	}
 }
 
-class Nuke extends Item {
-	constructor(position) {
-		super("nuke", position, 2, 3);
-	}
+const Bolt = simpleItem(0, 1);
+const Nuke = simpleItem(2, 3);
+const Potion = simpleItem(4);
+const RedKey = simpleItem(5);
+const YellowKey = simpleItem(6);
+const GreenKey = simpleItem(7);
+const BlueKey = simpleItem(8);
+const Scroll = simpleItem(9);
+const Treasure = simpleItem(10);
+
+
+var items = Object.freeze({
+	Item: Item,
+	Bolt: Bolt,
+	Nuke: Nuke,
+	Potion: Potion,
+	RedKey: RedKey,
+	YellowKey: YellowKey,
+	GreenKey: GreenKey,
+	BlueKey: BlueKey,
+	Scroll: Scroll,
+	Treasure: Treasure
+});
+
+function connectAdjacent(objects, obj, x, y, filterFunc) {
+	[
+		objects[[x-1, y]],
+		objects[[x+1, y]],
+		objects[[x, y-1]],
+		objects[[x, y+1]]
+	]
+	.filter(e => e !== undefined)
+	.filter(filterFunc || (e => true))
+	.forEach(neighbor => {
+		obj.adjacent.push(neighbor);
+		neighbor.adjacent.push(obj);
+	});
+	objects[[x, y]] = obj;
 }
 
-class Potion extends Item {
-	constructor(position) {
-		super("potion", position, 4);
-	}
+function createWallMeshes(geometryDict) {
+	return Object.keys(geometryDict).map(name => {
+		const geometry = new BufferGeometry().fromGeometry(geometryDict[name]);
+		const texture = textureCache.get("walls/" + name + ".png");
+		texture.anisotropy = 8;
+		const material = new CustomMaterial({map: texture});
+		return new Mesh(geometry, material)
+	})
 }
 
-class RedKey extends Item {
-	constructor(position) {
-		super("redKey", position, 5);
-	}
+function mergeWallGeometry(tile, adjacentTiles, geometryDict, position) {
+	geometryDict = geometryDict || {};
+	const variants = {
+		light: ["east", "west"],
+		dark: ["north", "south"]
+	};
+	Object.keys(variants).forEach(v => {
+		const name = tile.value + "_" + v;
+		variants[v].forEach(face => {
+			if (adjacentTiles[face] && adjacentTiles[face].type != tile.type) {
+				geometryDict[name] = geometryDict[name] || new Geometry();
+				geometryDict[name].merge(new WallGeometry(face, position));
+			}
+		});
+	});
+	return geometryDict
 }
 
-class YellowKey extends Item {
-	constructor(position) {
-		super("yellowKey", position, 6);
+function constructLayout(map, parent) {
+	const doors = {};
+	const explodingWalls = {};
+	const floor = new Geometry();
+	const walls = {};
+
+	// TODO: attach these methods somewhere else
+	map.getTile = function(x, y) {
+		try {
+			const symbol = this.layout[this.height-1-y][x];
+			return this.legend[symbol]
+		} catch (ex) {
+			return null
+		}
+	};
+
+	map.adjacentTiles = function(x, y) {
+		return {
+			east: this.getTile(x+1, y),
+			west: this.getTile(x-1, y),
+			north: this.getTile(x, y+1),
+			south: this.getTile(x, y-1)
+		}
+	};
+
+	for (let x = 0; x < map.width; x++) {
+		for (let y = 0; y < map.height; y++) {
+			const position = new Vector2(x, y);
+			const tile = map.getTile(x, y);
+			if (tile.type == "wall") {
+				mergeWallGeometry(tile, map.adjacentTiles(x, y), walls, position);
+			} else if (tile.type == "exploding_wall") {
+				const wall = new ExplodingWall(position);
+				wall.add(...createWallMeshes(mergeWallGeometry(tile, map.adjacentTiles(x, y))));
+				connectAdjacent(explodingWalls, wall, x, y);
+				parent.add(wall);
+			} else if (tile.type == "door") {
+				const door = new Door(tile.value, position);
+				connectAdjacent(doors, door, x, y, d => d.color == door.color);
+				parent.add(door);
+			}
+			if (tile.type != "wall") {
+				floor.merge(new FloorGeometry(position));
+			}
+		}
 	}
+
+	// add floor geometry to scene
+	const material = new CustomMaterial({color: 0x555555, clampColor: false, pixelate: 0});
+	parent.add(new Mesh(new BufferGeometry().fromGeometry(floor), material));
+
+	// add aggregate wall geometries to scene
+	parent.add(...createWallMeshes(walls));
 }
 
-class GreenKey extends Item {
-	constructor(position) {
-		super("greenKey", position, 7);
-	}
-}
-
-class BlueKey extends Item {
-	constructor(position) {
-		super("blueKey", position, 8);
-	}
-}
-
-class Scroll extends Item {
-	constructor(position) {
-		super("scroll", position, 9);
-	}
-}
-
-class Treasure extends Item {
-	constructor(position) {
-		super("treasure", position, 10);
-	}
+function spawnEntities(map, parent) {
+	const entityClasses = Object.assign({}, enemies, items, {JumpGate: JumpGate, WarpGate: WarpGate});
+	map.entities.forEach(entity => {
+		const position = new Vector3(entity.position[0], entity.position[1], 0);
+		const entityClass = entityClasses[entity.type];
+		if (entityClass) {
+			parent.add(new entityClass(entity));
+		} else {
+			console.warn("class not found for", entity.type, "at", position);
+		}
+	});
 }
 
 class Player extends Entity {
@@ -41122,8 +41252,9 @@ class Player extends Entity {
 			return false
 		} else if (obj instanceof Door) {
 			return !this.unlockDoor(obj)
-		} else if (obj instanceof Teleporter) {
-			this.teleportTo = obj.sibling.position.clone().add(this.velocity.clone().normalize().multiplyScalar(2/3));
+		} else if (obj instanceof JumpGate) {
+			const forward = this.velocity.clone().normalize().multiplyScalar(2/3);
+			this.warpToPosition = obj.destination.clone().add(forward);
 			return false
 		}
 		return true
@@ -41134,11 +41265,11 @@ class Player extends Entity {
 		if (item instanceof Treasure) {
 			this.score += 100;  // * level number
 		} else {
-			// play sound
-			if (this.inventory[item.name] === undefined) {
-				this.inventory[item.name] = 0;
+			const name = item.name[0].toLowerCase() + item.name.slice(1); // FIXME
+			if (this.inventory[name] === undefined) {
+				this.inventory[name] = 0;
 			}
-			this.inventory[item.name] += 1;
+			this.inventory[name] += 1;
 		}
 		item.pickup();
 	}
@@ -41433,363 +41564,21 @@ Vector3.prototype.copy = function(v) {
 	return this
 };
 
-const doorTypeMap = {
-	0x14: "red",
-	0x18: "yellow",
-	0x1C: "green",
-	0x20: "blue"
-};
-
-const wallTypeMap = {
-	0x01: "stone",
-	0x02: "slime",
-	0x03: "white",
-	0x04: "blood",
-	0x05: "tar",
-	0x06: "gold",
-	0x07: "hell"
-};
-
-function getWallName(type, direction) {
-	const suffix = ["north", "south"].includes(direction) ? "dark" : "light";
-	return wallTypeMap[type] + "_" + suffix
-}
-
-const PLAYER_START_NORTH = 0x01;
-const PLAYER_START_EAST = 0x02;
-const PLAYER_START_SOUTH = 0x03;
-const PLAYER_START_WEST = 0x04;
-const PLAYER_START_SET = new Set([PLAYER_START_NORTH, PLAYER_START_EAST, PLAYER_START_SOUTH, PLAYER_START_WEST]);
-
-const TELEPORTER_A = 0x1F;
-const TELEPORTER_B = 0x20;
-const TELEPORTER_C = 0x21;
-const TELEPORTER_SET = new Set([TELEPORTER_A, TELEPORTER_B, TELEPORTER_C]);
-
-class ExplodingWall extends Object3D {
-	constructor(position) {
-		super();
-		const geometry = new BoxBufferGeometry(1, 1, 1);
-		geometry.rotateX(Math.PI / 2);
-		const texture = textureCache.get("walls/exploding.png", texture => {
-			this.box.material.map = new SpriteSheetProxy(texture, 64, 3);
-			this.box.material.needsUpdate = true;
-		});
-		const material = new MeshBasicMaterial({map: texture, transparent: true});
-		this.position.copy(position);
-		this.box = new Mesh(geometry, material);
-		this.duration = 1/3;
-		this.adjacent = [];
-	}
-
-	ignite(time) {
-		if (this.isExploding()) {
-			return
-		}
-		this.ignition = time;
-		this.children.forEach(mesh => mesh.shouldRemove = true);
-		this.add(this.box);
-	}
-
-	igniteAdjacent(time) {
-		this.adjacent.forEach(e => e.ignite(time));
-		this.adjacentsIgnited = true;
-	}
-
-	isExploding() {
-		return !!this.ignition
-	}
-
-	onDamage(time) {
-		this.ignite(time);
-	}
-
-	update(time) {
-		if (this.isExploding()) {
-			const timeDelta = time - this.ignition;
-			if (timeDelta > this.duration) {
-				this.shouldRemove = true;
-			} else {
-				const texture = this.box.material.map;
-				const frame = Math.floor(timeDelta * texture.frames / this.duration);
-				this.box.material.map.setFrame(frame);
-				if (!this.adjacentsIgnited && timeDelta > this.duration / texture.frames) {
-					this.igniteAdjacent(time);
-				}
-			}
-		}
-	}
-}
-
-class Tile {
-	constructor(map, index, position, layout, entity) {
-		this.map = map;
-		this.index = index;
-		this.position = position;
-		this.layout = layout;
-		this.entity = entity;
-	}
-
-	adjacentTiles() {
-		// TODO: Tile should not be aware of how data is laid out in Map
-		return [
-			this.index - 1,
-			this.index + 1,
-			this.index - this.map.width,
-			this.index + this.map.width
-		]
-		.filter(idx => 0 <= idx && idx < this.map.size())
-		.map(idx => this.map.tileAt(idx))
-	}
-
-	directionTo(other) {
-		const tx = this.position.x;
-		const ty = this.position.y;
-		const ox = other.position.x;
-		const oy = other.position.y;
-		if (tx < ox && ty == oy) {
-			return "east"
-		} else if (tx > ox && ty == oy) {
-			return "west"
-		} else if (ty < oy && tx == ox) {
-			return "north"
-		} else if (ty > oy && tx == ox) {
-			return "south"
-		}
-		return null
-	}
-
-	isDoor() {
-		return doorTypeMap[this.layout] !== undefined
-	}
-
-	isFloor() {
-		return !(this.isDoor() || this.isWall() || this.isExplodable())
-	}
-
-	isWall() {
-		return wallTypeMap[this.layout] !== undefined
-	}
-
-	isExplodable() {
-		return wallTypeMap[this.layout-7] !== undefined
-	}
-}
-
-function isStartOrTeleport(tile) {
-	return PLAYER_START_SET.has(tile.entity) || TELEPORTER_SET.has(tile.entity)
-}
-
-class TileMap {
-	constructor(bytes) {
-		this.width = bytes[0];
-		this.height = bytes[1];
-		this.layout = bytes.slice(2, this.size() + 2);
-		this.entities = bytes.slice(this.size() + 2);
-	}
-
-	positionAt(index) {
-		let x = index % this.width;
-		let y = this.height - Math.floor(index / this.width);
-		return new Vector2(x, y)
-	}
-
-	size() {
-		return this.width * this.height
-	}
-
-	tileAt(index) {
-		return new Tile(this, index, this.positionAt(index), this.layout[index], this.entities[index])
-	}
-
-	tiles() {
-		const tiles = [];
-		for (let i = 0; i < this.size(); i++) {
-			tiles.push(this.tileAt(i));
-		}
-		return tiles
-	}
-}
-
-function setupMaze(map, scene) {
-	const mapTiles = map.tiles();
-
-	const immutable = new Group();
-	const explodable = new Group();
-
-	const doors = Array(map.size());
-	const explodingWalls = Array(map.size());
-
-	const floorGeometry = new Geometry();
-	const wallGeometry = new Map();
-
-	const visited = Array(map.size()).fill(false);
-	const queue = mapTiles.filter(isStartOrTeleport);
-	queue.forEach(tile => visited[tile.index] = true);
-
-	while (queue.length) {
-		const tile = queue.shift();
-		const adjacent = tile.adjacentTiles();
-		const walls = adjacent.filter(t => t.isWall());
-
-		floorGeometry.merge(new FloorGeometry(tile.position));
-
-		// add static wall geometry
-		walls.forEach(wall => {
-			const dir = wall.directionTo(tile);
-			const name = getWallName(wall.layout, dir);
-			if (!wallGeometry.has(name)) {
-				wallGeometry.set(name, new Geometry());
-			}
-			wallGeometry.get(name).merge(new WallGeometry(wall.position, dir));
-		});
-
-		// doors
-		if (tile.isDoor()) {
-			const color = doorTypeMap[tile.layout];
-			const door = new Door(color, tile.position);
-			doors[tile.index] = door;
-			scene.add(door);
-		}
-
-		// add explodeable wall geometry
-		if (tile.isExplodable()) {
-			const explodingWall = new ExplodingWall(tile.position);
-			adjacent.filter(a => a.isDoor() || a.isFloor()).forEach(floor => {
-				const dir = tile.directionTo(floor);
-				const name = getWallName(tile.layout-7, dir);
-				const geometry = new WallGeometry(new Vector2(), dir);
-				const bufferGeometry = new BufferGeometry().fromGeometry(geometry);
-				const texture = textureCache.get("walls/" + name + ".png");
-				texture.anisotropy = 8;
-				const material = new CustomMaterial({map: texture});
-				const mesh = new Mesh(bufferGeometry, material);
-				explodingWall.add(mesh);
-			});
-			explodingWalls[tile.index] = explodingWall;
-			explodable.add(explodingWall);
-		}
-
-		// enqueue adjacent floor tiles that haven't been visited yet
-		const unvisited_floors = adjacent.filter(t => !t.isWall()).filter(t => !visited[t.index]);
-		unvisited_floors.forEach(tile => {
-			queue.push(tile);
-			visited[tile.index] = true;
-		});
-	}
-
-	for (let i = 0; i < doors.length; i++) {
-		const door = doors[i];
-		if (door) {
-			const tile = mapTiles[i];
-			for (let k of tile.adjacentTiles().map(t => t.index)) {
-				if (doors[k] && doors[k].color == door.color) {
-					door.adjacent.push(doors[k]);
-				}
-			}
-		}
-	}
-
-	for (let i = 0; i < explodingWalls.length; i++) {
-		const expWall = explodingWalls[i];
-		if (expWall) {
-			const tile = mapTiles[i];
-			for (let k of tile.adjacentTiles().map(t => t.index)) {
-				if (explodingWalls[k]) {
-					expWall.adjacent.push(explodingWalls[k]);
-				}
-			}
-		}
-	}
-
-	// add floor geometry to scene
-	const material = new CustomMaterial({color: 0x555555, clampColor: false, pixelate: 0});
-	immutable.add(new Mesh(new BufferGeometry().fromGeometry(floorGeometry), material));
-
-	// add aggregate wall geometries to scene
-	wallGeometry.forEach((geometry, name) => {
-		const bufferGeometry = new BufferGeometry().fromGeometry(geometry);
-		const texture = textureCache.get("walls/" + name + ".png");
-		texture.anisotropy = 8;
-		const material = new CustomMaterial({map: texture});
-		const mesh = new Mesh(bufferGeometry, material);
-		mesh.name = name;
-		immutable.add(mesh);
-	});
-	scene.add(immutable, explodable);
-}
-
 function setupPlayerSpawn(map, player) {
-	const spawn = map.tiles().filter(t => PLAYER_START_SET.has(t.entity))[0];
-	player.position.copy(spawn.position);
+	const pos = map.playerStart.position;
+	const dir = map.playerStart.direction;
+	player.position.set(pos[0], pos[1], 0);
 	const target = player.position.clone();
-	switch (spawn.entity) {
-		case PLAYER_START_NORTH: target.y += 1; break
-		case PLAYER_START_EAST: target.x += 1; break
-		case PLAYER_START_SOUTH: target.y -= 1; break
-		case PLAYER_START_WEST: target.x -= 1; break
-	}
+	target.x += dir[0];
+	target.y += dir[1];
 	player.lookAt(target);
 }
 
-function addPortals(map, scene) {
-	const portalTiles = map.tiles().filter(t => [0x18, 0x1F, 0x20, 0x21].includes(t.entity));
-	const teleporters = {};
-	for (let tile of portalTiles) {
-		if (tile.entity == 0x18) {
-			scene.add(new Portal(tile.position));
-		} else {
-			const sibling = teleporters[tile.entity];
-			if (sibling) {
-				scene.add(new Teleporter(tile.position, sibling));
-			} else {
-				const teleporter = new Teleporter(tile.position);
-				scene.add(teleporter);
-				teleporters[tile.entity] = teleporter;
-			}
-		}
-	}
-}
-
-function addEnemies(map, scene) {
-	const enemies = [Orc, Troll, Bat, Mage, Demon];
-	const mapTiles = map.tiles();
-	enemies.forEach(enemy => {
-		const spawnPoints = mapTiles.filter(t => enemy.entityIds().includes(t.entity));
-		spawnPoints.forEach(spawn => scene.add(new enemy(spawn.position)));
-	});
-}
-
-function addItems(map, scene) {
-	const items = {
-		0x05: Bolt,
-		0x06: Nuke,
-		0x07: Potion,
-		0x08: RedKey,
-		0x09: YellowKey,
-		0x0A: GreenKey,
-		0x0B: BlueKey,
-		0x0C: Scroll,
-		0x0D: Scroll,
-		0x0E: Scroll,
-		0x0F: Scroll,
-		0x10: Scroll,
-		0x11: Scroll,
-		0x12: Scroll,
-		0x13: Scroll,
-		0x15: Treasure
-	};
-	map.tiles().forEach(tile => {
-		const item = items[tile.entity];
-		if (item) {
-			scene.add(new item(tile.position));
-		}
-	});
-}
-
 class Game {
-	constructor(container, mapName, player) {
+	constructor(container, location, mapName, player) {
 		this.container = container;
+		this.location = location;
+
 		this.mapName = mapName;
 		this.player = player || new Player();
 
@@ -41854,14 +41643,14 @@ class Game {
 		});
 		objectsToRemove.forEach(obj => obj.parent.remove(obj));
 
-		if (this.player.teleportTo) {
+		if (this.player.warpToPosition) {
 			this.transitionStart = time;
 
 			// render to first FBO
 			this.renderer.render(this.scene, this.player.camera, this.fbo1, true);
 
-			this.player.position.copy(this.player.teleportTo);
-			this.player.teleportTo = null;
+			this.player.position.copy(this.player.warpToPosition);
+			this.player.warpToPosition = null;
 		}
 
 		const transitionDelta = time - this.transitionStart;
@@ -41878,6 +41667,14 @@ class Game {
 		} else {
 			this.player.frozen = false;
 			this.renderer.render(this.scene, this.player.camera);
+		}
+
+		const pos = this.player.position;
+		const tile = this.map.getTile(Math.round(pos.x), Math.round(pos.y));
+		if (tile && tile.type == "floor") {
+			this.location.innerText = tile.value || "";
+		} else {
+			this.location.innerText = "";
 		}
 
 		if (this.isActive) {
@@ -41916,22 +41713,18 @@ class Game {
 		});
 
 		const that = this;
-		fetch("maps/" + this.mapName + ".c3dmap")
+		fetch("maps/" + this.mapName + ".map.json")
 		.then(function(response) {
-			return response.arrayBuffer()
+			return response.json()
 		})
-		.then(function(buffer) {
-			// TODO: Game should not be aware of map format
-			const map = new TileMap(new Uint8Array(buffer));
-			console.log("map dimensions: " + map.width + "x" + map.height);
-			const hellish = map.layout.includes(7);
-			const fogColor = hellish ? 0x330000 : 0x000000; // hell gets red tint
-			that.scene.fog = new Fog(fogColor, 1, Math.max(40, 1.25 * Math.max(map.width, map.height)));
-			setupMaze(map, that.maze);
+		.then(function(map) {
+			that.map = map;
+			if (map.fog) {
+				that.scene.fog = new Fog(map.fog.color, map.fog.near, map.fog.far);
+			}
+			constructLayout(map, that.maze);
+			spawnEntities(map, that.maze);
 			setupPlayerSpawn(map, that.player);
-			addPortals(map, that.maze);
-			addEnemies(map, that.maze);
-			addItems(map, that.maze);
 			that.scene.add(that.maze);
 			that.play();
 		});

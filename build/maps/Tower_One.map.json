@@ -1,0 +1,583 @@
+{
+	"title": "Tower One",
+	"levelNumber": 6,
+	"width": 40,
+	"height": 28,
+	"layout": [
+		"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+		"ABBBBAAABBBBBBBBBBBBBBBBBBBBBBAAABBBBBBA",
+		"ABBBBAAABBBBBBBBBBBBBBBBBBBBBBAAABBBBBBA",
+		"ABBBBAAABBBBBBBBBBBBBBBBBBBBBBAAABBBBBBA",
+		"ABBBBAAABBAAACCCCCCCCCCCCAAABBAAABBBBBBA",
+		"ABBBBAAABBAAADDDDDDDDDDDDAAABBBBBBBBBBBA",
+		"ABBBBBBBBBAAAAAAAAAAAAAAAAAABBBBBBBBBBBA",
+		"ABBBBBBBBBAAABBBBBBBBBBBBAAABBAAABBAACCA",
+		"AAABBAAABBAAABBBBBBBBBBBBAAABBAAABBAACCA",
+		"AAABBAAABBAAABBBBBBBBBBBBAAABBAAABBADDDA",
+		"AAABBAAABBAAABBAAABBAAABBAAABBAAABBADDDA",
+		"AAABBAAABBAAABBAAABBAAABBAAABBAAABBAAAAA",
+		"ABBBBAAABBAAABBAAABBAAABBAAABBAAABBBBBBA",
+		"ABBBBAAABBAAABBAAAAAAAABBAAABBAAABBBBBBA",
+		"ABBBBAAABBBBBBBAAADDAAABBBBBBBAAABBBBBBA",
+		"ABBBBAAABBBBBBBAAACCAAABBBBBBBAAABBBBBBA",
+		"ABBAAAAABBBBBBBEFGHHHAABBBBBBBAAAAAAABBA",
+		"ABBAAAAABBBBBBBEFGHHHAABBBBBBBAAAAAAABBA",
+		"ABBAAAAABBBBBBBEFGHHHAABBBBBBBAAAAAAABBA",
+		"ABBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBA",
+		"AIIIIAAAAAAAAAAAAAAAAAAAAAAAAAAAAJJJJJJA",
+		"KLLLLKKKKKKKKKKKKKKMMMMMMMMMMMMMMNNNNNNM",
+		"KLLLLLLLLLLKKKLLLKKMNNNODMNNNNNNNNNNNNNM",
+		"KKKLLLLLLLLKKKLLLKKMNNNODMNNNNNNNNNNMMMM",
+		"KKKLLKKKLLLKKKLLLKKMNNNMMMNNNMMMNNNNMMMM",
+		"KKKLLKDPLLLLLLLLLKKMNNNNNNNNNMMMNNNNMMMM",
+		"KKKLLKDPLLLLLLLLLKKMNNNNNNNNNMMMNNNNMMMM",
+		"KKKKKKKKKKKKKKKKKKKMMMMMMMMMMMMMMMMMMMMM"
+	],
+	"legend": {
+		"A": {
+			"type": "wall",
+			"value": "gold"
+		},
+		"B": {
+			"type": "floor",
+			"value": "Tower Corridors"
+		},
+		"C": {
+			"type": "exploding_wall",
+			"value": "gold"
+		},
+		"D": {
+			"type": "floor",
+			"value": "Hidden Area"
+		},
+		"E": {
+			"type": "door",
+			"value": "green"
+		},
+		"F": {
+			"type": "floor"
+		},
+		"G": {
+			"type": "door",
+			"value": "blue"
+		},
+		"H": {
+			"type": "floor",
+			"value": "Gate Room"
+		},
+		"I": {
+			"type": "door",
+			"value": "yellow"
+		},
+		"J": {
+			"type": "door",
+			"value": "red"
+		},
+		"K": {
+			"type": "wall",
+			"value": "white"
+		},
+		"L": {
+			"type": "floor",
+			"value": "Bright Room"
+		},
+		"M": {
+			"type": "wall",
+			"value": "stone"
+		},
+		"N": {
+			"type": "floor",
+			"value": "Dark Chamber"
+		},
+		"O": {
+			"type": "exploding_wall",
+			"value": "stone"
+		},
+		"P": {
+			"type": "exploding_wall",
+			"value": "white"
+		}
+	},
+	"playerStart": {
+		"position": [
+			18,
+			17
+		],
+		"direction": [
+			0,
+			1
+		]
+	},
+	"entities": [
+		{
+			"type": "RedKey",
+			"position": [
+				1,
+				26
+			]
+		},
+		{
+			"type": "YellowKey",
+			"position": [
+				38,
+				26
+			]
+		},
+		{
+			"type": "Orc",
+			"position": [
+				3,
+				25
+			],
+			"minDifficulty": 2
+		},
+		{
+			"type": "Orc",
+			"position": [
+				10,
+				25
+			],
+			"minDifficulty": 1
+		},
+		{
+			"type": "Orc",
+			"position": [
+				19,
+				25
+			]
+		},
+		{
+			"type": "Orc",
+			"position": [
+				25,
+				25
+			],
+			"minDifficulty": 2
+		},
+		{
+			"type": "Orc",
+			"position": [
+				37,
+				25
+			],
+			"minDifficulty": 2
+		},
+		{
+			"type": "Orc",
+			"position": [
+				36,
+				24
+			],
+			"minDifficulty": 2
+		},
+		{
+			"type": "Orc",
+			"position": [
+				2,
+				23
+			],
+			"minDifficulty": 2
+		},
+		{
+			"type": "Orc",
+			"position": [
+				36,
+				23
+			]
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				13,
+				22
+			],
+			"value": 600
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				14,
+				22
+			],
+			"value": 600
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				15,
+				22
+			],
+			"value": 600
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				16,
+				22
+			],
+			"value": 600
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				17,
+				22
+			],
+			"value": 600
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				18,
+				22
+			],
+			"value": 600
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				19,
+				22
+			],
+			"value": 600
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				20,
+				22
+			],
+			"value": 600
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				21,
+				22
+			],
+			"value": 600
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				22,
+				22
+			],
+			"value": 600
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				23,
+				22
+			],
+			"value": 600
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				24,
+				22
+			],
+			"value": 600
+		},
+		{
+			"type": "Orc",
+			"position": [
+				3,
+				20
+			]
+		},
+		{
+			"type": "Orc",
+			"position": [
+				23,
+				20
+			],
+			"minDifficulty": 2
+		},
+		{
+			"type": "Orc",
+			"position": [
+				18,
+				19
+			],
+			"minDifficulty": 2
+		},
+		{
+			"type": "Orc",
+			"position": [
+				28,
+				18
+			],
+			"minDifficulty": 1
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				36,
+				18
+			],
+			"value": 600
+		},
+		{
+			"type": "Potion",
+			"position": [
+				37,
+				18
+			]
+		},
+		{
+			"type": "Potion",
+			"position": [
+				38,
+				18
+			]
+		},
+		{
+			"type": "Orc",
+			"position": [
+				13,
+				17
+			]
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				36,
+				17
+			],
+			"value": 600
+		},
+		{
+			"type": "Potion",
+			"position": [
+				37,
+				17
+			]
+		},
+		{
+			"type": "Potion",
+			"position": [
+				38,
+				17
+			]
+		},
+		{
+			"type": "Orc",
+			"position": [
+				33,
+				16
+			],
+			"minDifficulty": 1
+		},
+		{
+			"type": "Potion",
+			"position": [
+				18,
+				13
+			]
+		},
+		{
+			"type": "Potion",
+			"position": [
+				19,
+				13
+			]
+		},
+		{
+			"type": "Orc",
+			"position": [
+				24,
+				12
+			]
+		},
+		{
+			"type": "Orc",
+			"position": [
+				1,
+				10
+			],
+			"minDifficulty": 1
+		},
+		{
+			"type": "Orc",
+			"position": [
+				11,
+				10
+			],
+			"minDifficulty": 2
+		},
+		{
+			"type": "WarpGate",
+			"position": [
+				20,
+				10
+			],
+			"value": "Tower_Two"
+		},
+		{
+			"type": "Orc",
+			"position": [
+				37,
+				10
+			],
+			"minDifficulty": 1
+		},
+		{
+			"type": "Orc",
+			"position": [
+				2,
+				6
+			],
+			"minDifficulty": 2
+		},
+		{
+			"type": "Orc",
+			"position": [
+				35,
+				6
+			]
+		},
+		{
+			"type": "BlueKey",
+			"position": [
+				16,
+				5
+			]
+		},
+		{
+			"type": "GreenKey",
+			"position": [
+				20,
+				5
+			]
+		},
+		{
+			"type": "Nuke",
+			"position": [
+				24,
+				5
+			]
+		},
+		{
+			"type": "Orc",
+			"position": [
+				32,
+				5
+			],
+			"minDifficulty": 2
+		},
+		{
+			"type": "Orc",
+			"position": [
+				6,
+				4
+			]
+		},
+		{
+			"type": "Orc",
+			"position": [
+				15,
+				4
+			],
+			"minDifficulty": 2
+		},
+		{
+			"type": "Nuke",
+			"position": [
+				24,
+				4
+			]
+		},
+		{
+			"type": "Orc",
+			"position": [
+				21,
+				3
+			],
+			"minDifficulty": 2
+		},
+		{
+			"type": "Bolt",
+			"position": [
+				6,
+				2
+			]
+		},
+		{
+			"type": "Orc",
+			"position": [
+				13,
+				2
+			]
+		},
+		{
+			"type": "Orc",
+			"position": [
+				23,
+				2
+			]
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				3,
+				1
+			],
+			"value": 600
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				4,
+				1
+			],
+			"value": 600
+		},
+		{
+			"type": "Bolt",
+			"position": [
+				6,
+				1
+			]
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				32,
+				1
+			],
+			"value": 600
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				33,
+				1
+			],
+			"value": 600
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				34,
+				1
+			],
+			"value": 600
+		},
+		{
+			"type": "Treasure",
+			"position": [
+				35,
+				1
+			],
+			"value": 600
+		}
+	],
+	"fog": {
+		"color": 0,
+		"near": 1,
+		"far": 50
+	}
+}

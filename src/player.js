@@ -1,6 +1,6 @@
 import { Audio, PerspectiveCamera, PointLight, Sprite, SpriteMaterial, Vector3 } from "three"
 import { audioListener, audioLoader } from "./audio"
-import { Entity, Fireball, Teleporter } from "./entities"
+import { Entity, Fireball, JumpGate } from "./entities"
 import { Door } from "./environment"
 import { Item, Treasure } from "./items"
 import { SpriteSheetProxy, textureCache } from "./utils"
@@ -57,8 +57,9 @@ export class Player extends Entity {
 			return false
 		} else if (obj instanceof Door) {
 			return !this.unlockDoor(obj)
-		} else if (obj instanceof Teleporter) {
-			this.teleportTo = obj.sibling.position.clone().add(this.velocity.clone().normalize().multiplyScalar(2/3))
+		} else if (obj instanceof JumpGate) {
+			const forward = this.velocity.clone().normalize().multiplyScalar(2/3)
+			this.warpToPosition = obj.destination.clone().add(forward)
 			return false
 		}
 		return true
@@ -69,11 +70,11 @@ export class Player extends Entity {
 		if (item instanceof Treasure) {
 			this.score += 100  // * level number
 		} else {
-			// play sound
-			if (this.inventory[item.name] === undefined) {
-				this.inventory[item.name] = 0
+			const name = item.name[0].toLowerCase() + item.name.slice(1) // FIXME
+			if (this.inventory[name] === undefined) {
+				this.inventory[name] = 0
 			}
-			this.inventory[item.name] += 1
+			this.inventory[name] += 1
 		}
 		item.pickup()
 	}
