@@ -118,7 +118,7 @@ type JsonMap struct {
 	Height      uint                 `json:"height"`
 	Layout      []string             `json:"layout"`
 	Legend      map[string]LayoutDef `json:"legend"`
-	PlayerStart PlayerStart          `json:"playerStart"`
+	PlayerStart Entity               `json:"playerStart"`
 	Entities    []Entity             `json:"entities"`
 	Fog         *Fog                 `json:"fog,omitempty"`
 }
@@ -151,7 +151,7 @@ var LayoutDict = map[byte]LayoutDef{
 type Vec2 [2]int
 
 type Entity struct {
-	Type          string      `json:"type"`
+	Type          string      `json:"type,omitempty"`
 	Position      Vec2        `json:"position"`
 	Direction     *Vec2       `json:"direction,omitempty"`
 	Value         interface{} `json:"value,omitempty"`
@@ -159,6 +159,11 @@ type Entity struct {
 }
 
 var EntityDict = map[byte]Entity{
+	0x01: Entity{Type: "PlayerStart", Direction: &Vec2{0, 1}},  // North
+	0x02: Entity{Type: "PlayerStart", Direction: &Vec2{1, 0}},  // East
+	0x03: Entity{Type: "PlayerStart", Direction: &Vec2{0, -1}}, // South
+	0x04: Entity{Type: "PlayerStart", Direction: &Vec2{-1, 0}}, // West
+
 	0x05: Entity{Type: "Bolt"},
 	0x06: Entity{Type: "Nuke"},
 	0x07: Entity{Type: "Potion"},
@@ -202,18 +207,6 @@ var EntityDict = map[byte]Entity{
 	0x2B: Entity{Type: "Bat", MinDifficulty: 2},
 	0x2C: Entity{Type: "Demon", MinDifficulty: 2},
 	0x2D: Entity{Type: "Mage", MinDifficulty: 2},
-}
-
-type PlayerStart struct {
-	Position  Vec2 `json:"position"`
-	Direction Vec2 `json:"direction"`
-}
-
-var StartDict = map[byte]PlayerStart{
-	0x01: PlayerStart{Direction: Vec2{0, 1}},  // North
-	0x02: PlayerStart{Direction: Vec2{1, 0}},  // East
-	0x03: PlayerStart{Direction: Vec2{0, -1}}, // South
-	0x04: PlayerStart{Direction: Vec2{-1, 0}}, // West
 }
 
 type Fog struct {
@@ -268,10 +261,7 @@ func main() {
 			position := Vec2{w, int(m.Height) - 1 - h}
 
 			// Entity (plane 2)
-			if start, exists := StartDict[e]; exists {
-				m.PlayerStart = start
-				m.PlayerStart.Position = position
-			} else if entity, exists := EntityDict[e]; exists {
+			if entity, exists := EntityDict[e]; exists {
 				entity.Position = position
 				if entity.Type == "JumpGate" {
 					if g, exists := jumpGates[entity.Value]; exists {
@@ -306,7 +296,13 @@ func main() {
 					}
 					b = adjacentFloor
 				}
-				m.Entities = append(m.Entities, entity)
+
+				if entity.Type == "PlayerStart" {
+					entity.Type = ""
+					m.PlayerStart = entity
+				} else {
+					m.Entities = append(m.Entities, entity)
+				}
 			} else if e != 0 {
 				panic(fmt.Sprint("unknown entity ", e, " at ", w, h))
 			}
