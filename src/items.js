@@ -5,7 +5,8 @@ import { SpriteSheetProxy, textureCache } from "./utils"
 export class Item extends Sprite {
 	constructor(props, ...itemFrames) {
 		super()
-		this.name = props.type
+		this.name = props.type.toLowerCase()
+		this.soundName = props.soundName
 		const pos = props.position
 		this.position.set(pos[0], pos[1], pos[2] || 0)
 		const scale = 0.6
@@ -13,7 +14,7 @@ export class Item extends Sprite {
 		this.translateZ(-(1-scale)/2)
 		this.itemFrames = itemFrames
 		this.material.fog = true
-		audioLoader.load("sounds/adlib/pickup_" + this.name + ".wav", buffer => {
+		audioLoader.load("sounds/adlib/pickup_" + (this.soundName || this.name) + ".wav", buffer => {
 			this.pickupSound = new PositionalAudio(audioListener)
 			this.pickupSound.setBuffer(buffer)
 			this.add(this.pickupSound)
@@ -41,20 +42,20 @@ export class Item extends Sprite {
 	}
 }
 
-function simpleItem(...itemFrames) {
+function simpleItem(itemFrames, addlProps) {
 	return class extends Item {
 		constructor(props) {
-			super(props, ...itemFrames)
+			super(Object.assign(props, addlProps), ...itemFrames)
 		}
 	}
 }
 
-export const Bolt = simpleItem(0, 1)
-export const Nuke = simpleItem(2, 3)
-export const Potion = simpleItem(4)
-export const RedKey = simpleItem(5)
-export const YellowKey = simpleItem(6)
-export const GreenKey = simpleItem(7)
-export const BlueKey = simpleItem(8)
-export const Scroll = simpleItem(9)
-export const Treasure = simpleItem(10)
+export const Bolt = simpleItem([0, 1])
+export const Nuke = simpleItem([2, 3])
+export const Potion = simpleItem([4])
+export const RedKey = simpleItem([5], {soundName: "key"})
+export const YellowKey = simpleItem([6], {soundName: "key"})
+export const GreenKey = simpleItem([7], {soundName: "key"})
+export const BlueKey = simpleItem([8], {soundName: "key"})
+export const Scroll = simpleItem([9])
+export const Treasure = simpleItem([10])

@@ -41020,7 +41020,8 @@ class WallGeometry extends PlaneGeometry {
 class Item extends Sprite {
 	constructor(props, ...itemFrames) {
 		super();
-		this.name = props.type;
+		this.name = props.type.toLowerCase();
+		this.soundName = props.soundName;
 		const pos = props.position;
 		this.position.set(pos[0], pos[1], pos[2] || 0);
 		const scale = 0.6;
@@ -41028,7 +41029,7 @@ class Item extends Sprite {
 		this.translateZ(-(1-scale)/2);
 		this.itemFrames = itemFrames;
 		this.material.fog = true;
-		audioLoader.load("sounds/adlib/pickup_" + this.name + ".wav", buffer => {
+		audioLoader.load("sounds/adlib/pickup_" + (this.soundName || this.name) + ".wav", buffer => {
 			this.pickupSound = new PositionalAudio(audioListener);
 			this.pickupSound.setBuffer(buffer);
 			this.add(this.pickupSound);
@@ -41056,23 +41057,23 @@ class Item extends Sprite {
 	}
 }
 
-function simpleItem(...itemFrames) {
+function simpleItem(itemFrames, addlProps) {
 	return class extends Item {
 		constructor(props) {
-			super(props, ...itemFrames);
+			super(Object.assign(props, addlProps), ...itemFrames);
 		}
 	}
 }
 
-const Bolt = simpleItem(0, 1);
-const Nuke = simpleItem(2, 3);
-const Potion = simpleItem(4);
-const RedKey = simpleItem(5);
-const YellowKey = simpleItem(6);
-const GreenKey = simpleItem(7);
-const BlueKey = simpleItem(8);
-const Scroll = simpleItem(9);
-const Treasure = simpleItem(10);
+const Bolt = simpleItem([0, 1]);
+const Nuke = simpleItem([2, 3]);
+const Potion = simpleItem([4]);
+const RedKey = simpleItem([5], {soundName: "key"});
+const YellowKey = simpleItem([6], {soundName: "key"});
+const GreenKey = simpleItem([7], {soundName: "key"});
+const BlueKey = simpleItem([8], {soundName: "key"});
+const Scroll = simpleItem([9]);
+const Treasure = simpleItem([10]);
 
 
 var items = Object.freeze({
@@ -41265,7 +41266,7 @@ class Player extends Entity {
 		if (item instanceof Treasure) {
 			this.score += 100;  // * level number
 		} else {
-			const name = item.name[0].toLowerCase() + item.name.slice(1); // FIXME
+			const name = item.name;
 			if (this.inventory[name] === undefined) {
 				this.inventory[name] = 0;
 			}
@@ -41279,7 +41280,7 @@ class Player extends Entity {
 	 * @return {boolean} true if successful, false if player does not have matching key
 	 */
 	unlockDoor(door) {
-		const keyName = door.color + "Key";
+		const keyName = door.color + "key";
 		if (this.inventory[keyName]) {
 			if (door.unlock()) {
 				this.inventory[keyName] -= 1;

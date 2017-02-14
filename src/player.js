@@ -70,7 +70,7 @@ export class Player extends Entity {
 		if (item instanceof Treasure) {
 			this.score += 100  // * level number
 		} else {
-			const name = item.name[0].toLowerCase() + item.name.slice(1) // FIXME
+			const name = item.name
 			if (this.inventory[name] === undefined) {
 				this.inventory[name] = 0
 			}
@@ -84,7 +84,7 @@ export class Player extends Entity {
 	 * @return {boolean} true if successful, false if player does not have matching key
 	 */
 	unlockDoor(door) {
-		const keyName = door.color + "Key"
+		const keyName = door.color + "key"
 		if (this.inventory[keyName]) {
 			if (door.unlock()) {
 				this.inventory[keyName] -= 1
