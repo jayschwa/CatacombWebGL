@@ -84,760 +84,760 @@
 		}
 	},
 	"playerStart": {
-		"position": [
-			1,
-			2
-		],
-		"direction": [
-			1,
-			0
-		]
+		"position": {
+			"x": 1,
+			"y": 2
+		},
+		"direction": {
+			"x": 1,
+			"y": 0
+		}
 	},
 	"entities": [
 		{
 			"type": "Troll",
-			"position": [
-				5,
-				26
-			]
+			"position": {
+				"x": 5,
+				"y": 26
+			}
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				37,
-				26
-			],
+			"position": {
+				"x": 37,
+				"y": 26
+			},
 			"value": 700
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				38,
-				26
-			],
+			"position": {
+				"x": 38,
+				"y": 26
+			},
 			"value": 700
 		},
 		{
 			"type": "Troll",
-			"position": [
-				1,
-				25
-			],
+			"position": {
+				"x": 1,
+				"y": 25
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "Troll",
-			"position": [
-				8,
-				25
-			],
+			"position": {
+				"x": 8,
+				"y": 25
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "JumpGate",
-			"position": [
-				20,
-				25
-			],
-			"value": [
-				7,
-				11
-			]
+			"position": {
+				"x": 20,
+				"y": 25
+			},
+			"value": {
+				"x": 7,
+				"y": 11
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				26,
-				25
-			],
+			"position": {
+				"x": 26,
+				"y": 25
+			},
 			"minDifficulty": 1
 		},
 		{
 			"type": "Troll",
-			"position": [
-				29,
-				25
-			]
+			"position": {
+				"x": 29,
+				"y": 25
+			}
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				37,
-				25
-			],
+			"position": {
+				"x": 37,
+				"y": 25
+			},
 			"value": 700
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				38,
-				25
-			],
+			"position": {
+				"x": 38,
+				"y": 25
+			},
 			"value": 700
 		},
 		{
 			"type": "Troll",
-			"position": [
-				34,
-				24
-			],
+			"position": {
+				"x": 34,
+				"y": 24
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				37,
-				24
-			],
+			"position": {
+				"x": 37,
+				"y": 24
+			},
 			"value": 700
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				38,
-				24
-			],
+			"position": {
+				"x": 38,
+				"y": 24
+			},
 			"value": 700
 		},
 		{
 			"type": "Bolt",
-			"position": [
-				1,
-				23
-			]
+			"position": {
+				"x": 1,
+				"y": 23
+			}
 		},
 		{
 			"type": "Bolt",
-			"position": [
-				2,
-				23
-			]
+			"position": {
+				"x": 2,
+				"y": 23
+			}
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				37,
-				23
-			],
+			"position": {
+				"x": 37,
+				"y": 23
+			},
 			"value": 700
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				38,
-				23
-			],
+			"position": {
+				"x": 38,
+				"y": 23
+			},
 			"value": 700
 		},
 		{
 			"type": "Bolt",
-			"position": [
-				1,
-				22
-			]
+			"position": {
+				"x": 1,
+				"y": 22
+			}
 		},
 		{
 			"type": "Bolt",
-			"position": [
-				2,
-				22
-			]
+			"position": {
+				"x": 2,
+				"y": 22
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				16,
-				22
-			],
+			"position": {
+				"x": 16,
+				"y": 22
+			},
 			"minDifficulty": 1
 		},
 		{
 			"type": "Troll",
-			"position": [
-				26,
-				22
-			],
+			"position": {
+				"x": 26,
+				"y": 22
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				37,
-				22
-			],
+			"position": {
+				"x": 37,
+				"y": 22
+			},
 			"value": 700
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				38,
-				22
-			],
+			"position": {
+				"x": 38,
+				"y": 22
+			},
 			"value": 700
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				29,
-				21
-			],
+			"position": {
+				"x": 29,
+				"y": 21
+			},
 			"value": 700
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				30,
-				21
-			],
+			"position": {
+				"x": 30,
+				"y": 21
+			},
 			"value": 700
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				37,
-				21
-			],
+			"position": {
+				"x": 37,
+				"y": 21
+			},
 			"value": 700
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				38,
-				21
-			],
+			"position": {
+				"x": 38,
+				"y": 21
+			},
 			"value": 700
 		},
 		{
 			"type": "Nuke",
-			"position": [
-				1,
-				20
-			]
+			"position": {
+				"x": 1,
+				"y": 20
+			}
 		},
 		{
 			"type": "Bolt",
-			"position": [
-				2,
-				20
-			]
+			"position": {
+				"x": 2,
+				"y": 20
+			}
 		},
 		{
 			"type": "JumpGate",
-			"position": [
-				9,
-				20
-			],
-			"value": [
-				3,
-				11
-			]
+			"position": {
+				"x": 9,
+				"y": 20
+			},
+			"value": {
+				"x": 3,
+				"y": 11
+			}
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				29,
-				20
-			],
+			"position": {
+				"x": 29,
+				"y": 20
+			},
 			"value": 700
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				30,
-				20
-			],
+			"position": {
+				"x": 30,
+				"y": 20
+			},
 			"value": 700
 		},
 		{
 			"type": "Troll",
-			"position": [
-				20,
-				19
-			],
+			"position": {
+				"x": 20,
+				"y": 19
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				29,
-				19
-			],
+			"position": {
+				"x": 29,
+				"y": 19
+			},
 			"value": 700
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				30,
-				19
-			],
+			"position": {
+				"x": 30,
+				"y": 19
+			},
 			"value": 700
 		},
 		{
 			"type": "Nuke",
-			"position": [
-				1,
-				18
-			]
+			"position": {
+				"x": 1,
+				"y": 18
+			}
 		},
 		{
 			"type": "Nuke",
-			"position": [
-				2,
-				18
-			]
+			"position": {
+				"x": 2,
+				"y": 18
+			}
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				29,
-				18
-			],
+			"position": {
+				"x": 29,
+				"y": 18
+			},
 			"value": 700
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				30,
-				18
-			],
+			"position": {
+				"x": 30,
+				"y": 18
+			},
 			"value": 700
 		},
 		{
 			"type": "Nuke",
-			"position": [
-				1,
-				17
-			]
+			"position": {
+				"x": 1,
+				"y": 17
+			}
 		},
 		{
 			"type": "Nuke",
-			"position": [
-				2,
-				17
-			]
+			"position": {
+				"x": 2,
+				"y": 17
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				16,
-				17
-			],
+			"position": {
+				"x": 16,
+				"y": 17
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				29,
-				17
-			],
+			"position": {
+				"x": 29,
+				"y": 17
+			},
 			"value": 700
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				30,
-				17
-			],
+			"position": {
+				"x": 30,
+				"y": 17
+			},
 			"value": 700
 		},
 		{
 			"type": "Troll",
-			"position": [
-				35,
-				17
-			]
+			"position": {
+				"x": 35,
+				"y": 17
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				1,
-				16
-			],
+			"position": {
+				"x": 1,
+				"y": 16
+			},
 			"minDifficulty": 1
 		},
 		{
 			"type": "Troll",
-			"position": [
-				22,
-				16
-			]
+			"position": {
+				"x": 22,
+				"y": 16
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				25,
-				16
-			],
+			"position": {
+				"x": 25,
+				"y": 16
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				32,
-				16
-			],
+			"position": {
+				"x": 32,
+				"y": 16
+			},
 			"value": 700
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				33,
-				16
-			],
+			"position": {
+				"x": 33,
+				"y": 16
+			},
 			"value": 700
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				34,
-				16
-			],
+			"position": {
+				"x": 34,
+				"y": 16
+			},
 			"value": 700
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				35,
-				16
-			],
+			"position": {
+				"x": 35,
+				"y": 16
+			},
 			"value": 700
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				36,
-				16
-			],
+			"position": {
+				"x": 36,
+				"y": 16
+			},
 			"value": 700
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				37,
-				16
-			],
+			"position": {
+				"x": 37,
+				"y": 16
+			},
 			"value": 700
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				38,
-				16
-			],
+			"position": {
+				"x": 38,
+				"y": 16
+			},
 			"value": 700
 		},
 		{
 			"type": "Troll",
-			"position": [
-				5,
-				15
-			]
+			"position": {
+				"x": 5,
+				"y": 15
+			}
 		},
 		{
 			"type": "Potion",
-			"position": [
-				28,
-				15
-			]
+			"position": {
+				"x": 28,
+				"y": 15
+			}
 		},
 		{
 			"type": "Potion",
-			"position": [
-				29,
-				15
-			]
+			"position": {
+				"x": 29,
+				"y": 15
+			}
 		},
 		{
 			"type": "Potion",
-			"position": [
-				30,
-				15
-			]
+			"position": {
+				"x": 30,
+				"y": 15
+			}
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				32,
-				15
-			],
+			"position": {
+				"x": 32,
+				"y": 15
+			},
 			"value": 700
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				33,
-				15
-			],
+			"position": {
+				"x": 33,
+				"y": 15
+			},
 			"value": 700
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				34,
-				15
-			],
+			"position": {
+				"x": 34,
+				"y": 15
+			},
 			"value": 700
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				35,
-				15
-			],
+			"position": {
+				"x": 35,
+				"y": 15
+			},
 			"value": 700
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				36,
-				15
-			],
+			"position": {
+				"x": 36,
+				"y": 15
+			},
 			"value": 700
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				37,
-				15
-			],
+			"position": {
+				"x": 37,
+				"y": 15
+			},
 			"value": 700
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				38,
-				15
-			],
+			"position": {
+				"x": 38,
+				"y": 15
+			},
 			"value": 700
 		},
 		{
 			"type": "Potion",
-			"position": [
-				28,
-				14
-			]
+			"position": {
+				"x": 28,
+				"y": 14
+			}
 		},
 		{
 			"type": "Potion",
-			"position": [
-				29,
-				14
-			]
+			"position": {
+				"x": 29,
+				"y": 14
+			}
 		},
 		{
 			"type": "Potion",
-			"position": [
-				30,
-				14
-			]
+			"position": {
+				"x": 30,
+				"y": 14
+			}
 		},
 		{
 			"type": "Potion",
-			"position": [
-				28,
-				13
-			]
+			"position": {
+				"x": 28,
+				"y": 13
+			}
 		},
 		{
 			"type": "Potion",
-			"position": [
-				29,
-				13
-			]
+			"position": {
+				"x": 29,
+				"y": 13
+			}
 		},
 		{
 			"type": "Potion",
-			"position": [
-				30,
-				13
-			]
+			"position": {
+				"x": 30,
+				"y": 13
+			}
 		},
 		{
 			"type": "Nuke",
-			"position": [
-				16,
-				12
-			]
+			"position": {
+				"x": 16,
+				"y": 12
+			}
 		},
 		{
 			"type": "Nuke",
-			"position": [
-				17,
-				12
-			]
+			"position": {
+				"x": 17,
+				"y": 12
+			}
 		},
 		{
 			"type": "Nuke",
-			"position": [
-				18,
-				12
-			]
+			"position": {
+				"x": 18,
+				"y": 12
+			}
 		},
 		{
 			"type": "JumpGate",
-			"position": [
-				3,
-				11
-			],
-			"value": [
-				9,
-				20
-			]
+			"position": {
+				"x": 3,
+				"y": 11
+			},
+			"value": {
+				"x": 9,
+				"y": 20
+			}
 		},
 		{
 			"type": "JumpGate",
-			"position": [
-				7,
-				11
-			],
-			"value": [
-				20,
-				25
-			]
+			"position": {
+				"x": 7,
+				"y": 11
+			},
+			"value": {
+				"x": 20,
+				"y": 25
+			}
 		},
 		{
 			"type": "JumpGate",
-			"position": [
-				11,
-				11
-			],
-			"value": [
-				29,
-				2
-			]
+			"position": {
+				"x": 11,
+				"y": 11
+			},
+			"value": {
+				"x": 29,
+				"y": 2
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				26,
-				11
-			],
+			"position": {
+				"x": 26,
+				"y": 11
+			},
 			"minDifficulty": 1
 		},
 		{
 			"type": "Troll",
-			"position": [
-				37,
-				11
-			],
+			"position": {
+				"x": 37,
+				"y": 11
+			},
 			"minDifficulty": 1
 		},
 		{
 			"type": "Troll",
-			"position": [
-				29,
-				10
-			]
+			"position": {
+				"x": 29,
+				"y": 10
+			}
 		},
 		{
 			"type": "WarpGate",
-			"position": [
-				17,
-				9
-			],
+			"position": {
+				"x": 17,
+				"y": 9
+			},
 			"value": "Access_Floor"
 		},
 		{
 			"type": "Troll",
-			"position": [
-				21,
-				8
-			]
+			"position": {
+				"x": 21,
+				"y": 8
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				29,
-				8
-			],
+			"position": {
+				"x": 29,
+				"y": 8
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "Troll",
-			"position": [
-				37,
-				8
-			]
+			"position": {
+				"x": 37,
+				"y": 8
+			}
 		},
 		{
 			"type": "Orc",
-			"position": [
-				14,
-				5
-			],
+			"position": {
+				"x": 14,
+				"y": 5
+			},
 			"minDifficulty": 1
 		},
 		{
 			"type": "Troll",
-			"position": [
-				37,
-				5
-			],
+			"position": {
+				"x": 37,
+				"y": 5
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "RedKey",
-			"position": [
-				2,
-				4
-			]
+			"position": {
+				"x": 2,
+				"y": 4
+			}
 		},
 		{
 			"type": "Orc",
-			"position": [
-				16,
-				4
-			],
+			"position": {
+				"x": 16,
+				"y": 4
+			},
 			"minDifficulty": 1
 		},
 		{
 			"type": "Orc",
-			"position": [
-				5,
-				2
-			],
+			"position": {
+				"x": 5,
+				"y": 2
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "Orc",
-			"position": [
-				10,
-				2
-			],
+			"position": {
+				"x": 10,
+				"y": 2
+			},
 			"minDifficulty": 1
 		},
 		{
 			"type": "Orc",
-			"position": [
-				16,
-				2
-			]
+			"position": {
+				"x": 16,
+				"y": 2
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				23,
-				2
-			],
+			"position": {
+				"x": 23,
+				"y": 2
+			},
 			"minDifficulty": 1
 		},
 		{
 			"type": "JumpGate",
-			"position": [
-				29,
-				2
-			],
-			"value": [
-				11,
-				11
-			]
+			"position": {
+				"x": 29,
+				"y": 2
+			},
+			"value": {
+				"x": 11,
+				"y": 11
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				35,
-				2
-			],
+			"position": {
+				"x": 35,
+				"y": 2
+			},
 			"minDifficulty": 1
 		}
 	],

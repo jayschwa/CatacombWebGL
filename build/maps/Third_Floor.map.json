@@ -99,357 +99,357 @@
 		}
 	},
 	"playerStart": {
-		"position": [
-			26,
-			14
-		],
-		"direction": [
-			1,
-			0
-		]
+		"position": {
+			"x": 26,
+			"y": 14
+		},
+		"direction": {
+			"x": 1,
+			"y": 0
+		}
 	},
 	"entities": [
 		{
 			"type": "Orc",
-			"position": [
-				31,
-				26
-			]
+			"position": {
+				"x": 31,
+				"y": 26
+			}
 		},
 		{
 			"type": "Fireball",
-			"position": [
-				5,
-				25
-			],
-			"direction": [
-				0,
-				1
-			]
+			"position": {
+				"x": 5,
+				"y": 25
+			},
+			"direction": {
+				"x": 0,
+				"y": 1
+			}
 		},
 		{
 			"type": "Potion",
-			"position": [
-				1,
-				23
-			]
+			"position": {
+				"x": 1,
+				"y": 23
+			}
 		},
 		{
 			"type": "WarpGate",
-			"position": [
-				3,
-				23
-			],
+			"position": {
+				"x": 3,
+				"y": 23
+			},
 			"value": "Tower_One"
 		},
 		{
 			"type": "Potion",
-			"position": [
-				30,
-				23
-			]
+			"position": {
+				"x": 30,
+				"y": 23
+			}
 		},
 		{
 			"type": "Potion",
-			"position": [
-				1,
-				22
-			]
+			"position": {
+				"x": 1,
+				"y": 22
+			}
 		},
 		{
 			"type": "Nuke",
-			"position": [
-				18,
-				22
-			]
+			"position": {
+				"x": 18,
+				"y": 22
+			}
 		},
 		{
 			"type": "Orc",
-			"position": [
-				31,
-				21
-			]
+			"position": {
+				"x": 31,
+				"y": 21
+			}
 		},
 		{
 			"type": "Bolt",
-			"position": [
-				34,
-				21
-			]
+			"position": {
+				"x": 34,
+				"y": 21
+			}
 		},
 		{
 			"type": "Potion",
-			"position": [
-				23,
-				19
-			]
+			"position": {
+				"x": 23,
+				"y": 19
+			}
 		},
 		{
 			"type": "Orc",
-			"position": [
-				30,
-				19
-			]
+			"position": {
+				"x": 30,
+				"y": 19
+			}
 		},
 		{
 			"type": "Orc",
-			"position": [
-				14,
-				18
-			]
+			"position": {
+				"x": 14,
+				"y": 18
+			}
 		},
 		{
 			"type": "Orc",
-			"position": [
-				33,
-				18
-			]
+			"position": {
+				"x": 33,
+				"y": 18
+			}
 		},
 		{
 			"type": "Orc",
-			"position": [
-				37,
-				18
-			]
+			"position": {
+				"x": 37,
+				"y": 18
+			}
 		},
 		{
 			"type": "Orc",
-			"position": [
-				14,
-				17
-			]
+			"position": {
+				"x": 14,
+				"y": 17
+			}
 		},
 		{
 			"type": "Fireball",
-			"position": [
-				7,
-				14
-			],
-			"direction": [
-				0,
-				1
-			]
+			"position": {
+				"x": 7,
+				"y": 14
+			},
+			"direction": {
+				"x": 0,
+				"y": 1
+			}
 		},
 		{
 			"type": "Orc",
-			"position": [
-				31,
-				12
-			]
+			"position": {
+				"x": 31,
+				"y": 12
+			}
 		},
 		{
 			"type": "Orc",
-			"position": [
-				2,
-				9
-			]
+			"position": {
+				"x": 2,
+				"y": 9
+			}
 		},
 		{
 			"type": "Orc",
-			"position": [
-				27,
-				9
-			]
+			"position": {
+				"x": 27,
+				"y": 9
+			}
 		},
 		{
 			"type": "Nuke",
-			"position": [
-				5,
-				8
-			]
+			"position": {
+				"x": 5,
+				"y": 8
+			}
 		},
 		{
 			"type": "Nuke",
-			"position": [
-				6,
-				8
-			]
+			"position": {
+				"x": 6,
+				"y": 8
+			}
 		},
 		{
 			"type": "YellowKey",
-			"position": [
-				22,
-				8
-			]
+			"position": {
+				"x": 22,
+				"y": 8
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				32,
-				8
-			]
+			"position": {
+				"x": 32,
+				"y": 8
+			}
 		},
 		{
 			"type": "Potion",
-			"position": [
-				8,
-				7
-			]
+			"position": {
+				"x": 8,
+				"y": 7
+			}
 		},
 		{
 			"type": "Potion",
-			"position": [
-				10,
-				7
-			]
+			"position": {
+				"x": 10,
+				"y": 7
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				30,
-				7
-			]
+			"position": {
+				"x": 30,
+				"y": 7
+			}
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				31,
-				7
-			],
+			"position": {
+				"x": 31,
+				"y": 7
+			},
 			"value": 500
 		},
 		{
 			"type": "Orc",
-			"position": [
-				1,
-				6
-			]
+			"position": {
+				"x": 1,
+				"y": 6
+			}
 		},
 		{
 			"type": "Potion",
-			"position": [
-				9,
-				6
-			]
+			"position": {
+				"x": 9,
+				"y": 6
+			}
 		},
 		{
 			"type": "Orc",
-			"position": [
-				14,
-				6
-			]
+			"position": {
+				"x": 14,
+				"y": 6
+			}
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				30,
-				6
-			],
+			"position": {
+				"x": 30,
+				"y": 6
+			},
 			"value": 500
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				31,
-				6
-			],
+			"position": {
+				"x": 31,
+				"y": 6
+			},
 			"value": 500
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				32,
-				6
-			],
+			"position": {
+				"x": 32,
+				"y": 6
+			},
 			"value": 500
 		},
 		{
 			"type": "Orc",
-			"position": [
-				2,
-				4
-			]
+			"position": {
+				"x": 2,
+				"y": 4
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				31,
-				4
-			]
+			"position": {
+				"x": 31,
+				"y": 4
+			}
 		},
 		{
 			"type": "Potion",
-			"position": [
-				32,
-				4
-			]
+			"position": {
+				"x": 32,
+				"y": 4
+			}
 		},
 		{
 			"type": "Potion",
-			"position": [
-				33,
-				4
-			]
+			"position": {
+				"x": 33,
+				"y": 4
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				29,
-				3
-			]
+			"position": {
+				"x": 29,
+				"y": 3
+			}
 		},
 		{
 			"type": "BlueKey",
-			"position": [
-				32,
-				3
-			]
+			"position": {
+				"x": 32,
+				"y": 3
+			}
 		},
 		{
 			"type": "Potion",
-			"position": [
-				33,
-				3
-			]
+			"position": {
+				"x": 33,
+				"y": 3
+			}
 		},
 		{
 			"type": "Bolt",
-			"position": [
-				12,
-				2
-			]
+			"position": {
+				"x": 12,
+				"y": 2
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				19,
-				2
-			]
+			"position": {
+				"x": 19,
+				"y": 2
+			}
 		},
 		{
 			"type": "RedKey",
-			"position": [
-				22,
-				2
-			]
+			"position": {
+				"x": 22,
+				"y": 2
+			}
 		},
 		{
 			"type": "Potion",
-			"position": [
-				33,
-				2
-			]
+			"position": {
+				"x": 33,
+				"y": 2
+			}
 		},
 		{
 			"type": "Bolt",
-			"position": [
-				12,
-				1
-			]
+			"position": {
+				"x": 12,
+				"y": 1
+			}
 		},
 		{
 			"type": "Potion",
-			"position": [
-				32,
-				1
-			]
+			"position": {
+				"x": 32,
+				"y": 1
+			}
 		},
 		{
 			"type": "Potion",
-			"position": [
-				33,
-				1
-			]
+			"position": {
+				"x": 33,
+				"y": 1
+			}
 		}
 	],
 	"fog": {

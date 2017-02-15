@@ -75,268 +75,268 @@
 		}
 	},
 	"playerStart": {
-		"position": [
-			33,
-			22
-		],
-		"direction": [
-			0,
-			1
-		]
+		"position": {
+			"x": 33,
+			"y": 22
+		},
+		"direction": {
+			"x": 0,
+			"y": 1
+		}
 	},
 	"entities": [
 		{
 			"type": "Mage",
-			"position": [
-				4,
-				37
-			]
+			"position": {
+				"x": 4,
+				"y": 37
+			}
 		},
 		{
 			"type": "Mage",
-			"position": [
-				13,
-				37
-			]
+			"position": {
+				"x": 13,
+				"y": 37
+			}
 		},
 		{
 			"type": "Mage",
-			"position": [
-				33,
-				37
-			]
+			"position": {
+				"x": 33,
+				"y": 37
+			}
 		},
 		{
 			"type": "Mage",
-			"position": [
-				54,
-				37
-			]
+			"position": {
+				"x": 54,
+				"y": 37
+			}
 		},
 		{
 			"type": "Bolt",
-			"position": [
-				2,
-				32
-			]
+			"position": {
+				"x": 2,
+				"y": 32
+			}
 		},
 		{
 			"type": "Bolt",
-			"position": [
-				3,
-				32
-			]
+			"position": {
+				"x": 3,
+				"y": 32
+			}
 		},
 		{
 			"type": "Mage",
-			"position": [
-				38,
-				32
-			]
+			"position": {
+				"x": 38,
+				"y": 32
+			}
 		},
 		{
 			"type": "Bolt",
-			"position": [
-				2,
-				31
-			]
+			"position": {
+				"x": 2,
+				"y": 31
+			}
 		},
 		{
 			"type": "Bolt",
-			"position": [
-				3,
-				31
-			]
+			"position": {
+				"x": 3,
+				"y": 31
+			}
 		},
 		{
 			"type": "Mage",
-			"position": [
-				18,
-				31
-			]
+			"position": {
+				"x": 18,
+				"y": 31
+			}
 		},
 		{
 			"type": "Mage",
-			"position": [
-				8,
-				27
-			]
+			"position": {
+				"x": 8,
+				"y": 27
+			}
 		},
 		{
 			"type": "Mage",
-			"position": [
-				28,
-				27
-			]
+			"position": {
+				"x": 28,
+				"y": 27
+			}
 		},
 		{
 			"type": "WarpGate",
-			"position": [
-				48,
-				27
-			],
+			"position": {
+				"x": 48,
+				"y": 27
+			},
 			"value": "Halls_of_Blood"
 		},
 		{
 			"type": "Mage",
-			"position": [
-				53,
-				27
-			]
+			"position": {
+				"x": 53,
+				"y": 27
+			}
 		},
 		{
 			"type": "Potion",
-			"position": [
-				2,
-				23
-			]
+			"position": {
+				"x": 2,
+				"y": 23
+			}
 		},
 		{
 			"type": "Potion",
-			"position": [
-				3,
-				23
-			]
+			"position": {
+				"x": 3,
+				"y": 23
+			}
 		},
 		{
 			"type": "Mage",
-			"position": [
-				13,
-				23
-			]
+			"position": {
+				"x": 13,
+				"y": 23
+			}
 		},
 		{
 			"type": "Potion",
-			"position": [
-				2,
-				22
-			]
+			"position": {
+				"x": 2,
+				"y": 22
+			}
 		},
 		{
 			"type": "Mage",
-			"position": [
-				53,
-				22
-			]
+			"position": {
+				"x": 53,
+				"y": 22
+			}
 		},
 		{
 			"type": "Mage",
-			"position": [
-				23,
-				17
-			]
+			"position": {
+				"x": 23,
+				"y": 17
+			}
 		},
 		{
 			"type": "Potion",
-			"position": [
-				2,
-				13
-			]
+			"position": {
+				"x": 2,
+				"y": 13
+			}
 		},
 		{
 			"type": "Potion",
-			"position": [
-				3,
-				13
-			]
+			"position": {
+				"x": 3,
+				"y": 13
+			}
 		},
 		{
 			"type": "Mage",
-			"position": [
-				8,
-				13
-			]
+			"position": {
+				"x": 8,
+				"y": 13
+			}
 		},
 		{
 			"type": "Potion",
-			"position": [
-				2,
-				12
-			]
+			"position": {
+				"x": 2,
+				"y": 12
+			}
 		},
 		{
 			"type": "Potion",
-			"position": [
-				37,
-				11
-			]
+			"position": {
+				"x": 37,
+				"y": 11
+			}
 		},
 		{
 			"type": "Potion",
-			"position": [
-				38,
-				11
-			]
+			"position": {
+				"x": 38,
+				"y": 11
+			}
 		},
 		{
 			"type": "Potion",
-			"position": [
-				35,
-				10
-			]
+			"position": {
+				"x": 35,
+				"y": 10
+			}
 		},
 		{
 			"type": "Potion",
-			"position": [
-				40,
-				10
-			]
+			"position": {
+				"x": 40,
+				"y": 10
+			}
 		},
 		{
 			"type": "Potion",
-			"position": [
-				35,
-				9
-			]
+			"position": {
+				"x": 35,
+				"y": 9
+			}
 		},
 		{
 			"type": "Potion",
-			"position": [
-				40,
-				9
-			]
+			"position": {
+				"x": 40,
+				"y": 9
+			}
 		},
 		{
 			"type": "Potion",
-			"position": [
-				37,
-				8
-			]
+			"position": {
+				"x": 37,
+				"y": 8
+			}
 		},
 		{
 			"type": "Potion",
-			"position": [
-				38,
-				8
-			]
+			"position": {
+				"x": 38,
+				"y": 8
+			}
 		},
 		{
 			"type": "Mage",
-			"position": [
-				3,
-				7
-			]
+			"position": {
+				"x": 3,
+				"y": 7
+			}
 		},
 		{
 			"type": "Mage",
-			"position": [
-				28,
-				7
-			]
+			"position": {
+				"x": 28,
+				"y": 7
+			}
 		},
 		{
 			"type": "Mage",
-			"position": [
-				23,
-				2
-			]
+			"position": {
+				"x": 23,
+				"y": 2
+			}
 		},
 		{
 			"type": "Mage",
-			"position": [
-				38,
-				2
-			]
+			"position": {
+				"x": 38,
+				"y": 2
+			}
 		}
 	],
 	"fog": {

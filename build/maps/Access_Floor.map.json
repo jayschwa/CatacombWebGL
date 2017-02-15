@@ -71,46 +71,46 @@
 		}
 	},
 	"playerStart": {
-		"position": [
-			10,
-			9
-		],
-		"direction": [
-			0,
-			1
-		]
+		"position": {
+			"x": 10,
+			"y": 9
+		},
+		"direction": {
+			"x": 0,
+			"y": 1
+		}
 	},
 	"entities": [
 		{
 			"type": "WarpGate",
-			"position": [
-				4,
-				18
-			],
+			"position": {
+				"x": 4,
+				"y": 18
+			},
 			"value": "Fens_of_Insanity"
 		},
 		{
 			"type": "WarpGate",
-			"position": [
-				18,
-				15
-			],
+			"position": {
+				"x": 18,
+				"y": 15
+			},
 			"value": "Warrens"
 		},
 		{
 			"type": "WarpGate",
-			"position": [
-				1,
-				4
-			],
+			"position": {
+				"x": 1,
+				"y": 4
+			},
 			"value": "Catacomb"
 		},
 		{
 			"type": "WarpGate",
-			"position": [
-				15,
-				1
-			],
+			"position": {
+				"x": 15,
+				"y": 1
+			},
 			"value": "Dungeon"
 		}
 	],

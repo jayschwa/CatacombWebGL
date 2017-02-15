@@ -7,19 +7,18 @@ import { SpriteSheetProxy, textureCache } from "./utils"
 THREE.Vector3.prototype.copy = function(v) {
 	this.x = v.x
 	this.y = v.y
-	if (v.isVector3) {
+	if (v.z !== undefined) {
 		this.z = v.z
 	}
 	return this
 }
 
 function setupPlayerSpawn(map, player) {
-	const pos = map.playerStart.position
+	player.position.copy(map.playerStart.position)
 	const dir = map.playerStart.direction
-	player.position.set(pos[0], pos[1], 0)
 	const target = player.position.clone()
-	target.x += dir[0]
-	target.y += dir[1]
+	target.x += dir.x
+	target.y += dir.y
 	player.lookAt(target)
 }
 

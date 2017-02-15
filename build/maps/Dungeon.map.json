@@ -103,510 +103,510 @@
 		}
 	},
 	"playerStart": {
-		"position": [
-			2,
-			25
-		],
-		"direction": [
-			1,
-			0
-		]
+		"position": {
+			"x": 2,
+			"y": 25
+		},
+		"direction": {
+			"x": 1,
+			"y": 0
+		}
 	},
 	"entities": [
 		{
 			"type": "Troll",
-			"position": [
-				17,
-				25
-			],
+			"position": {
+				"x": 17,
+				"y": 25
+			},
 			"minDifficulty": 1
 		},
 		{
 			"type": "Troll",
-			"position": [
-				36,
-				25
-			],
+			"position": {
+				"x": 36,
+				"y": 25
+			},
 			"minDifficulty": 1
 		},
 		{
 			"type": "Troll",
-			"position": [
-				7,
-				24
-			],
+			"position": {
+				"x": 7,
+				"y": 24
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "Troll",
-			"position": [
-				14,
-				24
-			]
+			"position": {
+				"x": 14,
+				"y": 24
+			}
 		},
 		{
 			"type": "Orc",
-			"position": [
-				10,
-				23
-			]
+			"position": {
+				"x": 10,
+				"y": 23
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				14,
-				23
-			]
+			"position": {
+				"x": 14,
+				"y": 23
+			}
 		},
 		{
 			"type": "Orc",
-			"position": [
-				19,
-				23
-			]
+			"position": {
+				"x": 19,
+				"y": 23
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				33,
-				23
-			]
+			"position": {
+				"x": 33,
+				"y": 23
+			}
 		},
 		{
 			"type": "Orc",
-			"position": [
-				5,
-				22
-			],
+			"position": {
+				"x": 5,
+				"y": 22
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "Troll",
-			"position": [
-				29,
-				22
-			],
+			"position": {
+				"x": 29,
+				"y": 22
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "Troll",
-			"position": [
-				35,
-				21
-			],
+			"position": {
+				"x": 35,
+				"y": 21
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "Troll",
-			"position": [
-				37,
-				21
-			]
+			"position": {
+				"x": 37,
+				"y": 21
+			}
 		},
 		{
 			"type": "Orc",
-			"position": [
-				30,
-				20
-			],
+			"position": {
+				"x": 30,
+				"y": 20
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "Orc",
-			"position": [
-				34,
-				19
-			],
+			"position": {
+				"x": 34,
+				"y": 19
+			},
 			"minDifficulty": 1
 		},
 		{
 			"type": "Orc",
-			"position": [
-				38,
-				19
-			]
+			"position": {
+				"x": 38,
+				"y": 19
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				35,
-				18
-			],
+			"position": {
+				"x": 35,
+				"y": 18
+			},
 			"minDifficulty": 1
 		},
 		{
 			"type": "Troll",
-			"position": [
-				36,
-				18
-			]
+			"position": {
+				"x": 36,
+				"y": 18
+			}
 		},
 		{
 			"type": "Orc",
-			"position": [
-				13,
-				17
-			]
+			"position": {
+				"x": 13,
+				"y": 17
+			}
 		},
 		{
 			"type": "Orc",
-			"position": [
-				29,
-				17
-			]
+			"position": {
+				"x": 29,
+				"y": 17
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				3,
-				16
-			],
+			"position": {
+				"x": 3,
+				"y": 16
+			},
 			"minDifficulty": 1
 		},
 		{
 			"type": "Troll",
-			"position": [
-				22,
-				16
-			],
+			"position": {
+				"x": 22,
+				"y": 16
+			},
 			"minDifficulty": 1
 		},
 		{
 			"type": "Orc",
-			"position": [
-				24,
-				16
-			]
+			"position": {
+				"x": 24,
+				"y": 16
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				19,
-				15
-			]
+			"position": {
+				"x": 19,
+				"y": 15
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				4,
-				14
-			]
+			"position": {
+				"x": 4,
+				"y": 14
+			}
 		},
 		{
 			"type": "Orc",
-			"position": [
-				14,
-				14
-			]
+			"position": {
+				"x": 14,
+				"y": 14
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				36,
-				14
-			],
+			"position": {
+				"x": 36,
+				"y": 14
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "Troll",
-			"position": [
-				2,
-				13
-			],
+			"position": {
+				"x": 2,
+				"y": 13
+			},
 			"minDifficulty": 1
 		},
 		{
 			"type": "Troll",
-			"position": [
-				23,
-				13
-			]
+			"position": {
+				"x": 23,
+				"y": 13
+			}
 		},
 		{
 			"type": "Orc",
-			"position": [
-				25,
-				13
-			],
+			"position": {
+				"x": 25,
+				"y": 13
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "Troll",
-			"position": [
-				30,
-				13
-			],
+			"position": {
+				"x": 30,
+				"y": 13
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "Troll",
-			"position": [
-				9,
-				12
-			],
+			"position": {
+				"x": 9,
+				"y": 12
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "Orc",
-			"position": [
-				13,
-				12
-			]
+			"position": {
+				"x": 13,
+				"y": 12
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				20,
-				12
-			],
+			"position": {
+				"x": 20,
+				"y": 12
+			},
 			"minDifficulty": 1
 		},
 		{
 			"type": "Troll",
-			"position": [
-				34,
-				12
-			]
+			"position": {
+				"x": 34,
+				"y": 12
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				37,
-				12
-			],
+			"position": {
+				"x": 37,
+				"y": 12
+			},
 			"minDifficulty": 1
 		},
 		{
 			"type": "Troll",
-			"position": [
-				4,
-				11
-			],
+			"position": {
+				"x": 4,
+				"y": 11
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "Potion",
-			"position": [
-				18,
-				11
-			]
+			"position": {
+				"x": 18,
+				"y": 11
+			}
 		},
 		{
 			"type": "Potion",
-			"position": [
-				18,
-				10
-			]
+			"position": {
+				"x": 18,
+				"y": 10
+			}
 		},
 		{
 			"type": "Potion",
-			"position": [
-				19,
-				10
-			]
+			"position": {
+				"x": 19,
+				"y": 10
+			}
 		},
 		{
 			"type": "Orc",
-			"position": [
-				22,
-				10
-			],
+			"position": {
+				"x": 22,
+				"y": 10
+			},
 			"minDifficulty": 1
 		},
 		{
 			"type": "WarpGate",
-			"position": [
-				25,
-				10
-			],
+			"position": {
+				"x": 25,
+				"y": 10
+			},
 			"value": "Lower_Dungeon"
 		},
 		{
 			"type": "Troll",
-			"position": [
-				36,
-				10
-			],
+			"position": {
+				"x": 36,
+				"y": 10
+			},
 			"minDifficulty": 1
 		},
 		{
 			"type": "Potion",
-			"position": [
-				18,
-				9
-			]
+			"position": {
+				"x": 18,
+				"y": 9
+			}
 		},
 		{
 			"type": "Potion",
-			"position": [
-				19,
-				9
-			]
+			"position": {
+				"x": 19,
+				"y": 9
+			}
 		},
 		{
 			"type": "Potion",
-			"position": [
-				20,
-				9
-			]
+			"position": {
+				"x": 20,
+				"y": 9
+			}
 		},
 		{
 			"type": "Orc",
-			"position": [
-				9,
-				8
-			]
+			"position": {
+				"x": 9,
+				"y": 8
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				37,
-				8
-			],
+			"position": {
+				"x": 37,
+				"y": 8
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "Orc",
-			"position": [
-				9,
-				7
-			]
+			"position": {
+				"x": 9,
+				"y": 7
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				35,
-				7
-			],
+			"position": {
+				"x": 35,
+				"y": 7
+			},
 			"minDifficulty": 1
 		},
 		{
 			"type": "Potion",
-			"position": [
-				1,
-				6
-			]
+			"position": {
+				"x": 1,
+				"y": 6
+			}
 		},
 		{
 			"type": "Potion",
-			"position": [
-				2,
-				6
-			]
+			"position": {
+				"x": 2,
+				"y": 6
+			}
 		},
 		{
 			"type": "Orc",
-			"position": [
-				18,
-				6
-			],
+			"position": {
+				"x": 18,
+				"y": 6
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "Troll",
-			"position": [
-				21,
-				6
-			],
+			"position": {
+				"x": 21,
+				"y": 6
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "Orc",
-			"position": [
-				28,
-				6
-			],
+			"position": {
+				"x": 28,
+				"y": 6
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "Potion",
-			"position": [
-				1,
-				5
-			]
+			"position": {
+				"x": 1,
+				"y": 5
+			}
 		},
 		{
 			"type": "Potion",
-			"position": [
-				2,
-				5
-			]
+			"position": {
+				"x": 2,
+				"y": 5
+			}
 		},
 		{
 			"type": "Orc",
-			"position": [
-				36,
-				5
-			],
+			"position": {
+				"x": 36,
+				"y": 5
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "Troll",
-			"position": [
-				3,
-				4
-			]
+			"position": {
+				"x": 3,
+				"y": 4
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				4,
-				3
-			],
+			"position": {
+				"x": 4,
+				"y": 3
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "Troll",
-			"position": [
-				3,
-				2
-			],
+			"position": {
+				"x": 3,
+				"y": 2
+			},
 			"minDifficulty": 1
 		},
 		{
 			"type": "Troll",
-			"position": [
-				35,
-				2
-			],
+			"position": {
+				"x": 35,
+				"y": 2
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "Troll",
-			"position": [
-				15,
-				1
-			]
+			"position": {
+				"x": 15,
+				"y": 1
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				19,
-				1
-			],
+			"position": {
+				"x": 19,
+				"y": 1
+			},
 			"minDifficulty": 1
 		},
 		{
 			"type": "Troll",
-			"position": [
-				28,
-				1
-			]
+			"position": {
+				"x": 28,
+				"y": 1
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				31,
-				1
-			],
+			"position": {
+				"x": 31,
+				"y": 1
+			},
 			"minDifficulty": 1
 		},
 		{
 			"type": "Orc",
-			"position": [
-				33,
-				1
-			],
+			"position": {
+				"x": 33,
+				"y": 1
+			},
 			"minDifficulty": 1
 		}
 	],

@@ -40566,8 +40566,7 @@ class Portal extends Sprite {
 	constructor(props) {
 		super();
 		this.name = "Portal";
-		const pos = props.position;
-		this.position.set(pos[0], pos[1], pos[2] || 0);
+		this.position.copy(props.position);
 		this.fps = 8;
 		this.light = new PointLight(0x0042DD, 1, 1.5);
 		this.add(this.light);
@@ -40591,7 +40590,7 @@ class Portal extends Sprite {
 class JumpGate extends Portal {
 	constructor(props) {
 		super(props);
-		this.destination = new Vector3(props.value[0], props.value[1], 0);
+		this.destination = new Vector3().copy(props.value);
 	}
 }
 
@@ -40600,8 +40599,7 @@ class WarpGate extends Portal {}
 class Enemy extends Entity {
 	constructor(sprite, props, size, speed, spriteInfo) {
 		super(size, speed);
-		const pos = props.position;
-		this.position.set(pos[0], pos[1], pos[2] || 0);
+		this.position.copy(props.position);
 		this.spriteInfo = spriteInfo;
 		textureCache.get(sprite, texture => {
 			const totalFrames = spriteInfo.walkFrames + spriteInfo.attackFrames + spriteInfo.deathFrames;
@@ -41022,8 +41020,7 @@ class Item extends Sprite {
 		super();
 		this.name = props.type.toLowerCase();
 		this.soundName = props.soundName;
-		const pos = props.position;
-		this.position.set(pos[0], pos[1], pos[2] || 0);
+		this.position.copy(props.position);
 		const scale = 0.6;
 		this.scale.multiplyScalar(scale);
 		this.translateZ(-(1-scale)/2);
@@ -41559,19 +41556,18 @@ class Transition {
 Vector3.prototype.copy = function(v) {
 	this.x = v.x;
 	this.y = v.y;
-	if (v.isVector3) {
+	if (v.z !== undefined) {
 		this.z = v.z;
 	}
 	return this
 };
 
 function setupPlayerSpawn(map, player) {
-	const pos = map.playerStart.position;
+	player.position.copy(map.playerStart.position);
 	const dir = map.playerStart.direction;
-	player.position.set(pos[0], pos[1], 0);
 	const target = player.position.clone();
-	target.x += dir[0];
-	target.y += dir[1];
+	target.x += dir.x;
+	target.y += dir.y;
 	player.lookAt(target);
 }
 

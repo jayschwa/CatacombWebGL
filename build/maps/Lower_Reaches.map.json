@@ -73,860 +73,860 @@
 		}
 	},
 	"playerStart": {
-		"position": [
-			14,
-			24
-		],
-		"direction": [
-			-1,
-			0
-		]
+		"position": {
+			"x": 14,
+			"y": 24
+		},
+		"direction": {
+			"x": -1,
+			"y": 0
+		}
 	},
 	"entities": [
 		{
 			"type": "Troll",
-			"position": [
-				19,
-				27
-			]
+			"position": {
+				"x": 19,
+				"y": 27
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				20,
-				27
-			]
+			"position": {
+				"x": 20,
+				"y": 27
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				22,
-				27
-			]
+			"position": {
+				"x": 22,
+				"y": 27
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				23,
-				27
-			]
+			"position": {
+				"x": 23,
+				"y": 27
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				25,
-				27
-			]
+			"position": {
+				"x": 25,
+				"y": 27
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				26,
-				27
-			]
+			"position": {
+				"x": 26,
+				"y": 27
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				31,
-				27
-			]
+			"position": {
+				"x": 31,
+				"y": 27
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				32,
-				27
-			]
+			"position": {
+				"x": 32,
+				"y": 27
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				34,
-				27
-			]
+			"position": {
+				"x": 34,
+				"y": 27
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				35,
-				27
-			]
+			"position": {
+				"x": 35,
+				"y": 27
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				19,
-				26
-			]
+			"position": {
+				"x": 19,
+				"y": 26
+			}
 		},
 		{
 			"type": "GreenKey",
-			"position": [
-				20,
-				26
-			]
+			"position": {
+				"x": 20,
+				"y": 26
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				22,
-				26
-			]
+			"position": {
+				"x": 22,
+				"y": 26
+			}
 		},
 		{
 			"type": "GreenKey",
-			"position": [
-				23,
-				26
-			]
+			"position": {
+				"x": 23,
+				"y": 26
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				25,
-				26
-			]
+			"position": {
+				"x": 25,
+				"y": 26
+			}
 		},
 		{
 			"type": "GreenKey",
-			"position": [
-				26,
-				26
-			]
+			"position": {
+				"x": 26,
+				"y": 26
+			}
 		},
 		{
 			"type": "WarpGate",
-			"position": [
-				28,
-				26
-			],
+			"position": {
+				"x": 28,
+				"y": 26
+			},
 			"value": "Chaos_Corridors"
 		},
 		{
 			"type": "Troll",
-			"position": [
-				31,
-				26
-			]
+			"position": {
+				"x": 31,
+				"y": 26
+			}
 		},
 		{
 			"type": "GreenKey",
-			"position": [
-				32,
-				26
-			]
+			"position": {
+				"x": 32,
+				"y": 26
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				34,
-				26
-			]
+			"position": {
+				"x": 34,
+				"y": 26
+			}
 		},
 		{
 			"type": "GreenKey",
-			"position": [
-				35,
-				26
-			]
+			"position": {
+				"x": 35,
+				"y": 26
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				16,
-				24
-			]
+			"position": {
+				"x": 16,
+				"y": 24
+			}
 		},
 		{
 			"type": "GreenKey",
-			"position": [
-				16,
-				23
-			]
+			"position": {
+				"x": 16,
+				"y": 23
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				37,
-				23
-			]
+			"position": {
+				"x": 37,
+				"y": 23
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				38,
-				23
-			]
+			"position": {
+				"x": 38,
+				"y": 23
+			}
 		},
 		{
 			"type": "GreenKey",
-			"position": [
-				37,
-				22
-			]
+			"position": {
+				"x": 37,
+				"y": 22
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				38,
-				22
-			]
+			"position": {
+				"x": 38,
+				"y": 22
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				8,
-				21
-			]
+			"position": {
+				"x": 8,
+				"y": 21
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				15,
-				21
-			]
+			"position": {
+				"x": 15,
+				"y": 21
+			}
 		},
 		{
 			"type": "GreenKey",
-			"position": [
-				16,
-				21
-			]
+			"position": {
+				"x": 16,
+				"y": 21
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				16,
-				20
-			]
+			"position": {
+				"x": 16,
+				"y": 20
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				37,
-				20
-			]
+			"position": {
+				"x": 37,
+				"y": 20
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				38,
-				20
-			]
+			"position": {
+				"x": 38,
+				"y": 20
+			}
 		},
 		{
 			"type": "GreenKey",
-			"position": [
-				37,
-				19
-			]
+			"position": {
+				"x": 37,
+				"y": 19
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				38,
-				19
-			]
+			"position": {
+				"x": 38,
+				"y": 19
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				4,
-				18
-			],
+			"position": {
+				"x": 4,
+				"y": 18
+			},
 			"minDifficulty": 1
 		},
 		{
 			"type": "Troll",
-			"position": [
-				15,
-				18
-			]
+			"position": {
+				"x": 15,
+				"y": 18
+			}
 		},
 		{
 			"type": "GreenKey",
-			"position": [
-				16,
-				18
-			]
+			"position": {
+				"x": 16,
+				"y": 18
+			}
 		},
 		{
 			"type": "GreenKey",
-			"position": [
-				25,
-				18
-			]
+			"position": {
+				"x": 25,
+				"y": 18
+			}
 		},
 		{
 			"type": "Orc",
-			"position": [
-				27,
-				18
-			]
+			"position": {
+				"x": 27,
+				"y": 18
+			}
 		},
 		{
 			"type": "GreenKey",
-			"position": [
-				28,
-				18
-			]
+			"position": {
+				"x": 28,
+				"y": 18
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				11,
-				17
-			],
+			"position": {
+				"x": 11,
+				"y": 17
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "Troll",
-			"position": [
-				15,
-				17
-			]
+			"position": {
+				"x": 15,
+				"y": 17
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				16,
-				17
-			]
+			"position": {
+				"x": 16,
+				"y": 17
+			}
 		},
 		{
 			"type": "Orc",
-			"position": [
-				25,
-				17
-			]
+			"position": {
+				"x": 25,
+				"y": 17
+			}
 		},
 		{
 			"type": "GreenKey",
-			"position": [
-				29,
-				17
-			]
+			"position": {
+				"x": 29,
+				"y": 17
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				37,
-				17
-			]
+			"position": {
+				"x": 37,
+				"y": 17
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				38,
-				17
-			]
+			"position": {
+				"x": 38,
+				"y": 17
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				29,
-				16
-			]
+			"position": {
+				"x": 29,
+				"y": 16
+			}
 		},
 		{
 			"type": "GreenKey",
-			"position": [
-				37,
-				16
-			]
+			"position": {
+				"x": 37,
+				"y": 16
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				38,
-				16
-			]
+			"position": {
+				"x": 38,
+				"y": 16
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				15,
-				15
-			]
+			"position": {
+				"x": 15,
+				"y": 15
+			}
 		},
 		{
 			"type": "GreenKey",
-			"position": [
-				16,
-				15
-			]
+			"position": {
+				"x": 16,
+				"y": 15
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				2,
-				14
-			]
+			"position": {
+				"x": 2,
+				"y": 14
+			}
 		},
 		{
 			"type": "Fireball",
-			"position": [
-				13,
-				14
-			],
-			"direction": [
-				1,
-				0
-			]
+			"position": {
+				"x": 13,
+				"y": 14
+			},
+			"direction": {
+				"x": 1,
+				"y": 0
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				15,
-				14
-			]
+			"position": {
+				"x": 15,
+				"y": 14
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				16,
-				14
-			]
+			"position": {
+				"x": 16,
+				"y": 14
+			}
 		},
 		{
 			"type": "GreenKey",
-			"position": [
-				27,
-				14
-			]
+			"position": {
+				"x": 27,
+				"y": 14
+			}
 		},
 		{
 			"type": "GreenKey",
-			"position": [
-				29,
-				14
-			]
+			"position": {
+				"x": 29,
+				"y": 14
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				37,
-				14
-			]
+			"position": {
+				"x": 37,
+				"y": 14
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				38,
-				14
-			]
+			"position": {
+				"x": 38,
+				"y": 14
+			}
 		},
 		{
 			"type": "Orc",
-			"position": [
-				27,
-				13
-			]
+			"position": {
+				"x": 27,
+				"y": 13
+			}
 		},
 		{
 			"type": "GreenKey",
-			"position": [
-				37,
-				13
-			]
+			"position": {
+				"x": 37,
+				"y": 13
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				38,
-				13
-			]
+			"position": {
+				"x": 38,
+				"y": 13
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				13,
-				12
-			],
+			"position": {
+				"x": 13,
+				"y": 12
+			},
 			"minDifficulty": 1
 		},
 		{
 			"type": "Troll",
-			"position": [
-				15,
-				12
-			]
+			"position": {
+				"x": 15,
+				"y": 12
+			}
 		},
 		{
 			"type": "GreenKey",
-			"position": [
-				16,
-				12
-			]
+			"position": {
+				"x": 16,
+				"y": 12
+			}
 		},
 		{
 			"type": "GreenKey",
-			"position": [
-				21,
-				12
-			]
+			"position": {
+				"x": 21,
+				"y": 12
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				22,
-				12
-			]
+			"position": {
+				"x": 22,
+				"y": 12
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				15,
-				11
-			]
+			"position": {
+				"x": 15,
+				"y": 11
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				16,
-				11
-			]
+			"position": {
+				"x": 16,
+				"y": 11
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				21,
-				11
-			]
+			"position": {
+				"x": 21,
+				"y": 11
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				22,
-				11
-			]
+			"position": {
+				"x": 22,
+				"y": 11
+			}
 		},
 		{
 			"type": "GreenKey",
-			"position": [
-				27,
-				11
-			]
+			"position": {
+				"x": 27,
+				"y": 11
+			}
 		},
 		{
 			"type": "GreenKey",
-			"position": [
-				29,
-				11
-			]
+			"position": {
+				"x": 29,
+				"y": 11
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				37,
-				11
-			]
+			"position": {
+				"x": 37,
+				"y": 11
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				38,
-				11
-			]
+			"position": {
+				"x": 38,
+				"y": 11
+			}
 		},
 		{
 			"type": "Orc",
-			"position": [
-				27,
-				10
-			]
+			"position": {
+				"x": 27,
+				"y": 10
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				29,
-				10
-			]
+			"position": {
+				"x": 29,
+				"y": 10
+			}
 		},
 		{
 			"type": "GreenKey",
-			"position": [
-				37,
-				10
-			]
+			"position": {
+				"x": 37,
+				"y": 10
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				38,
-				10
-			]
+			"position": {
+				"x": 38,
+				"y": 10
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				17,
-				8
-			]
+			"position": {
+				"x": 17,
+				"y": 8
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				21,
-				8
-			],
+			"position": {
+				"x": 21,
+				"y": 8
+			},
 			"minDifficulty": 1
 		},
 		{
 			"type": "Orc",
-			"position": [
-				27,
-				8
-			]
+			"position": {
+				"x": 27,
+				"y": 8
+			}
 		},
 		{
 			"type": "GreenKey",
-			"position": [
-				29,
-				8
-			]
+			"position": {
+				"x": 29,
+				"y": 8
+			}
 		},
 		{
 			"type": "GreenKey",
-			"position": [
-				37,
-				8
-			]
+			"position": {
+				"x": 37,
+				"y": 8
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				38,
-				8
-			]
+			"position": {
+				"x": 38,
+				"y": 8
+			}
 		},
 		{
 			"type": "GreenKey",
-			"position": [
-				27,
-				7
-			]
+			"position": {
+				"x": 27,
+				"y": 7
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				29,
-				7
-			]
+			"position": {
+				"x": 29,
+				"y": 7
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				37,
-				7
-			]
+			"position": {
+				"x": 37,
+				"y": 7
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				38,
-				7
-			]
+			"position": {
+				"x": 38,
+				"y": 7
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				10,
-				6
-			]
+			"position": {
+				"x": 10,
+				"y": 6
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				5,
-				5
-			]
+			"position": {
+				"x": 5,
+				"y": 5
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				7,
-				5
-			],
+			"position": {
+				"x": 7,
+				"y": 5
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "Orc",
-			"position": [
-				27,
-				5
-			]
+			"position": {
+				"x": 27,
+				"y": 5
+			}
 		},
 		{
 			"type": "GreenKey",
-			"position": [
-				29,
-				5
-			]
+			"position": {
+				"x": 29,
+				"y": 5
+			}
 		},
 		{
 			"type": "GreenKey",
-			"position": [
-				37,
-				5
-			]
+			"position": {
+				"x": 37,
+				"y": 5
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				38,
-				5
-			]
+			"position": {
+				"x": 38,
+				"y": 5
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				22,
-				4
-			],
+			"position": {
+				"x": 22,
+				"y": 4
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "GreenKey",
-			"position": [
-				27,
-				4
-			]
+			"position": {
+				"x": 27,
+				"y": 4
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				29,
-				4
-			]
+			"position": {
+				"x": 29,
+				"y": 4
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				37,
-				4
-			]
+			"position": {
+				"x": 37,
+				"y": 4
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				38,
-				4
-			]
+			"position": {
+				"x": 38,
+				"y": 4
+			}
 		},
 		{
 			"type": "WarpGate",
-			"position": [
-				2,
-				3
-			],
+			"position": {
+				"x": 2,
+				"y": 3
+			},
 			"value": "Access_Floor"
 		},
 		{
 			"type": "Troll",
-			"position": [
-				4,
-				3
-			],
+			"position": {
+				"x": 4,
+				"y": 3
+			},
 			"minDifficulty": 1
 		},
 		{
 			"type": "Fireball",
-			"position": [
-				14,
-				3
-			],
-			"direction": [
-				1,
-				0
-			]
+			"position": {
+				"x": 14,
+				"y": 3
+			},
+			"direction": {
+				"x": 1,
+				"y": 0
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				13,
-				2
-			],
+			"position": {
+				"x": 13,
+				"y": 2
+			},
 			"minDifficulty": 1
 		},
 		{
 			"type": "GreenKey",
-			"position": [
-				18,
-				2
-			]
+			"position": {
+				"x": 18,
+				"y": 2
+			}
 		},
 		{
 			"type": "GreenKey",
-			"position": [
-				31,
-				2
-			]
+			"position": {
+				"x": 31,
+				"y": 2
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				32,
-				2
-			]
+			"position": {
+				"x": 32,
+				"y": 2
+			}
 		},
 		{
 			"type": "GreenKey",
-			"position": [
-				34,
-				2
-			]
+			"position": {
+				"x": 34,
+				"y": 2
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				35,
-				2
-			]
+			"position": {
+				"x": 35,
+				"y": 2
+			}
 		},
 		{
 			"type": "Scroll",
-			"position": [
-				10,
-				1
-			],
+			"position": {
+				"x": 10,
+				"y": 1
+			},
 			"value": 5
 		},
 		{
 			"type": "Potion",
-			"position": [
-				11,
-				1
-			]
+			"position": {
+				"x": 11,
+				"y": 1
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				31,
-				1
-			]
+			"position": {
+				"x": 31,
+				"y": 1
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				32,
-				1
-			]
+			"position": {
+				"x": 32,
+				"y": 1
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				34,
-				1
-			]
+			"position": {
+				"x": 34,
+				"y": 1
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				35,
-				1
-			]
+			"position": {
+				"x": 35,
+				"y": 1
+			}
 		}
 	],
 	"fog": {

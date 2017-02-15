@@ -146,799 +146,799 @@
 		}
 	},
 	"playerStart": {
-		"position": [
-			5,
-			47
-		],
-		"direction": [
-			1,
-			0
-		]
+		"position": {
+			"x": 5,
+			"y": 47
+		},
+		"direction": {
+			"x": 1,
+			"y": 0
+		}
 	},
 	"entities": [
 		{
 			"type": "Demon",
-			"position": [
-				2,
-				61
-			]
+			"position": {
+				"x": 2,
+				"y": 61
+			}
 		},
 		{
 			"type": "Demon",
-			"position": [
-				3,
-				60
-			]
+			"position": {
+				"x": 3,
+				"y": 60
+			}
 		},
 		{
 			"type": "Demon",
-			"position": [
-				8,
-				60
-			]
+			"position": {
+				"x": 8,
+				"y": 60
+			}
 		},
 		{
 			"type": "Demon",
-			"position": [
-				13,
-				60
-			],
+			"position": {
+				"x": 13,
+				"y": 60
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "Demon",
-			"position": [
-				46,
-				60
-			]
+			"position": {
+				"x": 46,
+				"y": 60
+			}
 		},
 		{
 			"type": "Demon",
-			"position": [
-				58,
-				60
-			],
+			"position": {
+				"x": 58,
+				"y": 60
+			},
 			"minDifficulty": 1
 		},
 		{
 			"type": "Demon",
-			"position": [
-				39,
-				59
-			],
+			"position": {
+				"x": 39,
+				"y": 59
+			},
 			"minDifficulty": 1
 		},
 		{
 			"type": "Demon",
-			"position": [
-				62,
-				59
-			]
+			"position": {
+				"x": 62,
+				"y": 59
+			}
 		},
 		{
 			"type": "Demon",
-			"position": [
-				23,
-				57
-			],
+			"position": {
+				"x": 23,
+				"y": 57
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "Demon",
-			"position": [
-				20,
-				56
-			]
+			"position": {
+				"x": 20,
+				"y": 56
+			}
 		},
 		{
 			"type": "Demon",
-			"position": [
-				28,
-				56
-			],
+			"position": {
+				"x": 28,
+				"y": 56
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "Demon",
-			"position": [
-				41,
-				56
-			],
+			"position": {
+				"x": 41,
+				"y": 56
+			},
 			"minDifficulty": 1
 		},
 		{
 			"type": "Potion",
-			"position": [
-				56,
-				56
-			]
+			"position": {
+				"x": 56,
+				"y": 56
+			}
 		},
 		{
 			"type": "Potion",
-			"position": [
-				57,
-				56
-			]
+			"position": {
+				"x": 57,
+				"y": 56
+			}
 		},
 		{
 			"type": "Potion",
-			"position": [
-				58,
-				56
-			]
+			"position": {
+				"x": 58,
+				"y": 56
+			}
 		},
 		{
 			"type": "Potion",
-			"position": [
-				59,
-				56
-			]
+			"position": {
+				"x": 59,
+				"y": 56
+			}
 		},
 		{
 			"type": "Potion",
-			"position": [
-				60,
-				56
-			]
+			"position": {
+				"x": 60,
+				"y": 56
+			}
 		},
 		{
 			"type": "Potion",
-			"position": [
-				56,
-				55
-			]
+			"position": {
+				"x": 56,
+				"y": 55
+			}
 		},
 		{
 			"type": "Potion",
-			"position": [
-				57,
-				55
-			]
+			"position": {
+				"x": 57,
+				"y": 55
+			}
 		},
 		{
 			"type": "Potion",
-			"position": [
-				58,
-				55
-			]
+			"position": {
+				"x": 58,
+				"y": 55
+			}
 		},
 		{
 			"type": "Potion",
-			"position": [
-				59,
-				55
-			]
+			"position": {
+				"x": 59,
+				"y": 55
+			}
 		},
 		{
 			"type": "Potion",
-			"position": [
-				60,
-				55
-			]
+			"position": {
+				"x": 60,
+				"y": 55
+			}
 		},
 		{
 			"type": "Demon",
-			"position": [
-				34,
-				54
-			],
+			"position": {
+				"x": 34,
+				"y": 54
+			},
 			"minDifficulty": 1
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				56,
-				54
-			],
+			"position": {
+				"x": 56,
+				"y": 54
+			},
 			"value": 2000
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				57,
-				54
-			],
+			"position": {
+				"x": 57,
+				"y": 54
+			},
 			"value": 2000
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				58,
-				54
-			],
+			"position": {
+				"x": 58,
+				"y": 54
+			},
 			"value": 2000
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				59,
-				54
-			],
+			"position": {
+				"x": 59,
+				"y": 54
+			},
 			"value": 2000
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				60,
-				54
-			],
+			"position": {
+				"x": 60,
+				"y": 54
+			},
 			"value": 2000
 		},
 		{
 			"type": "Nuke",
-			"position": [
-				54,
-				53
-			]
+			"position": {
+				"x": 54,
+				"y": 53
+			}
 		},
 		{
 			"type": "Nuke",
-			"position": [
-				55,
-				53
-			]
+			"position": {
+				"x": 55,
+				"y": 53
+			}
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				56,
-				53
-			],
+			"position": {
+				"x": 56,
+				"y": 53
+			},
 			"value": 2000
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				57,
-				53
-			],
+			"position": {
+				"x": 57,
+				"y": 53
+			},
 			"value": 2000
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				58,
-				53
-			],
+			"position": {
+				"x": 58,
+				"y": 53
+			},
 			"value": 2000
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				59,
-				53
-			],
+			"position": {
+				"x": 59,
+				"y": 53
+			},
 			"value": 2000
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				60,
-				53
-			],
+			"position": {
+				"x": 60,
+				"y": 53
+			},
 			"value": 2000
 		},
 		{
 			"type": "Bolt",
-			"position": [
-				61,
-				53
-			]
+			"position": {
+				"x": 61,
+				"y": 53
+			}
 		},
 		{
 			"type": "Bolt",
-			"position": [
-				62,
-				53
-			]
+			"position": {
+				"x": 62,
+				"y": 53
+			}
 		},
 		{
 			"type": "Demon",
-			"position": [
-				15,
-				52
-			]
+			"position": {
+				"x": 15,
+				"y": 52
+			}
 		},
 		{
 			"type": "Demon",
-			"position": [
-				41,
-				52
-			],
+			"position": {
+				"x": 41,
+				"y": 52
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "Demon",
-			"position": [
-				48,
-				52
-			]
+			"position": {
+				"x": 48,
+				"y": 52
+			}
 		},
 		{
 			"type": "Demon",
-			"position": [
-				20,
-				50
-			],
+			"position": {
+				"x": 20,
+				"y": 50
+			},
 			"minDifficulty": 1
 		},
 		{
 			"type": "Demon",
-			"position": [
-				27,
-				50
-			]
+			"position": {
+				"x": 27,
+				"y": 50
+			}
 		},
 		{
 			"type": "Demon",
-			"position": [
-				2,
-				49
-			],
+			"position": {
+				"x": 2,
+				"y": 49
+			},
 			"minDifficulty": 1
 		},
 		{
 			"type": "Demon",
-			"position": [
-				42,
-				49
-			]
+			"position": {
+				"x": 42,
+				"y": 49
+			}
 		},
 		{
 			"type": "Demon",
-			"position": [
-				45,
-				49
-			],
+			"position": {
+				"x": 45,
+				"y": 49
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "Scroll",
-			"position": [
-				15,
-				47
-			],
+			"position": {
+				"x": 15,
+				"y": 47
+			},
 			"value": 7
 		},
 		{
 			"type": "RedKey",
-			"position": [
-				31,
-				47
-			]
+			"position": {
+				"x": 31,
+				"y": 47
+			}
 		},
 		{
 			"type": "Demon",
-			"position": [
-				35,
-				47
-			]
+			"position": {
+				"x": 35,
+				"y": 47
+			}
 		},
 		{
 			"type": "Nemesis",
-			"position": [
-				50,
-				47
-			]
+			"position": {
+				"x": 50,
+				"y": 47
+			}
 		},
 		{
 			"type": "Grelminar",
-			"position": [
-				62,
-				47
-			]
+			"position": {
+				"x": 62,
+				"y": 47
+			}
 		},
 		{
 			"type": "Demon",
-			"position": [
-				2,
-				45
-			],
+			"position": {
+				"x": 2,
+				"y": 45
+			},
 			"minDifficulty": 1
 		},
 		{
 			"type": "Demon",
-			"position": [
-				53,
-				45
-			],
+			"position": {
+				"x": 53,
+				"y": 45
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "Potion",
-			"position": [
-				30,
-				44
-			]
+			"position": {
+				"x": 30,
+				"y": 44
+			}
 		},
 		{
 			"type": "Potion",
-			"position": [
-				31,
-				44
-			]
+			"position": {
+				"x": 31,
+				"y": 44
+			}
 		},
 		{
 			"type": "Potion",
-			"position": [
-				32,
-				44
-			]
+			"position": {
+				"x": 32,
+				"y": 44
+			}
 		},
 		{
 			"type": "Potion",
-			"position": [
-				33,
-				44
-			]
+			"position": {
+				"x": 33,
+				"y": 44
+			}
 		},
 		{
 			"type": "Potion",
-			"position": [
-				34,
-				44
-			]
+			"position": {
+				"x": 34,
+				"y": 44
+			}
 		},
 		{
 			"type": "Demon",
-			"position": [
-				25,
-				42
-			]
+			"position": {
+				"x": 25,
+				"y": 42
+			}
 		},
 		{
 			"type": "Demon",
-			"position": [
-				31,
-				42
-			]
+			"position": {
+				"x": 31,
+				"y": 42
+			}
 		},
 		{
 			"type": "Demon",
-			"position": [
-				33,
-				42
-			]
+			"position": {
+				"x": 33,
+				"y": 42
+			}
 		},
 		{
 			"type": "Demon",
-			"position": [
-				55,
-				42
-			],
+			"position": {
+				"x": 55,
+				"y": 42
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "Demon",
-			"position": [
-				31,
-				41
-			]
+			"position": {
+				"x": 31,
+				"y": 41
+			}
 		},
 		{
 			"type": "Demon",
-			"position": [
-				24,
-				40
-			]
+			"position": {
+				"x": 24,
+				"y": 40
+			}
 		},
 		{
 			"type": "Demon",
-			"position": [
-				31,
-				40
-			],
+			"position": {
+				"x": 31,
+				"y": 40
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "Demon",
-			"position": [
-				59,
-				40
-			]
+			"position": {
+				"x": 59,
+				"y": 40
+			}
 		},
 		{
 			"type": "Demon",
-			"position": [
-				25,
-				38
-			],
+			"position": {
+				"x": 25,
+				"y": 38
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "Demon",
-			"position": [
-				53,
-				38
-			]
+			"position": {
+				"x": 53,
+				"y": 38
+			}
 		},
 		{
 			"type": "Demon",
-			"position": [
-				21,
-				36
-			],
+			"position": {
+				"x": 21,
+				"y": 36
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "Demon",
-			"position": [
-				45,
-				36
-			],
+			"position": {
+				"x": 45,
+				"y": 36
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "Demon",
-			"position": [
-				10,
-				35
-			],
+			"position": {
+				"x": 10,
+				"y": 35
+			},
 			"minDifficulty": 1
 		},
 		{
 			"type": "Demon",
-			"position": [
-				21,
-				35
-			],
+			"position": {
+				"x": 21,
+				"y": 35
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "Demon",
-			"position": [
-				18,
-				34
-			]
+			"position": {
+				"x": 18,
+				"y": 34
+			}
 		},
 		{
 			"type": "Demon",
-			"position": [
-				22,
-				34
-			]
+			"position": {
+				"x": 22,
+				"y": 34
+			}
 		},
 		{
 			"type": "Demon",
-			"position": [
-				38,
-				34
-			]
+			"position": {
+				"x": 38,
+				"y": 34
+			}
 		},
 		{
 			"type": "Demon",
-			"position": [
-				27,
-				33
-			]
+			"position": {
+				"x": 27,
+				"y": 33
+			}
 		},
 		{
 			"type": "Demon",
-			"position": [
-				32,
-				33
-			],
+			"position": {
+				"x": 32,
+				"y": 33
+			},
 			"minDifficulty": 1
 		},
 		{
 			"type": "Demon",
-			"position": [
-				57,
-				32
-			],
+			"position": {
+				"x": 57,
+				"y": 32
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "Demon",
-			"position": [
-				33,
-				28
-			]
+			"position": {
+				"x": 33,
+				"y": 28
+			}
 		},
 		{
 			"type": "Demon",
-			"position": [
-				45,
-				28
-			],
+			"position": {
+				"x": 45,
+				"y": 28
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "Demon",
-			"position": [
-				3,
-				25
-			],
+			"position": {
+				"x": 3,
+				"y": 25
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "Demon",
-			"position": [
-				4,
-				25
-			],
+			"position": {
+				"x": 4,
+				"y": 25
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "Demon",
-			"position": [
-				29,
-				25
-			]
+			"position": {
+				"x": 29,
+				"y": 25
+			}
 		},
 		{
 			"type": "Demon",
-			"position": [
-				60,
-				25
-			]
+			"position": {
+				"x": 60,
+				"y": 25
+			}
 		},
 		{
 			"type": "Demon",
-			"position": [
-				6,
-				24
-			]
+			"position": {
+				"x": 6,
+				"y": 24
+			}
 		},
 		{
 			"type": "Demon",
-			"position": [
-				16,
-				24
-			]
+			"position": {
+				"x": 16,
+				"y": 24
+			}
 		},
 		{
 			"type": "Demon",
-			"position": [
-				14,
-				22
-			]
+			"position": {
+				"x": 14,
+				"y": 22
+			}
 		},
 		{
 			"type": "Demon",
-			"position": [
-				4,
-				21
-			]
+			"position": {
+				"x": 4,
+				"y": 21
+			}
 		},
 		{
 			"type": "Demon",
-			"position": [
-				16,
-				20
-			],
+			"position": {
+				"x": 16,
+				"y": 20
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "Demon",
-			"position": [
-				15,
-				16
-			]
+			"position": {
+				"x": 15,
+				"y": 16
+			}
 		},
 		{
 			"type": "Demon",
-			"position": [
-				55,
-				16
-			]
+			"position": {
+				"x": 55,
+				"y": 16
+			}
 		},
 		{
 			"type": "Demon",
-			"position": [
-				3,
-				13
-			]
+			"position": {
+				"x": 3,
+				"y": 13
+			}
 		},
 		{
 			"type": "Demon",
-			"position": [
-				5,
-				13
-			],
+			"position": {
+				"x": 5,
+				"y": 13
+			},
 			"minDifficulty": 1
 		},
 		{
 			"type": "Demon",
-			"position": [
-				36,
-				11
-			]
+			"position": {
+				"x": 36,
+				"y": 11
+			}
 		},
 		{
 			"type": "Demon",
-			"position": [
-				56,
-				10
-			],
+			"position": {
+				"x": 56,
+				"y": 10
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "Demon",
-			"position": [
-				47,
-				8
-			]
+			"position": {
+				"x": 47,
+				"y": 8
+			}
 		},
 		{
 			"type": "Demon",
-			"position": [
-				61,
-				7
-			]
+			"position": {
+				"x": 61,
+				"y": 7
+			}
 		},
 		{
 			"type": "Demon",
-			"position": [
-				57,
-				6
-			]
+			"position": {
+				"x": 57,
+				"y": 6
+			}
 		},
 		{
 			"type": "Demon",
-			"position": [
-				42,
-				5
-			]
+			"position": {
+				"x": 42,
+				"y": 5
+			}
 		},
 		{
 			"type": "Demon",
-			"position": [
-				3,
-				4
-			],
+			"position": {
+				"x": 3,
+				"y": 4
+			},
 			"minDifficulty": 1
 		},
 		{
 			"type": "Demon",
-			"position": [
-				5,
-				4
-			],
+			"position": {
+				"x": 5,
+				"y": 4
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "Demon",
-			"position": [
-				11,
-				3
-			],
+			"position": {
+				"x": 11,
+				"y": 3
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "Demon",
-			"position": [
-				14,
-				3
-			]
+			"position": {
+				"x": 14,
+				"y": 3
+			}
 		},
 		{
 			"type": "Demon",
-			"position": [
-				28,
-				3
-			]
+			"position": {
+				"x": 28,
+				"y": 3
+			}
 		},
 		{
 			"type": "Demon",
-			"position": [
-				4,
-				2
-			]
+			"position": {
+				"x": 4,
+				"y": 2
+			}
 		},
 		{
 			"type": "Demon",
-			"position": [
-				11,
-				2
-			]
+			"position": {
+				"x": 11,
+				"y": 2
+			}
 		},
 		{
 			"type": "Demon",
-			"position": [
-				52,
-				2
-			]
+			"position": {
+				"x": 52,
+				"y": 2
+			}
 		}
 	],
 	"fog": {

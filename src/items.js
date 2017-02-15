@@ -7,8 +7,7 @@ export class Item extends Sprite {
 		super()
 		this.name = props.type.toLowerCase()
 		this.soundName = props.soundName
-		const pos = props.position
-		this.position.set(pos[0], pos[1], pos[2] || 0)
+		this.position.copy(props.position)
 		const scale = 0.6
 		this.scale.multiplyScalar(scale)
 		this.translateZ(-(1-scale)/2)

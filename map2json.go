@@ -148,7 +148,10 @@ var LayoutDict = map[byte]LayoutDef{
 	0xB4: Floor(""),
 }
 
-type Vec2 [2]int
+type Vec2 struct {
+	X int `json:"x"`
+	Y int `json:"y"`
+}
 
 type Entity struct {
 	Type          string      `json:"type,omitempty"`

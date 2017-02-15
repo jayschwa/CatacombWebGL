@@ -163,8 +163,7 @@ export class Portal extends Sprite {
 	constructor(props) {
 		super()
 		this.name = "Portal"
-		const pos = props.position
-		this.position.set(pos[0], pos[1], pos[2] || 0)
+		this.position.copy(props.position)
 		this.fps = 8
 		this.light = new PointLight(0x0042DD, 1, 1.5)
 		this.add(this.light)
@@ -188,7 +187,7 @@ export class Portal extends Sprite {
 export class JumpGate extends Portal {
 	constructor(props) {
 		super(props)
-		this.destination = new Vector3(props.value[0], props.value[1], 0)
+		this.destination = new Vector3().copy(props.value)
 	}
 }
 

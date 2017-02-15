@@ -76,167 +76,167 @@
 		}
 	},
 	"playerStart": {
-		"position": [
-			13,
-			23
-		],
-		"direction": [
-			-1,
-			0
-		]
+		"position": {
+			"x": 13,
+			"y": 23
+		},
+		"direction": {
+			"x": -1,
+			"y": 0
+		}
 	},
 	"entities": [
 		{
 			"type": "Scroll",
-			"position": [
-				9,
-				23
-			],
+			"position": {
+				"x": 9,
+				"y": 23
+			},
 			"value": 1
 		},
 		{
 			"type": "Orc",
-			"position": [
-				29,
-				22
-			]
+			"position": {
+				"x": 29,
+				"y": 22
+			}
 		},
 		{
 			"type": "Orc",
-			"position": [
-				21,
-				18
-			]
+			"position": {
+				"x": 21,
+				"y": 18
+			}
 		},
 		{
 			"type": "Orc",
-			"position": [
-				4,
-				14
-			]
+			"position": {
+				"x": 4,
+				"y": 14
+			}
 		},
 		{
 			"type": "Orc",
-			"position": [
-				35,
-				14
-			]
+			"position": {
+				"x": 35,
+				"y": 14
+			}
 		},
 		{
 			"type": "WarpGate",
-			"position": [
-				38,
-				13
-			],
+			"position": {
+				"x": 38,
+				"y": 13
+			},
 			"value": "Nemesis's_Keep"
 		},
 		{
 			"type": "Orc",
-			"position": [
-				20,
-				12
-			]
+			"position": {
+				"x": 20,
+				"y": 12
+			}
 		},
 		{
 			"type": "Potion",
-			"position": [
-				24,
-				11
-			]
+			"position": {
+				"x": 24,
+				"y": 11
+			}
 		},
 		{
 			"type": "Potion",
-			"position": [
-				25,
-				11
-			]
+			"position": {
+				"x": 25,
+				"y": 11
+			}
 		},
 		{
 			"type": "Orc",
-			"position": [
-				8,
-				10
-			]
+			"position": {
+				"x": 8,
+				"y": 10
+			}
 		},
 		{
 			"type": "Potion",
-			"position": [
-				24,
-				10
-			]
+			"position": {
+				"x": 24,
+				"y": 10
+			}
 		},
 		{
 			"type": "Potion",
-			"position": [
-				25,
-				10
-			]
+			"position": {
+				"x": 25,
+				"y": 10
+			}
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				16,
-				9
-			],
+			"position": {
+				"x": 16,
+				"y": 9
+			},
 			"value": 100
 		},
 		{
 			"type": "Potion",
-			"position": [
-				24,
-				9
-			]
+			"position": {
+				"x": 24,
+				"y": 9
+			}
 		},
 		{
 			"type": "Potion",
-			"position": [
-				25,
-				9
-			]
+			"position": {
+				"x": 25,
+				"y": 9
+			}
 		},
 		{
 			"type": "WarpGate",
-			"position": [
-				12,
-				8
-			],
+			"position": {
+				"x": 12,
+				"y": 8
+			},
 			"value": "Access_Floor"
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				16,
-				8
-			],
+			"position": {
+				"x": 16,
+				"y": 8
+			},
 			"value": 100
 		},
 		{
 			"type": "Potion",
-			"position": [
-				24,
-				8
-			]
+			"position": {
+				"x": 24,
+				"y": 8
+			}
 		},
 		{
 			"type": "Potion",
-			"position": [
-				25,
-				8
-			]
+			"position": {
+				"x": 25,
+				"y": 8
+			}
 		},
 		{
 			"type": "Orc",
-			"position": [
-				29,
-				6
-			]
+			"position": {
+				"x": 29,
+				"y": 6
+			}
 		},
 		{
 			"type": "Orc",
-			"position": [
-				18,
-				5
-			]
+			"position": {
+				"x": 18,
+				"y": 5
+			}
 		}
 	],
 	"fog": {

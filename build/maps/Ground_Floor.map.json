@@ -135,491 +135,491 @@
 		}
 	},
 	"playerStart": {
-		"position": [
-			2,
-			13
-		],
-		"direction": [
-			1,
-			0
-		]
+		"position": {
+			"x": 2,
+			"y": 13
+		},
+		"direction": {
+			"x": 1,
+			"y": 0
+		}
 	},
 	"entities": [
 		{
 			"type": "Orc",
-			"position": [
-				30,
-				26
-			]
+			"position": {
+				"x": 30,
+				"y": 26
+			}
 		},
 		{
 			"type": "Orc",
-			"position": [
-				34,
-				26
-			]
+			"position": {
+				"x": 34,
+				"y": 26
+			}
 		},
 		{
 			"type": "Potion",
-			"position": [
-				37,
-				26
-			]
+			"position": {
+				"x": 37,
+				"y": 26
+			}
 		},
 		{
 			"type": "Potion",
-			"position": [
-				38,
-				26
-			]
+			"position": {
+				"x": 38,
+				"y": 26
+			}
 		},
 		{
 			"type": "Bolt",
-			"position": [
-				2,
-				25
-			]
+			"position": {
+				"x": 2,
+				"y": 25
+			}
 		},
 		{
 			"type": "Bolt",
-			"position": [
-				6,
-				25
-			]
+			"position": {
+				"x": 6,
+				"y": 25
+			}
 		},
 		{
 			"type": "Orc",
-			"position": [
-				23,
-				25
-			]
+			"position": {
+				"x": 23,
+				"y": 25
+			}
 		},
 		{
 			"type": "Potion",
-			"position": [
-				37,
-				25
-			]
+			"position": {
+				"x": 37,
+				"y": 25
+			}
 		},
 		{
 			"type": "Potion",
-			"position": [
-				38,
-				25
-			]
+			"position": {
+				"x": 38,
+				"y": 25
+			}
 		},
 		{
 			"type": "Orc",
-			"position": [
-				11,
-				23
-			]
+			"position": {
+				"x": 11,
+				"y": 23
+			}
 		},
 		{
 			"type": "Bolt",
-			"position": [
-				38,
-				22
-			]
+			"position": {
+				"x": 38,
+				"y": 22
+			}
 		},
 		{
 			"type": "Orc",
-			"position": [
-				4,
-				21
-			]
+			"position": {
+				"x": 4,
+				"y": 21
+			}
 		},
 		{
 			"type": "Orc",
-			"position": [
-				16,
-				21
-			]
+			"position": {
+				"x": 16,
+				"y": 21
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				30,
-				21
-			]
+			"position": {
+				"x": 30,
+				"y": 21
+			}
 		},
 		{
 			"type": "Bolt",
-			"position": [
-				38,
-				21
-			]
+			"position": {
+				"x": 38,
+				"y": 21
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				23,
-				20
-			]
+			"position": {
+				"x": 23,
+				"y": 20
+			}
 		},
 		{
 			"type": "Orc",
-			"position": [
-				6,
-				19
-			]
+			"position": {
+				"x": 6,
+				"y": 19
+			}
 		},
 		{
 			"type": "Potion",
-			"position": [
-				36,
-				19
-			]
+			"position": {
+				"x": 36,
+				"y": 19
+			}
 		},
 		{
 			"type": "Potion",
-			"position": [
-				37,
-				19
-			]
+			"position": {
+				"x": 37,
+				"y": 19
+			}
 		},
 		{
 			"type": "Potion",
-			"position": [
-				38,
-				19
-			]
+			"position": {
+				"x": 38,
+				"y": 19
+			}
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				36,
-				18
-			],
+			"position": {
+				"x": 36,
+				"y": 18
+			},
 			"value": 300
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				37,
-				18
-			],
+			"position": {
+				"x": 37,
+				"y": 18
+			},
 			"value": 300
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				38,
-				18
-			],
+			"position": {
+				"x": 38,
+				"y": 18
+			},
 			"value": 300
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				36,
-				17
-			],
+			"position": {
+				"x": 36,
+				"y": 17
+			},
 			"value": 300
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				37,
-				17
-			],
+			"position": {
+				"x": 37,
+				"y": 17
+			},
 			"value": 300
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				38,
-				17
-			],
+			"position": {
+				"x": 38,
+				"y": 17
+			},
 			"value": 300
 		},
 		{
 			"type": "Orc",
-			"position": [
-				13,
-				16
-			]
+			"position": {
+				"x": 13,
+				"y": 16
+			}
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				32,
-				16
-			],
+			"position": {
+				"x": 32,
+				"y": 16
+			},
 			"value": 300
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				33,
-				16
-			],
+			"position": {
+				"x": 33,
+				"y": 16
+			},
 			"value": 300
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				34,
-				16
-			],
+			"position": {
+				"x": 34,
+				"y": 16
+			},
 			"value": 300
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				32,
-				15
-			],
+			"position": {
+				"x": 32,
+				"y": 15
+			},
 			"value": 300
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				33,
-				15
-			],
+			"position": {
+				"x": 33,
+				"y": 15
+			},
 			"value": 300
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				34,
-				15
-			],
+			"position": {
+				"x": 34,
+				"y": 15
+			},
 			"value": 300
 		},
 		{
 			"type": "BlueKey",
-			"position": [
-				36,
-				15
-			]
+			"position": {
+				"x": 36,
+				"y": 15
+			}
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				32,
-				14
-			],
+			"position": {
+				"x": 32,
+				"y": 14
+			},
 			"value": 300
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				33,
-				14
-			],
+			"position": {
+				"x": 33,
+				"y": 14
+			},
 			"value": 300
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				34,
-				14
-			],
+			"position": {
+				"x": 34,
+				"y": 14
+			},
 			"value": 300
 		},
 		{
 			"type": "Orc",
-			"position": [
-				37,
-				14
-			]
+			"position": {
+				"x": 37,
+				"y": 14
+			}
 		},
 		{
 			"type": "Orc",
-			"position": [
-				8,
-				13
-			]
+			"position": {
+				"x": 8,
+				"y": 13
+			}
 		},
 		{
 			"type": "WarpGate",
-			"position": [
-				30,
-				13
-			],
+			"position": {
+				"x": 30,
+				"y": 13
+			},
 			"value": "Second_Floor"
 		},
 		{
 			"type": "Orc",
-			"position": [
-				33,
-				11
-			]
+			"position": {
+				"x": 33,
+				"y": 11
+			}
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				2,
-				9
-			],
+			"position": {
+				"x": 2,
+				"y": 9
+			},
 			"value": 300
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				3,
-				9
-			],
+			"position": {
+				"x": 3,
+				"y": 9
+			},
 			"value": 300
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				4,
-				9
-			],
+			"position": {
+				"x": 4,
+				"y": 9
+			},
 			"value": 300
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				5,
-				9
-			],
+			"position": {
+				"x": 5,
+				"y": 9
+			},
 			"value": 300
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				6,
-				9
-			],
+			"position": {
+				"x": 6,
+				"y": 9
+			},
 			"value": 300
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				2,
-				8
-			],
+			"position": {
+				"x": 2,
+				"y": 8
+			},
 			"value": 300
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				3,
-				8
-			],
+			"position": {
+				"x": 3,
+				"y": 8
+			},
 			"value": 300
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				4,
-				8
-			],
+			"position": {
+				"x": 4,
+				"y": 8
+			},
 			"value": 300
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				5,
-				8
-			],
+			"position": {
+				"x": 5,
+				"y": 8
+			},
 			"value": 300
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				6,
-				8
-			],
-			"value": 300
-		},
-		{
-			"type": "Orc",
-			"position": [
-				30,
-				8
-			]
-		},
-		{
-			"type": "Treasure",
-			"position": [
-				5,
-				7
-			],
-			"value": 300
-		},
-		{
-			"type": "Treasure",
-			"position": [
-				6,
-				7
-			],
+			"position": {
+				"x": 6,
+				"y": 8
+			},
 			"value": 300
 		},
 		{
 			"type": "Orc",
-			"position": [
-				25,
-				5
-			]
+			"position": {
+				"x": 30,
+				"y": 8
+			}
+		},
+		{
+			"type": "Treasure",
+			"position": {
+				"x": 5,
+				"y": 7
+			},
+			"value": 300
+		},
+		{
+			"type": "Treasure",
+			"position": {
+				"x": 6,
+				"y": 7
+			},
+			"value": 300
 		},
 		{
 			"type": "Orc",
-			"position": [
-				34,
-				5
-			]
+			"position": {
+				"x": 25,
+				"y": 5
+			}
+		},
+		{
+			"type": "Orc",
+			"position": {
+				"x": 34,
+				"y": 5
+			}
 		},
 		{
 			"type": "Potion",
-			"position": [
-				2,
-				4
-			]
+			"position": {
+				"x": 2,
+				"y": 4
+			}
 		},
 		{
 			"type": "Orc",
-			"position": [
-				3,
-				4
-			]
+			"position": {
+				"x": 3,
+				"y": 4
+			}
 		},
 		{
 			"type": "Orc",
-			"position": [
-				14,
-				3
-			]
+			"position": {
+				"x": 14,
+				"y": 3
+			}
 		},
 		{
 			"type": "Potion",
-			"position": [
-				2,
-				2
-			]
+			"position": {
+				"x": 2,
+				"y": 2
+			}
 		},
 		{
 			"type": "Orc",
-			"position": [
-				3,
-				2
-			]
+			"position": {
+				"x": 3,
+				"y": 2
+			}
 		},
 		{
 			"type": "Orc",
-			"position": [
-				8,
-				2
-			]
+			"position": {
+				"x": 8,
+				"y": 2
+			}
 		},
 		{
 			"type": "Orc",
-			"position": [
-				24,
-				2
-			]
+			"position": {
+				"x": 24,
+				"y": 2
+			}
 		},
 		{
 			"type": "WarpGate",
-			"position": [
-				37,
-				1
-			],
+			"position": {
+				"x": 37,
+				"y": 1
+			},
 			"value": "Secret_Halls"
 		}
 	],

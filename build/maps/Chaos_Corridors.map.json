@@ -99,247 +99,247 @@
 		}
 	},
 	"playerStart": {
-		"position": [
-			16,
-			14
-		],
-		"direction": [
-			-1,
-			0
-		]
+		"position": {
+			"x": 16,
+			"y": 14
+		},
+		"direction": {
+			"x": -1,
+			"y": 0
+		}
 	},
 	"entities": [
 		{
 			"type": "RedKey",
-			"position": [
-				1,
-				26
-			]
+			"position": {
+				"x": 1,
+				"y": 26
+			}
 		},
 		{
 			"type": "Mage",
-			"position": [
-				26,
-				26
-			]
+			"position": {
+				"x": 26,
+				"y": 26
+			}
 		},
 		{
 			"type": "Mage",
-			"position": [
-				11,
-				25
-			],
+			"position": {
+				"x": 11,
+				"y": 25
+			},
 			"minDifficulty": 1
 		},
 		{
 			"type": "BlueKey",
-			"position": [
-				37,
-				25
-			]
+			"position": {
+				"x": 37,
+				"y": 25
+			}
 		},
 		{
 			"type": "Mage",
-			"position": [
-				2,
-				23
-			],
+			"position": {
+				"x": 2,
+				"y": 23
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "Mage",
-			"position": [
-				4,
-				23
-			]
+			"position": {
+				"x": 4,
+				"y": 23
+			}
 		},
 		{
 			"type": "Mage",
-			"position": [
-				21,
-				23
-			],
+			"position": {
+				"x": 21,
+				"y": 23
+			},
 			"minDifficulty": 1
 		},
 		{
 			"type": "Mage",
-			"position": [
-				15,
-				22
-			],
+			"position": {
+				"x": 15,
+				"y": 22
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "Potion",
-			"position": [
-				25,
-				22
-			]
+			"position": {
+				"x": 25,
+				"y": 22
+			}
 		},
 		{
 			"type": "Potion",
-			"position": [
-				26,
-				22
-			]
+			"position": {
+				"x": 26,
+				"y": 22
+			}
 		},
 		{
 			"type": "Mage",
-			"position": [
-				22,
-				21
-			],
+			"position": {
+				"x": 22,
+				"y": 21
+			},
 			"minDifficulty": 1
 		},
 		{
 			"type": "Potion",
-			"position": [
-				25,
-				21
-			]
+			"position": {
+				"x": 25,
+				"y": 21
+			}
 		},
 		{
 			"type": "Potion",
-			"position": [
-				26,
-				21
-			]
+			"position": {
+				"x": 26,
+				"y": 21
+			}
 		},
 		{
 			"type": "Mage",
-			"position": [
-				32,
-				20
-			],
+			"position": {
+				"x": 32,
+				"y": 20
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "Mage",
-			"position": [
-				10,
-				18
-			]
+			"position": {
+				"x": 10,
+				"y": 18
+			}
 		},
 		{
 			"type": "Mage",
-			"position": [
-				6,
-				16
-			],
+			"position": {
+				"x": 6,
+				"y": 16
+			},
 			"minDifficulty": 1
 		},
 		{
 			"type": "Mage",
-			"position": [
-				36,
-				16
-			],
+			"position": {
+				"x": 36,
+				"y": 16
+			},
 			"minDifficulty": 1
 		},
 		{
 			"type": "Mage",
-			"position": [
-				11,
-				11
-			],
+			"position": {
+				"x": 11,
+				"y": 11
+			},
 			"minDifficulty": 1
 		},
 		{
 			"type": "Mage",
-			"position": [
-				2,
-				10
-			],
+			"position": {
+				"x": 2,
+				"y": 10
+			},
 			"minDifficulty": 1
 		},
 		{
 			"type": "Mage",
-			"position": [
-				31,
-				9
-			]
+			"position": {
+				"x": 31,
+				"y": 9
+			}
 		},
 		{
 			"type": "Mage",
-			"position": [
-				37,
-				9
-			],
+			"position": {
+				"x": 37,
+				"y": 9
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "YellowKey",
-			"position": [
-				38,
-				9
-			]
+			"position": {
+				"x": 38,
+				"y": 9
+			}
 		},
 		{
 			"type": "Mage",
-			"position": [
-				4,
-				7
-			]
+			"position": {
+				"x": 4,
+				"y": 7
+			}
 		},
 		{
 			"type": "Mage",
-			"position": [
-				27,
-				7
-			],
+			"position": {
+				"x": 27,
+				"y": 7
+			},
 			"minDifficulty": 1
 		},
 		{
 			"type": "Mage",
-			"position": [
-				36,
-				5
-			]
+			"position": {
+				"x": 36,
+				"y": 5
+			}
 		},
 		{
 			"type": "GreenKey",
-			"position": [
-				1,
-				4
-			]
+			"position": {
+				"x": 1,
+				"y": 4
+			}
 		},
 		{
 			"type": "Mage",
-			"position": [
-				9,
-				4
-			]
+			"position": {
+				"x": 9,
+				"y": 4
+			}
 		},
 		{
 			"type": "Mage",
-			"position": [
-				4,
-				2
-			],
+			"position": {
+				"x": 4,
+				"y": 2
+			},
 			"minDifficulty": 1
 		},
 		{
 			"type": "Mage",
-			"position": [
-				12,
-				2
-			],
+			"position": {
+				"x": 12,
+				"y": 2
+			},
 			"minDifficulty": 1
 		},
 		{
 			"type": "Scroll",
-			"position": [
-				38,
-				2
-			],
+			"position": {
+				"x": 38,
+				"y": 2
+			},
 			"value": 6
 		},
 		{
 			"type": "WarpGate",
-			"position": [
-				29,
-				1
-			],
+			"position": {
+				"x": 29,
+				"y": 1
+			},
 			"value": "Labyrinth"
 		}
 	],

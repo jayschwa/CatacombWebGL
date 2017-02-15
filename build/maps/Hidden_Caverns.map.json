@@ -79,219 +79,219 @@
 		}
 	},
 	"playerStart": {
-		"position": [
-			32,
-			8
-		],
-		"direction": [
-			0,
-			-1
-		]
+		"position": {
+			"x": 32,
+			"y": 8
+		},
+		"direction": {
+			"x": 0,
+			"y": -1
+		}
 	},
 	"entities": [
 		{
 			"type": "Orc",
-			"position": [
-				33,
-				26
-			],
+			"position": {
+				"x": 33,
+				"y": 26
+			},
 			"minDifficulty": 1
 		},
 		{
 			"type": "Troll",
-			"position": [
-				13,
-				24
-			],
-			"minDifficulty": 1
-		},
-		{
-			"type": "Orc",
-			"position": [
-				32,
-				24
-			],
+			"position": {
+				"x": 13,
+				"y": 24
+			},
 			"minDifficulty": 1
 		},
 		{
 			"type": "Orc",
-			"position": [
-				33,
-				24
-			],
+			"position": {
+				"x": 32,
+				"y": 24
+			},
 			"minDifficulty": 1
 		},
 		{
 			"type": "Orc",
-			"position": [
-				34,
-				24
-			]
-		},
-		{
-			"type": "Troll",
-			"position": [
-				10,
-				23
-			],
-			"minDifficulty": 2
-		},
-		{
-			"type": "Troll",
-			"position": [
-				17,
-				23
-			]
+			"position": {
+				"x": 33,
+				"y": 24
+			},
+			"minDifficulty": 1
 		},
 		{
 			"type": "Orc",
-			"position": [
-				30,
-				23
-			]
+			"position": {
+				"x": 34,
+				"y": 24
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				13,
-				19
-			]
-		},
-		{
-			"type": "Troll",
-			"position": [
-				11,
-				17
-			],
-			"minDifficulty": 1
-		},
-		{
-			"type": "Bat",
-			"position": [
-				31,
-				17
-			],
-			"minDifficulty": 2
-		},
-		{
-			"type": "Bat",
-			"position": [
-				34,
-				17
-			],
+			"position": {
+				"x": 10,
+				"y": 23
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "Troll",
-			"position": [
-				13,
-				16
-			]
+			"position": {
+				"x": 17,
+				"y": 23
+			}
+		},
+		{
+			"type": "Orc",
+			"position": {
+				"x": 30,
+				"y": 23
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				10,
-				15
-			],
+			"position": {
+				"x": 13,
+				"y": 19
+			}
+		},
+		{
+			"type": "Troll",
+			"position": {
+				"x": 11,
+				"y": 17
+			},
+			"minDifficulty": 1
+		},
+		{
+			"type": "Bat",
+			"position": {
+				"x": 31,
+				"y": 17
+			},
+			"minDifficulty": 2
+		},
+		{
+			"type": "Bat",
+			"position": {
+				"x": 34,
+				"y": 17
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "Troll",
-			"position": [
-				13,
-				15
-			],
+			"position": {
+				"x": 13,
+				"y": 16
+			}
+		},
+		{
+			"type": "Troll",
+			"position": {
+				"x": 10,
+				"y": 15
+			},
+			"minDifficulty": 2
+		},
+		{
+			"type": "Troll",
+			"position": {
+				"x": 13,
+				"y": 15
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "Bat",
-			"position": [
-				32,
-				15
-			]
+			"position": {
+				"x": 32,
+				"y": 15
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				12,
-				14
-			],
+			"position": {
+				"x": 12,
+				"y": 14
+			},
 			"minDifficulty": 1
 		},
 		{
 			"type": "Bat",
-			"position": [
-				30,
-				14
-			],
+			"position": {
+				"x": 30,
+				"y": 14
+			},
 			"minDifficulty": 1
 		},
 		{
 			"type": "Bat",
-			"position": [
-				33,
-				14
-			],
+			"position": {
+				"x": 33,
+				"y": 14
+			},
 			"minDifficulty": 1
 		},
 		{
 			"type": "Bat",
-			"position": [
-				31,
-				12
-			]
+			"position": {
+				"x": 31,
+				"y": 12
+			}
 		},
 		{
 			"type": "Bat",
-			"position": [
-				32,
-				11
-			],
+			"position": {
+				"x": 32,
+				"y": 11
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "Scroll",
-			"position": [
-				14,
-				9
-			],
+			"position": {
+				"x": 14,
+				"y": 9
+			},
 			"value": 8
 		},
 		{
 			"type": "Potion",
-			"position": [
-				2,
-				5
-			]
+			"position": {
+				"x": 2,
+				"y": 5
+			}
 		},
 		{
 			"type": "Potion",
-			"position": [
-				3,
-				5
-			]
+			"position": {
+				"x": 3,
+				"y": 5
+			}
 		},
 		{
 			"type": "Potion",
-			"position": [
-				2,
-				4
-			]
+			"position": {
+				"x": 2,
+				"y": 4
+			}
 		},
 		{
 			"type": "Potion",
-			"position": [
-				3,
-				4
-			]
+			"position": {
+				"x": 3,
+				"y": 4
+			}
 		},
 		{
 			"type": "WarpGate",
-			"position": [
-				12,
-				2
-			],
+			"position": {
+				"x": 12,
+				"y": 2
+			},
 			"value": "Access_Floor"
 		}
 	],

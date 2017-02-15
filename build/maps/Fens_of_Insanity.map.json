@@ -75,348 +75,348 @@
 		}
 	},
 	"playerStart": {
-		"position": [
-			5,
-			5
-		],
-		"direction": [
-			1,
-			0
-		]
+		"position": {
+			"x": 5,
+			"y": 5
+		},
+		"direction": {
+			"x": 1,
+			"y": 0
+		}
 	},
 	"entities": [
 		{
 			"type": "Troll",
-			"position": [
-				17,
-				24
-			],
+			"position": {
+				"x": 17,
+				"y": 24
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "Troll",
-			"position": [
-				18,
-				24
-			],
+			"position": {
+				"x": 18,
+				"y": 24
+			},
 			"minDifficulty": 1
 		},
 		{
 			"type": "JumpGate",
-			"position": [
-				26,
-				24
-			],
-			"value": [
-				36,
-				23
-			]
+			"position": {
+				"x": 26,
+				"y": 24
+			},
+			"value": {
+				"x": 36,
+				"y": 23
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				7,
-				23
-			],
+			"position": {
+				"x": 7,
+				"y": 23
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "JumpGate",
-			"position": [
-				36,
-				23
-			],
-			"value": [
-				26,
-				24
-			]
+			"position": {
+				"x": 36,
+				"y": 23
+			},
+			"value": {
+				"x": 26,
+				"y": 24
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				9,
-				22
-			],
+			"position": {
+				"x": 9,
+				"y": 22
+			},
 			"minDifficulty": 1
 		},
 		{
 			"type": "Troll",
-			"position": [
-				31,
-				22
-			],
+			"position": {
+				"x": 31,
+				"y": 22
+			},
 			"minDifficulty": 1
 		},
 		{
 			"type": "JumpGate",
-			"position": [
-				12,
-				21
-			],
-			"value": [
-				24,
-				10
-			]
+			"position": {
+				"x": 12,
+				"y": 21
+			},
+			"value": {
+				"x": 24,
+				"y": 10
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				10,
-				20
-			],
+			"position": {
+				"x": 10,
+				"y": 20
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "JumpGate",
-			"position": [
-				3,
-				19
-			],
-			"value": [
-				11,
-				13
-			]
+			"position": {
+				"x": 3,
+				"y": 19
+			},
+			"value": {
+				"x": 11,
+				"y": 13
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				17,
-				18
-			],
+			"position": {
+				"x": 17,
+				"y": 18
+			},
 			"minDifficulty": 1
 		},
 		{
 			"type": "Troll",
-			"position": [
-				21,
-				17
-			],
+			"position": {
+				"x": 21,
+				"y": 17
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "Troll",
-			"position": [
-				28,
-				17
-			],
+			"position": {
+				"x": 28,
+				"y": 17
+			},
 			"minDifficulty": 1
 		},
 		{
 			"type": "Scroll",
-			"position": [
-				2,
-				14
-			],
+			"position": {
+				"x": 2,
+				"y": 14
+			},
 			"value": 2
 		},
 		{
 			"type": "Troll",
-			"position": [
-				25,
-				14
-			],
+			"position": {
+				"x": 25,
+				"y": 14
+			},
 			"minDifficulty": 1
 		},
 		{
 			"type": "JumpGate",
-			"position": [
-				11,
-				13
-			],
-			"value": [
-				3,
-				19
-			]
+			"position": {
+				"x": 11,
+				"y": 13
+			},
+			"value": {
+				"x": 3,
+				"y": 19
+			}
 		},
 		{
 			"type": "Bat",
-			"position": [
-				1,
-				12
-			]
+			"position": {
+				"x": 1,
+				"y": 12
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				8,
-				12
-			],
+			"position": {
+				"x": 8,
+				"y": 12
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "Troll",
-			"position": [
-				37,
-				12
-			],
+			"position": {
+				"x": 37,
+				"y": 12
+			},
 			"minDifficulty": 1
 		},
 		{
 			"type": "Troll",
-			"position": [
-				3,
-				11
-			],
+			"position": {
+				"x": 3,
+				"y": 11
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "Troll",
-			"position": [
-				17,
-				11
-			]
+			"position": {
+				"x": 17,
+				"y": 11
+			}
 		},
 		{
 			"type": "JumpGate",
-			"position": [
-				24,
-				10
-			],
-			"value": [
-				12,
-				21
-			]
+			"position": {
+				"x": 24,
+				"y": 10
+			},
+			"value": {
+				"x": 12,
+				"y": 21
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				12,
-				8
-			],
+			"position": {
+				"x": 12,
+				"y": 8
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "Orc",
-			"position": [
-				28,
-				8
-			],
+			"position": {
+				"x": 28,
+				"y": 8
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "Troll",
-			"position": [
-				1,
-				7
-			],
+			"position": {
+				"x": 1,
+				"y": 7
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "Troll",
-			"position": [
-				20,
-				7
-			],
+			"position": {
+				"x": 20,
+				"y": 7
+			},
 			"minDifficulty": 1
 		},
 		{
 			"type": "Troll",
-			"position": [
-				30,
-				7
-			]
+			"position": {
+				"x": 30,
+				"y": 7
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				32,
-				7
-			]
+			"position": {
+				"x": 32,
+				"y": 7
+			}
 		},
 		{
 			"type": "Orc",
-			"position": [
-				33,
-				7
-			]
+			"position": {
+				"x": 33,
+				"y": 7
+			}
 		},
 		{
 			"type": "Orc",
-			"position": [
-				34,
-				6
-			]
+			"position": {
+				"x": 34,
+				"y": 6
+			}
 		},
 		{
 			"type": "Bat",
-			"position": [
-				1,
-				5
-			]
+			"position": {
+				"x": 1,
+				"y": 5
+			}
 		},
 		{
 			"type": "Orc",
-			"position": [
-				30,
-				5
-			],
+			"position": {
+				"x": 30,
+				"y": 5
+			},
 			"minDifficulty": 1
 		},
 		{
 			"type": "Potion",
-			"position": [
-				1,
-				4
-			]
+			"position": {
+				"x": 1,
+				"y": 4
+			}
 		},
 		{
 			"type": "Potion",
-			"position": [
-				2,
-				4
-			]
+			"position": {
+				"x": 2,
+				"y": 4
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				24,
-				4
-			],
+			"position": {
+				"x": 24,
+				"y": 4
+			},
 			"minDifficulty": 1
 		},
 		{
 			"type": "Orc",
-			"position": [
-				33,
-				4
-			],
+			"position": {
+				"x": 33,
+				"y": 4
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "Potion",
-			"position": [
-				1,
-				3
-			]
+			"position": {
+				"x": 1,
+				"y": 3
+			}
 		},
 		{
 			"type": "Potion",
-			"position": [
-				2,
-				3
-			]
+			"position": {
+				"x": 2,
+				"y": 3
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				14,
-				2
-			]
+			"position": {
+				"x": 14,
+				"y": 2
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				23,
-				2
-			],
+			"position": {
+				"x": 23,
+				"y": 2
+			},
 			"minDifficulty": 1
 		},
 		{
 			"type": "WarpGate",
-			"position": [
-				3,
-				1
-			],
+			"position": {
+				"x": 3,
+				"y": 1
+			},
 			"value": "Access_Floor"
 		}
 	],

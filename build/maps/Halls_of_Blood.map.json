@@ -68,392 +68,392 @@
 		}
 	},
 	"playerStart": {
-		"position": [
-			2,
-			3
-		],
-		"direction": [
-			1,
-			0
-		]
+		"position": {
+			"x": 2,
+			"y": 3
+		},
+		"direction": {
+			"x": 1,
+			"y": 0
+		}
 	},
 	"entities": [
 		{
 			"type": "WarpGate",
-			"position": [
-				36,
-				26
-			],
+			"position": {
+				"x": 36,
+				"y": 26
+			},
 			"value": "Access_Floor"
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				18,
-				25
-			],
+			"position": {
+				"x": 18,
+				"y": 25
+			},
 			"value": 1900
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				19,
-				25
-			],
+			"position": {
+				"x": 19,
+				"y": 25
+			},
 			"value": 1900
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				35,
-				25
-			],
+			"position": {
+				"x": 35,
+				"y": 25
+			},
 			"value": 1900
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				36,
-				25
-			],
+			"position": {
+				"x": 36,
+				"y": 25
+			},
 			"value": 1900
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				37,
-				25
-			],
+			"position": {
+				"x": 37,
+				"y": 25
+			},
 			"value": 1900
 		},
 		{
 			"type": "JumpGate",
-			"position": [
-				4,
-				24
-			],
-			"value": [
-				23,
-				12
-			]
+			"position": {
+				"x": 4,
+				"y": 24
+			},
+			"value": {
+				"x": 23,
+				"y": 12
+			}
 		},
 		{
 			"type": "Demon",
-			"position": [
-				5,
-				24
-			]
+			"position": {
+				"x": 5,
+				"y": 24
+			}
 		},
 		{
 			"type": "Demon",
-			"position": [
-				19,
-				24
-			]
+			"position": {
+				"x": 19,
+				"y": 24
+			}
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				20,
-				24
-			],
+			"position": {
+				"x": 20,
+				"y": 24
+			},
 			"value": 1900
 		},
 		{
 			"type": "Demon",
-			"position": [
-				23,
-				24
-			]
+			"position": {
+				"x": 23,
+				"y": 24
+			}
 		},
 		{
 			"type": "Demon",
-			"position": [
-				37,
-				24
-			]
+			"position": {
+				"x": 37,
+				"y": 24
+			}
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				20,
-				23
-			],
+			"position": {
+				"x": 20,
+				"y": 23
+			},
 			"value": 1900
 		},
 		{
 			"type": "WarpGate",
-			"position": [
-				23,
-				23
-			],
+			"position": {
+				"x": 23,
+				"y": 23
+			},
 			"value": "Nemesis's_Lair"
 		},
 		{
 			"type": "Demon",
-			"position": [
-				33,
-				23
-			]
+			"position": {
+				"x": 33,
+				"y": 23
+			}
 		},
 		{
 			"type": "WarpGate",
-			"position": [
-				19,
-				22
-			],
+			"position": {
+				"x": 19,
+				"y": 22
+			},
 			"value": "Access_Floor"
 		},
 		{
 			"type": "Demon",
-			"position": [
-				25,
-				22
-			]
+			"position": {
+				"x": 25,
+				"y": 22
+			}
 		},
 		{
 			"type": "Demon",
-			"position": [
-				5,
-				21
-			]
+			"position": {
+				"x": 5,
+				"y": 21
+			}
 		},
 		{
 			"type": "Demon",
-			"position": [
-				17,
-				18
-			]
+			"position": {
+				"x": 17,
+				"y": 18
+			}
 		},
 		{
 			"type": "Demon",
-			"position": [
-				35,
-				16
-			]
+			"position": {
+				"x": 35,
+				"y": 16
+			}
 		},
 		{
 			"type": "Demon",
-			"position": [
-				7,
-				14
-			]
+			"position": {
+				"x": 7,
+				"y": 14
+			}
 		},
 		{
 			"type": "Demon",
-			"position": [
-				36,
-				13
-			]
+			"position": {
+				"x": 36,
+				"y": 13
+			}
 		},
 		{
 			"type": "JumpGate",
-			"position": [
-				23,
-				12
-			],
-			"value": [
-				4,
-				24
-			]
+			"position": {
+				"x": 23,
+				"y": 12
+			},
+			"value": {
+				"x": 4,
+				"y": 24
+			}
 		},
 		{
 			"type": "WarpGate",
-			"position": [
-				34,
-				12
-			],
+			"position": {
+				"x": 34,
+				"y": 12
+			},
 			"value": "Access_Floor"
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				35,
-				12
-			],
+			"position": {
+				"x": 35,
+				"y": 12
+			},
 			"value": 1900
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				36,
-				12
-			],
+			"position": {
+				"x": 36,
+				"y": 12
+			},
 			"value": 1900
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				37,
-				12
-			],
+			"position": {
+				"x": 37,
+				"y": 12
+			},
 			"value": 1900
 		},
 		{
 			"type": "Demon",
-			"position": [
-				28,
-				11
-			]
+			"position": {
+				"x": 28,
+				"y": 11
+			}
 		},
 		{
 			"type": "Demon",
-			"position": [
-				34,
-				10
-			]
+			"position": {
+				"x": 34,
+				"y": 10
+			}
 		},
 		{
 			"type": "WarpGate",
-			"position": [
-				35,
-				10
-			],
+			"position": {
+				"x": 35,
+				"y": 10
+			},
 			"value": "Access_Floor"
 		},
 		{
 			"type": "WarpGate",
-			"position": [
-				37,
-				10
-			],
+			"position": {
+				"x": 37,
+				"y": 10
+			},
 			"value": "Access_Floor"
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				33,
-				9
-			],
+			"position": {
+				"x": 33,
+				"y": 9
+			},
 			"value": 1900
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				34,
-				9
-			],
+			"position": {
+				"x": 34,
+				"y": 9
+			},
 			"value": 1900
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				37,
-				9
-			],
+			"position": {
+				"x": 37,
+				"y": 9
+			},
 			"value": 1900
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				38,
-				9
-			],
-			"value": 1900
-		},
-		{
-			"type": "Demon",
-			"position": [
-				37,
-				8
-			]
-		},
-		{
-			"type": "Treasure",
-			"position": [
-				38,
-				8
-			],
+			"position": {
+				"x": 38,
+				"y": 9
+			},
 			"value": 1900
 		},
 		{
 			"type": "Demon",
-			"position": [
-				27,
-				7
-			]
-		},
-		{
-			"type": "Demon",
-			"position": [
-				14,
-				6
-			]
-		},
-		{
-			"type": "Demon",
-			"position": [
-				23,
-				6
-			]
+			"position": {
+				"x": 37,
+				"y": 8
+			}
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				35,
-				4
-			],
+			"position": {
+				"x": 38,
+				"y": 8
+			},
+			"value": 1900
+		},
+		{
+			"type": "Demon",
+			"position": {
+				"x": 27,
+				"y": 7
+			}
+		},
+		{
+			"type": "Demon",
+			"position": {
+				"x": 14,
+				"y": 6
+			}
+		},
+		{
+			"type": "Demon",
+			"position": {
+				"x": 23,
+				"y": 6
+			}
+		},
+		{
+			"type": "Treasure",
+			"position": {
+				"x": 35,
+				"y": 4
+			},
 			"value": 1900
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				36,
-				4
-			],
+			"position": {
+				"x": 36,
+				"y": 4
+			},
 			"value": 1900
 		},
 		{
 			"type": "WarpGate",
-			"position": [
-				38,
-				4
-			],
+			"position": {
+				"x": 38,
+				"y": 4
+			},
 			"value": "Access_Floor"
 		},
 		{
 			"type": "Demon",
-			"position": [
-				17,
-				3
-			]
+			"position": {
+				"x": 17,
+				"y": 3
+			}
 		},
 		{
 			"type": "Demon",
-			"position": [
-				36,
-				3
-			]
+			"position": {
+				"x": 36,
+				"y": 3
+			}
 		},
 		{
 			"type": "Demon",
-			"position": [
-				14,
-				2
-			]
+			"position": {
+				"x": 14,
+				"y": 2
+			}
 		},
 		{
 			"type": "WarpGate",
-			"position": [
-				12,
-				1
-			],
+			"position": {
+				"x": 12,
+				"y": 1
+			},
 			"value": "Access_Floor"
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				14,
-				1
-			],
+			"position": {
+				"x": 14,
+				"y": 1
+			},
 			"value": 1900
 		},
 		{
 			"type": "Treasure",
-			"position": [
-				15,
-				1
-			],
+			"position": {
+				"x": 15,
+				"y": 1
+			},
 			"value": 1900
 		}
 	],

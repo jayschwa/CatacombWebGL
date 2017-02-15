@@ -115,261 +115,261 @@
 		}
 	},
 	"playerStart": {
-		"position": [
-			18,
-			14
-		],
-		"direction": [
-			0,
-			1
-		]
+		"position": {
+			"x": 18,
+			"y": 14
+		},
+		"direction": {
+			"x": 0,
+			"y": 1
+		}
 	},
 	"entities": [
 		{
 			"type": "Troll",
-			"position": [
-				18,
-				25
-			],
+			"position": {
+				"x": 18,
+				"y": 25
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "Troll",
-			"position": [
-				33,
-				23
-			]
+			"position": {
+				"x": 33,
+				"y": 23
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				26,
-				22
-			],
+			"position": {
+				"x": 26,
+				"y": 22
+			},
 			"minDifficulty": 1
 		},
 		{
 			"type": "Troll",
-			"position": [
-				2,
-				21
-			]
+			"position": {
+				"x": 2,
+				"y": 21
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				18,
-				21
-			],
+			"position": {
+				"x": 18,
+				"y": 21
+			},
 			"minDifficulty": 1
 		},
 		{
 			"type": "Troll",
-			"position": [
-				12,
-				20
-			]
+			"position": {
+				"x": 12,
+				"y": 20
+			}
 		},
 		{
 			"type": "Potion",
-			"position": [
-				15,
-				20
-			]
+			"position": {
+				"x": 15,
+				"y": 20
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				33,
-				18
-			],
+			"position": {
+				"x": 33,
+				"y": 18
+			},
 			"minDifficulty": 1
 		},
 		{
 			"type": "Fireball",
-			"position": [
-				5,
-				14
-			],
-			"direction": [
-				1,
-				0
-			]
+			"position": {
+				"x": 5,
+				"y": 14
+			},
+			"direction": {
+				"x": 1,
+				"y": 0
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				10,
-				14
-			],
+			"position": {
+				"x": 10,
+				"y": 14
+			},
 			"minDifficulty": 1
 		},
 		{
 			"type": "Troll",
-			"position": [
-				24,
-				14
-			],
+			"position": {
+				"x": 24,
+				"y": 14
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "Troll",
-			"position": [
-				30,
-				13
-			]
+			"position": {
+				"x": 30,
+				"y": 13
+			}
 		},
 		{
 			"type": "Fireball",
-			"position": [
-				1,
-				12
-			],
-			"direction": [
-				1,
-				0
-			]
+			"position": {
+				"x": 1,
+				"y": 12
+			},
+			"direction": {
+				"x": 1,
+				"y": 0
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				35,
-				12
-			],
+			"position": {
+				"x": 35,
+				"y": 12
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "Troll",
-			"position": [
-				31,
-				11
-			],
+			"position": {
+				"x": 31,
+				"y": 11
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "Fireball",
-			"position": [
-				3,
-				10
-			],
-			"direction": [
-				1,
-				0
-			]
+			"position": {
+				"x": 3,
+				"y": 10
+			},
+			"direction": {
+				"x": 1,
+				"y": 0
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				28,
-				9
-			],
+			"position": {
+				"x": 28,
+				"y": 9
+			},
 			"minDifficulty": 1
 		},
 		{
 			"type": "Troll",
-			"position": [
-				10,
-				8
-			]
+			"position": {
+				"x": 10,
+				"y": 8
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				15,
-				8
-			],
+			"position": {
+				"x": 15,
+				"y": 8
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "Orc",
-			"position": [
-				18,
-				8
-			]
+			"position": {
+				"x": 18,
+				"y": 8
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				21,
-				8
-			],
+			"position": {
+				"x": 21,
+				"y": 8
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "Troll",
-			"position": [
-				24,
-				8
-			],
+			"position": {
+				"x": 24,
+				"y": 8
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "Orc",
-			"position": [
-				30,
-				7
-			],
+			"position": {
+				"x": 30,
+				"y": 7
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "Troll",
-			"position": [
-				32,
-				6
-			],
+			"position": {
+				"x": 32,
+				"y": 6
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "Orc",
-			"position": [
-				35,
-				6
-			],
+			"position": {
+				"x": 35,
+				"y": 6
+			},
 			"minDifficulty": 2
 		},
 		{
 			"type": "WarpGate",
-			"position": [
-				36,
-				6
-			],
+			"position": {
+				"x": 36,
+				"y": 6
+			},
 			"value": "Access_Floor"
 		},
 		{
 			"type": "Troll",
-			"position": [
-				10,
-				4
-			]
+			"position": {
+				"x": 10,
+				"y": 4
+			}
 		},
 		{
 			"type": "Scroll",
-			"position": [
-				16,
-				4
-			],
+			"position": {
+				"x": 16,
+				"y": 4
+			},
 			"value": 4
 		},
 		{
 			"type": "BlueKey",
-			"position": [
-				27,
-				4
-			]
+			"position": {
+				"x": 27,
+				"y": 4
+			}
 		},
 		{
 			"type": "Troll",
-			"position": [
-				22,
-				2
-			]
+			"position": {
+				"x": 22,
+				"y": 2
+			}
 		},
 		{
 			"type": "RedKey",
-			"position": [
-				8,
-				1
-			]
+			"position": {
+				"x": 8,
+				"y": 1
+			}
 		}
 	],
 	"fog": {
