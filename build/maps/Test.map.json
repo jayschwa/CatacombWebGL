@@ -1,0 +1,62 @@
+{
+	"title": "Test Map",
+	"levelNumber": 0,
+	"width": 8,
+	"height": 9,
+	"layout": [
+		"AAAABAAA",
+		"AAAFFFAA",
+		"AAFFFFFA",
+		"AAFFFFFA",
+		"AAFFFFFA",
+		"AAAFFFAA",
+		"TFFFFFFD",
+		"TFFFFFFD",
+		"DDDDDDDD"
+	],
+	"legend": {
+		"A": {
+			"type": "wall",
+			"value": "slime"
+		},
+		"B": {
+			"type": "wall",
+			"value": "blood"
+		},
+		"D": {
+			"type": "wall",
+			"value": "stone"
+		},
+		"F": {
+			"type": "floor"
+		},
+		"T": {
+			"type": "wall",
+			"value": "tar"
+		}
+	},
+	"playerStart": {
+		"position": {
+			"x": 4,
+			"y": 1
+		},
+		"direction": {
+			"x": 0,
+			"y": 1
+		}
+	},
+	"entities": [
+		{
+			"type": "Orc",
+			"position": {
+				"x": 4,
+				"y": 6
+			}
+		}
+	],
+	"fog": {
+		"color": 0,
+		"near": 1,
+		"far": 40
+	}
+}
