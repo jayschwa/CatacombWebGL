@@ -5,11 +5,9 @@ import { Transition } from "./transition"
 import { SpriteSheetProxy, textureCache } from "./utils"
 
 THREE.Vector3.prototype.copy = function(v) {
-	this.x = v.x
-	this.y = v.y
-	if (v.z !== undefined) {
-		this.z = v.z
-	}
+	if ("x" in v) this.x = v.x
+	if ("y" in v) this.y = v.y
+	if ("z" in v) this.z = v.z
 	return this
 }
 
