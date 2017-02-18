@@ -1154,7 +1154,7 @@ Texture.prototype = {
 
 	transformUv: function ( uv ) {
 
-		if ( this.mapping !== UVMapping ) return;
+		if ( this.mapping !== UVMapping ) return uv;
 
 		uv.multiply( this.repeat );
 		uv.add( this.offset );
@@ -1226,6 +1226,8 @@ Texture.prototype = {
 			uv.y = 1 - uv.y;
 
 		}
+
+		return uv;
 
 	}
 
@@ -22831,25 +22833,28 @@ Sprite.prototype = Object.assign( Object.create( Object3D.prototype ), {
 
 	raycast: ( function () {
 
-		var matrixPosition = new Vector3();
+		var intersectPoint = new Vector3();
+		var worldPosition = new Vector3();
+		var worldScale = new Vector3();
 
 		return function raycast( raycaster, intersects ) {
 
-			matrixPosition.setFromMatrixPosition( this.matrixWorld );
+			worldPosition.setFromMatrixPosition( this.matrixWorld );
+			raycaster.ray.closestPointToPoint( worldPosition, intersectPoint );
 
-			var distanceSq = raycaster.ray.distanceSqToPoint( matrixPosition );
-			var guessSizeSq = this.scale.x * this.scale.y / 4;
+			worldScale.setFromMatrixScale( this.matrixWorld );
+			var guessSizeSq = worldScale.x * worldScale.y / 4;
 
-			if ( distanceSq > guessSizeSq ) {
+			if ( worldPosition.distanceToSquared( intersectPoint ) > guessSizeSq ) return;
 
-				return;
+			var distance = raycaster.ray.origin.distanceTo( intersectPoint );
 
-			}
+			if ( distance < raycaster.near || distance > raycaster.far ) return;
 
 			intersects.push( {
 
-				distance: Math.sqrt( distanceSq ),
-				point: this.position,
+				distance: distance,
+				point: intersectPoint.clone(),
 				face: null,
 				object: this
 
@@ -40444,9 +40449,6 @@ class Entity extends Object3D {
 
 				let collisions = this.raycaster.intersectObject(maze, true);
 
-				// FIXME: Three seems to have a terrible bug with sprite raytracing
-				collisions = collisions.filter(c => c.face || c.object.getWorldPosition().distanceTo(this.raycaster.ray.origin) <= far);
-
 				for (let collision of collisions) {
 					if (ancestorsAreEthereal(collision.object)) {
 						continue
@@ -40456,10 +40458,13 @@ class Entity extends Object3D {
 						pushBack = this.onCollision(collision, time);
 					}
 					if (pushBack) {
-						const normal = collision.face ? collision.face.normal : direction.clone().negate();
+						const normal = collision.face ? collision.face.normal : this.getWorldDirection().negate();
 						const overlap = far - collision.distance;
-						positionDelta.addScaledVector(normal, Math.min(overlap, magnitude));
-						collided = true;
+						const adjust = Math.min(magnitude, overlap);
+						if (adjust) {
+							positionDelta.addScaledVector(normal, adjust);
+							collided = true;
+						}
 					}
 				}
 			} while(collided)
@@ -40483,6 +40488,8 @@ function ancestorsAreEthereal(object) {
 	}
 	return false
 }
+
+const canvasCtx = document.createElement("canvas").getContext("2d");
 
 class Fireball extends Entity {
 	constructor(origin, direction, isBig) {
@@ -40523,14 +40530,46 @@ class Fireball extends Entity {
 		});
 	}
 
+	hitSolidPixel(collision, obj) {
+		if (collision.face) {
+			return true
+		}
+		console.log(collision);
+		const localIntersection = obj.sprite.worldToLocal(collision.point.clone());
+		const y = localIntersection.z;
+		localIntersection.z = 0;
+		const thisLocalDir = obj.sprite.worldToLocal(this.position.clone()).normalize();
+		const normal = new Vector3(0, 0, 1).cross(thisLocalDir);
+		const side = Math.sign(localIntersection.dot(normal));
+		const x = side * localIntersection.length();
+		const texture = obj.sprite.material.map;
+		const uv = texture.transformUv(new Vector2(x, y).addScalar(0.5));
+		const img = texture.image;
+		if (img.width > canvasCtx.canvas.width) {
+			canvasCtx.canvas.width = img.width;
+		}
+		if (img.height > canvasCtx.canvas.height) {
+			canvasCtx.canvas.height = img.height;
+		}
+		canvasCtx.clearRect(0, 0, img.width, img.height);
+		canvasCtx.drawImage(img, 0, 0);
+		const colorData = canvasCtx.getImageData(uv.x * img.width, img.height - uv.y * img.height, 1, 1).data;
+		console.log(uv, colorData);
+		return colorData.some(e => e)
+	}
+
 	onCollision(collision, time) {
 		if (!this.removeAtTime) {
 			let damagedSomething = false;
 			for (let obj = collision.object; obj; obj = obj.parent) {
 				if (obj.onDamage) {
-					obj.onDamage(time);
-					damagedSomething = true;
-					break
+					if (this.hitSolidPixel(collision, obj)) {
+						obj.onDamage(time);
+						damagedSomething = true;
+						break
+					} else {
+						return false
+					}
 				}
 			}
 			if (!damagedSomething && this.hitSound) {
@@ -41554,11 +41593,9 @@ class Transition {
 }
 
 Vector3.prototype.copy = function(v) {
-	this.x = v.x;
-	this.y = v.y;
-	if (v.z !== undefined) {
-		this.z = v.z;
-	}
+	if ("x" in v) this.x = v.x;
+	if ("y" in v) this.y = v.y;
+	if ("z" in v) this.z = v.z;
 	return this
 };
 

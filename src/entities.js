@@ -1,4 +1,4 @@
-import { Object3D, PointLight, PositionalAudio, Raycaster, Sprite, SpriteMaterial, Vector3 } from "three"
+import { Object3D, PointLight, PositionalAudio, Raycaster, Sprite, SpriteMaterial, Vector2, Vector3 } from "three"
 import { audioListener, audioLoader } from "./audio"
 import { SpriteSheetProxy, textureCache } from "./utils"
 
@@ -41,9 +41,6 @@ export class Entity extends Object3D {
 
 				let collisions = this.raycaster.intersectObject(maze, true)
 
-				// FIXME: Three seems to have a terrible bug with sprite raytracing
-				collisions = collisions.filter(c => c.face || c.object.getWorldPosition().distanceTo(this.raycaster.ray.origin) <= far)
-
 				for (let collision of collisions) {
 					if (ancestorsAreEthereal(collision.object)) {
 						continue
@@ -53,10 +50,13 @@ export class Entity extends Object3D {
 						pushBack = this.onCollision(collision, time)
 					}
 					if (pushBack) {
-						const normal = collision.face ? collision.face.normal : direction.clone().negate()
+						const normal = collision.face ? collision.face.normal : this.getWorldDirection().negate()
 						const overlap = far - collision.distance
-						positionDelta.addScaledVector(normal, Math.min(overlap, magnitude))
-						collided = true
+						const adjust = Math.min(magnitude, overlap)
+						if (adjust) {
+							positionDelta.addScaledVector(normal, adjust)
+							collided = true
+						}
 					}
 				}
 			} while(collided)
@@ -80,6 +80,8 @@ function ancestorsAreEthereal(object) {
 	}
 	return false
 }
+
+const canvasCtx = document.createElement("canvas").getContext("2d")
 
 export class Fireball extends Entity {
 	constructor(origin, direction, isBig) {
@@ -120,14 +122,46 @@ export class Fireball extends Entity {
 		})
 	}
 
+	hitSolidPixel(collision, obj) {
+		if (collision.face) {
+			return true
+		}
+		console.log(collision)
+		const localIntersection = obj.sprite.worldToLocal(collision.point.clone())
+		const y = localIntersection.z
+		localIntersection.z = 0
+		const thisLocalDir = obj.sprite.worldToLocal(this.position.clone()).normalize()
+		const normal = new Vector3(0, 0, 1).cross(thisLocalDir)
+		const side = Math.sign(localIntersection.dot(normal))
+		const x = side * localIntersection.length()
+		const texture = obj.sprite.material.map
+		const uv = texture.transformUv(new Vector2(x, y).addScalar(0.5))
+		const img = texture.image
+		if (img.width > canvasCtx.canvas.width) {
+			canvasCtx.canvas.width = img.width
+		}
+		if (img.height > canvasCtx.canvas.height) {
+			canvasCtx.canvas.height = img.height
+		}
+		canvasCtx.clearRect(0, 0, img.width, img.height)
+		canvasCtx.drawImage(img, 0, 0)
+		const colorData = canvasCtx.getImageData(uv.x * img.width, img.height - uv.y * img.height, 1, 1).data
+		console.log(uv, colorData)
+		return colorData.some(e => e)
+	}
+
 	onCollision(collision, time) {
 		if (!this.removeAtTime) {
 			let damagedSomething = false
 			for (let obj = collision.object; obj; obj = obj.parent) {
 				if (obj.onDamage) {
-					obj.onDamage(time)
-					damagedSomething = true
-					break
+					if (this.hitSolidPixel(collision, obj)) {
+						obj.onDamage(time)
+						damagedSomething = true
+						break
+					} else {
+						return false
+					}
 				}
 			}
 			if (!damagedSomething && this.hitSound) {
