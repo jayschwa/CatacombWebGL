@@ -41,9 +41,6 @@ export class Entity extends Object3D {
 
 				let collisions = this.raycaster.intersectObject(maze, true)
 
-				// FIXME: Three seems to have a terrible bug with sprite raytracing
-				collisions = collisions.filter(c => c.face || c.object.getWorldPosition().distanceTo(this.raycaster.ray.origin) <= far)
-
 				for (let collision of collisions) {
 					if (ancestorsAreEthereal(collision.object)) {
 						continue
@@ -53,10 +50,19 @@ export class Entity extends Object3D {
 						pushBack = this.onCollision(collision, time)
 					}
 					if (pushBack) {
-						const normal = collision.face ? collision.face.normal : direction.clone().negate()
-						const overlap = far - collision.distance
-						positionDelta.addScaledVector(normal, Math.min(overlap, magnitude))
-						collided = true
+						const normal = new Vector3()
+						if (collision.face) {
+							normal.copy(collision.face.normal)
+						} else {
+							// calculate normal vector of sprite
+							const objDir = collision.object.getWorldPosition().sub(collision.point)
+							normal.crossVectors(direction, objDir).cross(objDir).normalize()
+						}
+						const pushBackDistance = Math.min(magnitude, far - collision.distance)
+						if (pushBackDistance) {
+							positionDelta.addScaledVector(normal, pushBackDistance)
+							collided = true
+						}
 					}
 				}
 			} while(collided)
