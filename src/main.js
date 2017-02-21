@@ -169,7 +169,7 @@ export class Game {
 				that.scene.fog = new THREE.Fog(map.fog.color, map.fog.near, map.fog.far)
 			}
 			constructLayout(map, that.maze)
-			spawnEntities(map, that.maze)
+			spawnEntities(map.entities, that.maze)
 			setupPlayerSpawn(map, that.player)
 			that.scene.add(that.maze)
 			that.play()

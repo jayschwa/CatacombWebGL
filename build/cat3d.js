@@ -41759,9 +41759,9 @@ function constructLayout(map, parent) {
 	parent.add(...createWallMeshes(walls));
 }
 
-function spawnEntities(map, parent) {
+function spawnEntities(entities, parent) {
 	const entityClasses = Object.assign({}, enemies, items, {JumpGate: JumpGate, WarpGate: WarpGate});
-	map.entities.forEach(entity => {
+	entities.forEach(entity => {
 		const position = new Vector3(entity.position[0], entity.position[1], 0);
 		const entityClass = entityClasses[entity.type];
 		if (entityClass) {
@@ -42292,7 +42292,7 @@ class Game {
 				that.scene.fog = new Fog(map.fog.color, map.fog.near, map.fog.far);
 			}
 			constructLayout(map, that.maze);
-			spawnEntities(map, that.maze);
+			spawnEntities(map.entities, that.maze);
 			setupPlayerSpawn(map, that.player);
 			that.scene.add(that.maze);
 			that.play();

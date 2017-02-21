@@ -106,9 +106,9 @@ export function constructLayout(map, parent) {
 	parent.add(...createWallMeshes(walls))
 }
 
-export function spawnEntities(map, parent) {
+export function spawnEntities(entities, parent) {
 	const entityClasses = Object.assign({}, enemies, items, {JumpGate: JumpGate, WarpGate: WarpGate})
-	map.entities.forEach(entity => {
+	entities.forEach(entity => {
 		const position = new Vector3(entity.position[0], entity.position[1], 0)
 		const entityClass = entityClasses[entity.type]
 		if (entityClass) {
