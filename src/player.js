@@ -1,11 +1,11 @@
 import { Audio, PerspectiveCamera, PointLight, Sprite, SpriteMaterial, Vector3 } from "three"
 import { audioListener, audioLoader } from "./audio"
-import { Entity, Fireball, JumpGate } from "./entities"
+import { Actor, Fireball, JumpGate } from "./entities"
 import { Door } from "./environment"
 import { Item, Treasure } from "./items"
 import { SpriteSheetProxy, textureCache } from "./utils"
 
-export class Player extends Entity {
+export class Player extends Actor {
 	constructor() {
 		super({type: "Player"}, 2/3, 5)
 

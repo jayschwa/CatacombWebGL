@@ -2,7 +2,7 @@ import { Object3D, PointLight, PositionalAudio, Raycaster, Sprite, SpriteMateria
 import { audioListener, audioLoader } from "./audio"
 import { SpriteSheetProxy, textureCache } from "./utils"
 
-export class Entity extends Object3D {
+export class Actor extends Object3D {
 	constructor(props, size, speed) {
 		super()
 		this.type = props.type
@@ -102,7 +102,7 @@ function ancestorsAreEthereal(object) {
 	return false
 }
 
-export class Fireball extends Entity {
+export class Fireball extends Actor {
 	constructor(origin, direction, isBig) {
 		super({type: "Fireball"}, 0, 30)
 		this.isBig = isBig

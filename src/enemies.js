@@ -1,8 +1,8 @@
 import { Sprite, SpriteMaterial } from "three"
-import { Entity } from "./entities"
+import { Actor } from "./entities"
 import { SpriteSheetProxy, textureCache } from "./utils"
 
-export class Enemy extends Entity {
+export class Enemy extends Actor {
 	constructor(sprite, props, size, speed, spriteInfo) {
 		super(props, size, speed)
 		this.position.copy(props.position)

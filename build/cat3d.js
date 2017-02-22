@@ -40973,7 +40973,7 @@ class TextureCache extends TextureLoader {
 
 const textureCache = new TextureCache();
 
-class Entity extends Object3D {
+class Actor extends Object3D {
 	constructor(props, size, speed) {
 		super();
 		this.type = props.type;
@@ -41073,7 +41073,7 @@ function ancestorsAreEthereal(object) {
 	return false
 }
 
-class Fireball extends Entity {
+class Fireball extends Actor {
 	constructor(origin, direction, isBig) {
 		super({type: "Fireball"}, 0, 30);
 		this.isBig = isBig;
@@ -41195,7 +41195,7 @@ class JumpGate extends Portal {
 
 class WarpGate extends Portal {}
 
-class Enemy extends Entity {
+class Enemy extends Actor {
 	constructor(sprite, props, size, speed, spriteInfo) {
 		super(props, size, speed);
 		this.position.copy(props.position);
@@ -41814,7 +41814,7 @@ function spawnEntities(entities, parent) {
 	});
 }
 
-class Player extends Entity {
+class Player extends Actor {
 	constructor() {
 		super({type: "Player"}, 2/3, 5);
 
