@@ -6,11 +6,13 @@ export class Enemy extends Entity {
 	constructor(sprite, props, size, speed, spriteInfo) {
 		super(props, size, speed)
 		this.position.copy(props.position)
+		this.sprite = new Sprite(new SpriteMaterial({fog: true}))
 		this.spriteInfo = spriteInfo
 		textureCache.get(sprite, texture => {
 			const totalFrames = spriteInfo.walkFrames + spriteInfo.attackFrames + spriteInfo.deathFrames
 			this.texture = new SpriteSheetProxy(texture, spriteInfo.frameWidth, totalFrames)
-			this.sprite = new Sprite(new SpriteMaterial({fog: true, map: this.texture}))
+			this.sprite.material.map = this.texture
+			this.sprite.material.needsUpdate = true
 			this.add(this.sprite)
 		})
 	}
@@ -71,10 +73,10 @@ export class Bat extends Enemy {
 			attackFrames: 0,
 			deathFrames: 2
 		})
-		this.scale.x = 40/64
+		this.sprite.scale.x = 40/64
 		const scale = 0.8
-		this.scale.multiplyScalar(scale)
-		this.translateZ(-0.1)
+		this.sprite.scale.multiplyScalar(scale)
+		this.sprite.translateZ(-0.1)
 		this.removeDead = true
 	}
 }
@@ -87,7 +89,7 @@ export class Mage extends Enemy {
 			attackFrames: 1,
 			deathFrames: 3
 		})
-		this.scale.x = 56/64
+		this.sprite.scale.x = 56/64
 	}
 }
 
