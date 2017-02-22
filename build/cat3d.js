@@ -40974,9 +40974,10 @@ class TextureCache extends TextureLoader {
 const textureCache = new TextureCache();
 
 class Entity extends Object3D {
-	constructor(size, speed) {
+	constructor(props, size, speed) {
 		super();
-		this.name = "Entity";
+		this.type = props.type;
+		this.name = props.name || props.type;
 		this.up.set(0, 0, 1);
 
 		this.size = size;
@@ -40987,6 +40988,20 @@ class Entity extends Object3D {
 		this.turnDirection = 0;
 
 		this.raycaster = new Raycaster();
+	
+		this.persistedProps = ["type", "position"];
+	}
+
+	getState() {
+		const state = {};
+		this.persistedProps.forEach(prop => {
+			if (prop in this) {
+				state[prop] = this[prop];
+			} else {
+				throw new Error("entity does not have a `" + prop + "` property")
+			}
+		});
+		return state
 	}
 
 	update(time, maze) {
@@ -41060,7 +41075,7 @@ function ancestorsAreEthereal(object) {
 
 class Fireball extends Entity {
 	constructor(origin, direction, isBig) {
-		super(0, 30);
+		super({type: "Fireball"}, 0, 30);
 		this.isBig = isBig;
 		this.name = isBig? "Big Fireball" : "Fireball";
 		this.scale.divideScalar(3);
@@ -41139,7 +41154,9 @@ class Fireball extends Entity {
 class Portal extends Sprite {
 	constructor(props) {
 		super();
-		this.name = "Portal";
+		this.type = props.type;
+		this.name = props.name || props.type;
+		this.value = props.value;
 		this.position.copy(props.position);
 		this.fps = 8;
 		this.light = new PointLight(0x0042DD, 1, 1.5);
@@ -41150,6 +41167,14 @@ class Portal extends Sprite {
 			this.material.map = this.spritesheet;
 			this.material.needsUpdate = true;
 		});
+	}
+
+	getState() {
+		return {
+			type: this.type,
+			position: this.position,
+			value: this.value
+		}
 	}
 
 	update(time) {
@@ -41172,7 +41197,7 @@ class WarpGate extends Portal {}
 
 class Enemy extends Entity {
 	constructor(sprite, props, size, speed, spriteInfo) {
-		super(size, speed);
+		super(props, size, speed);
 		this.position.copy(props.position);
 		this.spriteInfo = spriteInfo;
 		textureCache.get(sprite, texture => {
@@ -41592,7 +41617,11 @@ class WallGeometry extends PlaneGeometry {
 class Item extends Sprite {
 	constructor(props, ...itemFrames) {
 		super();
+		this.type = props.type;
 		this.name = props.type.toLowerCase();
+		if ("value" in props) {
+			this.value = props.value;
+		}
 		this.soundName = props.soundName;
 		this.position.copy(props.position);
 		const scale = 0.6;
@@ -41610,6 +41639,17 @@ class Item extends Sprite {
 			this.material.map.setFrame(this.itemFrames[0]);
 			this.material.needsUpdate = true;
 		});
+	}
+
+	getState() {
+		const state = {
+			type: this.type,
+			position: this.position
+		};
+		if ("value" in this) {
+			state.value = this.value;
+		}
+		return state
 	}
 
 	pickup() {
@@ -41774,7 +41814,7 @@ function spawnEntities(entities, parent) {
 
 class Player extends Entity {
 	constructor() {
-		super(2/3, 5);
+		super({type: "Player"}, 2/3, 5);
 
 		this.audioListener = audioListener;
 		this.add(this.audioListener);
@@ -42258,6 +42298,16 @@ class Game {
 			camera.aspect = width / height;
 			camera.updateProjectionMatrix();
 		});
+	}
+
+	getMapState() {
+		const entities = [];
+		this.scene.traverse(obj => {
+			if (obj.getState) {
+				entities.push(obj.getState());
+			}
+		});
+		return {entities: entities}
 	}
 
 	setup() {

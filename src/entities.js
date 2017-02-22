@@ -3,9 +3,10 @@ import { audioListener, audioLoader } from "./audio"
 import { SpriteSheetProxy, textureCache } from "./utils"
 
 export class Entity extends Object3D {
-	constructor(size, speed) {
+	constructor(props, size, speed) {
 		super()
-		this.name = "Entity"
+		this.type = props.type
+		this.name = props.name || props.type
 		this.up.set(0, 0, 1)
 
 		this.size = size
@@ -16,6 +17,20 @@ export class Entity extends Object3D {
 		this.turnDirection = 0
 
 		this.raycaster = new Raycaster()
+	
+		this.persistedProps = ["type", "position"]
+	}
+
+	getState() {
+		const state = {}
+		this.persistedProps.forEach(prop => {
+			if (prop in this) {
+				state[prop] = this[prop]
+			} else {
+				throw new Error("entity does not have a `" + prop + "` property")
+			}
+		})
+		return state
 	}
 
 	update(time, maze) {
@@ -89,7 +104,7 @@ function ancestorsAreEthereal(object) {
 
 export class Fireball extends Entity {
 	constructor(origin, direction, isBig) {
-		super(0, 30)
+		super({type: "Fireball"}, 0, 30)
 		this.isBig = isBig
 		this.name = isBig? "Big Fireball" : "Fireball"
 		this.scale.divideScalar(3)
@@ -168,7 +183,9 @@ export class Fireball extends Entity {
 export class Portal extends Sprite {
 	constructor(props) {
 		super()
-		this.name = "Portal"
+		this.type = props.type
+		this.name = props.name || props.type
+		this.value = props.value
 		this.position.copy(props.position)
 		this.fps = 8
 		this.light = new PointLight(0x0042DD, 1, 1.5)
@@ -179,6 +196,14 @@ export class Portal extends Sprite {
 			this.material.map = this.spritesheet
 			this.material.needsUpdate = true
 		})
+	}
+
+	getState() {
+		return {
+			type: this.type,
+			position: this.position,
+			value: this.value
+		}
 	}
 
 	update(time) {

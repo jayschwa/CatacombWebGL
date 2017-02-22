@@ -7,7 +7,7 @@ import { SpriteSheetProxy, textureCache } from "./utils"
 
 export class Player extends Entity {
 	constructor() {
-		super(2/3, 5)
+		super({type: "Player"}, 2/3, 5)
 
 		this.audioListener = audioListener
 		this.add(this.audioListener)

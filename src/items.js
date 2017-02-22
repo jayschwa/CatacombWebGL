@@ -5,7 +5,11 @@ import { SpriteSheetProxy, textureCache } from "./utils"
 export class Item extends Sprite {
 	constructor(props, ...itemFrames) {
 		super()
+		this.type = props.type
 		this.name = props.type.toLowerCase()
+		if ("value" in props) {
+			this.value = props.value
+		}
 		this.soundName = props.soundName
 		this.position.copy(props.position)
 		const scale = 0.6
@@ -23,6 +27,17 @@ export class Item extends Sprite {
 			this.material.map.setFrame(this.itemFrames[0])
 			this.material.needsUpdate = true
 		})
+	}
+
+	getState() {
+		const state = {
+			type: this.type,
+			position: this.position
+		}
+		if ("value" in this) {
+			state.value = this.value
+		}
+		return state
 	}
 
 	pickup() {

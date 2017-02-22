@@ -4,7 +4,7 @@ import { SpriteSheetProxy, textureCache } from "./utils"
 
 export class Enemy extends Entity {
 	constructor(sprite, props, size, speed, spriteInfo) {
-		super(size, speed)
+		super(props, size, speed)
 		this.position.copy(props.position)
 		this.spriteInfo = spriteInfo
 		textureCache.get(sprite, texture => {

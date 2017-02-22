@@ -137,6 +137,16 @@ export class Game {
 		})
 	}
 
+	getMapState() {
+		const entities = []
+		this.scene.traverse(obj => {
+			if (obj.getState) {
+				entities.push(obj.getState())
+			}
+		})
+		return {entities: entities}
+	}
+
 	setup() {
 		const eventHandlers = [
 			["keydown", this.onKey(1)],
