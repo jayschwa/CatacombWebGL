@@ -3,8 +3,6 @@ import { audioListener, audioLoader } from "./audio"
 import { CustomMaterial } from "./material"
 import { SpriteSheetProxy, textureCache } from "./utils"
 
-// TODO: Move exploding wall here
-
 export class Door extends Mesh {
 	constructor(color, position) {
 		const geometry = new BoxBufferGeometry(1, 1, 1)
