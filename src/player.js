@@ -51,16 +51,17 @@ export class Player extends Actor {
 	}
 
 	onCollision(collision, time) {
-		const obj = collision.object
-		if (obj instanceof Item) {
-			this.pickupItem(obj)
-			return false
-		} else if (obj instanceof Door) {
-			return !this.unlockDoor(obj)
-		} else if (obj instanceof JumpGate) {
-			const forward = this.velocity.clone().normalize().multiplyScalar(2/3)
-			this.warpToPosition = obj.destination.clone().add(forward)
-			return false
+		for (let obj = collision.object; obj; obj = obj.parent) {
+			if (obj instanceof Item) {
+				this.pickupItem(obj)
+				return false
+			} else if (obj instanceof Door) {
+				return !this.unlockDoor(obj)
+			} else if (obj instanceof JumpGate) {
+				const forward = this.velocity.clone().normalize().multiplyScalar(2/3)
+				this.warpToPosition = obj.destination.clone().add(forward)
+				return false
+			}
 		}
 		return true
 	}
@@ -68,9 +69,9 @@ export class Player extends Actor {
 	/** Mark item for removal from scene and add to player's inventory. **/
 	pickupItem(item) {
 		if (item instanceof Treasure) {
-			this.score += 100  // * level number
+			this.score += item.value
 		} else {
-			const name = item.name
+			const name = item.name.toLowerCase()
 			if (this.inventory[name] === undefined) {
 				this.inventory[name] = 0
 			}
@@ -167,7 +168,12 @@ export class Player extends Actor {
 			}
 		} else {
 			const chargeTime = this.lastTime - this.chargeStarted
-			const fireball = new Fireball(this.position, this.getWorldDirection(), chargeTime > 1)
+			const fireball = new Fireball({
+				type: "Fireball",
+				position: this.position,
+				direction: this.getWorldDirection(),
+				isBig: chargeTime > 1
+			})
 			this.parent.add(fireball)
 			this.chargeStarted = 0
 			this.lastFire = this.lastTime

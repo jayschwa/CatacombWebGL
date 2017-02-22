@@ -40973,23 +40973,16 @@ class TextureCache extends TextureLoader {
 
 const textureCache = new TextureCache();
 
-class Actor extends Object3D {
-	constructor(props, size, speed) {
+class Entity extends Object3D {
+	constructor(props) {
 		super();
+		this.persistedProps = ["type", "position"];
 		this.type = props.type;
 		this.name = props.name || props.type;
+		if ("position" in props) {
+			this.position.copy(props.position);
+		}
 		this.up.set(0, 0, 1);
-
-		this.size = size;
-		this.speed = speed || 0;
-
-		this.moveDirection = new Vector3();
-		this.velocity = new Vector3();
-		this.turnDirection = 0;
-
-		this.raycaster = new Raycaster();
-	
-		this.persistedProps = ["type", "position"];
 	}
 
 	getState() {
@@ -41002,6 +40995,21 @@ class Actor extends Object3D {
 			}
 		});
 		return state
+	}
+}
+
+class Actor extends Entity {
+	constructor(props, size, speed) {
+		super(props);
+
+		this.size = size;
+		this.speed = speed || 0;
+
+		this.moveDirection = new Vector3();
+		this.velocity = new Vector3();
+		this.turnDirection = 0;
+
+		this.raycaster = new Raycaster();
 	}
 
 	update(time, maze) {
@@ -41074,19 +41082,19 @@ function ancestorsAreEthereal(object) {
 }
 
 class Fireball extends Actor {
-	constructor(origin, direction, isBig) {
-		super({type: "Fireball"}, 0, 30);
-		this.isBig = isBig;
-		this.name = isBig? "Big Fireball" : "Fireball";
+	constructor(props) {
+		super(props, 0, 30);
+		this.persistedProps.push("direction", "isBig");
+		this.direction = props.direction;
+		this.isBig = props.isBig;
 		this.scale.divideScalar(3);
-		this.position.copy(origin);
-		this.lookAt(origin.clone().add(direction));
-		this.position.addScaledVector(direction, 2/3);
+		this.lookAt(this.position.clone().add(this.direction));
+		this.position.addScaledVector(this.direction, 2/3);
 		this.updateMatrixWorld();
 		this.moveDirection.z = 1;
 		this.updateVelocity();
 
-		audioLoader.load("sounds/adlib/" + (isBig ? "big_" : "") + "shoot.wav", buffer => {
+		audioLoader.load("sounds/adlib/" + (this.isBig ? "big_" : "") + "shoot.wav", buffer => {
 			this.fireSound = new PositionalAudio(audioListener);
 			this.fireSound.setBuffer(buffer);
 			this.add(this.fireSound);
@@ -41099,13 +41107,13 @@ class Fireball extends Actor {
 		});
 
 		this.light = new PointLight(0xFF6600, 0.5, 0.5);
-		if (isBig) { this.light.distance *= 2; }
-		if (isBig) { this.add(this.light); }
+		if (this.isBig) { this.light.distance *= 2; }
+		if (this.isBig) { this.add(this.light); }
 
 		textureCache.get("sprites/fireball.png", texture => {
 			this.spriteSheet = SpriteSheetProxy(texture);
 			this.sprite = new Sprite(new SpriteMaterial({map: this.spriteSheet}));
-			if (!isBig) {
+			if (!this.isBig) {
 				this.sprite.material.rotation = Math.floor(Math.random() * 4) * Math.PI / 2;
 			}
 			this.add(this.sprite);
@@ -41151,36 +41159,27 @@ class Fireball extends Actor {
 	}
 }
 
-class Portal extends Sprite {
+class Portal extends Entity {
 	constructor(props) {
-		super();
-		this.type = props.type;
-		this.name = props.name || props.type;
+		super(props);
+		this.persistedProps.push("value");
 		this.value = props.value;
-		this.position.copy(props.position);
 		this.fps = 8;
+
 		this.light = new PointLight(0x0042DD, 1, 1.5);
 		this.add(this.light);
 
 		textureCache.get("sprites/portal.png", texture => {
 			this.spritesheet = new SpriteSheetProxy(texture);
-			this.material.map = this.spritesheet;
-			this.material.needsUpdate = true;
+			this.sprite = new Sprite(new SpriteMaterial({fog: true, map: this.spritesheet}));
+			this.add(this.sprite);
 		});
 	}
 
-	getState() {
-		return {
-			type: this.type,
-			position: this.position,
-			value: this.value
-		}
-	}
-
 	update(time) {
-		if (this.material.map && this.material.map.isSpriteSheet) {
-			const n = Math.floor(time * this.fps) % this.material.map.frames;
-			this.material.map.setFrame(n);
+		if (this.spritesheet) {
+			const n = Math.floor(time * this.fps) % this.spritesheet.frames;
+			this.spritesheet.setFrame(n);
 		}
 		this.light.intensity = 0.5 + 0.2 * Math.abs(Math.sin(0.5 * time)) + 0.02 * Math.abs(Math.sin(this.fps * time));
 	}
@@ -41616,42 +41615,28 @@ class WallGeometry extends PlaneGeometry {
 	}
 }
 
-class Item extends Sprite {
+const ITEM_SCALE = 0.6;
+
+class Item extends Entity {
 	constructor(props, ...itemFrames) {
-		super();
-		this.type = props.type;
-		this.name = props.type.toLowerCase();
-		if ("value" in props) {
-			this.value = props.value;
-		}
+		super(props);
+		this.persistedProps.push("value");
+		this.value = props.value;
 		this.soundName = props.soundName;
-		this.position.copy(props.position);
-		const scale = 0.6;
-		this.scale.multiplyScalar(scale);
-		this.translateZ(-(1-scale)/2);
 		this.itemFrames = itemFrames;
-		this.material.fog = true;
 		audioLoader.load("sounds/adlib/pickup_" + (this.soundName || this.name) + ".wav", buffer => {
 			this.pickupSound = new PositionalAudio(audioListener);
 			this.pickupSound.setBuffer(buffer);
 			this.add(this.pickupSound);
 		});
 		textureCache.get("sprites/items.png", texture => {
-			this.material.map = new SpriteSheetProxy(texture, 40, 11);
-			this.material.map.setFrame(this.itemFrames[0]);
-			this.material.needsUpdate = true;
+			this.spritesheet = new SpriteSheetProxy(texture, 40, 11);
+			this.spritesheet.setFrame(this.itemFrames[0]);
+			this.sprite = new Sprite(new SpriteMaterial({fog: true, map: this.spritesheet}));
+			this.sprite.scale.multiplyScalar(ITEM_SCALE);
+			this.sprite.translateZ(-(1-ITEM_SCALE)/2);
+			this.add(this.sprite);
 		});
-	}
-
-	getState() {
-		const state = {
-			type: this.type,
-			position: this.position
-		};
-		if ("value" in this) {
-			state.value = this.value;
-		}
-		return state
 	}
 
 	pickup() {
@@ -41659,13 +41644,14 @@ class Item extends Sprite {
 			this.pickupSound.play();
 		}
 		this.shouldRemove = true;
+		return this
 	}
 
 	update(time) {
-		if (this.itemFrames.length > 1 && this.material.map) {
+		if (this.itemFrames.length > 1 && this.spritesheet) {
 			const idx = Math.floor(8 * time) % this.itemFrames.length;
 			const frame = this.itemFrames[idx];
-			this.material.map.setFrame(frame);
+			this.spritesheet.setFrame(frame);
 		}
 	}
 }
@@ -41860,16 +41846,17 @@ class Player extends Actor {
 	}
 
 	onCollision(collision, time) {
-		const obj = collision.object;
-		if (obj instanceof Item) {
-			this.pickupItem(obj);
-			return false
-		} else if (obj instanceof Door) {
-			return !this.unlockDoor(obj)
-		} else if (obj instanceof JumpGate) {
-			const forward = this.velocity.clone().normalize().multiplyScalar(2/3);
-			this.warpToPosition = obj.destination.clone().add(forward);
-			return false
+		for (let obj = collision.object; obj; obj = obj.parent) {
+			if (obj instanceof Item) {
+				this.pickupItem(obj);
+				return false
+			} else if (obj instanceof Door) {
+				return !this.unlockDoor(obj)
+			} else if (obj instanceof JumpGate) {
+				const forward = this.velocity.clone().normalize().multiplyScalar(2/3);
+				this.warpToPosition = obj.destination.clone().add(forward);
+				return false
+			}
 		}
 		return true
 	}
@@ -41877,9 +41864,9 @@ class Player extends Actor {
 	/** Mark item for removal from scene and add to player's inventory. **/
 	pickupItem(item) {
 		if (item instanceof Treasure) {
-			this.score += 100;  // * level number
+			this.score += item.value;
 		} else {
-			const name = item.name;
+			const name = item.name.toLowerCase();
 			if (this.inventory[name] === undefined) {
 				this.inventory[name] = 0;
 			}
@@ -41976,7 +41963,12 @@ class Player extends Actor {
 			}
 		} else {
 			const chargeTime = this.lastTime - this.chargeStarted;
-			const fireball = new Fireball(this.position, this.getWorldDirection(), chargeTime > 1);
+			const fireball = new Fireball({
+				type: "Fireball",
+				position: this.position,
+				direction: this.getWorldDirection(),
+				isBig: chargeTime > 1
+			});
 			this.parent.add(fireball);
 			this.chargeStarted = 0;
 			this.lastFire = this.lastTime;

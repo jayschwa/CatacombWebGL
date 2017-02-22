@@ -1,43 +1,30 @@
-import { Audio, AudioLoader, PositionalAudio, Sprite } from "three"
+import { Audio, AudioLoader, PositionalAudio, Sprite, SpriteMaterial } from "three"
 import { audioListener, audioLoader } from "./audio"
+import { Entity } from "./entities"
 import { SpriteSheetProxy, textureCache } from "./utils"
 
-export class Item extends Sprite {
+const ITEM_SCALE = 0.6
+
+export class Item extends Entity {
 	constructor(props, ...itemFrames) {
-		super()
-		this.type = props.type
-		this.name = props.type.toLowerCase()
-		if ("value" in props) {
-			this.value = props.value
-		}
+		super(props)
+		this.persistedProps.push("value")
+		this.value = props.value
 		this.soundName = props.soundName
-		this.position.copy(props.position)
-		const scale = 0.6
-		this.scale.multiplyScalar(scale)
-		this.translateZ(-(1-scale)/2)
 		this.itemFrames = itemFrames
-		this.material.fog = true
 		audioLoader.load("sounds/adlib/pickup_" + (this.soundName || this.name) + ".wav", buffer => {
 			this.pickupSound = new PositionalAudio(audioListener)
 			this.pickupSound.setBuffer(buffer)
 			this.add(this.pickupSound)
 		})
 		textureCache.get("sprites/items.png", texture => {
-			this.material.map = new SpriteSheetProxy(texture, 40, 11)
-			this.material.map.setFrame(this.itemFrames[0])
-			this.material.needsUpdate = true
+			this.spritesheet = new SpriteSheetProxy(texture, 40, 11)
+			this.spritesheet.setFrame(this.itemFrames[0])
+			this.sprite = new Sprite(new SpriteMaterial({fog: true, map: this.spritesheet}))
+			this.sprite.scale.multiplyScalar(ITEM_SCALE)
+			this.sprite.translateZ(-(1-ITEM_SCALE)/2)
+			this.add(this.sprite)
 		})
-	}
-
-	getState() {
-		const state = {
-			type: this.type,
-			position: this.position
-		}
-		if ("value" in this) {
-			state.value = this.value
-		}
-		return state
 	}
 
 	pickup() {
@@ -45,13 +32,14 @@ export class Item extends Sprite {
 			this.pickupSound.play()
 		}
 		this.shouldRemove = true
+		return this
 	}
 
 	update(time) {
-		if (this.itemFrames.length > 1 && this.material.map) {
+		if (this.itemFrames.length > 1 && this.spritesheet) {
 			const idx = Math.floor(8 * time) % this.itemFrames.length
 			const frame = this.itemFrames[idx]
-			this.material.map.setFrame(frame)
+			this.spritesheet.setFrame(frame)
 		}
 	}
 }
