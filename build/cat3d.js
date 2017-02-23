@@ -41194,6 +41194,16 @@ class JumpGate extends Portal {
 
 class WarpGate extends Portal {}
 
+
+var misc = Object.freeze({
+	Entity: Entity,
+	Actor: Actor,
+	Fireball: Fireball,
+	Portal: Portal,
+	JumpGate: JumpGate,
+	WarpGate: WarpGate
+});
+
 class Enemy extends Actor {
 	constructor(sprite, props, size, speed, spriteInfo) {
 		super(props, size, speed);
@@ -41788,8 +41798,11 @@ function constructLayout(map, parent) {
 }
 
 function spawnEntities(entities, parent) {
-	const entityClasses = Object.assign({}, enemies, items, {JumpGate: JumpGate, WarpGate: WarpGate});
+	const entityClasses = Object.assign({}, enemies, items, misc);
 	entities.forEach(entity => {
+		if (entity.type == "Player") {
+			return
+		}
 		const position = new Vector3(entity.position[0], entity.position[1], 0);
 		const entityClass = entityClasses[entity.type];
 		if (entityClass) {
@@ -41803,6 +41816,7 @@ function spawnEntities(entities, parent) {
 class Player extends Actor {
 	constructor() {
 		super({type: "Player"}, 2/3, 5);
+		this.persistedProps.push("direction");
 
 		this.audioListener = audioListener;
 		this.add(this.audioListener);
@@ -41843,6 +41857,10 @@ class Player extends Actor {
 			this.hand.position.copy(this.hand.inPosition);
 			this.add(this.hand);
 		});
+	}
+
+	get direction() {
+		return this.getWorldDirection()
 	}
 
 	onCollision(collision, time) {
@@ -42168,9 +42186,9 @@ Vector3.prototype.copy = function(v) {
 	return this
 };
 
-function setupPlayerSpawn(map, player) {
-	player.position.copy(map.playerStart.position);
-	const dir = map.playerStart.direction;
+function setupPlayerSpawn(player, start) {
+	player.position.copy(start.position);
+	const dir = start.direction;
 	const target = player.position.clone();
 	target.x += dir.x;
 	target.y += dir.y;
@@ -42304,6 +42322,10 @@ class Game {
 		return {entities: entities}
 	}
 
+	save() {
+		localStorage.setItem(this.mapName, JSON.stringify(this.getMapState()));
+	}
+
 	setup() {
 		const eventHandlers = [
 			["keydown", this.onKey(1)],
@@ -42336,8 +42358,18 @@ class Game {
 				that.scene.fog = new Fog(map.fog.color, map.fog.near, map.fog.far);
 			}
 			constructLayout(map, that.maze);
-			spawnEntities(map.entities, that.maze);
-			setupPlayerSpawn(map, that.player);
+			
+			let savedState = localStorage.getItem(that.mapName);
+			if (savedState) {
+				savedState = JSON.parse(savedState);
+				spawnEntities(savedState.entities, that.maze);
+				const start = savedState.entities.filter(e => e.type == "Player").shift();
+				setupPlayerSpawn(that.player, start);
+			} else {
+				spawnEntities(map.entities, that.maze);
+				setupPlayerSpawn(that.player, map.playerStart);
+			}
+
 			that.scene.add(that.maze);
 			that.play();
 		});

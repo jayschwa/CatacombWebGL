@@ -1,6 +1,6 @@
 import { BufferGeometry, Geometry, Mesh, Scene, Vector2, Vector3 } from "three"
 import * as enemies from "./enemies"
-import { JumpGate, WarpGate } from "./entities"
+import * as misc from "./entities"
 import { Door, ExplodingWall } from "./environment"
 import { FloorGeometry, WallGeometry } from "./geometry"
 import * as items from "./items"
@@ -107,8 +107,11 @@ export function constructLayout(map, parent) {
 }
 
 export function spawnEntities(entities, parent) {
-	const entityClasses = Object.assign({}, enemies, items, {JumpGate: JumpGate, WarpGate: WarpGate})
+	const entityClasses = Object.assign({}, enemies, items, misc)
 	entities.forEach(entity => {
+		if (entity.type == "Player") {
+			return
+		}
 		const position = new Vector3(entity.position[0], entity.position[1], 0)
 		const entityClass = entityClasses[entity.type]
 		if (entityClass) {

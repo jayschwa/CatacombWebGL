@@ -8,6 +8,7 @@ import { SpriteSheetProxy, textureCache } from "./utils"
 export class Player extends Actor {
 	constructor() {
 		super({type: "Player"}, 2/3, 5)
+		this.persistedProps.push("direction")
 
 		this.audioListener = audioListener
 		this.add(this.audioListener)
@@ -48,6 +49,10 @@ export class Player extends Actor {
 			this.hand.position.copy(this.hand.inPosition)
 			this.add(this.hand)
 		})
+	}
+
+	get direction() {
+		return this.getWorldDirection()
 	}
 
 	onCollision(collision, time) {

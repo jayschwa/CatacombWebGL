@@ -11,9 +11,9 @@ THREE.Vector3.prototype.copy = function(v) {
 	return this
 }
 
-function setupPlayerSpawn(map, player) {
-	player.position.copy(map.playerStart.position)
-	const dir = map.playerStart.direction
+function setupPlayerSpawn(player, start) {
+	player.position.copy(start.position)
+	const dir = start.direction
 	const target = player.position.clone()
 	target.x += dir.x
 	target.y += dir.y
@@ -147,6 +147,10 @@ export class Game {
 		return {entities: entities}
 	}
 
+	save() {
+		localStorage.setItem(this.mapName, JSON.stringify(this.getMapState()))
+	}
+
 	setup() {
 		const eventHandlers = [
 			["keydown", this.onKey(1)],
@@ -179,8 +183,18 @@ export class Game {
 				that.scene.fog = new THREE.Fog(map.fog.color, map.fog.near, map.fog.far)
 			}
 			constructLayout(map, that.maze)
-			spawnEntities(map.entities, that.maze)
-			setupPlayerSpawn(map, that.player)
+			
+			let savedState = localStorage.getItem(that.mapName)
+			if (savedState) {
+				savedState = JSON.parse(savedState)
+				spawnEntities(savedState.entities, that.maze)
+				const start = savedState.entities.filter(e => e.type == "Player").shift()
+				setupPlayerSpawn(that.player, start)
+			} else {
+				spawnEntities(map.entities, that.maze)
+				setupPlayerSpawn(that.player, map.playerStart)
+			}
+
 			that.scene.add(that.maze)
 			that.play()
 		})
