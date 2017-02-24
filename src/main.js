@@ -1,4 +1,5 @@
 import * as THREE from "three"
+import { Clock } from "./clock"
 import { constructLayout, spawnEntities } from "./map"
 import { Player } from "./player"
 import { Transition } from "./transition"
@@ -27,8 +28,6 @@ export class Game {
 
 		this.mapName = mapName
 		this.player = player || new Player()
-
-		this.clock = new THREE.Clock()
 
 		this.renderer = new THREE.WebGLRenderer({antialias: true})
 		this.renderer.physicallyCorrectLights = true
@@ -70,11 +69,13 @@ export class Game {
 	}
 
 	play() {
+		this.clock.start()
 		this.isActive = true
 		this.render()
 	}
 
 	pause() {
+		this.clock.pause()
 		this.isActive = false
 	}
 
@@ -144,7 +145,10 @@ export class Game {
 				entities.push(obj.getState())
 			}
 		})
-		return {entities: entities}
+		return {
+			entities: entities,
+			time: this.clock.getElapsedTime()
+		}
 	}
 
 	save() {
@@ -190,9 +194,11 @@ export class Game {
 				spawnEntities(savedState.entities, that.maze)
 				const start = savedState.entities.filter(e => e.type == "Player").shift()
 				setupPlayerSpawn(that.player, start)
+				that.clock = new Clock(savedState.time)
 			} else {
 				spawnEntities(map.entities, that.maze)
 				setupPlayerSpawn(that.player, map.playerStart)
+				that.clock = new Clock()
 			}
 
 			that.scene.add(that.maze)

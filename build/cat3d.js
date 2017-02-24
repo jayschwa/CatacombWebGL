@@ -40865,6 +40865,31 @@ AudioAnalyser.prototype.getData = function () {
 
 //
 
+class Clock$1 {
+	constructor(startTime) {
+		this.elapsedTime = startTime || 0;
+		this.running = false;
+	}
+
+	getElapsedTime() {
+		if (this.running) {
+			const currentTime = performance.now() / 1000;
+			this.elapsedTime += currentTime - this.oldTime;
+			this.oldTime = currentTime;
+		}
+		return this.elapsedTime
+	}
+
+	start() {
+		this.oldTime = performance.now() / 1000;
+		this.running = true;
+	}
+
+	pause() {
+		this.running = false;
+	}
+}
+
 const audioListener = new AudioListener();
 const audioLoader = new AudioLoader();
 
@@ -41207,9 +41232,26 @@ var misc = Object.freeze({
 class Enemy extends Actor {
 	constructor(sprite, props, size, speed, spriteInfo) {
 		super(props, size, speed);
-		this.position.copy(props.position);
+		this.persistedProps.push("anim", "animStartTime", "health", "isEthereal");
+
+		this.anim = props.anim || "move";
+		this.animStartTime = props.animStartTime;
+		this.health = props.health || 5;
+		this.isEthereal = props.isEthereal || false;
+
 		this.sprite = new Sprite(new SpriteMaterial({fog: true}));
 		this.spriteInfo = spriteInfo;
+
+		const w = spriteInfo.walkFrames;
+		const a = spriteInfo.attackFrames;
+		const d = spriteInfo.deathFrames;
+		this.frames = {
+			move: [0, w],
+			attack: [w, a],
+			pain: [w+a, 1],
+			death: [w+a, d]
+		};
+
 		textureCache.get(sprite, texture => {
 			const totalFrames = spriteInfo.walkFrames + spriteInfo.attackFrames + spriteInfo.deathFrames;
 			this.texture = new SpriteSheetProxy(texture, spriteInfo.frameWidth, totalFrames);
@@ -41220,27 +41262,49 @@ class Enemy extends Actor {
 	}
 
 	onDamage(time) {
-		if (!this.timeOfDeath) {
-			this.isEthereal = true;
-			this.timeOfDeath = time;
+		if (this.anim != "death") {
+			this.health -= 1;
+			if (this.health) {
+				this.startAnimation("pain", time);
+			} else {
+				this.isEthereal = true;
+				this.startAnimation("death", time);
+			}
+		}
+	}
+
+	startAnimation(anim, time) {
+		if (anim in this.frames) {
+			this.anim = anim;
+			this.animStartTime = time;
 		}
 	}
 
 	update(time) {
 		if (this.texture) {
-			if (this.timeOfDeath) {
-				const timeAfterDeath = time - this.timeOfDeath;
-				const deathStartFrame = this.texture.frames - this.spriteInfo.deathFrames;
-				const frame = deathStartFrame + Math.floor(8 * timeAfterDeath);
-				if (frame >= this.texture.frames && this.removeDead) {
-					this.shouldRemove = true;
-				} else if (frame < this.texture.frames) {
-					this.texture.setFrame(frame);
-				}
-			} else {
-				const frame = Math.floor(this.speed * time) % this.spriteInfo.walkFrames;
-				this.texture.setFrame(frame);
+			if (!this.animStartTime) {
+				this.startAnimation(this.anim, time);
 			}
+
+			const delta = time - this.animStartTime;
+			const animFrameInfo = this.frames[this.anim];
+			let frameNum = Math.floor(delta * this.speed);
+
+			if (frameNum >= animFrameInfo[1]) {
+				if (this.anim == "death") {
+					if (this.removeDead) {
+						this.shouldRemove = true;
+					}
+					frameNum = animFrameInfo[1]-1;
+				} else if (this.anim == "move") {
+					frameNum = frameNum % animFrameInfo[1];
+				} else {
+					this.startAnimation("move", time);
+					return this.update(time)
+				}
+			}
+
+			this.texture.setFrame(animFrameInfo[0] + frameNum);
 		}
 	}
 }
@@ -42203,8 +42267,6 @@ class Game {
 		this.mapName = mapName;
 		this.player = player || new Player();
 
-		this.clock = new Clock();
-
 		this.renderer = new WebGLRenderer({antialias: true});
 		this.renderer.physicallyCorrectLights = true;
 		container.appendChild(this.renderer.domElement);
@@ -42245,11 +42307,13 @@ class Game {
 	}
 
 	play() {
+		this.clock.start();
 		this.isActive = true;
 		this.render();
 	}
 
 	pause() {
+		this.clock.pause();
 		this.isActive = false;
 	}
 
@@ -42319,7 +42383,10 @@ class Game {
 				entities.push(obj.getState());
 			}
 		});
-		return {entities: entities}
+		return {
+			entities: entities,
+			time: this.clock.getElapsedTime()
+		}
 	}
 
 	save() {
@@ -42365,9 +42432,11 @@ class Game {
 				spawnEntities(savedState.entities, that.maze);
 				const start = savedState.entities.filter(e => e.type == "Player").shift();
 				setupPlayerSpawn(that.player, start);
+				that.clock = new Clock$1(savedState.time);
 			} else {
 				spawnEntities(map.entities, that.maze);
 				setupPlayerSpawn(that.player, map.playerStart);
+				that.clock = new Clock$1();
 			}
 
 			that.scene.add(that.maze);
