@@ -70,7 +70,13 @@ export class Enemy extends Actor {
 					}
 					frameNum = animFrameInfo[1]-1
 				} else if (this.anim == "move") {
-					frameNum = frameNum % animFrameInfo[1]
+					if (Math.random() < 1/3) {
+						this.startAnimation("attack", time)
+						return this.update(time)
+					} else {
+						this.animStartTime = time
+						frameNum = frameNum % animFrameInfo[1]
+					}
 				} else {
 					this.startAnimation("move", time)
 					return this.update(time)
