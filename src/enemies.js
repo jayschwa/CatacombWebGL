@@ -5,7 +5,6 @@ import { SpriteSheetProxy, textureCache } from "./utils"
 export class Enemy extends Actor {
 	constructor(sprite, props, size, speed, spriteInfo) {
 		super(props, size, speed)
-		this.position.copy(props.position)
 		this.sprite = new Sprite(new SpriteMaterial({fog: true}))
 		this.spriteInfo = spriteInfo
 		textureCache.get(sprite, texture => {
