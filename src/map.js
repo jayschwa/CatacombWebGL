@@ -88,7 +88,7 @@ export function constructLayout(map, parent) {
 				connectAdjacent(explodingWalls, wall, x, y)
 				parent.add(wall)
 			} else if (tile.type == "door") {
-				const door = new Door(tile.value, position)
+				const door = new Door({color: tile.value, position: position})
 				connectAdjacent(doors, door, x, y, d => d.color == door.color)
 				parent.add(door)
 			}

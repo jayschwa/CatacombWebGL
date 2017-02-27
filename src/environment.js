@@ -1,23 +1,29 @@
 import { BoxBufferGeometry, Mesh, MeshBasicMaterial, Object3D, PositionalAudio } from "three"
 import { audioListener, audioLoader } from "./audio"
+import { Entity } from "./entities"
 import { CustomMaterial } from "./material"
 import { SpriteSheetProxy, textureCache } from "./utils"
 
-export class Door extends Mesh {
-	constructor(color, position) {
+export class Door extends Entity {
+	constructor(props) {
+		super(props)
+		this.type = "Door"
+		this.persistedProps.push("color")
+		this.color = props.color
+
 		const geometry = new BoxBufferGeometry(1, 1, 1)
 		geometry.rotateX(Math.PI / 2)
 		const material = new CustomMaterial()
-		textureCache.get("walls/" + color + "_door.png", texture => {
+		textureCache.get("walls/" + this.color + "_door.png", texture => {
 			texture.anisotropy = 8
 			const spritesheet = new SpriteSheetProxy(texture)
 			material.map = spritesheet
 			material.needsUpdate = true
 		})
-		super(geometry, material)
-		this.color = color
+		this.mesh = new Mesh(geometry, material)
+		this.add(this.mesh)
+
 		this.frequency = 9 + 0.5 * Math.random()
-		this.position.copy(position)
 		this.adjacent = []
 
 		audioLoader.load("sounds/adlib/use_key.wav", buffer => {
@@ -28,9 +34,9 @@ export class Door extends Mesh {
 	}
 
 	update(time) {
-		if (this.material.map) {
+		if (this.mesh.material.map) {
 			const frame = Math.floor(this.frequency * time) % 2
-			this.material.map.setFrame(frame)
+			this.mesh.material.map.setFrame(frame)
 		}
 	}
 
