@@ -41110,7 +41110,7 @@ class Fireball extends Actor {
 	constructor(props) {
 		super(props, 0, 30);
 		this.persistedProps.push("direction", "isBig");
-		this.direction = props.direction;
+		this.direction = new Vector3().copy(props.direction);
 		this.isBig = props.isBig;
 		this.scale.divideScalar(3);
 		this.lookAt(this.position.clone().add(this.direction));
