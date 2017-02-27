@@ -58,9 +58,14 @@ export class Door extends Entity {
 	}
 }
 
-export class ExplodingWall extends Object3D {
-	constructor(position) {
-		super()
+export class ExplodingWall extends Entity {
+	constructor(props) {
+		super(props)
+		this.type = "ExplodingWall"
+		this.persistedProps.push("ignition", "wall")
+		this.ignition = props.ignition
+		this.wall = props.wall
+
 		const geometry = new BoxBufferGeometry(1, 1, 1)
 		geometry.rotateX(Math.PI / 2)
 		const texture = textureCache.get("walls/exploding.png", texture => {
@@ -68,8 +73,8 @@ export class ExplodingWall extends Object3D {
 			this.box.material.needsUpdate = true
 		})
 		const material = new MeshBasicMaterial({map: texture, transparent: true})
-		this.position.copy(position)
 		this.box = new Mesh(geometry, material)
+
 		this.duration = 1/3
 		this.adjacent = []
 	}

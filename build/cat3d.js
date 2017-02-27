@@ -41571,21 +41571,26 @@ class CustomMaterial extends ShaderMaterial {
 	set pixelate(value) { this.uniforms.pixelate.value = value; }
 }
 
-class Door extends Mesh {
-	constructor(color, position) {
+class Door extends Entity {
+	constructor(props) {
+		super(props);
+		this.type = "Door";
+		this.persistedProps.push("color");
+		this.color = props.color;
+
 		const geometry = new BoxBufferGeometry(1, 1, 1);
 		geometry.rotateX(Math.PI / 2);
 		const material = new CustomMaterial();
-		textureCache.get("walls/" + color + "_door.png", texture => {
+		textureCache.get("walls/" + this.color + "_door.png", texture => {
 			texture.anisotropy = 8;
 			const spritesheet = new SpriteSheetProxy(texture);
 			material.map = spritesheet;
 			material.needsUpdate = true;
 		});
-		super(geometry, material);
-		this.color = color;
+		this.mesh = new Mesh(geometry, material);
+		this.add(this.mesh);
+
 		this.frequency = 9 + 0.5 * Math.random();
-		this.position.copy(position);
 		this.adjacent = [];
 
 		audioLoader.load("sounds/adlib/use_key.wav", buffer => {
@@ -41596,9 +41601,9 @@ class Door extends Mesh {
 	}
 
 	update(time) {
-		if (this.material.map) {
+		if (this.mesh.material.map) {
 			const frame = Math.floor(this.frequency * time) % 2;
-			this.material.map.setFrame(frame);
+			this.mesh.material.map.setFrame(frame);
 		}
 	}
 
@@ -41620,9 +41625,14 @@ class Door extends Mesh {
 	}
 }
 
-class ExplodingWall extends Object3D {
-	constructor(position) {
-		super();
+class ExplodingWall extends Entity {
+	constructor(props) {
+		super(props);
+		this.type = "ExplodingWall";
+		this.persistedProps.push("ignition", "wall");
+		this.ignition = props.ignition;
+		this.wall = props.wall;
+
 		const geometry = new BoxBufferGeometry(1, 1, 1);
 		geometry.rotateX(Math.PI / 2);
 		const texture = textureCache.get("walls/exploding.png", texture => {
@@ -41630,8 +41640,8 @@ class ExplodingWall extends Object3D {
 			this.box.material.needsUpdate = true;
 		});
 		const material = new MeshBasicMaterial({map: texture, transparent: true});
-		this.position.copy(position);
 		this.box = new Mesh(geometry, material);
+
 		this.duration = 1/3;
 		this.adjacent = [];
 	}
@@ -41844,12 +41854,12 @@ function constructLayout(map, parent) {
 			if (tile.type == "wall") {
 				mergeWallGeometry(tile, map.adjacentTiles(x, y), walls, position);
 			} else if (tile.type == "exploding_wall") {
-				const wall = new ExplodingWall(position);
+				const wall = new ExplodingWall({position: position, wall: tile.value});
 				wall.add(...createWallMeshes(mergeWallGeometry(tile, map.adjacentTiles(x, y))));
 				connectAdjacent(explodingWalls, wall, x, y);
 				parent.add(wall);
 			} else if (tile.type == "door") {
-				const door = new Door(tile.value, position);
+				const door = new Door({color: tile.value, position: position});
 				connectAdjacent(doors, door, x, y, d => d.color == door.color);
 				parent.add(door);
 			}
@@ -42426,6 +42436,7 @@ class Game {
 			return response.json()
 		})
 		.then(function(map) {
+			map.layout = map.layout.map(line => line.split(""));
 			that.map = map;
 			if (map.fog) {
 				that.scene.fog = new Fog(map.fog.color, map.fog.near, map.fog.far);
