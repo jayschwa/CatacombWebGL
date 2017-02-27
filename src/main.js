@@ -182,6 +182,7 @@ export class Game {
 			return response.json()
 		})
 		.then(function(map) {
+			map.layout = map.layout.map(line => line.split(""))
 			that.map = map
 			if (map.fog) {
 				that.scene.fog = new THREE.Fog(map.fog.color, map.fog.near, map.fog.far)
