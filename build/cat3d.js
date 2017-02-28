@@ -41642,26 +41642,17 @@ class ExplodingWall extends Entity {
 		const material = new MeshBasicMaterial({map: texture, transparent: true});
 		this.box = new Mesh(geometry, material);
 
-		this.duration = 1/3;
 		this.adjacent = [];
+		this.burnDuration = 0.25;
+		this.spreadDuration = this.burnDuration / 2;
 	}
 
 	ignite(time) {
-		if (this.isExploding()) {
+		if (time >= this.ignition) {
 			return
 		}
 		this.ignition = time;
-		this.children.forEach(mesh => mesh.shouldRemove = true);
-		this.add(this.box);
-	}
-
-	igniteAdjacent(time) {
-		this.adjacent.forEach(e => e.ignite(time));
-		this.adjacentsIgnited = true;
-	}
-
-	isExploding() {
-		return !!this.ignition
+		this.adjacent.forEach(e => e.ignite(time + this.spreadDuration));
 	}
 
 	onDamage(time) {
@@ -41669,18 +41660,18 @@ class ExplodingWall extends Entity {
 	}
 
 	update(time) {
-		if (this.isExploding()) {
-			const timeDelta = time - this.ignition;
-			if (timeDelta > this.duration) {
-				this.shouldRemove = true;
-			} else {
-				const texture = this.box.material.map;
-				const frame = Math.floor(timeDelta * texture.frames / this.duration);
-				this.box.material.map.setFrame(frame);
-				if (!this.adjacentsIgnited && timeDelta > this.duration / texture.frames) {
-					this.igniteAdjacent(time);
-				}
+		const timeDelta = time - this.ignition;
+		if (timeDelta > this.burnDuration) {
+			this.shouldRemove = true;
+		} else if (timeDelta > 0) {
+			if (!this.exploding) {
+				this.exploding = true;
+				this.children.forEach(mesh => mesh.shouldRemove = true); // remove wall segments
+				this.add(this.box);
 			}
+			const texture = this.box.material.map;
+			const frame = Math.floor(timeDelta * texture.frames / this.burnDuration);
+			texture.setFrame(frame);
 		}
 	}
 }
