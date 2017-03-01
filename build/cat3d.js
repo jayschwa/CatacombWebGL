@@ -41571,6 +41571,54 @@ class CustomMaterial extends ShaderMaterial {
 	set pixelate(value) { this.uniforms.pixelate.value = value; }
 }
 
+class FloorGeometry extends PlaneGeometry {
+	constructor(position) {
+		super(1, 1);
+		this.translate(position.x, position.y, -0.5);
+	}
+}
+
+class WallGeometry extends PlaneGeometry {
+	constructor(direction, position) {
+		super(1, 1);
+		this.rotateX(Math.PI / 2);
+		this.translate(0, -0.5, 0);
+		const directions = ["south", "east", "north", "west"];
+		this.rotateZ(directions.indexOf(direction) * Math.PI / 2);
+		if (position) {
+			this.translate(position.x, position.y, 0);
+		}
+	}
+}
+
+function createWallMeshes(geometryDict) {
+	return Object.keys(geometryDict).map(name => {
+		const geometry = new BufferGeometry().fromGeometry(geometryDict[name]);
+		const texture = textureCache.get("walls/" + name + ".png");
+		texture.anisotropy = 8;
+		const material = new CustomMaterial({map: texture});
+		return new Mesh(geometry, material)
+	})
+}
+
+function mergeWallGeometry(name, faces, geometryDict, position) {
+	geometryDict = geometryDict || {};
+	const suffix = {
+		east: "light",
+		west: "light",
+		north: "dark",
+		south: "dark"
+	};
+	faces.forEach(face => {
+		const faceName = name + "_" + suffix[face];
+		if (!(faceName in geometryDict)) {
+			geometryDict[faceName] = new Geometry();
+		}
+		geometryDict[faceName].merge(new WallGeometry(face, position));
+	});
+	return geometryDict
+}
+
 class Door extends Entity {
 	constructor(props, removeFunc) {
 		super(props);
@@ -41636,19 +41684,22 @@ class ExplodingWall extends Entity {
 	constructor(props, removeFunc) {
 		super(props);
 		this.type = "ExplodingWall";
-		this.persistedProps.push("ignition", "wall");
+		this.persistedProps.push("ignition", "faces", "wall");
 		this.ignition = props.ignition;
+		this.faces = props.faces;
 		this.wall = props.wall;
 
 		this.removeFunc = removeFunc;
 
+		this.add(...createWallMeshes(mergeWallGeometry(this.wall, this.faces)));
+
 		const geometry = new BoxBufferGeometry(1, 1, 1);
 		geometry.rotateX(Math.PI / 2);
-		const texture = textureCache.get("walls/exploding.png", texture => {
+		textureCache.get("walls/exploding.png", texture => {
 			this.box.material.map = new SpriteSheetProxy(texture, 64, 3);
 			this.box.material.needsUpdate = true;
 		});
-		const material = new MeshBasicMaterial({map: texture, transparent: true});
+		const material = new MeshBasicMaterial({transparent: true});
 		this.box = new Mesh(geometry, material);
 
 		this.adjacent = [];
@@ -41661,6 +41712,7 @@ class ExplodingWall extends Entity {
 			return
 		}
 		this.ignition = time;
+		this.removeFunc && this.removeFunc();
 		this.adjacent.forEach(e => e.ignite(time + this.spreadDuration));
 	}
 
@@ -41683,28 +41735,10 @@ class ExplodingWall extends Entity {
 				this.add(this.box);
 			}
 			const texture = this.box.material.map;
-			const frame = Math.floor(timeDelta * texture.frames / this.burnDuration);
-			texture.setFrame(frame);
-		}
-	}
-}
-
-class FloorGeometry extends PlaneGeometry {
-	constructor(position) {
-		super(1, 1);
-		this.translate(position.x, position.y, -0.5);
-	}
-}
-
-class WallGeometry extends PlaneGeometry {
-	constructor(direction, position) {
-		super(1, 1);
-		this.rotateX(Math.PI / 2);
-		this.translate(0, -0.5, 0);
-		const directions = ["south", "east", "north", "west"];
-		this.rotateZ(directions.indexOf(direction) * Math.PI / 2);
-		if (position) {
-			this.translate(position.x, position.y, 0);
+			if (texture) {
+				const frame = Math.floor(timeDelta * texture.frames / this.burnDuration);
+				texture.setFrame(frame);
+			}
 		}
 	}
 }
@@ -41798,34 +41832,6 @@ function connectAdjacent(objects, obj, x, y, filterFunc) {
 	objects[[x, y]] = obj;
 }
 
-function createWallMeshes(geometryDict) {
-	return Object.keys(geometryDict).map(name => {
-		const geometry = new BufferGeometry().fromGeometry(geometryDict[name]);
-		const texture = textureCache.get("walls/" + name + ".png");
-		texture.anisotropy = 8;
-		const material = new CustomMaterial({map: texture});
-		return new Mesh(geometry, material)
-	})
-}
-
-function mergeWallGeometry(tile, adjacentTiles, geometryDict, position) {
-	geometryDict = geometryDict || {};
-	const variants = {
-		light: ["east", "west"],
-		dark: ["north", "south"]
-	};
-	Object.keys(variants).forEach(v => {
-		const name = tile.value + "_" + v;
-		variants[v].forEach(face => {
-			if (adjacentTiles[face] && adjacentTiles[face].type != tile.type) {
-				geometryDict[name] = geometryDict[name] || new Geometry();
-				geometryDict[name].merge(new WallGeometry(face, position));
-			}
-		});
-	});
-	return geometryDict
-}
-
 function constructLayout(map, parent) {
 	const doors = {};
 	const explodingWalls = {};
@@ -41855,17 +41861,26 @@ function constructLayout(map, parent) {
 		}
 	};
 
+	map.borderFaces = function(x, y) {
+		const tile = this.getTile(x, y);
+		const adjacentTiles = this.adjacentTiles(x, y);
+		return Object.keys(adjacentTiles).filter(d => {
+			const adj = adjacentTiles[d];
+			return adj && adj.type != tile.type
+		})
+	};
+
 	for (let x = 0; x < map.width; x++) {
 		for (let y = 0; y < map.height; y++) {
 			const position = new Vector2(x, y);
 			const tile = map.getTile(x, y);
+			const borders = map.borderFaces(x, y);
 			const removeFunc = () => map.layout[map.height-1-y][x] = " ";
 
 			if (tile.type == "wall") {
-				mergeWallGeometry(tile, map.adjacentTiles(x, y), walls, position);
+				mergeWallGeometry(tile.value, borders, walls, position);
 			} else if (tile.type == "exploding_wall") {
-				const wall = new ExplodingWall({position: position, wall: tile.value}, removeFunc);
-				wall.add(...createWallMeshes(mergeWallGeometry(tile, map.adjacentTiles(x, y))));
+				const wall = new ExplodingWall({position: position, wall: tile.value, faces: borders}, removeFunc);
 				connectAdjacent(explodingWalls, wall, x, y);
 				parent.add(wall);
 			} else if (tile.type == "door") {
@@ -41888,7 +41903,7 @@ function constructLayout(map, parent) {
 }
 
 function spawnEntities(entities, parent) {
-	const entityClasses = Object.assign({}, enemies, items, misc);
+	const entityClasses = Object.assign({}, enemies, items, misc, {ExplodingWall: ExplodingWall});
 	entities.forEach(entity => {
 		if (entity.type == "Player") {
 			return
@@ -42313,6 +42328,7 @@ class Game {
 
 	onKey(value) {
 		const binds = this.player.binds();
+		binds.Enter = this.save.bind(this);
 		return (event) => {
 			const command = binds[event.code];
 			if (command && !event.repeat) {

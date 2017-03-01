@@ -71,8 +71,7 @@ export function constructLayout(map, parent) {
 			if (tile.type == "wall") {
 				mergeWallGeometry(tile.value, borders, walls, position)
 			} else if (tile.type == "exploding_wall") {
-				const wall = new ExplodingWall({position: position, wall: tile.value}, removeFunc)
-				wall.add(...createWallMeshes(mergeWallGeometry(tile.value, borders)))
+				const wall = new ExplodingWall({position: position, wall: tile.value, faces: borders}, removeFunc)
 				connectAdjacent(explodingWalls, wall, x, y)
 				parent.add(wall)
 			} else if (tile.type == "door") {

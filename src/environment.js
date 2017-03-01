@@ -1,6 +1,7 @@
 import { BoxBufferGeometry, Mesh, MeshBasicMaterial, Object3D, PositionalAudio } from "three"
 import { audioListener, audioLoader } from "./audio"
 import { Entity } from "./entities"
+import { createWallMeshes, mergeWallGeometry } from "./geometry"
 import { CustomMaterial } from "./material"
 import { SpriteSheetProxy, textureCache } from "./utils"
 
@@ -69,11 +70,14 @@ export class ExplodingWall extends Entity {
 	constructor(props, removeFunc) {
 		super(props)
 		this.type = "ExplodingWall"
-		this.persistedProps.push("ignition", "wall")
+		this.persistedProps.push("ignition", "faces", "wall")
 		this.ignition = props.ignition
+		this.faces = props.faces
 		this.wall = props.wall
 
 		this.removeFunc = removeFunc
+
+		this.add(...createWallMeshes(mergeWallGeometry(this.wall, this.faces)))
 
 		const geometry = new BoxBufferGeometry(1, 1, 1)
 		geometry.rotateX(Math.PI / 2)
