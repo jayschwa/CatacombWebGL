@@ -49,6 +49,7 @@ export class Game {
 
 	onKey(value) {
 		const binds = this.player.binds()
+		binds.Enter = this.save.bind(this)
 		return (event) => {
 			const command = binds[event.code]
 			if (command && !event.repeat) {
