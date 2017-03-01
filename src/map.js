@@ -2,7 +2,7 @@ import { BufferGeometry, Geometry, Mesh, Scene, Vector2, Vector3 } from "three"
 import * as enemies from "./enemies"
 import * as misc from "./entities"
 import { Door, ExplodingWall } from "./environment"
-import { FloorGeometry, WallGeometry } from "./geometry"
+import { FloorGeometry, WallGeometry, createWallMeshes, mergeWallGeometry } from "./geometry"
 import * as items from "./items"
 import { CustomMaterial } from "./material"
 import { textureCache } from "./utils"
@@ -21,34 +21,6 @@ function connectAdjacent(objects, obj, x, y, filterFunc) {
 		neighbor.adjacent.push(obj)
 	})
 	objects[[x, y]] = obj
-}
-
-function createWallMeshes(geometryDict) {
-	return Object.keys(geometryDict).map(name => {
-		const geometry = new BufferGeometry().fromGeometry(geometryDict[name])
-		const texture = textureCache.get("walls/" + name + ".png")
-		texture.anisotropy = 8
-		const material = new CustomMaterial({map: texture})
-		return new Mesh(geometry, material)
-	})
-}
-
-function mergeWallGeometry(tile, adjacentTiles, geometryDict, position) {
-	geometryDict = geometryDict || {}
-	const variants = {
-		light: ["east", "west"],
-		dark: ["north", "south"]
-	}
-	Object.keys(variants).forEach(v => {
-		const name = tile.value + "_" + v
-		variants[v].forEach(face => {
-			if (adjacentTiles[face] && adjacentTiles[face].type != tile.type) {
-				geometryDict[name] = geometryDict[name] || new Geometry()
-				geometryDict[name].merge(new WallGeometry(face, position))
-			}
-		})
-	})
-	return geometryDict
 }
 
 export function constructLayout(map, parent) {
@@ -80,17 +52,27 @@ export function constructLayout(map, parent) {
 		}
 	}
 
+	map.borderFaces = function(x, y) {
+		const tile = this.getTile(x, y)
+		const adjacentTiles = this.adjacentTiles(x, y)
+		return Object.keys(adjacentTiles).filter(d => {
+			const adj = adjacentTiles[d]
+			return adj && adj.type != tile.type
+		})
+	}
+
 	for (let x = 0; x < map.width; x++) {
 		for (let y = 0; y < map.height; y++) {
 			const position = new Vector2(x, y)
 			const tile = map.getTile(x, y)
+			const borders = map.borderFaces(x, y)
 			const removeFunc = () => map.layout[map.height-1-y][x] = " "
 
 			if (tile.type == "wall") {
-				mergeWallGeometry(tile, map.adjacentTiles(x, y), walls, position)
+				mergeWallGeometry(tile.value, borders, walls, position)
 			} else if (tile.type == "exploding_wall") {
 				const wall = new ExplodingWall({position: position, wall: tile.value}, removeFunc)
-				wall.add(...createWallMeshes(mergeWallGeometry(tile, map.adjacentTiles(x, y))))
+				wall.add(...createWallMeshes(mergeWallGeometry(tile.value, borders)))
 				connectAdjacent(explodingWalls, wall, x, y)
 				parent.add(wall)
 			} else if (tile.type == "door") {
