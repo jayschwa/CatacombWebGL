@@ -61,7 +61,11 @@ export function constructLayout(map, parent) {
 	map.getTile = function(x, y) {
 		try {
 			const symbol = this.layout[this.height-1-y][x]
-			return this.legend[symbol]
+			if (symbol == " ") {
+				return {type: "floor"}
+			} else {
+				return this.legend[symbol]
+			}
 		} catch (ex) {
 			return null
 		}
@@ -80,15 +84,17 @@ export function constructLayout(map, parent) {
 		for (let y = 0; y < map.height; y++) {
 			const position = new Vector2(x, y)
 			const tile = map.getTile(x, y)
+			const removeFunc = () => map.layout[map.height-1-y][x] = " "
+
 			if (tile.type == "wall") {
 				mergeWallGeometry(tile, map.adjacentTiles(x, y), walls, position)
 			} else if (tile.type == "exploding_wall") {
-				const wall = new ExplodingWall({position: position, wall: tile.value})
+				const wall = new ExplodingWall({position: position, wall: tile.value}, removeFunc)
 				wall.add(...createWallMeshes(mergeWallGeometry(tile, map.adjacentTiles(x, y))))
 				connectAdjacent(explodingWalls, wall, x, y)
 				parent.add(wall)
 			} else if (tile.type == "door") {
-				const door = new Door({color: tile.value, position: position})
+				const door = new Door({color: tile.value, position: position}, removeFunc)
 				connectAdjacent(doors, door, x, y, d => d.color == door.color)
 				parent.add(door)
 			}

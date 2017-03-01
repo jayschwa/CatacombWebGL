@@ -5,11 +5,13 @@ import { CustomMaterial } from "./material"
 import { SpriteSheetProxy, textureCache } from "./utils"
 
 export class Door extends Entity {
-	constructor(props) {
+	constructor(props, removeFunc) {
 		super(props)
 		this.type = "Door"
 		this.persistedProps.push("color")
 		this.color = props.color
+
+		this.removeFunc = removeFunc
 
 		const geometry = new BoxBufferGeometry(1, 1, 1)
 		geometry.rotateX(Math.PI / 2)
@@ -33,6 +35,10 @@ export class Door extends Entity {
 		})
 	}
 
+	getState() {
+		return null
+	}
+
 	update(time) {
 		if (this.mesh.material.map) {
 			const frame = Math.floor(this.frequency * time) % 2
@@ -52,6 +58,7 @@ export class Door extends Entity {
 				this.unlockSound.play()
 			}
 			this.shouldRemove = true
+			this.removeFunc()
 			this.adjacent.forEach(door => door.unlock(true))
 			return true
 		}
@@ -59,12 +66,14 @@ export class Door extends Entity {
 }
 
 export class ExplodingWall extends Entity {
-	constructor(props) {
+	constructor(props, removeFunc) {
 		super(props)
 		this.type = "ExplodingWall"
 		this.persistedProps.push("ignition", "wall")
 		this.ignition = props.ignition
 		this.wall = props.wall
+
+		this.removeFunc = removeFunc
 
 		const geometry = new BoxBufferGeometry(1, 1, 1)
 		geometry.rotateX(Math.PI / 2)
@@ -86,6 +95,10 @@ export class ExplodingWall extends Entity {
 		}
 		this.ignition = time
 		this.adjacent.forEach(e => e.ignite(time + this.spreadDuration))
+	}
+
+	getState() {
+		return this.ignition ? super.getState() : null
 	}
 
 	onDamage(time) {

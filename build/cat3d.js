@@ -41572,11 +41572,13 @@ class CustomMaterial extends ShaderMaterial {
 }
 
 class Door extends Entity {
-	constructor(props) {
+	constructor(props, removeFunc) {
 		super(props);
 		this.type = "Door";
 		this.persistedProps.push("color");
 		this.color = props.color;
+
+		this.removeFunc = removeFunc;
 
 		const geometry = new BoxBufferGeometry(1, 1, 1);
 		geometry.rotateX(Math.PI / 2);
@@ -41600,6 +41602,10 @@ class Door extends Entity {
 		});
 	}
 
+	getState() {
+		return null
+	}
+
 	update(time) {
 		if (this.mesh.material.map) {
 			const frame = Math.floor(this.frequency * time) % 2;
@@ -41619,6 +41625,7 @@ class Door extends Entity {
 				this.unlockSound.play();
 			}
 			this.shouldRemove = true;
+			this.removeFunc();
 			this.adjacent.forEach(door => door.unlock(true));
 			return true
 		}
@@ -41626,12 +41633,14 @@ class Door extends Entity {
 }
 
 class ExplodingWall extends Entity {
-	constructor(props) {
+	constructor(props, removeFunc) {
 		super(props);
 		this.type = "ExplodingWall";
 		this.persistedProps.push("ignition", "wall");
 		this.ignition = props.ignition;
 		this.wall = props.wall;
+
+		this.removeFunc = removeFunc;
 
 		const geometry = new BoxBufferGeometry(1, 1, 1);
 		geometry.rotateX(Math.PI / 2);
@@ -41653,6 +41662,10 @@ class ExplodingWall extends Entity {
 		}
 		this.ignition = time;
 		this.adjacent.forEach(e => e.ignite(time + this.spreadDuration));
+	}
+
+	getState() {
+		return this.ignition ? super.getState() : null
 	}
 
 	onDamage(time) {
@@ -41823,7 +41836,11 @@ function constructLayout(map, parent) {
 	map.getTile = function(x, y) {
 		try {
 			const symbol = this.layout[this.height-1-y][x];
-			return this.legend[symbol]
+			if (symbol == " ") {
+				return {type: "floor"}
+			} else {
+				return this.legend[symbol]
+			}
 		} catch (ex) {
 			return null
 		}
@@ -41842,15 +41859,17 @@ function constructLayout(map, parent) {
 		for (let y = 0; y < map.height; y++) {
 			const position = new Vector2(x, y);
 			const tile = map.getTile(x, y);
+			const removeFunc = () => map.layout[map.height-1-y][x] = " ";
+
 			if (tile.type == "wall") {
 				mergeWallGeometry(tile, map.adjacentTiles(x, y), walls, position);
 			} else if (tile.type == "exploding_wall") {
-				const wall = new ExplodingWall({position: position, wall: tile.value});
+				const wall = new ExplodingWall({position: position, wall: tile.value}, removeFunc);
 				wall.add(...createWallMeshes(mergeWallGeometry(tile, map.adjacentTiles(x, y))));
 				connectAdjacent(explodingWalls, wall, x, y);
 				parent.add(wall);
 			} else if (tile.type == "door") {
-				const door = new Door({color: tile.value, position: position});
+				const door = new Door({color: tile.value, position: position}, removeFunc);
 				connectAdjacent(doors, door, x, y, d => d.color == door.color);
 				parent.add(door);
 			}
@@ -42386,14 +42405,16 @@ class Game {
 	getMapState() {
 		const entities = [];
 		this.scene.traverse(obj => {
-			if (obj.getState) {
-				entities.push(obj.getState());
+			const objState = obj.getState && obj.getState();
+			if (objState) {
+				entities.push(objState);
 			}
 		});
-		return {
-			entities: entities,
-			time: this.clock.getElapsedTime()
-		}
+		const map = Object.assign({}, this.map);
+		map.layout = map.layout.map(line => line.join(""));
+		map.entities = entities;
+		map.time = this.clock.getElapsedTime();
+		return map
 	}
 
 	save() {
@@ -42427,21 +42448,23 @@ class Game {
 			return response.json()
 		})
 		.then(function(map) {
-			map.layout = map.layout.map(line => line.split(""));
-			that.map = map;
 			if (map.fog) {
 				that.scene.fog = new Fog(map.fog.color, map.fog.near, map.fog.far);
 			}
-			constructLayout(map, that.maze);
-			
 			let savedState = localStorage.getItem(that.mapName);
 			if (savedState) {
 				savedState = JSON.parse(savedState);
+				savedState.layout = savedState.layout.map(line => line.split(""));
+				that.map = savedState;
+				constructLayout(savedState, that.maze);
 				spawnEntities(savedState.entities, that.maze);
 				const start = savedState.entities.filter(e => e.type == "Player").shift();
 				setupPlayerSpawn(that.player, start);
 				that.clock = new Clock$1(savedState.time);
 			} else {
+				map.layout = map.layout.map(line => line.split(""));
+				that.map = map;
+				constructLayout(map, that.maze);
 				spawnEntities(map.entities, that.maze);
 				setupPlayerSpawn(that.player, map.playerStart);
 				that.clock = new Clock$1();

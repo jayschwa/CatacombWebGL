@@ -141,14 +141,16 @@ export class Game {
 	getMapState() {
 		const entities = []
 		this.scene.traverse(obj => {
-			if (obj.getState) {
-				entities.push(obj.getState())
+			const objState = obj.getState && obj.getState()
+			if (objState) {
+				entities.push(objState)
 			}
 		})
-		return {
-			entities: entities,
-			time: this.clock.getElapsedTime()
-		}
+		const map = Object.assign({}, this.map)
+		map.layout = map.layout.map(line => line.join(""))
+		map.entities = entities
+		map.time = this.clock.getElapsedTime()
+		return map
 	}
 
 	save() {
@@ -182,21 +184,23 @@ export class Game {
 			return response.json()
 		})
 		.then(function(map) {
-			map.layout = map.layout.map(line => line.split(""))
-			that.map = map
 			if (map.fog) {
 				that.scene.fog = new THREE.Fog(map.fog.color, map.fog.near, map.fog.far)
 			}
-			constructLayout(map, that.maze)
-			
 			let savedState = localStorage.getItem(that.mapName)
 			if (savedState) {
 				savedState = JSON.parse(savedState)
+				savedState.layout = savedState.layout.map(line => line.split(""))
+				that.map = savedState
+				constructLayout(savedState, that.maze)
 				spawnEntities(savedState.entities, that.maze)
 				const start = savedState.entities.filter(e => e.type == "Player").shift()
 				setupPlayerSpawn(that.player, start)
 				that.clock = new Clock(savedState.time)
 			} else {
+				map.layout = map.layout.map(line => line.split(""))
+				that.map = map
+				constructLayout(map, that.maze)
 				spawnEntities(map.entities, that.maze)
 				setupPlayerSpawn(that.player, map.playerStart)
 				that.clock = new Clock()
