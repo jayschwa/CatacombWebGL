@@ -77,11 +77,11 @@ export class ExplodingWall extends Entity {
 
 		const geometry = new BoxBufferGeometry(1, 1, 1)
 		geometry.rotateX(Math.PI / 2)
-		const texture = textureCache.get("walls/exploding.png", texture => {
+		textureCache.get("walls/exploding.png", texture => {
 			this.box.material.map = new SpriteSheetProxy(texture, 64, 3)
 			this.box.material.needsUpdate = true
 		})
-		const material = new MeshBasicMaterial({map: texture, transparent: true})
+		const material = new MeshBasicMaterial({transparent: true})
 		this.box = new Mesh(geometry, material)
 
 		this.adjacent = []
@@ -94,6 +94,7 @@ export class ExplodingWall extends Entity {
 			return
 		}
 		this.ignition = time
+		this.removeFunc && this.removeFunc()
 		this.adjacent.forEach(e => e.ignite(time + this.spreadDuration))
 	}
 
@@ -116,8 +117,10 @@ export class ExplodingWall extends Entity {
 				this.add(this.box)
 			}
 			const texture = this.box.material.map
-			const frame = Math.floor(timeDelta * texture.frames / this.burnDuration)
-			texture.setFrame(frame)
+			if (texture) {
+				const frame = Math.floor(timeDelta * texture.frames / this.burnDuration)
+				texture.setFrame(frame)
+			}
 		}
 	}
 }
