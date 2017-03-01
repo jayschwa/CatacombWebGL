@@ -113,7 +113,7 @@ export function constructLayout(map, parent) {
 }
 
 export function spawnEntities(entities, parent) {
-	const entityClasses = Object.assign({}, enemies, items, misc)
+	const entityClasses = Object.assign({}, enemies, items, misc, {ExplodingWall: ExplodingWall})
 	entities.forEach(entity => {
 		if (entity.type == "Player") {
 			return
