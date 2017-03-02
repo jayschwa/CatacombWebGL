@@ -8,9 +8,8 @@ import { SpriteSheetProxy, textureCache } from "./utils"
 export class Door extends Entity {
 	constructor(props, removeFunc) {
 		super(props)
-		this.type = "Door"
+		this.type = this.type || "Door"
 		this.persistedProps.push("color")
-		this.color = props.color
 
 		this.removeFunc = removeFunc
 
@@ -71,9 +70,6 @@ export class ExplodingWall extends Entity {
 		super(props)
 		this.type = "ExplodingWall"
 		this.persistedProps.push("ignition", "faces", "wall")
-		this.ignition = props.ignition
-		this.faces = props.faces
-		this.wall = props.wall
 
 		this.removeFunc = removeFunc
 

@@ -8,9 +8,6 @@ const ITEM_SCALE = 0.6
 export class Item extends Entity {
 	constructor(props, ...itemFrames) {
 		super(props)
-		this.persistedProps.push("value")
-		this.value = props.value
-		this.soundName = props.soundName
 		this.itemFrames = itemFrames
 		audioLoader.load("sounds/adlib/pickup_" + (this.soundName || this.name) + ".wav", buffer => {
 			this.pickupSound = new PositionalAudio(audioListener)

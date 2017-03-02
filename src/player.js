@@ -87,7 +87,7 @@ export class Player extends Actor {
 		if (item instanceof Treasure) {
 			this.score += item.value
 		} else {
-			const name = item.name.toLowerCase()
+			const name = item.type.toLowerCase()
 			if (this.inventory[name] === undefined) {
 				this.inventory[name] = 0
 			}

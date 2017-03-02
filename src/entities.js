@@ -5,12 +5,14 @@ import { SpriteSheetProxy, textureCache } from "./utils"
 export class Entity extends Object3D {
 	constructor(props) {
 		super()
+		Object.keys(props).forEach(prop => {
+			if (this[prop] instanceof Object && this[prop].copy) {
+				this[prop].copy(props[prop])
+			} else {
+				this[prop] = props[prop]
+			}
+		})
 		this.persistedProps = ["type", "position"]
-		this.type = props.type
-		this.name = props.name || props.type
-		if ("position" in props) {
-			this.position.copy(props.position)
-		}
 		this.up.set(0, 0, 1)
 	}
 
@@ -30,6 +32,7 @@ export class Entity extends Object3D {
 			if (prop in this) {
 				state[prop] = this[prop]
 			} else {
+				console.log(this)
 				throw new Error("entity does not have a `" + prop + "` property")
 			}
 		})
@@ -124,8 +127,11 @@ export class Fireball extends Actor {
 	constructor(props) {
 		super(props, 0, 30)
 		this.persistedProps.push("direction", "isBig")
-		this.direction = new Vector3().copy(props.direction)
-		this.isBig = props.isBig
+
+		if (this.isBig === undefined) {
+			this.isBig = true
+		}
+
 		this.scale.divideScalar(3)
 		this.lookAt(this.position.clone().add(this.direction))
 		this.updateMatrixWorld()
@@ -195,7 +201,6 @@ export class Portal extends Entity {
 	constructor(props) {
 		super(props)
 		this.persistedProps.push("value")
-		this.value = props.value
 		this.fps = 8
 
 		this.light = new PointLight(0x0042DD, 1, 1.5)

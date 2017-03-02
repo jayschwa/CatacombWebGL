@@ -7,10 +7,8 @@ export class Enemy extends Actor {
 		super(props, size, speed)
 		this.persistedProps.push("anim", "animStartTime", "health", "isEthereal")
 
-		this.anim = props.anim || "move"
-		this.animStartTime = props.animStartTime
-		this.health = props.health || 5
-		this.isEthereal = props.isEthereal || false
+		this.anim = this.anim || "move"
+		this.health = this.health || 5
 
 		this.sprite = new Sprite(new SpriteMaterial({fog: true}))
 		this.spriteInfo = spriteInfo
