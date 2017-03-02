@@ -14,6 +14,16 @@ export class Entity extends Object3D {
 		this.up.set(0, 0, 1)
 	}
 
+	/** True if the given object is identical to, or a descendant of, this entity. **/
+	includes(object) {
+		for (let obj = object; obj; obj = obj.parent) {
+			if (obj === this) {
+				return true
+			}
+		}
+		return false
+	}
+
 	getState() {
 		const state = {}
 		this.persistedProps.forEach(prop => {
@@ -65,7 +75,7 @@ export class Actor extends Entity {
 				let collisions = this.raycaster.intersectObject(maze, true)
 
 				for (let collision of collisions) {
-					if (ancestorsAreEthereal(collision.object)) {
+					if (this.includes(collision.object) || ancestorsAreEthereal(collision.object)) {
 						continue
 					}
 					let pushBack = true
