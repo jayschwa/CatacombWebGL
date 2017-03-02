@@ -184,10 +184,11 @@ export class Player extends Actor {
 			}
 		} else {
 			const chargeTime = this.lastTime - this.chargeStarted
+			const direction = this.getWorldDirection()
 			const fireball = new Fireball({
 				type: "Fireball",
-				position: this.position,
-				direction: this.getWorldDirection(),
+				position: this.position.clone().addScaledVector(direction, 2/3),
+				direction: direction,
 				isBig: chargeTime > 1
 			})
 			this.parent.add(fireball)

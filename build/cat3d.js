@@ -41114,7 +41114,6 @@ class Fireball extends Actor {
 		this.isBig = props.isBig;
 		this.scale.divideScalar(3);
 		this.lookAt(this.position.clone().add(this.direction));
-		this.position.addScaledVector(this.direction, 2/3);
 		this.updateMatrixWorld();
 		this.moveDirection.z = 1;
 		this.updateVelocity();
@@ -42091,10 +42090,11 @@ class Player extends Actor {
 			}
 		} else {
 			const chargeTime = this.lastTime - this.chargeStarted;
+			const direction = this.getWorldDirection();
 			const fireball = new Fireball({
 				type: "Fireball",
-				position: this.position,
-				direction: this.getWorldDirection(),
+				position: this.position.clone().addScaledVector(direction, 2/3),
+				direction: direction,
 				isBig: chargeTime > 1
 			});
 			this.parent.add(fireball);
