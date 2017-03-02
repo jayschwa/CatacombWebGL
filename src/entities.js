@@ -123,12 +123,6 @@ export class Fireball extends Actor {
 		this.moveDirection.z = 1
 		this.updateVelocity()
 
-		audioLoader.load("sounds/adlib/" + (this.isBig ? "big_" : "") + "shoot.wav", buffer => {
-			this.fireSound = new PositionalAudio(audioListener)
-			this.fireSound.setBuffer(buffer)
-			this.add(this.fireSound)
-			this.fireSound.play()
-		})
 		audioLoader.load("sounds/adlib/wall_hit.wav", buffer => {
 			this.hitSound = new PositionalAudio(audioListener)
 			this.hitSound.setBuffer(buffer)

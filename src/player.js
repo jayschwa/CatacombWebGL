@@ -1,4 +1,4 @@
-import { Audio, PerspectiveCamera, PointLight, Sprite, SpriteMaterial, Vector3 } from "three"
+import { Audio, PerspectiveCamera, PointLight, PositionalAudio, Sprite, SpriteMaterial, Vector3 } from "three"
 import { audioListener, audioLoader } from "./audio"
 import { Actor, Fireball, JumpGate } from "./entities"
 import { Door } from "./environment"
@@ -39,7 +39,7 @@ export class Player extends Actor {
 			const spritesheet = SpriteSheetProxy(texture, 88, 2)
 			spritesheet.repeat.y = 88/72
 			this.hand = new Sprite(new SpriteMaterial({map: spritesheet}))
-			this.hand.setFrame = (frame) => {
+			this.hand.setFrame = frame => {
 				spritesheet.setFrame(frame)
 				this.light.intensity = frame
 			}
@@ -48,6 +48,17 @@ export class Player extends Actor {
 			this.hand.inPosition = new Vector3(-0.0032, -0.033, 0.05)
 			this.hand.position.copy(this.hand.inPosition)
 			this.add(this.hand)
+
+			const sounds = ["shoot", "big_shoot"]
+			sounds.forEach(name => {
+				const file = "sounds/adlib/" + name + ".wav"
+				audioLoader.load(file, buffer => {
+					const audio = new PositionalAudio(audioListener).setBuffer(buffer)
+					const prop = name.replace("_", "") + "Sound"
+					this[prop] = audio
+					this.hand.add(audio)
+				})
+			})
 		})
 	}
 
@@ -180,6 +191,13 @@ export class Player extends Actor {
 				isBig: chargeTime > 1
 			})
 			this.parent.add(fireball)
+
+			const sound = fireball.isBig ? this.bigshootSound : this.shootSound
+			if (sound.isPlaying) {
+				sound.stop()
+			}
+			sound.play()
+
 			this.chargeStarted = 0
 			this.lastFire = this.lastTime
 			this.hand.setFrame(0)
