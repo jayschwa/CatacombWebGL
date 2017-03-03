@@ -108,7 +108,7 @@ export class ExplodingWall extends Entity {
 
 	update(time) {
 		const timeDelta = time - this.ignition
-		if (timeDelta > this.burnDuration) {
+		if (timeDelta >= this.burnDuration) {
 			this.shouldRemove = true
 		} else if (timeDelta > 0) {
 			if (!this.exploding) {
