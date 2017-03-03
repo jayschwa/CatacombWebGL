@@ -137,6 +137,7 @@ export class Fireball extends Actor {
 		this.updateMatrixWorld()
 		this.moveDirection.z = 1
 		this.updateVelocity()
+		this.isEthereal = true
 
 		audioLoader.load("sounds/adlib/wall_hit.wav", buffer => {
 			this.hitSound = new PositionalAudio(audioListener)

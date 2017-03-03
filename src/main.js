@@ -84,7 +84,7 @@ export class Game {
 		const time = this.clock.getElapsedTime()
 		const objectsToRemove = []
 		this.scene.traverse(obj => {
-			obj.update && obj.update(time, this.maze)
+			obj.update && obj.update(time, this.scene)
 			if (obj.shouldRemove) {
 				objectsToRemove.push(obj)
 			}

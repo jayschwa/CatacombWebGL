@@ -41133,6 +41133,7 @@ class Fireball extends Actor {
 		this.updateMatrixWorld();
 		this.moveDirection.z = 1;
 		this.updateVelocity();
+		this.isEthereal = true;
 
 		audioLoader.load("sounds/adlib/wall_hit.wav", buffer => {
 			this.hitSound = new PositionalAudio(audioListener);
@@ -42396,7 +42397,7 @@ class Game {
 		const time = this.clock.getElapsedTime();
 		const objectsToRemove = [];
 		this.scene.traverse(obj => {
-			obj.update && obj.update(time, this.maze);
+			obj.update && obj.update(time, this.scene);
 			if (obj.shouldRemove) {
 				objectsToRemove.push(obj);
 			}
