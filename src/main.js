@@ -33,14 +33,6 @@ export class Game {
 		this.renderer.physicallyCorrectLights = true
 		container.appendChild(this.renderer.domElement)
 
-		this.scene = new THREE.Scene()
-		this.ambientLight = new THREE.AmbientLight()
-		this.scene.add(this.ambientLight)
-		this.scene.add(this.player)
-
-		this.maze = new THREE.Group()
-		this.maze.name = "Maze"
-
 		// transition stuff
 		this.fbo1 = new THREE.WebGLRenderTarget(window.innerWidth, window.innerHeight, {minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, format: THREE.RGBFormat, stencilBuffer: false})
 		this.fbo2 = new THREE.WebGLRenderTarget(window.innerWidth, window.innerHeight, {minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, format: THREE.RGBFormat, stencilBuffer: false})
@@ -186,27 +178,23 @@ export class Game {
 		})
 		.then(function(map) {
 			map = new Map(map)
-			if (map.fog) {
-				that.scene.fog = new THREE.Fog(map.fog.color, map.fog.near, map.fog.far)
-			}
 			let savedState = localStorage.getItem(that.mapName)
 			if (savedState) {
 				savedState = new Map(savedState)
 				that.map = savedState
-				constructLayout(savedState, that.maze)
-				spawnEntities(savedState.entities, that.maze)
+				that.scene = that.map.toScene()
+				that.scene.add(that.player)
 				const start = savedState.entities.filter(e => e.type == "Player").shift()
 				setupPlayerSpawn(that.player, start)
 				that.clock = new Clock(savedState.time)
 			} else {
 				that.map = map
-				constructLayout(map, that.maze)
-				spawnEntities(map.entities, that.maze)
+				that.scene = that.map.toScene()
+				that.scene.add(that.player)
 				setupPlayerSpawn(that.player, map.playerStart)
 				that.clock = new Clock()
 			}
 
-			that.scene.add(that.maze)
 			that.play()
 		})
 	}

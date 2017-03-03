@@ -1,4 +1,4 @@
-import { BufferGeometry, Geometry, Mesh, Scene, Vector2, Vector3 } from "three"
+import { AmbientLight, BufferGeometry, Fog, Geometry, Mesh, Scene, Vector2, Vector3 } from "three"
 import * as enemies from "./enemies"
 import * as misc from "./entities"
 import { Door, ExplodingWall } from "./environment"
@@ -65,9 +65,20 @@ export class Map {
 			return adj && adj.type != tile.type
 		})
 	}
+
+	toScene() {
+		const scene = new Scene()
+		scene.add(new AmbientLight())
+		if (this.fog) {
+			scene.fog = new Fog(this.fog.color, this.fog.near, this.fog.far)
+		}
+		constructLayout(this, scene)
+		spawnEntities(this.entities, scene)
+		return scene
+	}
 }
 
-export function constructLayout(map, parent) {
+function constructLayout(map, parent) {
 	const doors = {}
 	const explodingWalls = {}
 	const floor = new Geometry()
@@ -105,7 +116,7 @@ export function constructLayout(map, parent) {
 	parent.add(...createWallMeshes(walls))
 }
 
-export function spawnEntities(entities, parent) {
+function spawnEntities(entities, parent) {
 	const entityClasses = Object.assign({}, enemies, items, misc, {ExplodingWall: ExplodingWall})
 	entities.forEach(entity => {
 		if (entity.type == "Player") {

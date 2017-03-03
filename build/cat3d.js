@@ -41877,6 +41877,17 @@ class Map$1 {
 			return adj && adj.type != tile.type
 		})
 	}
+
+	toScene() {
+		const scene = new Scene();
+		scene.add(new AmbientLight());
+		if (this.fog) {
+			scene.fog = new Fog(this.fog.color, this.fog.near, this.fog.far);
+		}
+		constructLayout(this, scene);
+		spawnEntities(this.entities, scene);
+		return scene
+	}
 }
 
 function constructLayout(map, parent) {
@@ -42346,14 +42357,6 @@ class Game {
 		this.renderer.physicallyCorrectLights = true;
 		container.appendChild(this.renderer.domElement);
 
-		this.scene = new Scene();
-		this.ambientLight = new AmbientLight();
-		this.scene.add(this.ambientLight);
-		this.scene.add(this.player);
-
-		this.maze = new Group();
-		this.maze.name = "Maze";
-
 		// transition stuff
 		this.fbo1 = new WebGLRenderTarget(window.innerWidth, window.innerHeight, {minFilter: LinearFilter, magFilter: LinearFilter, format: RGBFormat, stencilBuffer: false});
 		this.fbo2 = new WebGLRenderTarget(window.innerWidth, window.innerHeight, {minFilter: LinearFilter, magFilter: LinearFilter, format: RGBFormat, stencilBuffer: false});
@@ -42499,27 +42502,23 @@ class Game {
 		})
 		.then(function(map) {
 			map = new Map$1(map);
-			if (map.fog) {
-				that.scene.fog = new Fog(map.fog.color, map.fog.near, map.fog.far);
-			}
 			let savedState = localStorage.getItem(that.mapName);
 			if (savedState) {
 				savedState = new Map$1(savedState);
 				that.map = savedState;
-				constructLayout(savedState, that.maze);
-				spawnEntities(savedState.entities, that.maze);
+				that.scene = that.map.toScene();
+				that.scene.add(that.player);
 				const start = savedState.entities.filter(e => e.type == "Player").shift();
 				setupPlayerSpawn(that.player, start);
 				that.clock = new Clock$1(savedState.time);
 			} else {
 				that.map = map;
-				constructLayout(map, that.maze);
-				spawnEntities(map.entities, that.maze);
+				that.scene = that.map.toScene();
+				that.scene.add(that.player);
 				setupPlayerSpawn(that.player, map.playerStart);
 				that.clock = new Clock$1();
 			}
 
-			that.scene.add(that.maze);
 			that.play();
 		});
 	}
