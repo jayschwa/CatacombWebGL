@@ -23,49 +23,61 @@ function connectAdjacent(objects, obj, x, y, filterFunc) {
 	objects[[x, y]] = obj
 }
 
-export function constructLayout(map, parent) {
-	const doors = {}
-	const explodingWalls = {}
-	const floor = new Geometry()
-	const walls = {}
+export class Map {
+	constructor(json) {
+		Object.assign(this, JSON.parse(json))
+		if (typeof this.layout[0] === "string") {
+			this.layout = this.layout.map(line => line.split(""))
+		}
+	}
 
-	// TODO: attach these methods somewhere else
-	map.getTile = function(x, y) {
+	getTile(position) {
 		try {
-			const symbol = this.layout[this.height-1-y][x]
+			const symbol = this.layout[this.height-1-position.y][position.x]
 			if (symbol == " ") {
 				return {type: "floor"}
 			} else {
 				return this.legend[symbol]
 			}
 		} catch (ex) {
+			// FIXME: this should not swallow exceptions related to legend lookups
 			return null
 		}
 	}
 
-	map.adjacentTiles = function(x, y) {
+	adjacentTiles(position) {
+		const x = position.x
+		const y = position.y
 		return {
-			east: this.getTile(x+1, y),
-			west: this.getTile(x-1, y),
-			north: this.getTile(x, y+1),
-			south: this.getTile(x, y-1)
+			east: this.getTile(new Vector2(x+1, y)),
+			west: this.getTile(new Vector2(x-1, y)),
+			north: this.getTile(new Vector2(x, y+1)),
+			south: this.getTile(new Vector2(x, y-1))
 		}
 	}
 
-	map.borderFaces = function(x, y) {
-		const tile = this.getTile(x, y)
-		const adjacentTiles = this.adjacentTiles(x, y)
+	/** List of cardinal directions from position that contain a different type of tile. **/
+	adjacentBorders(position) {
+		const tile = this.getTile(position)
+		const adjacentTiles = this.adjacentTiles(position)
 		return Object.keys(adjacentTiles).filter(d => {
 			const adj = adjacentTiles[d]
 			return adj && adj.type != tile.type
 		})
 	}
+}
+
+export function constructLayout(map, parent) {
+	const doors = {}
+	const explodingWalls = {}
+	const floor = new Geometry()
+	const walls = {}
 
 	for (let x = 0; x < map.width; x++) {
 		for (let y = 0; y < map.height; y++) {
 			const position = new Vector2(x, y)
-			const tile = map.getTile(x, y)
-			const borders = map.borderFaces(x, y)
+			const tile = map.getTile(position)
+			const borders = map.adjacentBorders(position)
 			const removeFunc = () => map.layout[map.height-1-y][x] = " "
 
 			if (tile.type == "wall") {

@@ -1,6 +1,6 @@
 import * as THREE from "three"
 import { Clock } from "./clock"
-import { constructLayout, spawnEntities } from "./map"
+import { Map, constructLayout, spawnEntities } from "./map"
 import { Player } from "./player"
 import { Transition } from "./transition"
 import { SpriteSheetProxy, textureCache } from "./utils"
@@ -182,16 +182,16 @@ export class Game {
 		const that = this
 		fetch("maps/" + this.mapName + ".map.json")
 		.then(function(response) {
-			return response.json()
+			return response.text()
 		})
 		.then(function(map) {
+			map = new Map(map)
 			if (map.fog) {
 				that.scene.fog = new THREE.Fog(map.fog.color, map.fog.near, map.fog.far)
 			}
 			let savedState = localStorage.getItem(that.mapName)
 			if (savedState) {
-				savedState = JSON.parse(savedState)
-				savedState.layout = savedState.layout.map(line => line.split(""))
+				savedState = new Map(savedState)
 				that.map = savedState
 				constructLayout(savedState, that.maze)
 				spawnEntities(savedState.entities, that.maze)
@@ -199,7 +199,6 @@ export class Game {
 				setupPlayerSpawn(that.player, start)
 				that.clock = new Clock(savedState.time)
 			} else {
-				map.layout = map.layout.map(line => line.split(""))
 				that.map = map
 				constructLayout(map, that.maze)
 				spawnEntities(map.entities, that.maze)
