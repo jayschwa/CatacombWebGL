@@ -5,10 +5,13 @@ import { SpriteSheetProxy, textureCache } from "./utils"
 export class Enemy extends Actor {
 	constructor(sprite, props, size, speed, spriteInfo) {
 		super(props, size, speed)
-		this.persistedProps.push("anim", "animStartTime", "health", "isEthereal")
+		this.persistedProps.push("anim", "animStartTime", "health")
 
 		this.anim = this.anim || "move"
-		this.health = this.health || 5
+		if (this.health === undefined) {
+			this.health = 5
+		}
+		this.isEthereal = this.health <= 0
 
 		this.sprite = new Sprite(new SpriteMaterial({fog: true}))
 		this.spriteInfo = spriteInfo
@@ -35,7 +38,7 @@ export class Enemy extends Actor {
 	onDamage(time) {
 		if (this.anim != "death") {
 			this.health -= 1
-			if (this.health) {
+			if (this.health > 0) {
 				this.startAnimation("pain", time)
 			} else {
 				this.isEthereal = true

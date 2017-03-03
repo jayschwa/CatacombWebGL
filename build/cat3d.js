@@ -41001,13 +41001,25 @@ const textureCache = new TextureCache();
 class Entity extends Object3D {
 	constructor(props) {
 		super();
+		Object.keys(props).forEach(prop => {
+			if (this[prop] instanceof Object && this[prop].copy) {
+				this[prop].copy(props[prop]);
+			} else {
+				this[prop] = props[prop];
+			}
+		});
 		this.persistedProps = ["type", "position"];
-		this.type = props.type;
-		this.name = props.name || props.type;
-		if ("position" in props) {
-			this.position.copy(props.position);
-		}
 		this.up.set(0, 0, 1);
+	}
+
+	/** True if the given object is identical to, or a descendant of, this entity. **/
+	includes(object) {
+		for (let obj = object; obj; obj = obj.parent) {
+			if (obj === this) {
+				return true
+			}
+		}
+		return false
 	}
 
 	getState() {
@@ -41016,6 +41028,7 @@ class Entity extends Object3D {
 			if (prop in this) {
 				state[prop] = this[prop];
 			} else {
+				console.log(this);
 				throw new Error("entity does not have a `" + prop + "` property")
 			}
 		});
@@ -41061,7 +41074,7 @@ class Actor extends Entity {
 				let collisions = this.raycaster.intersectObject(maze, true);
 
 				for (let collision of collisions) {
-					if (ancestorsAreEthereal(collision.object)) {
+					if (this.includes(collision.object) || ancestorsAreEthereal(collision.object)) {
 						continue
 					}
 					let pushBack = true;
@@ -41110,8 +41123,11 @@ class Fireball extends Actor {
 	constructor(props) {
 		super(props, 0, 30);
 		this.persistedProps.push("direction", "isBig");
-		this.direction = new Vector3().copy(props.direction);
-		this.isBig = props.isBig;
+
+		if (this.isBig === undefined) {
+			this.isBig = true;
+		}
+
 		this.scale.divideScalar(3);
 		this.lookAt(this.position.clone().add(this.direction));
 		this.updateMatrixWorld();
@@ -41181,7 +41197,6 @@ class Portal extends Entity {
 	constructor(props) {
 		super(props);
 		this.persistedProps.push("value");
-		this.value = props.value;
 		this.fps = 8;
 
 		this.light = new PointLight(0x0042DD, 1, 1.5);
@@ -41225,12 +41240,13 @@ var misc = Object.freeze({
 class Enemy extends Actor {
 	constructor(sprite, props, size, speed, spriteInfo) {
 		super(props, size, speed);
-		this.persistedProps.push("anim", "animStartTime", "health", "isEthereal");
+		this.persistedProps.push("anim", "animStartTime", "health");
 
-		this.anim = props.anim || "move";
-		this.animStartTime = props.animStartTime;
-		this.health = props.health || 5;
-		this.isEthereal = props.isEthereal || false;
+		this.anim = this.anim || "move";
+		if (this.health === undefined) {
+			this.health = 5;
+		}
+		this.isEthereal = this.health <= 0;
 
 		this.sprite = new Sprite(new SpriteMaterial({fog: true}));
 		this.spriteInfo = spriteInfo;
@@ -41257,7 +41273,7 @@ class Enemy extends Actor {
 	onDamage(time) {
 		if (this.anim != "death") {
 			this.health -= 1;
-			if (this.health) {
+			if (this.health > 0) {
 				this.startAnimation("pain", time);
 			} else {
 				this.isEthereal = true;
@@ -41615,9 +41631,8 @@ function mergeWallGeometry(name, faces, geometryDict, position) {
 class Door extends Entity {
 	constructor(props, removeFunc) {
 		super(props);
-		this.type = "Door";
+		this.type = this.type || "Door";
 		this.persistedProps.push("color");
-		this.color = props.color;
 
 		this.removeFunc = removeFunc;
 
@@ -41678,9 +41693,6 @@ class ExplodingWall extends Entity {
 		super(props);
 		this.type = "ExplodingWall";
 		this.persistedProps.push("ignition", "faces", "wall");
-		this.ignition = props.ignition;
-		this.faces = props.faces;
-		this.wall = props.wall;
 
 		this.removeFunc = removeFunc;
 
@@ -41741,9 +41753,6 @@ const ITEM_SCALE = 0.6;
 class Item extends Entity {
 	constructor(props, ...itemFrames) {
 		super(props);
-		this.persistedProps.push("value");
-		this.value = props.value;
-		this.soundName = props.soundName;
 		this.itemFrames = itemFrames;
 		audioLoader.load("sounds/adlib/pickup_" + (this.soundName || this.name) + ".wav", buffer => {
 			this.pickupSound = new PositionalAudio(audioListener);
@@ -41993,7 +42002,7 @@ class Player extends Actor {
 		if (item instanceof Treasure) {
 			this.score += item.value;
 		} else {
-			const name = item.name.toLowerCase();
+			const name = item.type.toLowerCase();
 			if (this.inventory[name] === undefined) {
 				this.inventory[name] = 0;
 			}
