@@ -41160,7 +41160,8 @@ class Fireball extends Actor {
 			let damagedSomething = false;
 			for (let obj = collision.object; obj; obj = obj.parent) {
 				if (obj.onDamage) {
-					obj.onDamage(time);
+					const damage = this.isBig ? 3 : 1;
+					obj.onDamage(time, damage);
 					damagedSomething = true;
 					break
 				}
@@ -41239,13 +41240,13 @@ var misc = Object.freeze({
 });
 
 class Enemy extends Actor {
-	constructor(sprite, props, size, speed, spriteInfo) {
+	constructor(sprite, props, health, size, speed, spriteInfo) {
 		super(props, size, speed);
 		this.persistedProps.push("anim", "animStartTime", "health");
 
 		this.anim = this.anim || "move";
 		if (this.health === undefined) {
-			this.health = 5;
+			this.health = health;
 		}
 		this.isEthereal = this.health <= 0;
 		this.sprite = new Sprite(new SpriteMaterial({fog: true}));
@@ -41269,9 +41270,9 @@ class Enemy extends Actor {
 		});
 	}
 
-	onDamage(time) {
+	onDamage(time, damage) {
 		if (this.anim != "death") {
-			this.health -= 1;
+			this.health -= damage;
 			if (this.health > 0) {
 				this.startAnimation("pain", time);
 			} else {
@@ -41325,7 +41326,7 @@ class Enemy extends Actor {
 
 class Orc extends Enemy {
 	constructor(props) {
-		super("sprites/orc.png", props, 0.5, 5, {
+		super("sprites/orc.png", props, 3, 0.5, 5, {
 			frameWidth: 51,
 			walkFrames: 4,
 			attackFrames: 2,
@@ -41336,7 +41337,7 @@ class Orc extends Enemy {
 
 class Troll extends Enemy {
 	constructor(props) {
-		super("sprites/troll.png", props, 0.75, 5, {
+		super("sprites/troll.png", props, 10, 0.75, 5, {
 			frameWidth: 64,
 			walkFrames: 4,
 			attackFrames: 3,
@@ -41347,7 +41348,7 @@ class Troll extends Enemy {
 
 class Bat extends Enemy {
 	constructor(props) {
-		super("sprites/bat.png", props, 0.5, 10, {
+		super("sprites/bat.png", props, 1, 0.5, 10, {
 			frameWidth: 40,
 			walkFrames: 4,
 			attackFrames: 0,
@@ -41364,7 +41365,7 @@ class Bat extends Enemy {
 
 class Mage extends Enemy {
 	constructor(props) {
-		super("sprites/mage.png", props, 0.5, 5, {
+		super("sprites/mage.png", props, 5, 0.5, 5, {
 			frameWidth: 56,
 			walkFrames: 2,
 			attackFrames: 1,
@@ -41376,7 +41377,7 @@ class Mage extends Enemy {
 
 class Demon extends Enemy {
 	constructor(props) {
-		super("sprites/demon.png", props, 0.75, 5, {
+		super("sprites/demon.png", props, 50, 0.75, 5, {
 			frameWidth: 64,
 			walkFrames: 4,
 			attackFrames: 3,

@@ -164,7 +164,8 @@ export class Fireball extends Actor {
 			let damagedSomething = false
 			for (let obj = collision.object; obj; obj = obj.parent) {
 				if (obj.onDamage) {
-					obj.onDamage(time)
+					const damage = this.isBig ? 3 : 1
+					obj.onDamage(time, damage)
 					damagedSomething = true
 					break
 				}
