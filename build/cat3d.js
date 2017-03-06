@@ -41836,8 +41836,8 @@ function connectAdjacent(objects, obj, x, y, filterFunc) {
 }
 
 class Map$1 {
-	constructor(json) {
-		Object.assign(this, JSON.parse(json));
+	constructor(props) {
+		Object.assign(this, props);
 		if (typeof this.layout[0] === "string") {
 			this.layout = this.layout.map(line => line.split(""));
 		}
@@ -42455,6 +42455,17 @@ class Game {
 		});
 	}
 
+	loadMap(name) {
+		const savedState = localStorage.getItem(name);
+		if (savedState) {
+			const map = new Map$1(JSON.parse(savedState));
+			return Promise.resolve(map)
+		} else {
+			const path = "maps/" + name + ".map.json";
+			return fetch(path).then(r => r.json()).then(o => new Map$1(o))
+		}
+	}
+
 	getMapState() {
 		const entities = [];
 		this.scene.traverse(obj => {
@@ -42496,29 +42507,13 @@ class Game {
 		});
 
 		const that = this;
-		fetch("maps/" + this.mapName + ".map.json")
-		.then(function(response) {
-			return response.text()
-		})
-		.then(function(map) {
-			map = new Map$1(map);
-			let savedState = localStorage.getItem(that.mapName);
-			if (savedState) {
-				savedState = new Map$1(savedState);
-				that.map = savedState;
-				that.scene = that.map.toScene();
-				that.scene.add(that.player);
-				const start = savedState.entities.filter(e => e.type == "Player").shift();
-				setupPlayerSpawn(that.player, start);
-				that.clock = new Clock$1(savedState.time);
-			} else {
-				that.map = map;
-				that.scene = that.map.toScene();
-				that.scene.add(that.player);
-				setupPlayerSpawn(that.player, map.playerStart);
-				that.clock = new Clock$1();
-			}
-
+		this.loadMap(this.mapName).then(map => {
+			that.map = map;
+			that.scene = map.toScene();
+			that.scene.add(that.player);
+			const start = map.entities.filter(e => e.type == "Player").shift() || map.playerStart;
+			setupPlayerSpawn(that.player, start);
+			that.clock = new Clock$1(map.time);
 			that.play();
 		});
 	}

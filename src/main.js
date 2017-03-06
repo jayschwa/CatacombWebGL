@@ -131,6 +131,17 @@ export class Game {
 		})
 	}
 
+	loadMap(name) {
+		const savedState = localStorage.getItem(name)
+		if (savedState) {
+			const map = new Map(JSON.parse(savedState))
+			return Promise.resolve(map)
+		} else {
+			const path = "maps/" + name + ".map.json"
+			return fetch(path).then(r => r.json()).then(o => new Map(o))
+		}
+	}
+
 	getMapState() {
 		const entities = []
 		this.scene.traverse(obj => {
@@ -172,29 +183,13 @@ export class Game {
 		})
 
 		const that = this
-		fetch("maps/" + this.mapName + ".map.json")
-		.then(function(response) {
-			return response.text()
-		})
-		.then(function(map) {
-			map = new Map(map)
-			let savedState = localStorage.getItem(that.mapName)
-			if (savedState) {
-				savedState = new Map(savedState)
-				that.map = savedState
-				that.scene = that.map.toScene()
-				that.scene.add(that.player)
-				const start = savedState.entities.filter(e => e.type == "Player").shift()
-				setupPlayerSpawn(that.player, start)
-				that.clock = new Clock(savedState.time)
-			} else {
-				that.map = map
-				that.scene = that.map.toScene()
-				that.scene.add(that.player)
-				setupPlayerSpawn(that.player, map.playerStart)
-				that.clock = new Clock()
-			}
-
+		this.loadMap(this.mapName).then(map => {
+			that.map = map
+			that.scene = map.toScene()
+			that.scene.add(that.player)
+			const start = map.entities.filter(e => e.type == "Player").shift() || map.playerStart
+			setupPlayerSpawn(that.player, start)
+			that.clock = new Clock(map.time)
 			that.play()
 		})
 	}

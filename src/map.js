@@ -24,8 +24,8 @@ function connectAdjacent(objects, obj, x, y, filterFunc) {
 }
 
 export class Map {
-	constructor(json) {
-		Object.assign(this, JSON.parse(json))
+	constructor(props) {
+		Object.assign(this, props)
 		if (typeof this.layout[0] === "string") {
 			this.layout = this.layout.map(line => line.split(""))
 		}
