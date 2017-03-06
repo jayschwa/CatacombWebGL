@@ -12,9 +12,7 @@ export class Enemy extends Actor {
 			this.health = 5
 		}
 		this.isEthereal = this.health <= 0
-
 		this.sprite = new Sprite(new SpriteMaterial({fog: true}))
-		this.spriteInfo = spriteInfo
 
 		const w = spriteInfo.walkFrames
 		const a = spriteInfo.attackFrames
