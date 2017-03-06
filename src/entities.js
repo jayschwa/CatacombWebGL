@@ -3,10 +3,46 @@ import { audioListener, audioLoader } from "./audio"
 import { SpriteSheetProxy, textureCache } from "./utils"
 
 export class Entity extends Object3D {
-	constructor(size, speed) {
+	constructor(props) {
 		super()
-		this.name = "Entity"
+		Object.keys(props).forEach(prop => {
+			if (this[prop] instanceof Object && this[prop].copy) {
+				this[prop].copy(props[prop])
+			} else {
+				this[prop] = props[prop]
+			}
+		})
+		this.persistedProps = ["type", "position"]
 		this.up.set(0, 0, 1)
+	}
+
+	/** True if the given object is identical to, or a descendant of, this entity. **/
+	includes(object) {
+		for (let obj = object; obj; obj = obj.parent) {
+			if (obj === this) {
+				return true
+			}
+		}
+		return false
+	}
+
+	getState() {
+		const state = {}
+		this.persistedProps.forEach(prop => {
+			if (prop in this) {
+				state[prop] = this[prop]
+			} else {
+				console.log(this)
+				throw new Error("entity does not have a `" + prop + "` property")
+			}
+		})
+		return state
+	}
+}
+
+export class Actor extends Entity {
+	constructor(props, size, speed) {
+		super(props)
 
 		this.size = size
 		this.speed = speed || 0
@@ -42,7 +78,7 @@ export class Entity extends Object3D {
 				let collisions = this.raycaster.intersectObject(maze, true)
 
 				for (let collision of collisions) {
-					if (ancestorsAreEthereal(collision.object)) {
+					if (this.includes(collision.object) || ancestorsAreEthereal(collision.object)) {
 						continue
 					}
 					let pushBack = true
@@ -87,25 +123,22 @@ function ancestorsAreEthereal(object) {
 	return false
 }
 
-export class Fireball extends Entity {
-	constructor(origin, direction, isBig) {
-		super(0, 30)
-		this.isBig = isBig
-		this.name = isBig? "Big Fireball" : "Fireball"
+export class Fireball extends Actor {
+	constructor(props) {
+		super(props, 0, 30)
+		this.persistedProps.push("direction", "isBig")
+
+		if (this.isBig === undefined) {
+			this.isBig = true
+		}
+
 		this.scale.divideScalar(3)
-		this.position.copy(origin)
-		this.lookAt(origin.clone().add(direction))
-		this.position.addScaledVector(direction, 2/3)
+		this.lookAt(this.position.clone().add(this.direction))
 		this.updateMatrixWorld()
 		this.moveDirection.z = 1
 		this.updateVelocity()
+		this.isEthereal = true
 
-		audioLoader.load("sounds/adlib/" + (isBig ? "big_" : "") + "shoot.wav", buffer => {
-			this.fireSound = new PositionalAudio(audioListener)
-			this.fireSound.setBuffer(buffer)
-			this.add(this.fireSound)
-			this.fireSound.play()
-		})
 		audioLoader.load("sounds/adlib/wall_hit.wav", buffer => {
 			this.hitSound = new PositionalAudio(audioListener)
 			this.hitSound.setBuffer(buffer)
@@ -113,13 +146,13 @@ export class Fireball extends Entity {
 		})
 
 		this.light = new PointLight(0xFF6600, 0.5, 0.5)
-		if (isBig) { this.light.distance *= 2 }
-		if (isBig) { this.add(this.light) }
+		if (this.isBig) { this.light.distance *= 2 }
+		if (this.isBig) { this.add(this.light) }
 
 		textureCache.get("sprites/fireball.png", texture => {
 			this.spriteSheet = SpriteSheetProxy(texture)
 			this.sprite = new Sprite(new SpriteMaterial({map: this.spriteSheet}))
-			if (!isBig) {
+			if (!this.isBig) {
 				this.sprite.material.rotation = Math.floor(Math.random() * 4) * Math.PI / 2
 			}
 			this.add(this.sprite)
@@ -165,26 +198,26 @@ export class Fireball extends Entity {
 	}
 }
 
-export class Portal extends Sprite {
+export class Portal extends Entity {
 	constructor(props) {
-		super()
-		this.name = "Portal"
-		this.position.copy(props.position)
+		super(props)
+		this.persistedProps.push("value")
 		this.fps = 8
+
 		this.light = new PointLight(0x0042DD, 1, 1.5)
 		this.add(this.light)
 
 		textureCache.get("sprites/portal.png", texture => {
 			this.spritesheet = new SpriteSheetProxy(texture)
-			this.material.map = this.spritesheet
-			this.material.needsUpdate = true
+			this.sprite = new Sprite(new SpriteMaterial({fog: true, map: this.spritesheet}))
+			this.add(this.sprite)
 		})
 	}
 
 	update(time) {
-		if (this.material.map && this.material.map.isSpriteSheet) {
-			const n = Math.floor(time * this.fps) % this.material.map.frames
-			this.material.map.setFrame(n)
+		if (this.spritesheet) {
+			const n = Math.floor(time * this.fps) % this.spritesheet.frames
+			this.spritesheet.setFrame(n)
 		}
 		this.light.intensity = 0.5 + 0.2 * Math.abs(Math.sin(0.5 * time)) + 0.02 * Math.abs(Math.sin(this.fps * time))
 	}

@@ -1,23 +1,31 @@
 import { BoxBufferGeometry, Mesh, MeshBasicMaterial, Object3D, PositionalAudio } from "three"
 import { audioListener, audioLoader } from "./audio"
+import { Entity } from "./entities"
+import { createWallMeshes, mergeWallGeometry } from "./geometry"
 import { CustomMaterial } from "./material"
 import { SpriteSheetProxy, textureCache } from "./utils"
 
-export class Door extends Mesh {
-	constructor(color, position) {
+export class Door extends Entity {
+	constructor(props, removeFunc) {
+		super(props)
+		this.type = this.type || "Door"
+		this.persistedProps.push("color")
+
+		this.removeFunc = removeFunc
+
 		const geometry = new BoxBufferGeometry(1, 1, 1)
 		geometry.rotateX(Math.PI / 2)
 		const material = new CustomMaterial()
-		textureCache.get("walls/" + color + "_door.png", texture => {
+		textureCache.get("walls/" + this.color + "_door.png", texture => {
 			texture.anisotropy = 8
 			const spritesheet = new SpriteSheetProxy(texture)
 			material.map = spritesheet
 			material.needsUpdate = true
 		})
-		super(geometry, material)
-		this.color = color
+		this.mesh = new Mesh(geometry, material)
+		this.add(this.mesh)
+
 		this.frequency = 9 + 0.5 * Math.random()
-		this.position.copy(position)
 		this.adjacent = []
 
 		audioLoader.load("sounds/adlib/use_key.wav", buffer => {
@@ -27,10 +35,14 @@ export class Door extends Mesh {
 		})
 	}
 
+	getState() {
+		return null
+	}
+
 	update(time) {
-		if (this.material.map) {
+		if (this.mesh.material.map) {
 			const frame = Math.floor(this.frequency * time) % 2
-			this.material.map.setFrame(frame)
+			this.mesh.material.map.setFrame(frame)
 		}
 	}
 
@@ -46,44 +58,48 @@ export class Door extends Mesh {
 				this.unlockSound.play()
 			}
 			this.shouldRemove = true
+			this.removeFunc()
 			this.adjacent.forEach(door => door.unlock(true))
 			return true
 		}
 	}
 }
 
-export class ExplodingWall extends Object3D {
-	constructor(position) {
-		super()
+export class ExplodingWall extends Entity {
+	constructor(props, removeFunc) {
+		super(props)
+		this.type = "ExplodingWall"
+		this.persistedProps.push("ignition", "faces", "wall")
+
+		this.removeFunc = removeFunc
+
+		this.add(...createWallMeshes(mergeWallGeometry(this.wall, this.faces)))
+
 		const geometry = new BoxBufferGeometry(1, 1, 1)
 		geometry.rotateX(Math.PI / 2)
-		const texture = textureCache.get("walls/exploding.png", texture => {
+		textureCache.get("walls/exploding.png", texture => {
 			this.box.material.map = new SpriteSheetProxy(texture, 64, 3)
 			this.box.material.needsUpdate = true
 		})
-		const material = new MeshBasicMaterial({map: texture, transparent: true})
-		this.position.copy(position)
+		const material = new MeshBasicMaterial({transparent: true})
 		this.box = new Mesh(geometry, material)
-		this.duration = 1/3
+
 		this.adjacent = []
+		this.burnDuration = 0.25
+		this.spreadDuration = this.burnDuration / 2
 	}
 
 	ignite(time) {
-		if (this.isExploding()) {
+		if (time >= this.ignition) {
 			return
 		}
 		this.ignition = time
-		this.children.forEach(mesh => mesh.shouldRemove = true)
-		this.add(this.box)
+		this.removeFunc && this.removeFunc()
+		this.adjacent.forEach(e => e.ignite(time + this.spreadDuration))
 	}
 
-	igniteAdjacent(time) {
-		this.adjacent.forEach(e => e.ignite(time))
-		this.adjacentsIgnited = true
-	}
-
-	isExploding() {
-		return !!this.ignition
+	getState() {
+		return this.ignition ? super.getState() : null
 	}
 
 	onDamage(time) {
@@ -91,17 +107,19 @@ export class ExplodingWall extends Object3D {
 	}
 
 	update(time) {
-		if (this.isExploding()) {
-			const timeDelta = time - this.ignition
-			if (timeDelta > this.duration) {
-				this.shouldRemove = true
-			} else {
-				const texture = this.box.material.map
-				const frame = Math.floor(timeDelta * texture.frames / this.duration)
-				this.box.material.map.setFrame(frame)
-				if (!this.adjacentsIgnited && timeDelta > this.duration / texture.frames) {
-					this.igniteAdjacent(time)
-				}
+		const timeDelta = time - this.ignition
+		if (timeDelta >= this.burnDuration) {
+			this.shouldRemove = true
+		} else if (timeDelta > 0) {
+			if (!this.exploding) {
+				this.exploding = true
+				this.children.forEach(mesh => mesh.shouldRemove = true) // remove wall segments
+				this.add(this.box)
+			}
+			const texture = this.box.material.map
+			if (texture) {
+				const frame = Math.floor(timeDelta * texture.frames / this.burnDuration)
+				texture.setFrame(frame)
 			}
 		}
 	}

@@ -1,13 +1,14 @@
-import { Audio, PerspectiveCamera, PointLight, Sprite, SpriteMaterial, Vector3 } from "three"
+import { Audio, PerspectiveCamera, PointLight, PositionalAudio, Sprite, SpriteMaterial, Vector3 } from "three"
 import { audioListener, audioLoader } from "./audio"
-import { Entity, Fireball, JumpGate } from "./entities"
+import { Actor, Fireball, JumpGate } from "./entities"
 import { Door } from "./environment"
 import { Item, Treasure } from "./items"
 import { SpriteSheetProxy, textureCache } from "./utils"
 
-export class Player extends Entity {
+export class Player extends Actor {
 	constructor() {
-		super(2/3, 5)
+		super({type: "Player"}, 2/3, 5)
+		this.persistedProps.push("direction")
 
 		this.audioListener = audioListener
 		this.add(this.audioListener)
@@ -38,7 +39,7 @@ export class Player extends Entity {
 			const spritesheet = SpriteSheetProxy(texture, 88, 2)
 			spritesheet.repeat.y = 88/72
 			this.hand = new Sprite(new SpriteMaterial({map: spritesheet}))
-			this.hand.setFrame = (frame) => {
+			this.hand.setFrame = frame => {
 				spritesheet.setFrame(frame)
 				this.light.intensity = frame
 			}
@@ -47,20 +48,36 @@ export class Player extends Entity {
 			this.hand.inPosition = new Vector3(-0.0032, -0.033, 0.05)
 			this.hand.position.copy(this.hand.inPosition)
 			this.add(this.hand)
+
+			const sounds = ["shoot", "big_shoot"]
+			sounds.forEach(name => {
+				const file = "sounds/adlib/" + name + ".wav"
+				audioLoader.load(file, buffer => {
+					const audio = new PositionalAudio(audioListener).setBuffer(buffer)
+					const prop = name.replace("_", "") + "Sound"
+					this[prop] = audio
+					this.hand.add(audio)
+				})
+			})
 		})
 	}
 
+	get direction() {
+		return this.getWorldDirection()
+	}
+
 	onCollision(collision, time) {
-		const obj = collision.object
-		if (obj instanceof Item) {
-			this.pickupItem(obj)
-			return false
-		} else if (obj instanceof Door) {
-			return !this.unlockDoor(obj)
-		} else if (obj instanceof JumpGate) {
-			const forward = this.velocity.clone().normalize().multiplyScalar(2/3)
-			this.warpToPosition = obj.destination.clone().add(forward)
-			return false
+		for (let obj = collision.object; obj; obj = obj.parent) {
+			if (obj instanceof Item) {
+				this.pickupItem(obj)
+				return false
+			} else if (obj instanceof Door) {
+				return !this.unlockDoor(obj)
+			} else if (obj instanceof JumpGate) {
+				const forward = this.velocity.clone().normalize().multiplyScalar(2/3)
+				this.warpToPosition = obj.destination.clone().add(forward)
+				return false
+			}
 		}
 		return true
 	}
@@ -68,9 +85,9 @@ export class Player extends Entity {
 	/** Mark item for removal from scene and add to player's inventory. **/
 	pickupItem(item) {
 		if (item instanceof Treasure) {
-			this.score += 100  // * level number
+			this.score += item.value
 		} else {
-			const name = item.name
+			const name = item.type.toLowerCase()
 			if (this.inventory[name] === undefined) {
 				this.inventory[name] = 0
 			}
@@ -167,8 +184,21 @@ export class Player extends Entity {
 			}
 		} else {
 			const chargeTime = this.lastTime - this.chargeStarted
-			const fireball = new Fireball(this.position, this.getWorldDirection(), chargeTime > 1)
+			const direction = this.getWorldDirection()
+			const fireball = new Fireball({
+				type: "Fireball",
+				position: this.position.clone().addScaledVector(direction, 2/3),
+				direction: direction,
+				isBig: chargeTime > 1
+			})
 			this.parent.add(fireball)
+
+			const sound = fireball.isBig ? this.bigshootSound : this.shootSound
+			if (sound.isPlaying) {
+				sound.stop()
+			}
+			sound.play()
+
 			this.chargeStarted = 0
 			this.lastFire = this.lastTime
 			this.hand.setFrame(0)

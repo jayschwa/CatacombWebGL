@@ -1,8 +1,8 @@
-import { BufferGeometry, Geometry, Mesh, Scene, Vector2, Vector3 } from "three"
+import { AmbientLight, BufferGeometry, Fog, Geometry, Mesh, Scene, Vector2, Vector3 } from "three"
 import * as enemies from "./enemies"
-import { JumpGate, WarpGate } from "./entities"
+import * as misc from "./entities"
 import { Door, ExplodingWall } from "./environment"
-import { FloorGeometry, WallGeometry } from "./geometry"
+import { FloorGeometry, WallGeometry, createWallMeshes, mergeWallGeometry } from "./geometry"
 import * as items from "./items"
 import { CustomMaterial } from "./material"
 import { textureCache } from "./utils"
@@ -23,72 +23,87 @@ function connectAdjacent(objects, obj, x, y, filterFunc) {
 	objects[[x, y]] = obj
 }
 
-function createWallMeshes(geometryDict) {
-	return Object.keys(geometryDict).map(name => {
-		const geometry = new BufferGeometry().fromGeometry(geometryDict[name])
-		const texture = textureCache.get("walls/" + name + ".png")
-		texture.anisotropy = 8
-		const material = new CustomMaterial({map: texture})
-		return new Mesh(geometry, material)
-	})
-}
-
-function mergeWallGeometry(tile, adjacentTiles, geometryDict, position) {
-	geometryDict = geometryDict || {}
-	const variants = {
-		light: ["east", "west"],
-		dark: ["north", "south"]
+export class Map {
+	constructor(props) {
+		Object.assign(this, props)
+		if (typeof this.layout[0] === "string") {
+			this.layout = this.layout.map(line => line.split(""))
+		}
 	}
-	Object.keys(variants).forEach(v => {
-		const name = tile.value + "_" + v
-		variants[v].forEach(face => {
-			if (adjacentTiles[face] && adjacentTiles[face].type != tile.type) {
-				geometryDict[name] = geometryDict[name] || new Geometry()
-				geometryDict[name].merge(new WallGeometry(face, position))
+
+	getTile(position) {
+		try {
+			const symbol = this.layout[this.height-1-position.y][position.x]
+			if (symbol == " ") {
+				return {type: "floor"}
+			} else {
+				return this.legend[symbol]
 			}
+		} catch (ex) {
+			// FIXME: this should not swallow exceptions related to legend lookups
+			return null
+		}
+	}
+
+	adjacentTiles(position) {
+		const x = position.x
+		const y = position.y
+		return {
+			east: this.getTile(new Vector2(x+1, y)),
+			west: this.getTile(new Vector2(x-1, y)),
+			north: this.getTile(new Vector2(x, y+1)),
+			south: this.getTile(new Vector2(x, y-1))
+		}
+	}
+
+	/** List of cardinal directions from position that contain a different type of tile. **/
+	adjacentBorders(position) {
+		const tile = this.getTile(position)
+		const adjacentTiles = this.adjacentTiles(position)
+		return Object.keys(adjacentTiles).filter(d => {
+			const adj = adjacentTiles[d]
+			return adj && adj.type != tile.type
 		})
-	})
-	return geometryDict
+	}
+
+	getPlayerStart() {
+		const isPlayer = entity => entity.type == "Player"
+		return this.entities.filter(isPlayer).shift() || this.playerStart
+	}
+
+	toScene() {
+		const scene = new Scene()
+		scene.add(new AmbientLight())
+		if (this.fog) {
+			scene.fog = new Fog(this.fog.color, this.fog.near, this.fog.far)
+		}
+		constructLayout(this, scene)
+		spawnEntities(this.entities, scene)
+		return scene
+	}
 }
 
-export function constructLayout(map, parent) {
+function constructLayout(map, parent) {
 	const doors = {}
 	const explodingWalls = {}
 	const floor = new Geometry()
 	const walls = {}
 
-	// TODO: attach these methods somewhere else
-	map.getTile = function(x, y) {
-		try {
-			const symbol = this.layout[this.height-1-y][x]
-			return this.legend[symbol]
-		} catch (ex) {
-			return null
-		}
-	}
-
-	map.adjacentTiles = function(x, y) {
-		return {
-			east: this.getTile(x+1, y),
-			west: this.getTile(x-1, y),
-			north: this.getTile(x, y+1),
-			south: this.getTile(x, y-1)
-		}
-	}
-
 	for (let x = 0; x < map.width; x++) {
 		for (let y = 0; y < map.height; y++) {
 			const position = new Vector2(x, y)
-			const tile = map.getTile(x, y)
+			const tile = map.getTile(position)
+			const borders = map.adjacentBorders(position)
+			const removeFunc = () => map.layout[map.height-1-y][x] = " "
+
 			if (tile.type == "wall") {
-				mergeWallGeometry(tile, map.adjacentTiles(x, y), walls, position)
+				mergeWallGeometry(tile.value, borders, walls, position)
 			} else if (tile.type == "exploding_wall") {
-				const wall = new ExplodingWall(position)
-				wall.add(...createWallMeshes(mergeWallGeometry(tile, map.adjacentTiles(x, y))))
+				const wall = new ExplodingWall({position: position, wall: tile.value, faces: borders}, removeFunc)
 				connectAdjacent(explodingWalls, wall, x, y)
 				parent.add(wall)
 			} else if (tile.type == "door") {
-				const door = new Door(tile.value, position)
+				const door = new Door({color: tile.value, position: position}, removeFunc)
 				connectAdjacent(doors, door, x, y, d => d.color == door.color)
 				parent.add(door)
 			}
@@ -106,9 +121,12 @@ export function constructLayout(map, parent) {
 	parent.add(...createWallMeshes(walls))
 }
 
-export function spawnEntities(entities, parent) {
-	const entityClasses = Object.assign({}, enemies, items, {JumpGate: JumpGate, WarpGate: WarpGate})
+function spawnEntities(entities, parent) {
+	const entityClasses = Object.assign({}, enemies, items, misc, {ExplodingWall: ExplodingWall})
 	entities.forEach(entity => {
+		if (entity.type == "Player") {
+			return
+		}
 		const position = new Vector3(entity.position[0], entity.position[1], 0)
 		const entityClass = entityClasses[entity.type]
 		if (entityClass) {

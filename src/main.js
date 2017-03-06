@@ -1,5 +1,6 @@
 import * as THREE from "three"
-import { constructLayout, spawnEntities } from "./map"
+import { Clock } from "./clock"
+import { Map, constructLayout, spawnEntities } from "./map"
 import { Player } from "./player"
 import { Transition } from "./transition"
 import { SpriteSheetProxy, textureCache } from "./utils"
@@ -11,9 +12,9 @@ THREE.Vector3.prototype.copy = function(v) {
 	return this
 }
 
-function setupPlayerSpawn(map, player) {
-	player.position.copy(map.playerStart.position)
-	const dir = map.playerStart.direction
+function setupPlayerSpawn(player, start) {
+	player.position.copy(start.position)
+	const dir = start.direction
 	const target = player.position.clone()
 	target.x += dir.x
 	target.y += dir.y
@@ -28,19 +29,9 @@ export class Game {
 		this.mapName = mapName
 		this.player = player || new Player()
 
-		this.clock = new THREE.Clock()
-
 		this.renderer = new THREE.WebGLRenderer({antialias: true})
 		this.renderer.physicallyCorrectLights = true
 		container.appendChild(this.renderer.domElement)
-
-		this.scene = new THREE.Scene()
-		this.ambientLight = new THREE.AmbientLight()
-		this.scene.add(this.ambientLight)
-		this.scene.add(this.player)
-
-		this.maze = new THREE.Group()
-		this.maze.name = "Maze"
 
 		// transition stuff
 		this.fbo1 = new THREE.WebGLRenderTarget(window.innerWidth, window.innerHeight, {minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, format: THREE.RGBFormat, stencilBuffer: false})
@@ -50,6 +41,7 @@ export class Game {
 
 	onKey(value) {
 		const binds = this.player.binds()
+		binds.Enter = this.save.bind(this)
 		return (event) => {
 			const command = binds[event.code]
 			if (command && !event.repeat) {
@@ -70,11 +62,13 @@ export class Game {
 	}
 
 	play() {
+		this.clock.start()
 		this.isActive = true
 		this.render()
 	}
 
 	pause() {
+		this.clock.pause()
 		this.isActive = false
 	}
 
@@ -82,7 +76,7 @@ export class Game {
 		const time = this.clock.getElapsedTime()
 		const objectsToRemove = []
 		this.scene.traverse(obj => {
-			obj.update && obj.update(time, this.maze)
+			obj.update && obj.update(time, this.scene)
 			if (obj.shouldRemove) {
 				objectsToRemove.push(obj)
 			}
@@ -137,6 +131,36 @@ export class Game {
 		})
 	}
 
+	loadMap(name) {
+		const savedState = localStorage.getItem(name)
+		if (savedState) {
+			const map = new Map(JSON.parse(savedState))
+			return Promise.resolve(map)
+		} else {
+			const path = "maps/" + name + ".map.json"
+			return fetch(path).then(r => r.json()).then(o => new Map(o))
+		}
+	}
+
+	getMapState() {
+		const entities = []
+		this.scene.traverse(obj => {
+			const objState = obj.getState && obj.getState()
+			if (objState) {
+				entities.push(objState)
+			}
+		})
+		const map = Object.assign({}, this.map)
+		map.layout = map.layout.map(line => line.join(""))
+		map.entities = entities
+		map.time = this.clock.getElapsedTime()
+		return map
+	}
+
+	save() {
+		localStorage.setItem(this.mapName, JSON.stringify(this.getMapState()))
+	}
+
 	setup() {
 		const eventHandlers = [
 			["keydown", this.onKey(1)],
@@ -159,19 +183,12 @@ export class Game {
 		})
 
 		const that = this
-		fetch("maps/" + this.mapName + ".map.json")
-		.then(function(response) {
-			return response.json()
-		})
-		.then(function(map) {
+		this.loadMap(this.mapName).then(map => {
 			that.map = map
-			if (map.fog) {
-				that.scene.fog = new THREE.Fog(map.fog.color, map.fog.near, map.fog.far)
-			}
-			constructLayout(map, that.maze)
-			spawnEntities(map.entities, that.maze)
-			setupPlayerSpawn(map, that.player)
-			that.scene.add(that.maze)
+			that.scene = map.toScene()
+			that.scene.add(that.player)
+			setupPlayerSpawn(that.player, map.getPlayerStart())
+			that.clock = new Clock(map.time)
 			that.play()
 		})
 	}

@@ -40865,6 +40865,31 @@ AudioAnalyser.prototype.getData = function () {
 
 //
 
+class Clock$1 {
+	constructor(startTime) {
+		this.elapsedTime = startTime || 0;
+		this.running = false;
+	}
+
+	getElapsedTime() {
+		if (this.running) {
+			const currentTime = performance.now() / 1000;
+			this.elapsedTime += currentTime - this.oldTime;
+			this.oldTime = currentTime;
+		}
+		return this.elapsedTime
+	}
+
+	start() {
+		this.oldTime = performance.now() / 1000;
+		this.running = true;
+	}
+
+	pause() {
+		this.running = false;
+	}
+}
+
 const audioListener = new AudioListener();
 const audioLoader = new AudioLoader();
 
@@ -40974,10 +40999,46 @@ class TextureCache extends TextureLoader {
 const textureCache = new TextureCache();
 
 class Entity extends Object3D {
-	constructor(size, speed) {
+	constructor(props) {
 		super();
-		this.name = "Entity";
+		Object.keys(props).forEach(prop => {
+			if (this[prop] instanceof Object && this[prop].copy) {
+				this[prop].copy(props[prop]);
+			} else {
+				this[prop] = props[prop];
+			}
+		});
+		this.persistedProps = ["type", "position"];
 		this.up.set(0, 0, 1);
+	}
+
+	/** True if the given object is identical to, or a descendant of, this entity. **/
+	includes(object) {
+		for (let obj = object; obj; obj = obj.parent) {
+			if (obj === this) {
+				return true
+			}
+		}
+		return false
+	}
+
+	getState() {
+		const state = {};
+		this.persistedProps.forEach(prop => {
+			if (prop in this) {
+				state[prop] = this[prop];
+			} else {
+				console.log(this);
+				throw new Error("entity does not have a `" + prop + "` property")
+			}
+		});
+		return state
+	}
+}
+
+class Actor extends Entity {
+	constructor(props, size, speed) {
+		super(props);
 
 		this.size = size;
 		this.speed = speed || 0;
@@ -41013,7 +41074,7 @@ class Entity extends Object3D {
 				let collisions = this.raycaster.intersectObject(maze, true);
 
 				for (let collision of collisions) {
-					if (ancestorsAreEthereal(collision.object)) {
+					if (this.includes(collision.object) || ancestorsAreEthereal(collision.object)) {
 						continue
 					}
 					let pushBack = true;
@@ -41058,25 +41119,22 @@ function ancestorsAreEthereal(object) {
 	return false
 }
 
-class Fireball extends Entity {
-	constructor(origin, direction, isBig) {
-		super(0, 30);
-		this.isBig = isBig;
-		this.name = isBig? "Big Fireball" : "Fireball";
+class Fireball extends Actor {
+	constructor(props) {
+		super(props, 0, 30);
+		this.persistedProps.push("direction", "isBig");
+
+		if (this.isBig === undefined) {
+			this.isBig = true;
+		}
+
 		this.scale.divideScalar(3);
-		this.position.copy(origin);
-		this.lookAt(origin.clone().add(direction));
-		this.position.addScaledVector(direction, 2/3);
+		this.lookAt(this.position.clone().add(this.direction));
 		this.updateMatrixWorld();
 		this.moveDirection.z = 1;
 		this.updateVelocity();
+		this.isEthereal = true;
 
-		audioLoader.load("sounds/adlib/" + (isBig ? "big_" : "") + "shoot.wav", buffer => {
-			this.fireSound = new PositionalAudio(audioListener);
-			this.fireSound.setBuffer(buffer);
-			this.add(this.fireSound);
-			this.fireSound.play();
-		});
 		audioLoader.load("sounds/adlib/wall_hit.wav", buffer => {
 			this.hitSound = new PositionalAudio(audioListener);
 			this.hitSound.setBuffer(buffer);
@@ -41084,13 +41142,13 @@ class Fireball extends Entity {
 		});
 
 		this.light = new PointLight(0xFF6600, 0.5, 0.5);
-		if (isBig) { this.light.distance *= 2; }
-		if (isBig) { this.add(this.light); }
+		if (this.isBig) { this.light.distance *= 2; }
+		if (this.isBig) { this.add(this.light); }
 
 		textureCache.get("sprites/fireball.png", texture => {
 			this.spriteSheet = SpriteSheetProxy(texture);
 			this.sprite = new Sprite(new SpriteMaterial({map: this.spriteSheet}));
-			if (!isBig) {
+			if (!this.isBig) {
 				this.sprite.material.rotation = Math.floor(Math.random() * 4) * Math.PI / 2;
 			}
 			this.add(this.sprite);
@@ -41136,26 +41194,26 @@ class Fireball extends Entity {
 	}
 }
 
-class Portal extends Sprite {
+class Portal extends Entity {
 	constructor(props) {
-		super();
-		this.name = "Portal";
-		this.position.copy(props.position);
+		super(props);
+		this.persistedProps.push("value");
 		this.fps = 8;
+
 		this.light = new PointLight(0x0042DD, 1, 1.5);
 		this.add(this.light);
 
 		textureCache.get("sprites/portal.png", texture => {
 			this.spritesheet = new SpriteSheetProxy(texture);
-			this.material.map = this.spritesheet;
-			this.material.needsUpdate = true;
+			this.sprite = new Sprite(new SpriteMaterial({fog: true, map: this.spritesheet}));
+			this.add(this.sprite);
 		});
 	}
 
 	update(time) {
-		if (this.material.map && this.material.map.isSpriteSheet) {
-			const n = Math.floor(time * this.fps) % this.material.map.frames;
-			this.material.map.setFrame(n);
+		if (this.spritesheet) {
+			const n = Math.floor(time * this.fps) % this.spritesheet.frames;
+			this.spritesheet.setFrame(n);
 		}
 		this.light.intensity = 0.5 + 0.2 * Math.abs(Math.sin(0.5 * time)) + 0.02 * Math.abs(Math.sin(this.fps * time));
 	}
@@ -41170,41 +41228,97 @@ class JumpGate extends Portal {
 
 class WarpGate extends Portal {}
 
-class Enemy extends Entity {
+
+var misc = Object.freeze({
+	Entity: Entity,
+	Actor: Actor,
+	Fireball: Fireball,
+	Portal: Portal,
+	JumpGate: JumpGate,
+	WarpGate: WarpGate
+});
+
+class Enemy extends Actor {
 	constructor(sprite, props, size, speed, spriteInfo) {
-		super(size, speed);
-		this.position.copy(props.position);
-		this.spriteInfo = spriteInfo;
+		super(props, size, speed);
+		this.persistedProps.push("anim", "animStartTime", "health");
+
+		this.anim = this.anim || "move";
+		if (this.health === undefined) {
+			this.health = 5;
+		}
+		this.isEthereal = this.health <= 0;
+		this.sprite = new Sprite(new SpriteMaterial({fog: true}));
+
+		const w = spriteInfo.walkFrames;
+		const a = spriteInfo.attackFrames;
+		const d = spriteInfo.deathFrames;
+		this.animations = {
+			move: [0, w],
+			attack: [w, a],
+			pain: [w+a, 1],
+			death: [w+a, d]
+		};
+
 		textureCache.get(sprite, texture => {
 			const totalFrames = spriteInfo.walkFrames + spriteInfo.attackFrames + spriteInfo.deathFrames;
 			this.texture = new SpriteSheetProxy(texture, spriteInfo.frameWidth, totalFrames);
-			this.sprite = new Sprite(new SpriteMaterial({fog: true, map: this.texture}));
+			this.sprite.material.map = this.texture;
+			this.sprite.material.needsUpdate = true;
 			this.add(this.sprite);
 		});
 	}
 
 	onDamage(time) {
-		if (!this.timeOfDeath) {
-			this.isEthereal = true;
-			this.timeOfDeath = time;
+		if (this.anim != "death") {
+			this.health -= 1;
+			if (this.health > 0) {
+				this.startAnimation("pain", time);
+			} else {
+				this.isEthereal = true;
+				this.startAnimation("death", time);
+			}
+		}
+	}
+
+	startAnimation(anim, time) {
+		if (anim in this.animations) {
+			this.anim = anim;
+			this.animStartTime = time;
 		}
 	}
 
 	update(time) {
 		if (this.texture) {
-			if (this.timeOfDeath) {
-				const timeAfterDeath = time - this.timeOfDeath;
-				const deathStartFrame = this.texture.frames - this.spriteInfo.deathFrames;
-				const frame = deathStartFrame + Math.floor(8 * timeAfterDeath);
-				if (frame >= this.texture.frames && this.removeDead) {
-					this.shouldRemove = true;
-				} else if (frame < this.texture.frames) {
-					this.texture.setFrame(frame);
-				}
-			} else {
-				const frame = Math.floor(this.speed * time) % this.spriteInfo.walkFrames;
-				this.texture.setFrame(frame);
+			if (!this.animStartTime) {
+				this.startAnimation(this.anim, time);
 			}
+
+			const delta = time - this.animStartTime;
+			const animFrameInfo = this.animations[this.anim];
+			let frameNum = Math.floor(delta * this.speed);
+
+			if (frameNum >= animFrameInfo[1]) {
+				if (this.anim == "death") {
+					if (this.removeDead) {
+						this.shouldRemove = true;
+					}
+					frameNum = animFrameInfo[1]-1;
+				} else if (this.anim == "move") {
+					if (Math.random() < 1/3) {
+						this.startAnimation("attack", time);
+						return this.update(time)
+					} else {
+						this.animStartTime = time;
+						frameNum = frameNum % animFrameInfo[1];
+					}
+				} else {
+					this.startAnimation("move", time);
+					return this.update(time)
+				}
+			}
+
+			this.texture.setFrame(animFrameInfo[0] + frameNum);
 		}
 	}
 }
@@ -41239,10 +41353,11 @@ class Bat extends Enemy {
 			attackFrames: 0,
 			deathFrames: 2
 		});
-		this.scale.x = 40/64;
+		delete this.animations.pain;
+		this.sprite.scale.x = 40/64;
 		const scale = 0.8;
-		this.scale.multiplyScalar(scale);
-		this.translateZ(-0.1);
+		this.sprite.scale.multiplyScalar(scale);
+		this.sprite.translateZ(-0.1);
 		this.removeDead = true;
 	}
 }
@@ -41255,7 +41370,7 @@ class Mage extends Enemy {
 			attackFrames: 1,
 			deathFrames: 3
 		});
-		this.scale.x = 56/64;
+		this.sprite.scale.x = 56/64;
 	}
 }
 
@@ -41465,110 +41580,6 @@ class CustomMaterial extends ShaderMaterial {
 	set pixelate(value) { this.uniforms.pixelate.value = value; }
 }
 
-class Door extends Mesh {
-	constructor(color, position) {
-		const geometry = new BoxBufferGeometry(1, 1, 1);
-		geometry.rotateX(Math.PI / 2);
-		const material = new CustomMaterial();
-		textureCache.get("walls/" + color + "_door.png", texture => {
-			texture.anisotropy = 8;
-			const spritesheet = new SpriteSheetProxy(texture);
-			material.map = spritesheet;
-			material.needsUpdate = true;
-		});
-		super(geometry, material);
-		this.color = color;
-		this.frequency = 9 + 0.5 * Math.random();
-		this.position.copy(position);
-		this.adjacent = [];
-
-		audioLoader.load("sounds/adlib/use_key.wav", buffer => {
-			this.unlockSound = new PositionalAudio(audioListener);
-			this.unlockSound.setBuffer(buffer);
-			this.add(this.unlockSound);
-		});
-	}
-
-	update(time) {
-		if (this.material.map) {
-			const frame = Math.floor(this.frequency * time) % 2;
-			this.material.map.setFrame(frame);
-		}
-	}
-
-	/**
-	 * Mark this and connected door tiles for removal.
-	 * @return {boolean} true if successful, false if this door is already marked
-	 */
-	unlock(silent) {
-		if (this.shouldRemove) {
-			return false
-		} else {
-			if (!silent) {
-				this.unlockSound.play();
-			}
-			this.shouldRemove = true;
-			this.adjacent.forEach(door => door.unlock(true));
-			return true
-		}
-	}
-}
-
-class ExplodingWall extends Object3D {
-	constructor(position) {
-		super();
-		const geometry = new BoxBufferGeometry(1, 1, 1);
-		geometry.rotateX(Math.PI / 2);
-		const texture = textureCache.get("walls/exploding.png", texture => {
-			this.box.material.map = new SpriteSheetProxy(texture, 64, 3);
-			this.box.material.needsUpdate = true;
-		});
-		const material = new MeshBasicMaterial({map: texture, transparent: true});
-		this.position.copy(position);
-		this.box = new Mesh(geometry, material);
-		this.duration = 1/3;
-		this.adjacent = [];
-	}
-
-	ignite(time) {
-		if (this.isExploding()) {
-			return
-		}
-		this.ignition = time;
-		this.children.forEach(mesh => mesh.shouldRemove = true);
-		this.add(this.box);
-	}
-
-	igniteAdjacent(time) {
-		this.adjacent.forEach(e => e.ignite(time));
-		this.adjacentsIgnited = true;
-	}
-
-	isExploding() {
-		return !!this.ignition
-	}
-
-	onDamage(time) {
-		this.ignite(time);
-	}
-
-	update(time) {
-		if (this.isExploding()) {
-			const timeDelta = time - this.ignition;
-			if (timeDelta > this.duration) {
-				this.shouldRemove = true;
-			} else {
-				const texture = this.box.material.map;
-				const frame = Math.floor(timeDelta * texture.frames / this.duration);
-				this.box.material.map.setFrame(frame);
-				if (!this.adjacentsIgnited && timeDelta > this.duration / texture.frames) {
-					this.igniteAdjacent(time);
-				}
-			}
-		}
-	}
-}
-
 class FloorGeometry extends PlaneGeometry {
 	constructor(position) {
 		super(1, 1);
@@ -41589,26 +41600,172 @@ class WallGeometry extends PlaneGeometry {
 	}
 }
 
-class Item extends Sprite {
+function createWallMeshes(geometryDict) {
+	return Object.keys(geometryDict).map(name => {
+		const geometry = new BufferGeometry().fromGeometry(geometryDict[name]);
+		const texture = textureCache.get("walls/" + name + ".png");
+		texture.anisotropy = 8;
+		const material = new CustomMaterial({map: texture});
+		return new Mesh(geometry, material)
+	})
+}
+
+function mergeWallGeometry(name, faces, geometryDict, position) {
+	geometryDict = geometryDict || {};
+	const suffix = {
+		east: "light",
+		west: "light",
+		north: "dark",
+		south: "dark"
+	};
+	faces.forEach(face => {
+		const faceName = name + "_" + suffix[face];
+		if (!(faceName in geometryDict)) {
+			geometryDict[faceName] = new Geometry();
+		}
+		geometryDict[faceName].merge(new WallGeometry(face, position));
+	});
+	return geometryDict
+}
+
+class Door extends Entity {
+	constructor(props, removeFunc) {
+		super(props);
+		this.type = this.type || "Door";
+		this.persistedProps.push("color");
+
+		this.removeFunc = removeFunc;
+
+		const geometry = new BoxBufferGeometry(1, 1, 1);
+		geometry.rotateX(Math.PI / 2);
+		const material = new CustomMaterial();
+		textureCache.get("walls/" + this.color + "_door.png", texture => {
+			texture.anisotropy = 8;
+			const spritesheet = new SpriteSheetProxy(texture);
+			material.map = spritesheet;
+			material.needsUpdate = true;
+		});
+		this.mesh = new Mesh(geometry, material);
+		this.add(this.mesh);
+
+		this.frequency = 9 + 0.5 * Math.random();
+		this.adjacent = [];
+
+		audioLoader.load("sounds/adlib/use_key.wav", buffer => {
+			this.unlockSound = new PositionalAudio(audioListener);
+			this.unlockSound.setBuffer(buffer);
+			this.add(this.unlockSound);
+		});
+	}
+
+	getState() {
+		return null
+	}
+
+	update(time) {
+		if (this.mesh.material.map) {
+			const frame = Math.floor(this.frequency * time) % 2;
+			this.mesh.material.map.setFrame(frame);
+		}
+	}
+
+	/**
+	 * Mark this and connected door tiles for removal.
+	 * @return {boolean} true if successful, false if this door is already marked
+	 */
+	unlock(silent) {
+		if (this.shouldRemove) {
+			return false
+		} else {
+			if (!silent) {
+				this.unlockSound.play();
+			}
+			this.shouldRemove = true;
+			this.removeFunc();
+			this.adjacent.forEach(door => door.unlock(true));
+			return true
+		}
+	}
+}
+
+class ExplodingWall extends Entity {
+	constructor(props, removeFunc) {
+		super(props);
+		this.type = "ExplodingWall";
+		this.persistedProps.push("ignition", "faces", "wall");
+
+		this.removeFunc = removeFunc;
+
+		this.add(...createWallMeshes(mergeWallGeometry(this.wall, this.faces)));
+
+		const geometry = new BoxBufferGeometry(1, 1, 1);
+		geometry.rotateX(Math.PI / 2);
+		textureCache.get("walls/exploding.png", texture => {
+			this.box.material.map = new SpriteSheetProxy(texture, 64, 3);
+			this.box.material.needsUpdate = true;
+		});
+		const material = new MeshBasicMaterial({transparent: true});
+		this.box = new Mesh(geometry, material);
+
+		this.adjacent = [];
+		this.burnDuration = 0.25;
+		this.spreadDuration = this.burnDuration / 2;
+	}
+
+	ignite(time) {
+		if (time >= this.ignition) {
+			return
+		}
+		this.ignition = time;
+		this.removeFunc && this.removeFunc();
+		this.adjacent.forEach(e => e.ignite(time + this.spreadDuration));
+	}
+
+	getState() {
+		return this.ignition ? super.getState() : null
+	}
+
+	onDamage(time) {
+		this.ignite(time);
+	}
+
+	update(time) {
+		const timeDelta = time - this.ignition;
+		if (timeDelta >= this.burnDuration) {
+			this.shouldRemove = true;
+		} else if (timeDelta > 0) {
+			if (!this.exploding) {
+				this.exploding = true;
+				this.children.forEach(mesh => mesh.shouldRemove = true); // remove wall segments
+				this.add(this.box);
+			}
+			const texture = this.box.material.map;
+			if (texture) {
+				const frame = Math.floor(timeDelta * texture.frames / this.burnDuration);
+				texture.setFrame(frame);
+			}
+		}
+	}
+}
+
+const ITEM_SCALE = 0.6;
+
+class Item extends Entity {
 	constructor(props, ...itemFrames) {
-		super();
-		this.name = props.type.toLowerCase();
-		this.soundName = props.soundName;
-		this.position.copy(props.position);
-		const scale = 0.6;
-		this.scale.multiplyScalar(scale);
-		this.translateZ(-(1-scale)/2);
+		super(props);
 		this.itemFrames = itemFrames;
-		this.material.fog = true;
 		audioLoader.load("sounds/adlib/pickup_" + (this.soundName || this.name) + ".wav", buffer => {
 			this.pickupSound = new PositionalAudio(audioListener);
 			this.pickupSound.setBuffer(buffer);
 			this.add(this.pickupSound);
 		});
 		textureCache.get("sprites/items.png", texture => {
-			this.material.map = new SpriteSheetProxy(texture, 40, 11);
-			this.material.map.setFrame(this.itemFrames[0]);
-			this.material.needsUpdate = true;
+			this.spritesheet = new SpriteSheetProxy(texture, 40, 11);
+			this.spritesheet.setFrame(this.itemFrames[0]);
+			this.sprite = new Sprite(new SpriteMaterial({fog: true, map: this.spritesheet}));
+			this.sprite.scale.multiplyScalar(ITEM_SCALE);
+			this.sprite.translateZ(-(1-ITEM_SCALE)/2);
+			this.add(this.sprite);
 		});
 	}
 
@@ -41617,13 +41774,14 @@ class Item extends Sprite {
 			this.pickupSound.play();
 		}
 		this.shouldRemove = true;
+		return this
 	}
 
 	update(time) {
-		if (this.itemFrames.length > 1 && this.material.map) {
+		if (this.itemFrames.length > 1 && this.spritesheet) {
 			const idx = Math.floor(8 * time) % this.itemFrames.length;
 			const frame = this.itemFrames[idx];
-			this.material.map.setFrame(frame);
+			this.spritesheet.setFrame(frame);
 		}
 	}
 }
@@ -41676,32 +41834,64 @@ function connectAdjacent(objects, obj, x, y, filterFunc) {
 	objects[[x, y]] = obj;
 }
 
-function createWallMeshes(geometryDict) {
-	return Object.keys(geometryDict).map(name => {
-		const geometry = new BufferGeometry().fromGeometry(geometryDict[name]);
-		const texture = textureCache.get("walls/" + name + ".png");
-		texture.anisotropy = 8;
-		const material = new CustomMaterial({map: texture});
-		return new Mesh(geometry, material)
-	})
-}
+class Map$1 {
+	constructor(props) {
+		Object.assign(this, props);
+		if (typeof this.layout[0] === "string") {
+			this.layout = this.layout.map(line => line.split(""));
+		}
+	}
 
-function mergeWallGeometry(tile, adjacentTiles, geometryDict, position) {
-	geometryDict = geometryDict || {};
-	const variants = {
-		light: ["east", "west"],
-		dark: ["north", "south"]
-	};
-	Object.keys(variants).forEach(v => {
-		const name = tile.value + "_" + v;
-		variants[v].forEach(face => {
-			if (adjacentTiles[face] && adjacentTiles[face].type != tile.type) {
-				geometryDict[name] = geometryDict[name] || new Geometry();
-				geometryDict[name].merge(new WallGeometry(face, position));
+	getTile(position) {
+		try {
+			const symbol = this.layout[this.height-1-position.y][position.x];
+			if (symbol == " ") {
+				return {type: "floor"}
+			} else {
+				return this.legend[symbol]
 			}
-		});
-	});
-	return geometryDict
+		} catch (ex) {
+			// FIXME: this should not swallow exceptions related to legend lookups
+			return null
+		}
+	}
+
+	adjacentTiles(position) {
+		const x = position.x;
+		const y = position.y;
+		return {
+			east: this.getTile(new Vector2(x+1, y)),
+			west: this.getTile(new Vector2(x-1, y)),
+			north: this.getTile(new Vector2(x, y+1)),
+			south: this.getTile(new Vector2(x, y-1))
+		}
+	}
+
+	/** List of cardinal directions from position that contain a different type of tile. **/
+	adjacentBorders(position) {
+		const tile = this.getTile(position);
+		const adjacentTiles = this.adjacentTiles(position);
+		return Object.keys(adjacentTiles).filter(d => {
+			const adj = adjacentTiles[d];
+			return adj && adj.type != tile.type
+		})
+	}
+
+	getPlayerStart() {
+		const isPlayer = entity => entity.type == "Player";
+		return this.entities.filter(isPlayer).shift() || this.playerStart
+	}
+
+	toScene() {
+		const scene = new Scene();
+		scene.add(new AmbientLight());
+		if (this.fog) {
+			scene.fog = new Fog(this.fog.color, this.fog.near, this.fog.far);
+		}
+		constructLayout(this, scene);
+		spawnEntities(this.entities, scene);
+		return scene
+	}
 }
 
 function constructLayout(map, parent) {
@@ -41710,38 +41900,21 @@ function constructLayout(map, parent) {
 	const floor = new Geometry();
 	const walls = {};
 
-	// TODO: attach these methods somewhere else
-	map.getTile = function(x, y) {
-		try {
-			const symbol = this.layout[this.height-1-y][x];
-			return this.legend[symbol]
-		} catch (ex) {
-			return null
-		}
-	};
-
-	map.adjacentTiles = function(x, y) {
-		return {
-			east: this.getTile(x+1, y),
-			west: this.getTile(x-1, y),
-			north: this.getTile(x, y+1),
-			south: this.getTile(x, y-1)
-		}
-	};
-
 	for (let x = 0; x < map.width; x++) {
 		for (let y = 0; y < map.height; y++) {
 			const position = new Vector2(x, y);
-			const tile = map.getTile(x, y);
+			const tile = map.getTile(position);
+			const borders = map.adjacentBorders(position);
+			const removeFunc = () => map.layout[map.height-1-y][x] = " ";
+
 			if (tile.type == "wall") {
-				mergeWallGeometry(tile, map.adjacentTiles(x, y), walls, position);
+				mergeWallGeometry(tile.value, borders, walls, position);
 			} else if (tile.type == "exploding_wall") {
-				const wall = new ExplodingWall(position);
-				wall.add(...createWallMeshes(mergeWallGeometry(tile, map.adjacentTiles(x, y))));
+				const wall = new ExplodingWall({position: position, wall: tile.value, faces: borders}, removeFunc);
 				connectAdjacent(explodingWalls, wall, x, y);
 				parent.add(wall);
 			} else if (tile.type == "door") {
-				const door = new Door(tile.value, position);
+				const door = new Door({color: tile.value, position: position}, removeFunc);
 				connectAdjacent(doors, door, x, y, d => d.color == door.color);
 				parent.add(door);
 			}
@@ -41760,8 +41933,11 @@ function constructLayout(map, parent) {
 }
 
 function spawnEntities(entities, parent) {
-	const entityClasses = Object.assign({}, enemies, items, {JumpGate: JumpGate, WarpGate: WarpGate});
+	const entityClasses = Object.assign({}, enemies, items, misc, {ExplodingWall: ExplodingWall});
 	entities.forEach(entity => {
+		if (entity.type == "Player") {
+			return
+		}
 		const position = new Vector3(entity.position[0], entity.position[1], 0);
 		const entityClass = entityClasses[entity.type];
 		if (entityClass) {
@@ -41772,9 +41948,10 @@ function spawnEntities(entities, parent) {
 	});
 }
 
-class Player extends Entity {
+class Player extends Actor {
 	constructor() {
-		super(2/3, 5);
+		super({type: "Player"}, 2/3, 5);
+		this.persistedProps.push("direction");
 
 		this.audioListener = audioListener;
 		this.add(this.audioListener);
@@ -41805,7 +41982,7 @@ class Player extends Entity {
 			const spritesheet = SpriteSheetProxy(texture, 88, 2);
 			spritesheet.repeat.y = 88/72;
 			this.hand = new Sprite(new SpriteMaterial({map: spritesheet}));
-			this.hand.setFrame = (frame) => {
+			this.hand.setFrame = frame => {
 				spritesheet.setFrame(frame);
 				this.light.intensity = frame;
 			};
@@ -41814,20 +41991,36 @@ class Player extends Entity {
 			this.hand.inPosition = new Vector3(-0.0032, -0.033, 0.05);
 			this.hand.position.copy(this.hand.inPosition);
 			this.add(this.hand);
+
+			const sounds = ["shoot", "big_shoot"];
+			sounds.forEach(name => {
+				const file = "sounds/adlib/" + name + ".wav";
+				audioLoader.load(file, buffer => {
+					const audio = new PositionalAudio(audioListener).setBuffer(buffer);
+					const prop = name.replace("_", "") + "Sound";
+					this[prop] = audio;
+					this.hand.add(audio);
+				});
+			});
 		});
 	}
 
+	get direction() {
+		return this.getWorldDirection()
+	}
+
 	onCollision(collision, time) {
-		const obj = collision.object;
-		if (obj instanceof Item) {
-			this.pickupItem(obj);
-			return false
-		} else if (obj instanceof Door) {
-			return !this.unlockDoor(obj)
-		} else if (obj instanceof JumpGate) {
-			const forward = this.velocity.clone().normalize().multiplyScalar(2/3);
-			this.warpToPosition = obj.destination.clone().add(forward);
-			return false
+		for (let obj = collision.object; obj; obj = obj.parent) {
+			if (obj instanceof Item) {
+				this.pickupItem(obj);
+				return false
+			} else if (obj instanceof Door) {
+				return !this.unlockDoor(obj)
+			} else if (obj instanceof JumpGate) {
+				const forward = this.velocity.clone().normalize().multiplyScalar(2/3);
+				this.warpToPosition = obj.destination.clone().add(forward);
+				return false
+			}
 		}
 		return true
 	}
@@ -41835,9 +42028,9 @@ class Player extends Entity {
 	/** Mark item for removal from scene and add to player's inventory. **/
 	pickupItem(item) {
 		if (item instanceof Treasure) {
-			this.score += 100;  // * level number
+			this.score += item.value;
 		} else {
-			const name = item.name;
+			const name = item.type.toLowerCase();
 			if (this.inventory[name] === undefined) {
 				this.inventory[name] = 0;
 			}
@@ -41934,8 +42127,21 @@ class Player extends Entity {
 			}
 		} else {
 			const chargeTime = this.lastTime - this.chargeStarted;
-			const fireball = new Fireball(this.position, this.getWorldDirection(), chargeTime > 1);
+			const direction = this.getWorldDirection();
+			const fireball = new Fireball({
+				type: "Fireball",
+				position: this.position.clone().addScaledVector(direction, 2/3),
+				direction: direction,
+				isBig: chargeTime > 1
+			});
 			this.parent.add(fireball);
+
+			const sound = fireball.isBig ? this.bigshootSound : this.shootSound;
+			if (sound.isPlaying) {
+				sound.stop();
+			}
+			sound.play();
+
 			this.chargeStarted = 0;
 			this.lastFire = this.lastTime;
 			this.hand.setFrame(0);
@@ -42134,9 +42340,9 @@ Vector3.prototype.copy = function(v) {
 	return this
 };
 
-function setupPlayerSpawn(map, player) {
-	player.position.copy(map.playerStart.position);
-	const dir = map.playerStart.direction;
+function setupPlayerSpawn(player, start) {
+	player.position.copy(start.position);
+	const dir = start.direction;
 	const target = player.position.clone();
 	target.x += dir.x;
 	target.y += dir.y;
@@ -42151,19 +42357,9 @@ class Game {
 		this.mapName = mapName;
 		this.player = player || new Player();
 
-		this.clock = new Clock();
-
 		this.renderer = new WebGLRenderer({antialias: true});
 		this.renderer.physicallyCorrectLights = true;
 		container.appendChild(this.renderer.domElement);
-
-		this.scene = new Scene();
-		this.ambientLight = new AmbientLight();
-		this.scene.add(this.ambientLight);
-		this.scene.add(this.player);
-
-		this.maze = new Group();
-		this.maze.name = "Maze";
 
 		// transition stuff
 		this.fbo1 = new WebGLRenderTarget(window.innerWidth, window.innerHeight, {minFilter: LinearFilter, magFilter: LinearFilter, format: RGBFormat, stencilBuffer: false});
@@ -42173,6 +42369,7 @@ class Game {
 
 	onKey(value) {
 		const binds = this.player.binds();
+		binds.Enter = this.save.bind(this);
 		return (event) => {
 			const command = binds[event.code];
 			if (command && !event.repeat) {
@@ -42193,11 +42390,13 @@ class Game {
 	}
 
 	play() {
+		this.clock.start();
 		this.isActive = true;
 		this.render();
 	}
 
 	pause() {
+		this.clock.pause();
 		this.isActive = false;
 	}
 
@@ -42205,7 +42404,7 @@ class Game {
 		const time = this.clock.getElapsedTime();
 		const objectsToRemove = [];
 		this.scene.traverse(obj => {
-			obj.update && obj.update(time, this.maze);
+			obj.update && obj.update(time, this.scene);
 			if (obj.shouldRemove) {
 				objectsToRemove.push(obj);
 			}
@@ -42260,6 +42459,36 @@ class Game {
 		});
 	}
 
+	loadMap(name) {
+		const savedState = localStorage.getItem(name);
+		if (savedState) {
+			const map = new Map$1(JSON.parse(savedState));
+			return Promise.resolve(map)
+		} else {
+			const path = "maps/" + name + ".map.json";
+			return fetch(path).then(r => r.json()).then(o => new Map$1(o))
+		}
+	}
+
+	getMapState() {
+		const entities = [];
+		this.scene.traverse(obj => {
+			const objState = obj.getState && obj.getState();
+			if (objState) {
+				entities.push(objState);
+			}
+		});
+		const map = Object.assign({}, this.map);
+		map.layout = map.layout.map(line => line.join(""));
+		map.entities = entities;
+		map.time = this.clock.getElapsedTime();
+		return map
+	}
+
+	save() {
+		localStorage.setItem(this.mapName, JSON.stringify(this.getMapState()));
+	}
+
 	setup() {
 		const eventHandlers = [
 			["keydown", this.onKey(1)],
@@ -42282,19 +42511,12 @@ class Game {
 		});
 
 		const that = this;
-		fetch("maps/" + this.mapName + ".map.json")
-		.then(function(response) {
-			return response.json()
-		})
-		.then(function(map) {
+		this.loadMap(this.mapName).then(map => {
 			that.map = map;
-			if (map.fog) {
-				that.scene.fog = new Fog(map.fog.color, map.fog.near, map.fog.far);
-			}
-			constructLayout(map, that.maze);
-			spawnEntities(map.entities, that.maze);
-			setupPlayerSpawn(map, that.player);
-			that.scene.add(that.maze);
+			that.scene = map.toScene();
+			that.scene.add(that.player);
+			setupPlayerSpawn(that.player, map.getPlayerStart());
+			that.clock = new Clock$1(map.time);
 			that.play();
 		});
 	}
