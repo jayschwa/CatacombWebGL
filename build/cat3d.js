@@ -41386,6 +41386,17 @@ class Demon extends Enemy {
 	}
 }
 
+class Nemesis extends Enemy {
+	constructor(props) {
+		super("sprites/nemesis.png", props, 100, 0.5, 5, {
+			frameWidth: 64,
+			walkFrames: 2,
+			attackFrames: 1,
+			deathFrames: 7
+		});
+	}
+}
+
 
 var enemies = Object.freeze({
 	Enemy: Enemy,
@@ -41393,7 +41404,8 @@ var enemies = Object.freeze({
 	Troll: Troll,
 	Bat: Bat,
 	Mage: Mage,
-	Demon: Demon
+	Demon: Demon,
+	Nemesis: Nemesis
 });
 
 const vertexShader = `

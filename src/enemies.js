@@ -148,3 +148,14 @@ export class Demon extends Enemy {
 		})
 	}
 }
+
+export class Nemesis extends Enemy {
+	constructor(props) {
+		super("sprites/nemesis.png", props, 100, 0.5, 5, {
+			frameWidth: 64,
+			walkFrames: 2,
+			attackFrames: 1,
+			deathFrames: 7
+		})
+	}
+}
