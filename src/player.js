@@ -68,7 +68,7 @@ export class Player extends Actor {
 
 	onCollision(collision, time) {
 		for (let obj = collision.object; obj; obj = obj.parent) {
-			if (obj instanceof Item) {
+			if (obj.pickup) {
 				this.pickupItem(obj)
 				return false
 			} else if (obj instanceof Door) {

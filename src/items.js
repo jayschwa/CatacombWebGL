@@ -59,3 +59,18 @@ export const GreenKey = simpleItem([7], {soundName: "key"})
 export const BlueKey = simpleItem([8], {soundName: "key"})
 export const Scroll = simpleItem([9])
 export const Treasure = simpleItem([10])
+
+export class Grelminar extends Entity {
+	constructor(props) {
+		super(props)
+		textureCache.get("sprites/grelminar.png", texture => {
+			this.sprite = new Sprite(new SpriteMaterial({fog: true, map: texture}))
+			this.add(this.sprite)
+		})
+	}
+
+	pickup() {
+		console.log("Game over, man! Game over!") // TODO
+		return this
+	}
+}

@@ -41755,7 +41755,8 @@ class Item extends Entity {
 	constructor(props, ...itemFrames) {
 		super(props);
 		this.itemFrames = itemFrames;
-		audioLoader.load("sounds/adlib/pickup_" + (this.soundName || this.name) + ".wav", buffer => {
+		const soundName = this.soundName || this.type.toLowerCase();
+		audioLoader.load("sounds/adlib/pickup_" + soundName + ".wav", buffer => {
 			this.pickupSound = new PositionalAudio(audioListener);
 			this.pickupSound.setBuffer(buffer);
 			this.add(this.pickupSound);
@@ -41805,6 +41806,21 @@ const BlueKey = simpleItem([8], {soundName: "key"});
 const Scroll = simpleItem([9]);
 const Treasure = simpleItem([10]);
 
+class Grelminar extends Entity {
+	constructor(props) {
+		super(props);
+		textureCache.get("sprites/grelminar.png", texture => {
+			this.sprite = new Sprite(new SpriteMaterial({fog: true, map: texture}));
+			this.add(this.sprite);
+		});
+	}
+
+	pickup() {
+		console.log("Game over, man! Game over!"); // TODO
+		return this
+	}
+}
+
 
 var items = Object.freeze({
 	Item: Item,
@@ -41816,7 +41832,8 @@ var items = Object.freeze({
 	GreenKey: GreenKey,
 	BlueKey: BlueKey,
 	Scroll: Scroll,
-	Treasure: Treasure
+	Treasure: Treasure,
+	Grelminar: Grelminar
 });
 
 function connectAdjacent(objects, obj, x, y, filterFunc) {
@@ -42012,7 +42029,7 @@ class Player extends Actor {
 
 	onCollision(collision, time) {
 		for (let obj = collision.object; obj; obj = obj.parent) {
-			if (obj instanceof Item) {
+			if (obj.pickup) {
 				this.pickupItem(obj);
 				return false
 			} else if (obj instanceof Door) {
