@@ -187,8 +187,7 @@ export class Game {
 			that.map = map
 			that.scene = map.toScene()
 			that.scene.add(that.player)
-			const start = map.entities.filter(e => e.type == "Player").shift() || map.playerStart
-			setupPlayerSpawn(that.player, start)
+			setupPlayerSpawn(that.player, map.getPlayerStart())
 			that.clock = new Clock(map.time)
 			that.play()
 		})

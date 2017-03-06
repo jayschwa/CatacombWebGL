@@ -41878,6 +41878,11 @@ class Map$1 {
 		})
 	}
 
+	getPlayerStart() {
+		const isPlayer = entity => entity.type == "Player";
+		return this.entities.filter(isPlayer).shift() || this.playerStart
+	}
+
 	toScene() {
 		const scene = new Scene();
 		scene.add(new AmbientLight());
@@ -42511,8 +42516,7 @@ class Game {
 			that.map = map;
 			that.scene = map.toScene();
 			that.scene.add(that.player);
-			const start = map.entities.filter(e => e.type == "Player").shift() || map.playerStart;
-			setupPlayerSpawn(that.player, start);
+			setupPlayerSpawn(that.player, map.getPlayerStart());
 			that.clock = new Clock$1(map.time);
 			that.play();
 		});

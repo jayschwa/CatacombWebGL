@@ -66,6 +66,11 @@ export class Map {
 		})
 	}
 
+	getPlayerStart() {
+		const isPlayer = entity => entity.type == "Player"
+		return this.entities.filter(isPlayer).shift() || this.playerStart
+	}
+
 	toScene() {
 		const scene = new Scene()
 		scene.add(new AmbientLight())
