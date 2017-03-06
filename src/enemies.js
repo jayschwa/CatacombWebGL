@@ -19,7 +19,7 @@ export class Enemy extends Actor {
 		const w = spriteInfo.walkFrames
 		const a = spriteInfo.attackFrames
 		const d = spriteInfo.deathFrames
-		this.frames = {
+		this.animations = {
 			move: [0, w],
 			attack: [w, a],
 			pain: [w+a, 1],
@@ -48,7 +48,7 @@ export class Enemy extends Actor {
 	}
 
 	startAnimation(anim, time) {
-		if (anim in this.frames) {
+		if (anim in this.animations) {
 			this.anim = anim
 			this.animStartTime = time
 		}
@@ -61,7 +61,7 @@ export class Enemy extends Actor {
 			}
 
 			const delta = time - this.animStartTime
-			const animFrameInfo = this.frames[this.anim]
+			const animFrameInfo = this.animations[this.anim]
 			let frameNum = Math.floor(delta * this.speed)
 
 			if (frameNum >= animFrameInfo[1]) {
@@ -119,6 +119,7 @@ export class Bat extends Enemy {
 			attackFrames: 0,
 			deathFrames: 2
 		})
+		delete this.animations.pain
 		this.sprite.scale.x = 40/64
 		const scale = 0.8
 		this.sprite.scale.multiplyScalar(scale)
