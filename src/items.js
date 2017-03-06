@@ -9,7 +9,8 @@ export class Item extends Entity {
 	constructor(props, ...itemFrames) {
 		super(props)
 		this.itemFrames = itemFrames
-		audioLoader.load("sounds/adlib/pickup_" + (this.soundName || this.name) + ".wav", buffer => {
+		const soundName = this.soundName || this.type.toLowerCase()
+		audioLoader.load("sounds/adlib/pickup_" + soundName + ".wav", buffer => {
 			this.pickupSound = new PositionalAudio(audioListener)
 			this.pickupSound.setBuffer(buffer)
 			this.add(this.pickupSound)
