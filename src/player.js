@@ -182,7 +182,7 @@ export class Player extends Actor {
 				this.hand.setFrame(1)
 				this.light.distance = 0
 			}
-		} else {
+		} else if (this.chargeStarted) {
 			const chargeTime = this.lastTime - this.chargeStarted
 			const direction = this.getWorldDirection()
 			const fireball = new Fireball({
