@@ -21,6 +21,39 @@ function setupPlayerSpawn(player, start) {
 	player.lookAt(target)
 }
 
+class TouchControls {
+	constructor(actor) {
+		this.actor = actor
+		this.touches = {}
+		document.addEventListener("touchstart", this.onTouchStart.bind(this))
+		document.addEventListener("touchend", this.onTouchEnd.bind(this))
+	}
+
+	partition(touches) {
+		const left = []
+		const right = []
+		for (let touch of touches) {
+			if (touch.screenX < window.screen.width / 2) {
+				left.push(touch)
+			} else {
+				right.push(touch)
+			}
+		}
+		return {left: left, right: right}
+	}
+
+	onTouchStart(event) {
+		this.touches = this.partition(event.touches)
+		this.actor.shoot && this.actor.shoot(this.touches.right.length)
+	}
+
+	onTouchEnd(event) {
+		this.touches = this.partition(event.touches)
+		console.log(this.touches)
+		this.actor.shoot && this.actor.shoot(this.touches.right.length)
+	}
+}
+
 export class Game {
 	constructor(container, location, mapName, player) {
 		this.container = container
@@ -169,6 +202,8 @@ export class Game {
 			["mouseup", this.onMouseButton(-1)],
 			["mousemove", this.onMouseMove.bind(this)]
 		]
+
+		this.touchControls = new TouchControls(this.player)
 
 		document.addEventListener("pointerlockchange", event => {
 			if (document.pointerLockElement === this.renderer.domElement) {
