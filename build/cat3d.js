@@ -42435,7 +42435,7 @@ class TouchControls {
 				delta = xDelta;
 			}
 		}
-		let fraction = delta / 50.0;
+		let fraction = delta / 25.0;
 		fraction = Math.min(fraction, 1.5);
 		if (Math.abs(fraction) < 0.25) {
 			fraction = 0;
