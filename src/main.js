@@ -53,7 +53,7 @@ class TouchControls {
 	onTouchStart(event) {
 		this.touches = this.partition(event.touches)
 		this.actor.shoot && this.actor.shoot(this.touches.right.length)
-		if (this.touches.left && !this.movingForward) {
+		if (this.touches.left.length && !this.movingForward) {
 			this.timeoutId = window.setTimeout(this.moveForward.bind(this), 500)
 		}
 		for (let touch of event.changedTouches) {
