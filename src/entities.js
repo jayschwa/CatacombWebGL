@@ -116,8 +116,8 @@ export class Actor extends Entity {
 
 function ancestorsAreEthereal(object) {
 	for (let obj = object; obj; obj = obj.parent) {
-		if (obj.isEthereal) {
-			return obj.isEthereal
+		if (obj.isEthereal || obj.shouldRemove) {
+			return true
 		}
 	}
 	return false
