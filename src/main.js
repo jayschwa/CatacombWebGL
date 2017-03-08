@@ -74,8 +74,8 @@ class TouchControls {
 				delta = xDelta
 			}
 		}
-		let fraction = delta / 100.0
-		fraction = Math.min(fraction, 1)
+		let fraction = delta / 50.0
+		fraction = Math.min(fraction, 1.5)
 		if (Math.abs(fraction) < 0.25) {
 			fraction = 0
 		} else if (!this.movingForward) {
