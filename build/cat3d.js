@@ -42424,6 +42424,9 @@ class TouchControls {
 
 	onTouchMove(event) {
 		this.touches = this.partition(event.touches);
+		if (this.touches.left.length < 1) {
+			return
+		}
 		let delta = 0;
 		for (let touch of this.touches.left) {
 			const origin = this.touchOrigins[touch.identifier];
