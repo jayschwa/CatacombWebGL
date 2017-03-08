@@ -42384,6 +42384,7 @@ class TouchControls {
 		this.actor = actor;
 		this.touches = {};
 		this.touchOrigins = {};
+
 		document.addEventListener("touchstart", this.onTouchStart.bind(this));
 		document.addEventListener("touchmove", this.onTouchMove.bind(this));
 		document.addEventListener("touchend", this.onTouchEnd.bind(this));
@@ -42402,11 +42403,16 @@ class TouchControls {
 		return {left: left, right: right}
 	}
 
+	moveForward() {
+		this.movingForward = true;
+		this.actor.moveForward(1);
+	}
+
 	onTouchStart(event) {
 		this.touches = this.partition(event.touches);
 		this.actor.shoot && this.actor.shoot(this.touches.right.length);
-		if (this.touches.left) {
-			this.actor.moveForward && this.actor.moveForward(1);
+		if (this.touches.left && !this.movingForward) {
+			this.timeoutId = window.setTimeout(this.moveForward.bind(this), 500);
 		}
 		for (let touch of event.changedTouches) {
 			this.touchOrigins[touch.identifier] = {
@@ -42426,10 +42432,13 @@ class TouchControls {
 				delta = xDelta;
 			}
 		}
-		let fraction = delta * 4.0 / window.screen.width;
+		let fraction = delta / 100.0;
 		fraction = Math.min(fraction, 1);
 		if (Math.abs(fraction) < 0.25) {
 			fraction = 0;
+		} else if (!this.movingForward) {
+			window.clearTimeout(this.timeoutId);
+			this.timeoutId = window.setTimeout(this.moveForward.bind(this), 500);
 		}
 		this.actor.turnDirection = fraction;
 	}
@@ -42438,7 +42447,12 @@ class TouchControls {
 		this.touches = this.partition(event.touches);
 		this.actor.shoot && this.actor.shoot(this.touches.right.length);
 		if (this.touches.left.length < 1) {
-			this.actor.moveForward && this.actor.moveForward(-1);
+			window.clearTimeout(this.timeoutId);
+			this.timeoutId = undefined;
+			if (this.movingForward) {
+				this.actor.moveForward(-1);
+				this.movingForward = false;
+			}
 			this.actor.turnDirection = 0;
 		}
 		for (let touch of event.changedTouches) {
