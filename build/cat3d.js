@@ -42405,7 +42405,7 @@ class TouchControls {
 
 	moveForward() {
 		this.movingForward = true;
-		this.actor.moveForward(1);
+		this.actor.moveForward(0.5);
 	}
 
 	onTouchStart(event) {
@@ -42437,7 +42437,7 @@ class TouchControls {
 		}
 		let fraction = delta / 25.0;
 		fraction = Math.min(fraction, 1.5);
-		if (Math.abs(fraction) < 0.25) {
+		if (Math.abs(fraction) < 0.5) {
 			fraction = 0;
 		} else if (!this.movingForward) {
 			window.clearTimeout(this.timeoutId);
@@ -42453,7 +42453,7 @@ class TouchControls {
 			window.clearTimeout(this.timeoutId);
 			this.timeoutId = undefined;
 			if (this.movingForward) {
-				this.actor.moveForward(-1);
+				this.actor.moveForward(-0.5);
 				this.movingForward = false;
 			}
 			this.actor.turnDirection = 0;
