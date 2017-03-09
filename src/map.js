@@ -124,9 +124,6 @@ function constructLayout(map, parent) {
 function spawnEntities(entities, parent) {
 	const entityClasses = Object.assign({}, enemies, items, misc, {ExplodingWall: ExplodingWall})
 	entities.forEach(entity => {
-		if (entity.type == "Player") {
-			return
-		}
 		const position = new Vector3(entity.position[0], entity.position[1], 0)
 		const entityClass = entityClasses[entity.type]
 		if (entityClass) {

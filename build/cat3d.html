@@ -66,7 +66,7 @@ mapSelect.addEventListener("change", event => {
 
 const gameContainer = document.getElementById("cat3d")
 const gameLocation = document.getElementById("location")
-const game = new Catacomb3D.Game(gameContainer, gameLocation, mapSelect.value)
+const game = new Catacomb3D.Game("pwn", gameContainer, gameLocation, mapSelect.value)
 game.resizeView(gameContainer.clientWidth, gameContainer.clientHeight)
 
 let resizeNextFrame = false

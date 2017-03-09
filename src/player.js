@@ -6,9 +6,16 @@ import { Item, Treasure } from "./items"
 import { SpriteSheetProxy, textureCache } from "./utils"
 
 export class Player extends Actor {
-	constructor() {
-		super({type: "Player"}, 2/3, 5)
-		this.persistedProps.push("direction")
+	constructor(props) {
+		props.type = props.type || "Player"
+		super(props, 2/3, 5)
+		this.persistedProps.push("direction", "inventory")
+		if (props.direction) {
+			this.direction = props.direction
+		}
+		if (!this.inventory) {
+			this.inventory = {}
+		}
 
 		this.audioListener = audioListener
 		this.add(this.audioListener)
@@ -21,7 +28,6 @@ export class Player extends Actor {
 		this.light = new PointLight(0xE55B00, 0, 0)
 		this.add(this.light)
 
-		this.inventory = {}
 		this.score = 0
 
 		this.footstepIdx = 0
@@ -64,6 +70,12 @@ export class Player extends Actor {
 
 	get direction() {
 		return this.getWorldDirection()
+	}
+
+	set direction(vector) {
+		const direction = new Vector3().copy(vector)
+		const target = this.position.clone().add(direction)
+		this.lookAt(target)
 	}
 
 	onCollision(collision, time) {

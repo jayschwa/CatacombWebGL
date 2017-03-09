@@ -12,15 +12,6 @@ THREE.Vector3.prototype.copy = function(v) {
 	return this
 }
 
-function setupPlayerSpawn(player, start) {
-	player.position.copy(start.position)
-	const dir = start.direction
-	const target = player.position.clone()
-	target.x += dir.x
-	target.y += dir.y
-	player.lookAt(target)
-}
-
 class TouchControls {
 	constructor(actor) {
 		this.actor = actor
@@ -107,12 +98,17 @@ class TouchControls {
 }
 
 export class Game {
-	constructor(container, location, mapName, player) {
+	constructor(name, container, location, mapOverride) {
+		this.name = name
 		this.container = container
 		this.location = location
 
-		this.mapName = mapName
-		this.player = player || new Player()
+		const globalState = JSON.parse(localStorage.getItem(this.name) || "{}")
+		this.fromSave = "gameTime" in globalState
+
+		this.clock = new Clock(globalState.gameTime)
+		this.mapName = mapOverride || globalState.mapName
+		this.player = new Player(globalState.player)
 
 		this.renderer = new THREE.WebGLRenderer({antialias: true})
 		this.renderer.physicallyCorrectLights = true
@@ -227,9 +223,21 @@ export class Game {
 		}
 	}
 
+	getGlobalState() {
+		return {
+			date: new Date(),
+			gameTime: this.clock.getElapsedTime(),
+			mapName: this.mapName,
+			player: this.player.getState()
+		}
+	}
+
 	getMapState() {
 		const entities = []
 		this.scene.traverse(obj => {
+			if (obj instanceof Player) {
+				return
+			}
 			const objState = obj.getState && obj.getState()
 			if (objState) {
 				entities.push(objState)
@@ -238,11 +246,11 @@ export class Game {
 		const map = Object.assign({}, this.map)
 		map.layout = map.layout.map(line => line.join(""))
 		map.entities = entities
-		map.time = this.clock.getElapsedTime()
 		return map
 	}
 
 	save() {
+		localStorage.setItem(this.name, JSON.stringify(this.getGlobalState()))
 		localStorage.setItem(this.mapName, JSON.stringify(this.getMapState()))
 	}
 
@@ -274,8 +282,10 @@ export class Game {
 			that.map = map
 			that.scene = map.toScene()
 			that.scene.add(that.player)
-			setupPlayerSpawn(that.player, map.getPlayerStart())
-			that.clock = new Clock(map.time)
+			if (!that.fromSave) {
+				that.player.position.copy(map.playerStart.position)
+				that.player.direction = map.playerStart.direction
+			}
 			that.play()
 		})
 	}
