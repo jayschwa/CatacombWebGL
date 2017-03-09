@@ -41711,14 +41711,13 @@ class ExplodingWall extends Entity {
 
 		this.add(...createWallMeshes(mergeWallGeometry(this.wall, this.faces)));
 
-		const geometry = new BoxBufferGeometry(1, 1, 1);
-		geometry.rotateX(Math.PI / 2);
+		const geometry = new BoxBufferGeometry(1, 1, 1).rotateX(Math.PI / 2);
+		const material = new MeshBasicMaterial({transparent: true});
+		this.box = new Mesh(geometry, material);
 		textureCache.get("walls/exploding.png", texture => {
 			this.box.material.map = new SpriteSheetProxy(texture, 64, 3);
 			this.box.material.needsUpdate = true;
 		});
-		const material = new MeshBasicMaterial({transparent: true});
-		this.box = new Mesh(geometry, material);
 
 		this.adjacent = [];
 		this.burnDuration = 0.25;
@@ -41977,7 +41976,6 @@ function spawnEntities(entities, parent) {
 
 class Player extends Actor {
 	constructor(props) {
-		props.type = props.type || "Player";
 		super(props, 2/3, 5);
 		this.persistedProps.push("direction", "inventory");
 		if (props.direction) {
@@ -41991,7 +41989,6 @@ class Player extends Actor {
 		this.add(this.audioListener);
 
 		this.camera = new PerspectiveCamera(45, 0, 0.01, 256);
-		this.name = "Player";
 		this.camera.rotation.set(0, Math.PI, 0);
 		this.add(this.camera);
 
@@ -42158,12 +42155,10 @@ class Player extends Actor {
 	turnLeft(value) { this.turnDirection += value; }
 	turnRight(value) { this.turnDirection -= value; }
 	shoot(value) {
-		if (value > 0) {
-			if (!this.chargeStarted) {
-				this.chargeStarted = this.lastTime;
-				this.hand.setFrame(1);
-				this.light.distance = 0;
-			}
+		if (value > 0 && !this.chargeStarted) {
+			this.chargeStarted = this.lastTime;
+			this.hand.setFrame(1);
+			this.light.distance = 0;
 		} else if (this.chargeStarted) {
 			const chargeTime = this.lastTime - this.chargeStarted;
 			const direction = this.getWorldDirection();
@@ -42475,7 +42470,7 @@ class Game {
 
 		this.clock = new Clock$1(globalState.gameTime);
 		this.mapName = mapOverride || globalState.mapName;
-		this.player = new Player(globalState.player);
+		this.player = new Player(globalState.player || {type: "Player"});
 
 		this.renderer = new WebGLRenderer({antialias: true});
 		this.renderer.physicallyCorrectLights = true;
@@ -42580,7 +42575,16 @@ class Game {
 	}
 
 	changeMap(name) {
-
+		const that = this;
+		this.loadMap(name).then(map => {
+			that.save();
+			that.mapName = name;
+			that.map = map;
+			that.scene = map.toScene();
+			that.scene.add(that.player);
+			that.player.position.copy(map.playerStart.position);
+			that.player.direction = map.playerStart.direction;
+		});
 	}
 
 	loadMap(name) {

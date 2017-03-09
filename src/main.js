@@ -108,7 +108,7 @@ export class Game {
 
 		this.clock = new Clock(globalState.gameTime)
 		this.mapName = mapOverride || globalState.mapName
-		this.player = new Player(globalState.player)
+		this.player = new Player(globalState.player || {type: "Player"})
 
 		this.renderer = new THREE.WebGLRenderer({antialias: true})
 		this.renderer.physicallyCorrectLights = true
@@ -209,6 +209,19 @@ export class Game {
 		cameras.forEach(camera => {
 			camera.aspect = width / height
 			camera.updateProjectionMatrix()
+		})
+	}
+
+	changeMap(name) {
+		const that = this
+		this.loadMap(name).then(map => {
+			that.save()
+			that.mapName = name
+			that.map = map
+			that.scene = map.toScene()
+			that.scene.add(that.player)
+			that.player.position.copy(map.playerStart.position)
+			that.player.direction = map.playerStart.direction
 		})
 	}
 

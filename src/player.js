@@ -7,7 +7,6 @@ import { SpriteSheetProxy, textureCache } from "./utils"
 
 export class Player extends Actor {
 	constructor(props) {
-		props.type = props.type || "Player"
 		super(props, 2/3, 5)
 		this.persistedProps.push("direction", "inventory")
 		if (props.direction) {
@@ -21,7 +20,6 @@ export class Player extends Actor {
 		this.add(this.audioListener)
 
 		this.camera = new PerspectiveCamera(45, 0, 0.01, 256)
-		this.name = "Player"
 		this.camera.rotation.set(0, Math.PI, 0)
 		this.add(this.camera)
 
