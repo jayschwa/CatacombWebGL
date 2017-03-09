@@ -108,7 +108,7 @@ export class Game {
 
 		this.clock = new Clock(globalState.gameTime)
 		this.mapName = mapOverride || globalState.mapName
-		this.player = new Player(globalState.player || {type: "Player"})
+		this.player = new Player(globalState.player || {type: "Player"}, this)
 
 		this.renderer = new THREE.WebGLRenderer({antialias: true})
 		this.renderer.physicallyCorrectLights = true
@@ -213,9 +213,14 @@ export class Game {
 	}
 
 	changeMap(name) {
+		// render to first FBO
+		this.renderer.render(this.scene, this.player.camera, this.fbo1, true)
+		this.player.frozen = true
+
 		const that = this
 		this.loadMap(name).then(map => {
 			that.save()
+			that.transitionStart = that.clock.getElapsedTime()
 			that.mapName = name
 			that.map = map
 			that.scene = map.toScene()

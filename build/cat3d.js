@@ -41975,7 +41975,7 @@ function spawnEntities(entities, parent) {
 }
 
 class Player extends Actor {
-	constructor(props) {
+	constructor(props, game) {
 		super(props, 2/3, 5);
 		this.persistedProps.push("direction", "inventory");
 		if (props.direction) {
@@ -41984,6 +41984,8 @@ class Player extends Actor {
 		if (!this.inventory) {
 			this.inventory = {};
 		}
+
+		this.game = game;
 
 		this.audioListener = audioListener;
 		this.add(this.audioListener);
@@ -42056,6 +42058,8 @@ class Player extends Actor {
 				const forward = this.velocity.clone().normalize().multiplyScalar(2/3);
 				this.warpToPosition = obj.destination.clone().add(forward);
 				return false
+			} else if (obj instanceof WarpGate) {
+				this.game.changeMap(obj.value);
 			}
 		}
 		return true
@@ -42470,7 +42474,7 @@ class Game {
 
 		this.clock = new Clock$1(globalState.gameTime);
 		this.mapName = mapOverride || globalState.mapName;
-		this.player = new Player(globalState.player || {type: "Player"});
+		this.player = new Player(globalState.player || {type: "Player"}, this);
 
 		this.renderer = new WebGLRenderer({antialias: true});
 		this.renderer.physicallyCorrectLights = true;
@@ -42575,9 +42579,14 @@ class Game {
 	}
 
 	changeMap(name) {
+		// render to first FBO
+		this.renderer.render(this.scene, this.player.camera, this.fbo1, true);
+		this.player.frozen = true;
+
 		const that = this;
 		this.loadMap(name).then(map => {
 			that.save();
+			that.transitionStart = that.clock.getElapsedTime();
 			that.mapName = name;
 			that.map = map;
 			that.scene = map.toScene();

@@ -1,12 +1,12 @@
 import { Audio, PerspectiveCamera, PointLight, PositionalAudio, Sprite, SpriteMaterial, Vector3 } from "three"
 import { audioListener, audioLoader } from "./audio"
-import { Actor, Fireball, JumpGate } from "./entities"
+import { Actor, Fireball, JumpGate, WarpGate } from "./entities"
 import { Door } from "./environment"
 import { Item, Treasure } from "./items"
 import { SpriteSheetProxy, textureCache } from "./utils"
 
 export class Player extends Actor {
-	constructor(props) {
+	constructor(props, game) {
 		super(props, 2/3, 5)
 		this.persistedProps.push("direction", "inventory")
 		if (props.direction) {
@@ -15,6 +15,8 @@ export class Player extends Actor {
 		if (!this.inventory) {
 			this.inventory = {}
 		}
+
+		this.game = game
 
 		this.audioListener = audioListener
 		this.add(this.audioListener)
@@ -87,6 +89,8 @@ export class Player extends Actor {
 				const forward = this.velocity.clone().normalize().multiplyScalar(2/3)
 				this.warpToPosition = obj.destination.clone().add(forward)
 				return false
+			} else if (obj instanceof WarpGate) {
+				this.game.changeMap(obj.value)
 			}
 		}
 		return true
