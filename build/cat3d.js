@@ -42579,9 +42579,14 @@ class Game {
 	}
 
 	changeMap(name) {
+		if (this.loading) {
+			return
+		}
+
 		// render to first FBO
 		this.renderer.render(this.scene, this.player.camera, this.fbo1, true);
 		this.player.frozen = true;
+		this.loading = true;
 
 		const that = this;
 		this.loadMap(name).then(map => {
@@ -42593,6 +42598,7 @@ class Game {
 			that.scene.add(that.player);
 			that.player.position.copy(map.playerStart.position);
 			that.player.direction = map.playerStart.direction;
+			that.loading = false;
 		});
 	}
 
