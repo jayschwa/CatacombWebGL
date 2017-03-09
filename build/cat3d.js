@@ -42466,7 +42466,7 @@ class Game {
 		this.location = location;
 
 		const globalState = JSON.parse(localStorage.getItem(this.name) || "{}");
-		this.fromSave = "gameTime" in globalState;
+		this.fromSave = "mapName" in globalState && globalState.mapName == mapOverride;
 
 		this.clock = new Clock$1(globalState.gameTime);
 		this.mapName = mapOverride || globalState.mapName;
