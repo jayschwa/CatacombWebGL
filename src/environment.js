@@ -75,14 +75,13 @@ export class ExplodingWall extends Entity {
 
 		this.add(...createWallMeshes(mergeWallGeometry(this.wall, this.faces)))
 
-		const geometry = new BoxBufferGeometry(1, 1, 1)
-		geometry.rotateX(Math.PI / 2)
+		const geometry = new BoxBufferGeometry(1, 1, 1).rotateX(Math.PI / 2)
+		const material = new MeshBasicMaterial({transparent: true})
+		this.box = new Mesh(geometry, material)
 		textureCache.get("walls/exploding.png", texture => {
 			this.box.material.map = new SpriteSheetProxy(texture, 64, 3)
 			this.box.material.needsUpdate = true
 		})
-		const material = new MeshBasicMaterial({transparent: true})
-		this.box = new Mesh(geometry, material)
 
 		this.adjacent = []
 		this.burnDuration = 0.25
