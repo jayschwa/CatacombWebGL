@@ -41,6 +41,8 @@ export class Enemy extends Actor {
 			} else {
 				this.isEthereal = true
 				this.startAnimation("death", time)
+				this.moveDestination = null
+				this.velocity.set(0, 0, 0)
 				if (this.thinkInterval) {
 					clearInterval(this.thinkInterval)
 				}
