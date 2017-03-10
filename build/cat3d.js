@@ -41311,7 +41311,7 @@ class Enemy extends Actor {
 		this.raycaster.set(this.position, path.normalize());
 		this.raycaster.far = distance;
 		let collisions = this.raycaster.intersectObject(this.maze, true);
-		collisions = collisions.filter(c => !(this.includes(c.object) || this.target.includes(c.object)));
+		collisions = collisions.filter(c => !(c.object instanceof Sprite));
 		if (collisions.length) {
 			// sight to target is obstructed
 			if (this.moveDestination) {
