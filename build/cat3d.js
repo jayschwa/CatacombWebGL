@@ -41343,7 +41343,7 @@ class Enemy extends Actor {
 
 			const delta = time - this.animStartTime;
 			const animFrameInfo = this.animations[this.anim];
-			let frameNum = Math.floor(delta * this.speed);
+			let frameNum = Math.floor(delta * this.speed * 2);
 
 			if (frameNum >= animFrameInfo[1]) {
 				if (this.anim == "death") {
@@ -41367,7 +41367,7 @@ class Enemy extends Actor {
 
 class Orc extends Enemy {
 	constructor(props) {
-		super("sprites/orc.png", props, 3, 0.5, 5, {
+		super("sprites/orc.png", props, 3, 0.5, 2, {
 			frameWidth: 51,
 			walkFrames: 4,
 			attackFrames: 2,
@@ -41389,7 +41389,7 @@ class Troll extends Enemy {
 
 class Bat extends Enemy {
 	constructor(props) {
-		super("sprites/bat.png", props, 1, 0.5, 10, {
+		super("sprites/bat.png", props, 1, 0.5, 5, {
 			frameWidth: 40,
 			walkFrames: 4,
 			attackFrames: 0,
@@ -41418,7 +41418,7 @@ class Mage extends Enemy {
 
 class Demon extends Enemy {
 	constructor(props) {
-		super("sprites/demon.png", props, 50, 0.75, 5, {
+		super("sprites/demon.png", props, 50, 0.75, 1.5, {
 			frameWidth: 64,
 			walkFrames: 4,
 			attackFrames: 3,
