@@ -1,4 +1,4 @@
-import { Sprite, SpriteMaterial } from "three"
+import { Raycaster, Sprite, SpriteMaterial } from "three"
 import { Actor } from "./entities"
 import { SpriteSheetProxy, textureCache } from "./utils"
 
@@ -41,6 +41,9 @@ export class Enemy extends Actor {
 			} else {
 				this.isEthereal = true
 				this.startAnimation("death", time)
+				if (this.thinkInterval) {
+					clearInterval(this.thinkInterval)
+				}
 			}
 		}
 	}
@@ -52,7 +55,50 @@ export class Enemy extends Actor {
 		}
 	}
 
-	update(time) {
+	hunt(target, maze) {
+		if (this.anim == "death") {
+			return
+		}
+		this.target = target
+		this.maze = maze
+		this.raycaster = new Raycaster()
+		this.sightTarget()
+		this.thinkInterval = window.setInterval(this.sightTarget.bind(this), 1000)
+	}
+
+	sightTarget() {
+		const path = this.target.position.clone().sub(this.position)
+		const distance = path.length()
+		this.raycaster.set(this.position, path.normalize())
+		this.raycaster.far = distance
+		let collisions = this.raycaster.intersectObject(this.maze, true)
+		collisions = collisions.filter(c => !(this.includes(c.object) || this.target.includes(c.object)))
+		if (collisions.length) {
+			// sight to target is obstructed
+			if (this.moveDestination) {
+				this.moveDestination = this.moveDestination.clone()
+			}
+		} else {
+			console.log("player sighted")
+			this.moveDestination = this.target.position
+		}
+	}
+
+	update(time, maze) {
+		if (this.moveDestination) {
+			this.velocity.copy(this.moveDestination).sub(this.position).clampLength(0, this.speed)
+			let arrivedDistance = this.size
+			if (this.target) {
+				arrivedDistance += this.target.size
+			}
+			if (this.velocity.length() < arrivedDistance) {
+				this.moveDestination = null
+				this.velocity.set(0, 0, 0)
+			}
+		}
+
+		super.update(time, maze)
+		
 		if (this.texture) {
 			if (!this.animStartTime) {
 				this.startAnimation(this.anim, time)
@@ -69,13 +115,8 @@ export class Enemy extends Actor {
 					}
 					frameNum = animFrameInfo[1]-1
 				} else if (this.anim == "move") {
-					if (Math.random() < 1/3) {
-						this.startAnimation("attack", time)
-						return this.update(time)
-					} else {
-						this.animStartTime = time
-						frameNum = frameNum % animFrameInfo[1]
-					}
+					this.animStartTime = time
+					frameNum = frameNum % animFrameInfo[1]
 				} else {
 					this.startAnimation("move", time)
 					return this.update(time)
