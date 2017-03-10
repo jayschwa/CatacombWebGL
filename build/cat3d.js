@@ -41278,6 +41278,8 @@ class Enemy extends Actor {
 			} else {
 				this.isEthereal = true;
 				this.startAnimation("death", time);
+				this.moveDestination = null;
+				this.velocity.set(0, 0, 0);
 				if (this.thinkInterval) {
 					clearInterval(this.thinkInterval);
 				}
@@ -41300,7 +41302,7 @@ class Enemy extends Actor {
 		this.maze = maze;
 		this.raycaster = new Raycaster();
 		this.sightTarget();
-		this.thinkInterval = window.setInterval(this.sightTarget.bind(this), 1000);
+		this.thinkInterval = window.setInterval(this.sightTarget.bind(this), 250);
 	}
 
 	sightTarget() {

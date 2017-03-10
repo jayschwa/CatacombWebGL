@@ -65,7 +65,7 @@ export class Enemy extends Actor {
 		this.maze = maze
 		this.raycaster = new Raycaster()
 		this.sightTarget()
-		this.thinkInterval = window.setInterval(this.sightTarget.bind(this), 1000)
+		this.thinkInterval = window.setInterval(this.sightTarget.bind(this), 250)
 	}
 
 	sightTarget() {
