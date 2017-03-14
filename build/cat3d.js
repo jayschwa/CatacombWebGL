@@ -41318,7 +41318,6 @@ class Enemy extends Actor {
 				this.moveDestination = this.moveDestination.clone();
 			}
 		} else {
-			console.log("player sighted");
 			this.moveDestination = this.target.position;
 		}
 	}
