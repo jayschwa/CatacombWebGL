@@ -41061,9 +41061,11 @@ class Actor extends Entity {
 		}
 
 		if (this.velocity.lengthSq() && !this.frozen) {
+			let loops = 0;
 			let collided = false;
 			const positionDelta = this.velocity.clone().multiplyScalar(timeDelta);
 			do {
+				loops++;
 				collided = false;
 				const magnitude = positionDelta.length();
 				const direction = positionDelta.clone().normalize();
@@ -41097,7 +41099,11 @@ class Actor extends Entity {
 						}
 					}
 				}
-			} while(collided)
+			} while(collided && loops < 10)
+
+			if (loops >= 10) {
+				console.warn("aborted collision loop after", loops, "loops");  // FIXME
+			}
 
 			this.position.add(positionDelta);
 		}
