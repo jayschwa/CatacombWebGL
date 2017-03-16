@@ -41289,13 +41289,13 @@ class Enemy extends Actor {
 	onDamage(time, damage) {
 		if (this.anim != "death") {
 			this.health -= damage;
+			this.velocity.set(0, 0, 0);
 			if (this.health > 0) {
 				this.startAnimation("pain", time);
 			} else {
 				this.isEthereal = true;
 				this.startAnimation("death", time);
 				this.moveDestination = null;
-				this.velocity.set(0, 0, 0);
 				if (this.thinkInterval) {
 					this.thinkInterval = clearInterval(this.thinkInterval);
 				}
@@ -41347,7 +41347,7 @@ class Enemy extends Actor {
 	}
 
 	update(time, maze) {
-		if (this.moveDestination) {
+		if (this.moveDestination && this.anim == "move") {
 			this.velocity.copy(this.moveDestination).sub(this.position).clampLength(0, this.speed);
 			let arrivedDistance = this.size;
 			if (this.target) {
@@ -41356,6 +41356,7 @@ class Enemy extends Actor {
 			if (this.velocity.length() < arrivedDistance) {
 				this.moveDestination = null;
 				this.velocity.set(0, 0, 0);
+				this.startAnimation("attack");
 			}
 		}
 

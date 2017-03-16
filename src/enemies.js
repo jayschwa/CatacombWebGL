@@ -94,7 +94,7 @@ export class Enemy extends Actor {
 	}
 
 	update(time, maze) {
-		if (this.moveDestination) {
+		if (this.moveDestination && this.anim == "move") {
 			this.velocity.copy(this.moveDestination).sub(this.position).clampLength(0, this.speed)
 			let arrivedDistance = this.size
 			if (this.target) {
@@ -103,6 +103,7 @@ export class Enemy extends Actor {
 			if (this.velocity.length() < arrivedDistance) {
 				this.moveDestination = null
 				this.velocity.set(0, 0, 0)
+				this.startAnimation("attack")
 			}
 		}
 
