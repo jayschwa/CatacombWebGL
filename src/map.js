@@ -32,16 +32,16 @@ export class Map {
 	}
 
 	getTile(position) {
-		try {
-			const symbol = this.layout[this.height-1-position.y][position.x]
-			if (symbol == " ") {
-				return {type: "floor"}
-			} else {
-				return this.legend[symbol]
-			}
-		} catch (ex) {
-			// FIXME: this should not swallow exceptions related to legend lookups
+		const row = this.height-1-Math.round(position.y)
+		const col = Math.round(position.x)
+		if (row < 0 || row >= this.height || col < 0 || col >= this.width) {
 			return null
+		}
+		const symbol = this.layout[row][col]
+		if (symbol == " ") {
+			return {type: "floor"}
+		} else {
+			return this.legend[symbol]
 		}
 	}
 

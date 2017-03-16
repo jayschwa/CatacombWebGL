@@ -191,8 +191,7 @@ export class Game {
 			this.renderer.render(this.scene, this.player.camera)
 		}
 
-		const pos = this.player.position
-		const tile = this.map.getTile(Math.round(pos.x), Math.round(pos.y))
+		const tile = this.map.getTile(this.player.position)
 		if (tile && tile.type == "floor") {
 			this.location.innerText = tile.value || ""
 		} else {
