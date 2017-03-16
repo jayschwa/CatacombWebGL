@@ -1,6 +1,7 @@
 import * as THREE from "three"
 import { Clock } from "./clock"
-import { Map, constructLayout, spawnEntities } from "./map"
+import { Enemy } from "./enemies"
+import { Map } from "./map"
 import { Player } from "./player"
 import { Transition } from "./transition"
 import { SpriteSheetProxy, textureCache } from "./utils"
@@ -225,6 +226,9 @@ export class Game {
 		const that = this
 		this.loadMap(name).then(map => {
 			that.save()
+
+			that.scene.traverse(obj => obj.dispose && obj.dispose())
+
 			that.transitionStart = that.clock.getElapsedTime()
 			that.mapName = name
 			that.map = map
@@ -232,7 +236,16 @@ export class Game {
 			that.scene.add(that.player)
 			that.player.position.copy(map.playerStart.position)
 			that.player.direction = map.playerStart.direction
+			that.huntPlayer()
 			that.loading = false
+		})
+	}
+
+	huntPlayer() {
+		this.scene.traverse(obj => {
+			if ("hunt" in obj) {
+				obj.hunt(this.player, this.scene)
+			}
 		})
 	}
 
@@ -310,6 +323,7 @@ export class Game {
 				that.player.position.copy(map.playerStart.position)
 				that.player.direction = map.playerStart.direction
 			}
+			that.huntPlayer()
 			that.play()
 		})
 	}

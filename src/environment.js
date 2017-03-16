@@ -35,6 +35,12 @@ export class Door extends Entity {
 		})
 	}
 
+	dispose() {
+		this.mesh.geometry.dispose()
+		this.mesh.material.dispose()
+		this.mesh.material.map.dispose()
+	}
+
 	getState() {
 		return null
 	}
@@ -73,7 +79,8 @@ export class ExplodingWall extends Entity {
 
 		this.removeFunc = removeFunc
 
-		this.add(...createWallMeshes(mergeWallGeometry(this.wall, this.faces)))
+		this.walls = createWallMeshes(mergeWallGeometry(this.wall, this.faces))
+		this.add(...this.walls)
 
 		const geometry = new BoxBufferGeometry(1, 1, 1).rotateX(Math.PI / 2)
 		const material = new MeshBasicMaterial({transparent: true})
@@ -86,6 +93,13 @@ export class ExplodingWall extends Entity {
 		this.adjacent = []
 		this.burnDuration = 0.25
 		this.spreadDuration = this.burnDuration / 2
+	}
+
+	dispose() {
+		this.box.geometry.dispose()
+		this.box.material.dispose()
+		this.box.material.map.dispose()
+		this.walls.forEach(w => w.dispose())
 	}
 
 	ignite(time) {

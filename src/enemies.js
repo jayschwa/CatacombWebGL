@@ -1,4 +1,4 @@
-import { Sprite, SpriteMaterial } from "three"
+import { Raycaster, Sprite, SpriteMaterial } from "three"
 import { Actor } from "./entities"
 import { SpriteSheetProxy, textureCache } from "./utils"
 
@@ -41,7 +41,20 @@ export class Enemy extends Actor {
 			} else {
 				this.isEthereal = true
 				this.startAnimation("death", time)
+				this.moveDestination = null
+				this.velocity.set(0, 0, 0)
+				if (this.thinkInterval) {
+					this.thinkInterval = clearInterval(this.thinkInterval)
+				}
 			}
+		}
+	}
+
+	dispose() {
+		this.sprite.material.dispose()
+		this.texture.dispose()
+		if (this.thinkInterval) {
+			this.thinkInterval = clearInterval(this.thinkInterval)
 		}
 	}
 
@@ -52,7 +65,49 @@ export class Enemy extends Actor {
 		}
 	}
 
-	update(time) {
+	hunt(target, maze) {
+		if (this.anim == "death") {
+			return
+		}
+		this.target = target
+		this.maze = maze
+		this.raycaster = new Raycaster()
+		this.sightTarget()
+		this.thinkInterval = window.setInterval(this.sightTarget.bind(this), 250)
+	}
+
+	sightTarget() {
+		const path = this.target.position.clone().sub(this.position)
+		const distance = path.length()
+		this.raycaster.set(this.position, path.normalize())
+		this.raycaster.far = distance
+		let collisions = this.raycaster.intersectObject(this.maze, true)
+		collisions = collisions.filter(c => !(c.object instanceof Sprite))
+		if (collisions.length) {
+			// sight to target is obstructed
+			if (this.moveDestination) {
+				this.moveDestination = this.moveDestination.clone()
+			}
+		} else {
+			this.moveDestination = this.target.position
+		}
+	}
+
+	update(time, maze) {
+		if (this.moveDestination) {
+			this.velocity.copy(this.moveDestination).sub(this.position).clampLength(0, this.speed)
+			let arrivedDistance = this.size
+			if (this.target) {
+				arrivedDistance += this.target.size
+			}
+			if (this.velocity.length() < arrivedDistance) {
+				this.moveDestination = null
+				this.velocity.set(0, 0, 0)
+			}
+		}
+
+		super.update(time, maze)
+		
 		if (this.texture) {
 			if (!this.animStartTime) {
 				this.startAnimation(this.anim, time)
@@ -60,7 +115,7 @@ export class Enemy extends Actor {
 
 			const delta = time - this.animStartTime
 			const animFrameInfo = this.animations[this.anim]
-			let frameNum = Math.floor(delta * this.speed)
+			let frameNum = Math.floor(delta * this.speed * 2)
 
 			if (frameNum >= animFrameInfo[1]) {
 				if (this.anim == "death") {
@@ -69,13 +124,8 @@ export class Enemy extends Actor {
 					}
 					frameNum = animFrameInfo[1]-1
 				} else if (this.anim == "move") {
-					if (Math.random() < 1/3) {
-						this.startAnimation("attack", time)
-						return this.update(time)
-					} else {
-						this.animStartTime = time
-						frameNum = frameNum % animFrameInfo[1]
-					}
+					this.animStartTime = time
+					frameNum = frameNum % animFrameInfo[1]
 				} else {
 					this.startAnimation("move", time)
 					return this.update(time)
@@ -89,7 +139,7 @@ export class Enemy extends Actor {
 
 export class Orc extends Enemy {
 	constructor(props) {
-		super("sprites/orc.png", props, 3, 0.5, 5, {
+		super("sprites/orc.png", props, 3, 0.5, 2, {
 			frameWidth: 51,
 			walkFrames: 4,
 			attackFrames: 2,
@@ -111,7 +161,7 @@ export class Troll extends Enemy {
 
 export class Bat extends Enemy {
 	constructor(props) {
-		super("sprites/bat.png", props, 1, 0.5, 10, {
+		super("sprites/bat.png", props, 1, 0.5, 5, {
 			frameWidth: 40,
 			walkFrames: 4,
 			attackFrames: 0,
@@ -140,7 +190,7 @@ export class Mage extends Enemy {
 
 export class Demon extends Enemy {
 	constructor(props) {
-		super("sprites/demon.png", props, 50, 0.75, 5, {
+		super("sprites/demon.png", props, 50, 0.75, 1.5, {
 			frameWidth: 64,
 			walkFrames: 4,
 			attackFrames: 3,
