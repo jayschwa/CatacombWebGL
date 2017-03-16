@@ -28,7 +28,13 @@ export function createWallMeshes(geometryDict) {
 		const texture = textureCache.get("walls/" + name + ".png")
 		texture.anisotropy = 8
 		const material = new CustomMaterial({map: texture})
-		return new Mesh(geometry, material)
+		const mesh = new Mesh(geometry, material)
+		mesh.dispose = function() {
+			geometry.dispose()
+			material.dispose()
+			texture.dispose()
+		}
+		return mesh
 	})
 }
 

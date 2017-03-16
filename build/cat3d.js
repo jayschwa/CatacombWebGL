@@ -41161,6 +41161,11 @@ class Fireball extends Actor {
 		});
 	}
 
+	dispose() {
+		this.sprite.material.dispose();
+		this.spriteSheet.dispose();
+	}
+
 	onCollision(collision, time) {
 		if (!this.removeAtTime) {
 			let damagedSomething = false;
@@ -41215,6 +41220,11 @@ class Portal extends Entity {
 			this.sprite = new Sprite(new SpriteMaterial({fog: true, map: this.spritesheet}));
 			this.add(this.sprite);
 		});
+	}
+
+	dispose() {
+		this.sprite.material.dispose();
+		this.spritesheet.dispose();
 	}
 
 	update(time) {
@@ -41287,9 +41297,17 @@ class Enemy extends Actor {
 				this.moveDestination = null;
 				this.velocity.set(0, 0, 0);
 				if (this.thinkInterval) {
-					clearInterval(this.thinkInterval);
+					this.thinkInterval = clearInterval(this.thinkInterval);
 				}
 			}
+		}
+	}
+
+	dispose() {
+		this.sprite.material.dispose();
+		this.texture.dispose();
+		if (this.thinkInterval) {
+			this.thinkInterval = clearInterval(this.thinkInterval);
 		}
 	}
 
@@ -41667,7 +41685,13 @@ function createWallMeshes(geometryDict) {
 		const texture = textureCache.get("walls/" + name + ".png");
 		texture.anisotropy = 8;
 		const material = new CustomMaterial({map: texture});
-		return new Mesh(geometry, material)
+		const mesh = new Mesh(geometry, material);
+		mesh.dispose = function() {
+			geometry.dispose();
+			material.dispose();
+			texture.dispose();
+		};
+		return mesh
 	})
 }
 
@@ -41719,6 +41743,12 @@ class Door extends Entity {
 		});
 	}
 
+	dispose() {
+		this.mesh.geometry.dispose();
+		this.mesh.material.dispose();
+		this.mesh.material.map.dispose();
+	}
+
 	getState() {
 		return null
 	}
@@ -41757,7 +41787,8 @@ class ExplodingWall extends Entity {
 
 		this.removeFunc = removeFunc;
 
-		this.add(...createWallMeshes(mergeWallGeometry(this.wall, this.faces)));
+		this.walls = createWallMeshes(mergeWallGeometry(this.wall, this.faces));
+		this.add(...this.walls);
 
 		const geometry = new BoxBufferGeometry(1, 1, 1).rotateX(Math.PI / 2);
 		const material = new MeshBasicMaterial({transparent: true});
@@ -41770,6 +41801,13 @@ class ExplodingWall extends Entity {
 		this.adjacent = [];
 		this.burnDuration = 0.25;
 		this.spreadDuration = this.burnDuration / 2;
+	}
+
+	dispose() {
+		this.box.geometry.dispose();
+		this.box.material.dispose();
+		this.box.material.map.dispose();
+		this.walls.forEach(w => w.dispose());
 	}
 
 	ignite(time) {
@@ -41821,6 +41859,7 @@ class Item extends Entity {
 			this.add(this.pickupSound);
 		});
 		textureCache.get("sprites/items.png", texture => {
+			this.texture = texture;
 			this.spritesheet = new SpriteSheetProxy(texture, 40, 11);
 			this.spritesheet.setFrame(this.itemFrames[0]);
 			this.sprite = new Sprite(new SpriteMaterial({fog: true, map: this.spritesheet}));
@@ -41828,6 +41867,11 @@ class Item extends Entity {
 			this.sprite.translateZ(-(1-ITEM_SCALE)/2);
 			this.add(this.sprite);
 		});
+	}
+
+	dispose() {
+		this.sprite.material.dispose();
+		this.texture.dispose();
 	}
 
 	pickup() {
@@ -42639,6 +42683,9 @@ class Game {
 		const that = this;
 		this.loadMap(name).then(map => {
 			that.save();
+
+			that.scene.traverse(obj => obj.dispose && obj.dispose());
+
 			that.transitionStart = that.clock.getElapsedTime();
 			that.mapName = name;
 			that.map = map;

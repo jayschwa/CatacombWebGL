@@ -44,9 +44,17 @@ export class Enemy extends Actor {
 				this.moveDestination = null
 				this.velocity.set(0, 0, 0)
 				if (this.thinkInterval) {
-					clearInterval(this.thinkInterval)
+					this.thinkInterval = clearInterval(this.thinkInterval)
 				}
 			}
+		}
+	}
+
+	dispose() {
+		this.sprite.material.dispose()
+		this.texture.dispose()
+		if (this.thinkInterval) {
+			this.thinkInterval = clearInterval(this.thinkInterval)
 		}
 	}
 

@@ -16,6 +16,7 @@ export class Item extends Entity {
 			this.add(this.pickupSound)
 		})
 		textureCache.get("sprites/items.png", texture => {
+			this.texture = texture
 			this.spritesheet = new SpriteSheetProxy(texture, 40, 11)
 			this.spritesheet.setFrame(this.itemFrames[0])
 			this.sprite = new Sprite(new SpriteMaterial({fog: true, map: this.spritesheet}))
@@ -23,6 +24,11 @@ export class Item extends Entity {
 			this.sprite.translateZ(-(1-ITEM_SCALE)/2)
 			this.add(this.sprite)
 		})
+	}
+
+	dispose() {
+		this.sprite.material.dispose()
+		this.texture.dispose()
 	}
 
 	pickup() {

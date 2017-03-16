@@ -1,7 +1,7 @@
 import * as THREE from "three"
 import { Clock } from "./clock"
 import { Enemy } from "./enemies"
-import { Map, constructLayout, spawnEntities } from "./map"
+import { Map } from "./map"
 import { Player } from "./player"
 import { Transition } from "./transition"
 import { SpriteSheetProxy, textureCache } from "./utils"
@@ -226,6 +226,9 @@ export class Game {
 		const that = this
 		this.loadMap(name).then(map => {
 			that.save()
+
+			that.scene.traverse(obj => obj.dispose && obj.dispose())
+
 			that.transitionStart = that.clock.getElapsedTime()
 			that.mapName = name
 			that.map = map

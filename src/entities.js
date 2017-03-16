@@ -165,6 +165,11 @@ export class Fireball extends Actor {
 		})
 	}
 
+	dispose() {
+		this.sprite.material.dispose()
+		this.spriteSheet.dispose()
+	}
+
 	onCollision(collision, time) {
 		if (!this.removeAtTime) {
 			let damagedSomething = false
@@ -219,6 +224,11 @@ export class Portal extends Entity {
 			this.sprite = new Sprite(new SpriteMaterial({fog: true, map: this.spritesheet}))
 			this.add(this.sprite)
 		})
+	}
+
+	dispose() {
+		this.sprite.material.dispose()
+		this.spritesheet.dispose()
 	}
 
 	update(time) {
