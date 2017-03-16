@@ -178,7 +178,9 @@ export class Player extends Actor {
 			KeyS: this.moveBackward.bind(this),
 			KeyD: this.moveRight.bind(this),
 
-			ShiftLeft: this.sprint.bind(this)
+			ShiftLeft: this.sprint.bind(this),
+
+			Space: this.shoot.bind(this)
 		}
 	}
 
