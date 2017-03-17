@@ -41260,7 +41260,10 @@ class Enemy extends Actor {
 		super(props, size, speed);
 		this.persistedProps.push("anim", "animStartTime", "health");
 
-		this.anim = this.anim || "move";
+		if (this.anim === undefined) {
+			this.anim = "move";
+			this.animStartTime = -Math.random(); // Prevent enemies from appearing in lockstep
+		}
 		if (this.health === undefined) {
 			this.health = health;
 		}
@@ -41348,17 +41351,13 @@ class Enemy extends Actor {
 			if (this.velocity.length() < arrivedDistance) {
 				this.moveDestination = null;
 				this.velocity.set(0, 0, 0);
-				this.startAnimation("attack");
+				this.startAnimation("attack", time);
 			}
 		}
 
 		super.update(time, maze);
 		
 		if (this.texture) {
-			if (!this.animStartTime) {
-				this.startAnimation(this.anim, time);
-			}
-
 			const delta = time - this.animStartTime;
 			const animFrameInfo = this.animations[this.anim];
 			let frameNum = Math.floor(delta * animFrameInfo.speed);
