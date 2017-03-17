@@ -41267,18 +41267,10 @@ class Enemy extends Actor {
 		this.isEthereal = this.health <= 0;
 		this.sprite = new Sprite(new SpriteMaterial({fog: true}));
 
-		const w = spriteInfo.walkFrames;
-		const a = spriteInfo.attackFrames;
-		const d = spriteInfo.deathFrames;
-		this.animations = {
-			move: [0, w],
-			attack: [w, a],
-			pain: [w+a, 1],
-			death: [w+a, d]
-		};
+		this.animations = spriteInfo.animations;
+		const totalFrames = Object.values(this.animations).map(a => a.start + a.length).reduce(Math.max, 0);
 
 		textureCache.get(sprite, texture => {
-			const totalFrames = spriteInfo.walkFrames + spriteInfo.attackFrames + spriteInfo.deathFrames;
 			this.texture = new SpriteSheetProxy(texture, spriteInfo.frameWidth, totalFrames);
 			this.sprite.material.map = this.texture;
 			this.sprite.material.needsUpdate = true;
@@ -41369,24 +41361,24 @@ class Enemy extends Actor {
 
 			const delta = time - this.animStartTime;
 			const animFrameInfo = this.animations[this.anim];
-			let frameNum = Math.floor(delta * this.speed * 2);
+			let frameNum = Math.floor(delta * animFrameInfo.speed);
 
-			if (frameNum >= animFrameInfo[1]) {
+			if (frameNum >= animFrameInfo.length) {
 				if (this.anim == "death") {
 					if (this.removeDead) {
 						this.shouldRemove = true;
 					}
-					frameNum = animFrameInfo[1]-1;
+					frameNum = animFrameInfo.length-1;
 				} else if (this.anim == "move") {
 					this.animStartTime = time;
-					frameNum = frameNum % animFrameInfo[1];
+					frameNum = frameNum % animFrameInfo.length;
 				} else {
 					this.startAnimation("move", time);
 					return this.update(time)
 				}
 			}
 
-			this.texture.setFrame(animFrameInfo[0] + frameNum);
+			this.texture.setFrame(animFrameInfo.start + frameNum);
 		}
 	}
 }
@@ -41395,9 +41387,12 @@ class Orc extends Enemy {
 	constructor(props) {
 		super("sprites/orc.png", props, 3, 0.5, 2, {
 			frameWidth: 51,
-			walkFrames: 4,
-			attackFrames: 2,
-			deathFrames: 4
+			animations: {
+				move:   {start: 0, length: 4, speed: 4},
+				attack: {start: 4, length: 2, speed: 2},
+				pain:   {start: 6, length: 1, speed: 4},
+				death:  {start: 6, length: 4, speed: 6}
+			}
 		});
 	}
 }
@@ -41406,9 +41401,12 @@ class Troll extends Enemy {
 	constructor(props) {
 		super("sprites/troll.png", props, 10, 0.75, 5, {
 			frameWidth: 64,
-			walkFrames: 4,
-			attackFrames: 3,
-			deathFrames: 4
+			animations: {
+				move:   {start: 0, length: 4, speed: 6},
+				attack: {start: 4, length: 3, speed: 5},
+				pain:   {start: 7, length: 1, speed: 4},
+				death:  {start: 7, length: 4, speed: 6}
+			}
 		});
 	}
 }
@@ -41417,11 +41415,11 @@ class Bat extends Enemy {
 	constructor(props) {
 		super("sprites/bat.png", props, 1, 0.5, 5, {
 			frameWidth: 40,
-			walkFrames: 4,
-			attackFrames: 0,
-			deathFrames: 2
+			animations: {
+				move:   {start: 0, length: 4, speed: 16},
+				death:  {start: 4, length: 2, speed: 8}
+			}
 		});
-		delete this.animations.pain;
 		this.sprite.scale.x = 40/64;
 		const scale = 0.8;
 		this.sprite.scale.multiplyScalar(scale);
@@ -41432,11 +41430,14 @@ class Bat extends Enemy {
 
 class Mage extends Enemy {
 	constructor(props) {
-		super("sprites/mage.png", props, 5, 0.5, 5, {
+		super("sprites/mage.png", props, 5, 0.5, 1.5, {
 			frameWidth: 56,
-			walkFrames: 2,
-			attackFrames: 1,
-			deathFrames: 3
+			animations: {
+				move:   {start: 0, length: 2, speed: 3},
+				attack: {start: 2, length: 1, speed: 3},
+				pain:   {start: 3, length: 1, speed: 2},
+				death:  {start: 3, length: 3, speed: 7}
+			}
 		});
 		this.sprite.scale.x = 56/64;
 	}
@@ -41446,9 +41447,12 @@ class Demon extends Enemy {
 	constructor(props) {
 		super("sprites/demon.png", props, 50, 0.75, 1.5, {
 			frameWidth: 64,
-			walkFrames: 4,
-			attackFrames: 3,
-			deathFrames: 4
+			animations: {
+				move:   {start: 0, length: 4, speed: 3.5},
+				attack: {start: 4, length: 3, speed: 4},
+				pain:   {start: 7, length: 1, speed: 4},
+				death:  {start: 7, length: 4, speed: 6}
+			}
 		});
 	}
 }
@@ -41457,9 +41461,12 @@ class Nemesis extends Enemy {
 	constructor(props) {
 		super("sprites/nemesis.png", props, 100, 0.5, 5, {
 			frameWidth: 64,
-			walkFrames: 2,
-			attackFrames: 1,
-			deathFrames: 7
+			animations: {
+				move:   {start: 0, length: 2, speed: 10},
+				attack: {start: 2, length: 1, speed: 2},
+				pain:   {start: 3, length: 1, speed: 4},
+				death:  {start: 3, length: 7, speed: 8}
+			}
 		});
 	}
 }
