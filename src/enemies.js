@@ -1,11 +1,12 @@
-import { Raycaster, Sprite, SpriteMaterial } from "three"
-import { Actor } from "./entities"
+import { PositionalAudio, Raycaster, Sprite, SpriteMaterial } from "three"
+import { audioListener, audioLoader } from "./audio"
+import { Actor, Fireball } from "./entities"
 import { SpriteSheetProxy, textureCache } from "./utils"
 
 export class Enemy extends Actor {
-	constructor(sprite, props, health, size, speed, spriteInfo) {
+	constructor(sprite, props, health, size, speed, attackInterval, spriteInfo) {
 		super(props, size, speed)
-		this.persistedProps.push("anim", "animStartTime", "health")
+		this.persistedProps.push("anim", "animStartTime", "health", "lastAttackTime")
 
 		if (this.anim === undefined) {
 			this.anim = "move"
@@ -14,8 +15,13 @@ export class Enemy extends Actor {
 		if (this.health === undefined) {
 			this.health = health
 		}
+		if (this.lastAttackTime === undefined) {
+			this.lastAttackTime = 0
+		}
+		this.lastThinkTime = Math.random()
 		this.isEthereal = this.health <= 0
 		this.sprite = new Sprite(new SpriteMaterial({fog: true}))
+		this.attackInterval = attackInterval
 
 		this.animations = spriteInfo.animations
 		const totalFrames = Object.values(this.animations).map(a => a.start + a.length).reduce(Math.max, 0)
@@ -26,6 +32,13 @@ export class Enemy extends Actor {
 			this.sprite.material.needsUpdate = true
 			this.add(this.sprite)
 		})
+
+		this.raycaster = new Raycaster()
+	}
+
+	attack(position, time) {
+		this.startAnimation("attack", time)
+		this.lastAttackTime = time
 	}
 
 	onDamage(time, damage) {
@@ -38,19 +51,13 @@ export class Enemy extends Actor {
 				this.isEthereal = true
 				this.startAnimation("death", time)
 				this.moveDestination = null
-				if (this.thinkInterval) {
-					this.thinkInterval = clearInterval(this.thinkInterval)
-				}
 			}
 		}
 	}
 
 	dispose() {
-		this.sprite.material.dispose()
+		this.sprite.material.dispose
 		this.texture.dispose()
-		if (this.thinkInterval) {
-			this.thinkInterval = clearInterval(this.thinkInterval)
-		}
 	}
 
 	startAnimation(anim, time) {
@@ -66,9 +73,6 @@ export class Enemy extends Actor {
 		}
 		this.target = target
 		this.maze = maze
-		this.raycaster = new Raycaster()
-		this.sightTarget()
-		this.thinkInterval = window.setInterval(this.sightTarget.bind(this), 250)
 	}
 
 	sightTarget() {
@@ -78,17 +82,27 @@ export class Enemy extends Actor {
 		this.raycaster.far = distance
 		let collisions = this.raycaster.intersectObject(this.maze, true)
 		collisions = collisions.filter(c => !(c.object instanceof Sprite))
-		if (collisions.length) {
+		if (collisions.length && this.targetLocked) {
 			// sight to target is obstructed
-			if (this.moveDestination) {
-				this.moveDestination = this.moveDestination.clone()
-			}
-		} else {
-			this.moveDestination = this.target.position
+			this.targetPosition = this.targetPosition.clone()
+			this.targetLocked = false
+		} else if (!collisions.length && !this.targetLocked) {
+			this.targetPosition = this.target.position
+			this.targetLocked = true
 		}
+		return this.targetLocked
 	}
 
 	update(time, maze) {
+		if (this.animStartTime === undefined) {
+			this.startAnimation(this.anim, time)
+		}
+
+		if (this.target && time > this.lastThinkTime + 0.25) {
+			this.think(time)
+			this.lastThinkTime = time
+		}
+
 		if (this.moveDestination && this.anim == "move") {
 			this.velocity.copy(this.moveDestination).sub(this.position).clampLength(0, this.speed)
 			let arrivedDistance = this.size
@@ -98,8 +112,9 @@ export class Enemy extends Actor {
 			if (this.velocity.length() < arrivedDistance) {
 				this.moveDestination = null
 				this.velocity.set(0, 0, 0)
-				this.startAnimation("attack", time)
 			}
+		} else {
+			this.velocity.set(0, 0, 0)
 		}
 
 		super.update(time, maze)
@@ -129,9 +144,61 @@ export class Enemy extends Actor {
 	}
 }
 
-export class Orc extends Enemy {
+export class MeleeEnemy extends Enemy {
+	think(time) {
+		if (this.sightTarget()) {
+			const delta = time - this.lastAttackTime
+			const reach = this.size + this.target.size
+			if (this.position.distanceTo(this.targetPosition) < reach && this.anim == "move" && delta >= this.attackInterval) {
+				this.attack(this.targetPosition, time)
+			} else {
+				this.moveDestination = this.targetPosition
+			}
+		} else {
+			this.moveDestination = this.targetPosition
+		}
+	}
+}
+
+export class RangedEnemy extends Enemy {
+	constructor(...args) {
+		super(...args)
+		audioLoader.load("sounds/adlib/shoot.wav", buffer => {
+			this.shootSound = new PositionalAudio(audioListener).setBuffer(buffer)
+			this.add(this.shootSound)
+		})
+	}
+
+	attack(position, time) {
+		super.attack(position, time)
+		const direction = position.clone().sub(this.position).normalize()
+		const fireball = new Fireball({
+			type: "Fireball",
+			position: this.position.clone().addScaledVector(direction, 2/3),
+			direction: direction,
+			isBig: false
+		})
+		this.parent.add(fireball)
+		if (this.shootSound) {
+			this.shootSound.play()
+		}
+	}
+
+	think(time) {
+		if (this.sightTarget()) {
+			const delta = time - this.lastAttackTime
+			if (this.anim == "move" && delta >= this.attackInterval) {
+				this.attack(this.targetPosition, time)
+			}
+		} else {
+			this.moveDestination = this.targetPosition
+		}
+	}
+}
+
+export class Orc extends MeleeEnemy {
 	constructor(props) {
-		super("sprites/orc.png", props, 3, 0.5, 2, {
+		super("sprites/orc.png", props, 3, 0.5, 2, 1, {
 			frameWidth: 51,
 			animations: {
 				move:   {start: 0, length: 4, speed: 4},
@@ -143,9 +210,9 @@ export class Orc extends Enemy {
 	}
 }
 
-export class Troll extends Enemy {
+export class Troll extends MeleeEnemy {
 	constructor(props) {
-		super("sprites/troll.png", props, 10, 0.75, 5, {
+		super("sprites/troll.png", props, 10, 0.75, 5, 1, {
 			frameWidth: 64,
 			animations: {
 				move:   {start: 0, length: 4, speed: 6},
@@ -157,9 +224,9 @@ export class Troll extends Enemy {
 	}
 }
 
-export class Bat extends Enemy {
+export class Bat extends MeleeEnemy {
 	constructor(props) {
-		super("sprites/bat.png", props, 1, 0.5, 5, {
+		super("sprites/bat.png", props, 1, 0.5, 5, 0, {
 			frameWidth: 40,
 			animations: {
 				move:   {start: 0, length: 4, speed: 16},
@@ -174,9 +241,9 @@ export class Bat extends Enemy {
 	}
 }
 
-export class Mage extends Enemy {
+export class Mage extends RangedEnemy {
 	constructor(props) {
-		super("sprites/mage.png", props, 5, 0.5, 1.5, {
+		super("sprites/mage.png", props, 5, 0.5, 1.5, 2, {
 			frameWidth: 56,
 			animations: {
 				move:   {start: 0, length: 2, speed: 3},
@@ -189,9 +256,9 @@ export class Mage extends Enemy {
 	}
 }
 
-export class Demon extends Enemy {
+export class Demon extends MeleeEnemy {
 	constructor(props) {
-		super("sprites/demon.png", props, 50, 0.75, 1.5, {
+		super("sprites/demon.png", props, 50, 0.75, 1.5, 1, {
 			frameWidth: 64,
 			animations: {
 				move:   {start: 0, length: 4, speed: 3.5},
@@ -203,9 +270,9 @@ export class Demon extends Enemy {
 	}
 }
 
-export class Nemesis extends Enemy {
+export class Nemesis extends RangedEnemy {
 	constructor(props) {
-		super("sprites/nemesis.png", props, 100, 0.5, 5, {
+		super("sprites/nemesis.png", props, 100, 0.5, 5, 2, {
 			frameWidth: 64,
 			animations: {
 				move:   {start: 0, length: 2, speed: 10},
