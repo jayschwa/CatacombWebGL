@@ -95,10 +95,11 @@ export class Enemy extends Actor {
 
 	onCollision(collision, time) {
 		const obj = collision.object
-		if (obj instanceof Sprite) {
+		if (!this.sidestep && obj instanceof Sprite) {
 			const obstructionNormal = this.worldToLocal(obj.position.clone()).cross(this.up)
 			const localTarget = this.worldToLocal(this.target.position.clone())
 			this.sidestep = Math.sign(localTarget.dot(obstructionNormal))
+			this.sidestepStartTime = time
 		}
 		return true
 	}
@@ -106,6 +107,10 @@ export class Enemy extends Actor {
 	update(time, maze) {
 		if (this.animStartTime === undefined) {
 			this.startAnimation(this.anim, time)
+		}
+
+		if (time > this.sidestepStartTime + 1) {
+			this.sidestep = 0
 		}
 
 		if (this.target && time > this.lastThinkTime + 0.25) {
