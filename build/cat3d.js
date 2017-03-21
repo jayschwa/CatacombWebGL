@@ -41348,7 +41348,9 @@ class Enemy extends Actor {
 	onCollision(collision, time) {
 		const obj = collision.object;
 		if (obj instanceof Sprite) {
-			this.sidestep = true;
+			const obstructionNormal = this.worldToLocal(obj.position.clone()).cross(this.up);
+			const localTarget = this.worldToLocal(this.target.position.clone());
+			this.sidestep = Math.sign(localTarget.dot(obstructionNormal));
 		}
 		return true
 	}
@@ -41366,7 +41368,7 @@ class Enemy extends Actor {
 		if (this.moveDestination && this.anim == "move") {
 			this.velocity.copy(this.moveDestination).sub(this.position);
 			if (this.sidestep) {
-				this.velocity.cross(this.up);
+				this.velocity.cross(this.up.clone().multiplyScalar(this.sidestep));
 			}
 			this.velocity.clampLength(0, this.speed);
 			let arrivedDistance = this.size;
@@ -41418,7 +41420,7 @@ class MeleeEnemy extends Enemy {
 			} else {
 				this.moveDestination = this.targetPosition;
 			}
-			this.sidestep = false;
+			this.sidestep = 0;
 		} else {
 			this.moveDestination = this.targetPosition;
 		}
@@ -41455,7 +41457,7 @@ class RangedEnemy extends Enemy {
 			if (this.anim == "move" && delta >= this.attackInterval) {
 				this.attack(this.targetPosition, time);
 			}
-			this.sidestep = false;
+			this.sidestep = 0;
 		} else {
 			this.moveDestination = this.targetPosition;
 		}
