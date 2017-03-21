@@ -41345,6 +41345,14 @@ class Enemy extends Actor {
 		return this.targetLocked
 	}
 
+	onCollision(collision, time) {
+		const obj = collision.object;
+		if (obj instanceof Sprite) {
+			this.sidestep = true;
+		}
+		return true
+	}
+
 	update(time, maze) {
 		if (this.animStartTime === undefined) {
 			this.startAnimation(this.anim, time);
@@ -41356,7 +41364,11 @@ class Enemy extends Actor {
 		}
 
 		if (this.moveDestination && this.anim == "move") {
-			this.velocity.copy(this.moveDestination).sub(this.position).clampLength(0, this.speed);
+			this.velocity.copy(this.moveDestination).sub(this.position);
+			if (this.sidestep) {
+				this.velocity.cross(this.up);
+			}
+			this.velocity.clampLength(0, this.speed);
 			let arrivedDistance = this.size;
 			if (this.target) {
 				arrivedDistance += this.target.size;
@@ -41406,6 +41418,7 @@ class MeleeEnemy extends Enemy {
 			} else {
 				this.moveDestination = this.targetPosition;
 			}
+			this.sidestep = false;
 		} else {
 			this.moveDestination = this.targetPosition;
 		}
@@ -41442,6 +41455,7 @@ class RangedEnemy extends Enemy {
 			if (this.anim == "move" && delta >= this.attackInterval) {
 				this.attack(this.targetPosition, time);
 			}
+			this.sidestep = false;
 		} else {
 			this.moveDestination = this.targetPosition;
 		}
