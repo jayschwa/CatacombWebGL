@@ -5,11 +5,25 @@
 	<link rel="icon" type="image/png" href="/favicon.png"/>
 	<style>
 		body { margin: 0; }
-		#cat3d { color: white; width: 100%; height: 100%; overflow: hidden; }
-		#hud, #menu { position: absolute; left: 0; right: 0; }
-		.playing #menu { visibility: hidden; }
-		#location {
+		#cat3d {
+			color: white;
+			text-shadow: black 0 0 5px;
 			font-family: sans-serif;
+			width: 100%;
+			height: 100%;
+			overflow: hidden;
+		}
+		#hud, #menu {
+			position: absolute;
+			left: 0;
+			right: 0;
+			padding: 0.5em;
+		}
+		.playing #menu { visibility: hidden; }
+		#hud { visibility: hidden; }
+		.playing #hud { visibility: initial; }
+		#inventory { position: absolute; }
+		#location {
 			font-size: large;
 			position: absolute;
 			left: 50%;
@@ -54,6 +68,7 @@
 			</ul>
 		</div>
 		<div id="hud">
+			<span id="inventory"></span>
 			<span id="location"></span>
 		</div>
 	</div>
@@ -73,8 +88,8 @@ mapSelect.addEventListener("change", event => {
 })
 
 const gameContainer = document.getElementById("cat3d")
-const gameLocation = document.getElementById("location")
-const game = new Catacomb3D.Game("pwn", gameContainer, gameLocation, mapSelect.value)
+const gameHud = document.getElementById("hud")
+const game = new Catacomb3D.Game("pwn", gameContainer, gameHud, mapSelect.value)
 game.resizeView(gameContainer.clientWidth, gameContainer.clientHeight)
 
 let resizeNextFrame = false

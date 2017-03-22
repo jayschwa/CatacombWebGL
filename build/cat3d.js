@@ -42654,10 +42654,12 @@ class TouchControls {
 }
 
 class Game {
-	constructor(name, container, location, mapOverride) {
+	constructor(name, container, hud, mapOverride) {
 		this.name = name;
 		this.container = container;
-		this.location = location;
+		this.hud = hud;
+		this.hudInventory = hud.children.inventory;
+		this.hudLocation = hud.children.location;
 
 		const globalState = JSON.parse(localStorage.getItem(this.name) || "{}");
 		this.fromSave = "mapName" in globalState && globalState.mapName == mapOverride;
@@ -42748,9 +42750,9 @@ class Game {
 
 		const tile = this.map.getTile(this.player.position);
 		if (tile && tile.type == "floor") {
-			this.location.innerText = tile.value || "";
+			this.hudLocation.innerText = tile.value || "";
 		} else {
-			this.location.innerText = "";
+			this.hudLocation.innerText = "";
 		}
 
 		if (this.isActive) {
@@ -42846,6 +42848,8 @@ class Game {
 	}
 
 	setup() {
+		const that = this;
+
 		const eventHandlers = [
 			["keydown", this.onKey(1)],
 			["keyup", this.onKey(-1)],
@@ -42853,6 +42857,16 @@ class Game {
 			["mouseup", this.onMouseButton(-1)],
 			["mousemove", this.onMouseMove.bind(this)]
 		];
+
+		// Update HUD when player inventory changes
+		this.player.inventory = new Proxy(this.player.inventory, {
+			set: function(target, property, value, receiver) {
+				target[property] = value;
+				that.drawInventory(target);
+				return true
+			}
+		});
+		this.drawInventory(this.player.inventory);
 
 		this.touchControls = new TouchControls(this.player);
 
@@ -42868,7 +42882,6 @@ class Game {
 			}
 		});
 
-		const that = this;
 		this.loadMap(this.mapName).then(map => {
 			that.map = map;
 			that.scene = map.toScene();
@@ -42880,6 +42893,13 @@ class Game {
 			that.huntPlayer();
 			that.play();
 		});
+	}
+
+	drawInventory(inventory) {
+		this.hudInventory.innerText = Object.entries(inventory)
+			.filter(([key, value]) => value)
+			.map(([key, value]) => `${key}: ${value}`)
+			.join("\n");
 	}
 }
 
