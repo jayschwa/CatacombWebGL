@@ -42874,7 +42874,9 @@ class Game {
 			if (document.pointerLockElement === this.renderer.domElement) {
 				eventHandlers.forEach(([e, f]) => document.addEventListener(e, f));
 				this.container.classList.add("playing");
+				this.play();
 			} else {
+				this.pause();
 				eventHandlers.forEach(([e, f]) => document.removeEventListener(e, f));
 				this.container.classList.remove("playing");
 				this.player.moveDirection.set(0, 0, 0);
@@ -42891,7 +42893,9 @@ class Game {
 				that.player.direction = map.playerStart.direction;
 			}
 			that.huntPlayer();
-			that.play();
+
+			that.isActive = true;
+			that.render();
 		});
 	}
 
