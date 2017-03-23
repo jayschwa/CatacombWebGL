@@ -1949,7 +1949,10 @@ Object.assign( WebGLRenderTarget.prototype, EventDispatcher.prototype, {
 } );
 
 /**
- * @author alteredq / http://alteredqualia.com
+ * @author mikael emtinger / http://gomo.se/
+ * @author alteredq / http://alteredqualia.com/
+ * @author WestLangley / http://github.com/WestLangley
+ * @author bhouston / http://clara.io
  */
 
 function Quaternion( x, y, z, w ) {
@@ -11935,8 +11938,6 @@ Object.assign( BufferAttribute.prototype, {
 
 } );
 
-//
-
 function Uint16BufferAttribute( array, itemSize ) {
 
 	BufferAttribute.call( this, new Uint16Array( array ), itemSize );
@@ -11966,6 +11967,10 @@ function Float32BufferAttribute( array, itemSize ) {
 Float32BufferAttribute.prototype = Object.create( BufferAttribute.prototype );
 Float32BufferAttribute.prototype.constructor = Float32BufferAttribute;
 
+
+/**
+ * @author mrdoob / http://mrdoob.com/
+ */
 
 function DirectGeometry() {
 
@@ -23794,7 +23799,7 @@ Group.prototype = Object.assign( Object.create( Object3D.prototype ), {
 } );
 
 /**
- * @author mrdoob / http://mrdoob.com/
+ * @author alteredq / http://alteredqualia.com/
  */
 
 function CompressedTexture( mipmaps, width, height, format, type, mapping, wrapS, wrapT, magFilter, minFilter, anisotropy, encoding ) {
@@ -23823,6 +23828,7 @@ CompressedTexture.prototype.isCompressedTexture = true;
 
 /**
  * @author mrdoob / http://mrdoob.com/
+ * @author Mugen87 / https://github.com/Mugen87
  */
 
 function WireframeGeometry( geometry ) {
@@ -35222,10 +35228,7 @@ Object.assign( StereoCamera.prototype, {
 } );
 
 /**
- * Camera for rendering cube maps
- *	- renders scene into axis-aligned cube
- *
- * @author alteredq / http://alteredqualia.com/
+ * @author mrdoob / http://mrdoob.com/
  */
 
 function AudioListener() {
@@ -38655,7 +38658,9 @@ Object.assign( InterleavedBuffer.prototype, {
 } );
 
 /**
- * @author benaadams / https://twitter.com/ben_a_adams
+ * @author mrdoob / http://mrdoob.com/
+ * @author bhouston / http://clara.io/
+ * @author stephomi / http://stephaneginier.com/
  */
 
 function Raycaster( origin, direction, near, far ) {
@@ -38987,8 +38992,9 @@ Object.assign( Cylindrical.prototype, {
 } );
 
 /**
- * @author alteredq / http://alteredqualia.com/
- */
+ * @author mrdoob / http://mrdoob.com/
+ * @author WestLangley / http://github.com/WestLangley
+*/
 
 function VertexNormalsHelper( object, size, hex, linewidth ) {
 
@@ -39132,10 +39138,12 @@ VertexNormalsHelper.prototype.update = ( function () {
 }() );
 
 /**
- * @author alteredq / http://alteredqualia.com/
+ * @author Sean Griffin / http://twitter.com/sgrif
+ * @author Michael Guerrero / http://realitymeltdown.com
  * @author mrdoob / http://mrdoob.com/
- * @author WestLangley / http://github.com/WestLangley
-*/
+ * @author ikerr / http://verold.com
+ * @author Mugen87 / https://github.com/Mugen87
+ */
 
 function SkeletonHelper( object ) {
 
@@ -39247,6 +39255,7 @@ SkeletonHelper.prototype.update = function () {
 /**
  * @author alteredq / http://alteredqualia.com/
  * @author mrdoob / http://mrdoob.com/
+ * @author Mugen87 / https://github.com/Mugen87
  */
 
 function HemisphereLightHelper( light, size ) {
@@ -39319,7 +39328,8 @@ HemisphereLightHelper.prototype.update = function () {
 
 /**
  * @author mrdoob / http://mrdoob.com/
- */
+ * @author WestLangley / http://github.com/WestLangley
+*/
 
 function FaceNormalsHelper( object, size, hex, linewidth ) {
 
@@ -39429,8 +39439,12 @@ FaceNormalsHelper.prototype.update = ( function () {
 
 /**
  * @author alteredq / http://alteredqualia.com/
- * @author mrdoob / http://mrdoob.com/
- * @author WestLangley / http://github.com/WestLangley
+ * @author Mugen87 / https://github.com/Mugen87
+ *
+ *	- shows frustum, line of sight and up of the camera
+ *	- suitable for fast updates
+ * 	- based on frustum visualization in lightgl.js shadowmap example
+ *		http://evanw.github.com/lightgl.js/tests/shadowmap.html
  */
 
 function CameraHelper( camera ) {
@@ -39623,8 +39637,26 @@ CameraHelper.prototype.update = function () {
 }();
 
 /**
- * @author mrdoob / http://mrdoob.com/
+ * @author zz85 https://github.com/zz85
+ *
+ * Centripetal CatmullRom Curve - which is useful for avoiding
+ * cusps and self-intersections in non-uniform catmull rom curves.
+ * http://www.cemyuksel.com/research/catmullrom_param/catmullrom.pdf
+ *
+ * curve.type accepts centripetal(default), chordal and catmullrom
+ * curve.tension is used for catmullrom which defaults to 0.5
  */
+
+
+/*
+Based on an optimized c++ solution in
+ - http://stackoverflow.com/questions/9489736/catmull-rom-curve-with-no-cusps-and-no-self-intersections/
+ - http://ideone.com/NoEbVM
+
+This CubicPoly class could be used for reusing some variables and calculations,
+but for three.js curve use, it could be possible inlined and flatten into a single function call
+which can be placed in CurveUtils.
+*/
 
 function CubicPoly() {
 
@@ -39779,6 +39811,8 @@ CatmullRomCurve3.prototype.getPoint = function ( t ) {
 
 };
 
+//
+
 Curve.create = function ( construct, getPoint ) {
 
 	console.log( 'THREE.Curve.create() has been deprecated' );
@@ -39825,6 +39859,7 @@ Object.assign( Spline.prototype, {
 } );
 
 //
+
 Object.assign( Box2.prototype, {
 
 	center: function ( optionalTarget ) {
@@ -40862,8 +40897,6 @@ AudioAnalyser.prototype.getData = function () {
 	return this.getFrequencyData();
 
 };
-
-//
 
 class Clock$1 {
 	constructor(startTime) {
@@ -42383,6 +42416,8 @@ class Player extends Actor {
 	}
 }
 
+// TODO: Sort out copyright of https://github.com/stegu/webgl-noise
+
 const vertexShader$1 = `
 #define USE_MAP = 1;
 #include <uv_pars_vertex>
@@ -42872,9 +42907,7 @@ class Game {
 			if (document.pointerLockElement === this.renderer.domElement) {
 				eventHandlers.forEach(([e, f]) => document.addEventListener(e, f));
 				this.container.classList.add("playing");
-				this.play();
 			} else {
-				this.pause();
 				eventHandlers.forEach(([e, f]) => document.removeEventListener(e, f));
 				this.container.classList.remove("playing");
 				this.player.moveDirection.set(0, 0, 0);
@@ -42891,9 +42924,7 @@ class Game {
 				that.player.direction = map.playerStart.direction;
 			}
 			that.huntPlayer();
-
-			that.isActive = true;
-			that.render();
+			that.play();
 		});
 	}
 
