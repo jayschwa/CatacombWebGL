@@ -41099,11 +41099,7 @@ class Actor extends Entity {
 						}
 					}
 				}
-			} while(collided && loops < 4)
-
-			if (loops >= 4) {
-				console.warn("aborted collision loop after", loops, "loops");  // FIXME
-			}
+			} while(collided && loops < 4)  // FIXME: max iteration hack
 
 			this.position.add(positionDelta);
 		}
