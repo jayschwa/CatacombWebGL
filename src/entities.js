@@ -129,6 +129,9 @@ function ancestorsAreEthereal(object) {
 	return false
 }
 
+let wallHitSound = null
+audioLoader.load("sounds/adlib/wall_hit.wav", buffer => wallHitSound = buffer)
+
 export class Fireball extends Actor {
 	constructor(props) {
 		super(props, 0, 30)
@@ -145,11 +148,11 @@ export class Fireball extends Actor {
 		this.updateVelocity()
 		this.isEthereal = true
 
-		audioLoader.load("sounds/adlib/wall_hit.wav", buffer => {
+		if (wallHitSound) {
 			this.hitSound = new PositionalAudio(audioListener)
-			this.hitSound.setBuffer(buffer)
+			this.hitSound.setBuffer(wallHitSound)
 			this.add(this.hitSound)
-		})
+		}
 
 		this.light = new PointLight(0xFF6600, 0.5, 0.5)
 		if (this.isBig) { this.light.distance *= 2 }
