@@ -1,7 +1,7 @@
 {
   "name": "catacomb3d",
   "version": "0.1.0",
-  "description": "Catacomb 3-D game recreated in JavaScript and WebGL",
+  "description": "Catacomb 3D game recreated in JavaScript and WebGL",
   "main": "cat3d.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
