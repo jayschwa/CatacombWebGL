@@ -41150,9 +41150,11 @@ class Fireball extends Actor {
 			this.add(this.hitSound);
 		}
 
-		this.light = new PointLight(0xFF6600, 0.5, 0.5);
-		if (this.isBig) { this.light.distance *= 2; }
-		if (this.isBig) { this.add(this.light); }
+		if (this.isBig) {
+			this.light = new PointLight(0xFF6600, 0.5, 0.5);
+			this.light.distance *= 2;
+			this.add(this.light);
+		}
 
 		textureCache.get("sprites/fireball.png", texture => {
 			this.spriteSheet = SpriteSheetProxy(texture);
@@ -41183,9 +41185,6 @@ class Fireball extends Actor {
 			if (!damagedSomething && this.hitSound) {
 				this.hitSound.play();
 			}
-		}
-		if (!this.isBig) {
-			this.add(this.light);
 		}
 		this.removeAtTime = time + 0.075;
 		this.isBig = false;
