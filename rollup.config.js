@@ -1,6 +1,6 @@
 import nodeResolve from "rollup-plugin-node-resolve";
 import uglify from "rollup-plugin-uglify";
-import { minify } from "uglify-js";
+import { minify } from "uglify-es";
 
 export default {
   entry: "src/main.js",
