@@ -9,7 +9,7 @@ export default {
   moduleName: "Catacomb3D",
   sourceMap: true,
   plugins: [
-  	nodeResolve()
-//  	uglify({}, minify)
+    nodeResolve()
+    //uglify({}, minify)
   ]
 };
