@@ -26,5 +26,9 @@
   },
   "dependencies": {
     "three": "^0.86.0"
+  },
+  "scripts": {
+    "build": "rollup -c",
+    "dev": "rollup -c -w"
   }
 }
