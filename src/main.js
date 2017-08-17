@@ -296,10 +296,10 @@ export class Game {
 		const that = this
 
 		const eventHandlers = [
-			["keydown", this.onKey(1)],
-			["keyup", this.onKey(-1)],
-			["mousedown", this.onMouseButton(1)],
-			["mouseup", this.onMouseButton(-1)],
+			["keydown", this.onKey(true)],
+			["keyup", this.onKey(false)],
+			["mousedown", this.onMouseButton(true)],
+			["mouseup", this.onMouseButton(false)],
 			["mousemove", this.onMouseMove.bind(this)]
 		]
 
@@ -322,8 +322,7 @@ export class Game {
 			} else {
 				eventHandlers.forEach(([e, f]) => document.removeEventListener(e, f))
 				this.container.classList.remove("playing")
-				this.player.moveDirection.set(0, 0, 0)
-				this.player.updateVelocity()
+				this.player.stopMovement()
 			}
 		})
 

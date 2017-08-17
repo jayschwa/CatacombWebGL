@@ -184,15 +184,43 @@ export class Player extends Actor {
 		}
 	}
 
-	moveForward(value) { this.moveDirection.z += value; this.updateVelocity() }
-	moveBackward(value) { this.moveDirection.z -= value; this.updateVelocity() }
-	moveLeft(value) { this.moveDirection.x += value; this.updateVelocity() }
-	moveRight(value) { this.moveDirection.x -= value; this.updateVelocity() }
+	updateMovement() {
+		let forward = 0
+		let side = 0
+		if (this.movingForward) {
+			forward += 1
+		}
+		if (this.movingBackward) {
+			forward -= 1
+		}
+		if (this.movingLeft) {
+			side += 1
+		}
+		if (this.movingRight) {
+			side -= 1
+		}
+		this.moveDirection.z = forward
+		this.moveDirection.x = side
+		this.updateVelocity()
+	}
+
+	stopMovement() {
+		this.movingForward = false
+		this.movingBackward = false
+		this.movingLeft = false
+		this.movingRight = false
+		this.updateMovement()
+	}
+
+	moveForward(value) { this.movingForward = value; this.updateMovement() }
+	moveBackward(value) { this.movingBackward = value; this.updateMovement() }
+	moveLeft(value) { this.movingLeft = value; this.updateMovement() }
+	moveRight(value) { this.movingRight = value; this.updateMovement() }
 	sprint(value) { this.speed *= (value > 0) ? 2 : 0.5; this.updateVelocity() }
 	turnLeft(value) { this.turnDirection += value }
 	turnRight(value) { this.turnDirection -= value }
 	shoot(value) {
-		if (value > 0 && !this.chargeStarted) {
+		if (value && !this.chargeStarted) {
 			this.chargeStarted = this.lastTime
 			this.hand.setFrame(1)
 			this.light.distance = 0
