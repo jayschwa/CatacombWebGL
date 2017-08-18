@@ -104,6 +104,7 @@ window.addEventListener("resize", () => {
 })
 
 game.renderer.domElement.addEventListener("click", event => {
+	gameContainer.classList.add("playing")
 	game.renderer.domElement.requestPointerLock()
 })
 
