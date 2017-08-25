@@ -81,11 +81,21 @@ location.search.substr(1).split("&").forEach(pair => {
 	const tokens = pair.split("=").map(decodeURIComponent)
 	queryParams[tokens[0]] = tokens[1]
 })
+console.log(queryParams)
+
+function encodeParam([key, value]) {
+	return encodeURIComponent(key) + '=' + encodeURIComponent(value)
+}
+
+function reloadWithParams() {
+	location.search = '?' + Object.entries(queryParams).map(encodeParam).join('&')
+}
 
 const mapSelect = document.getElementById("map-select")
 mapSelect.value = queryParams.map || "Approach"
 mapSelect.addEventListener("change", event => {
-	location.search = "?map=" + encodeURIComponent(mapSelect.value)
+	queryParams.map = mapSelect.value
+	reloadWithParams()
 })
 
 let hqxFactor = 1
