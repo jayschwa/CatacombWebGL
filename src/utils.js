@@ -1,15 +1,14 @@
 import hqx from "js-hqx"
 import { CanvasTexture, NearestFilter, TextureLoader } from "three"
-
-const hqxFactor = 4
+import { HQXFactor } from "./config"
 
 export function SpriteSheetProxy(texture, frameWidth, frames) {
 	const p = {
 		offset: texture.offset.clone(),
 		repeat: texture.repeat.clone()
 	}
-	if (frameWidth) {
-		frameWidth *= hqxFactor
+	if (frameWidth && HQXFactor > 1) {
+		frameWidth *= HQXFactor
 	}
 	p.frameWidth = frameWidth || texture.image.height
 	p.frames = frames || Math.floor(texture.image.width / p.frameWidth)
@@ -66,9 +65,11 @@ class TextureCache extends TextureLoader {
 		}
 		this.stats.get(path).loaded++
 		function wrappedOnLoad(texture) {
-			const hqxImage = hqx(texture.image, hqxFactor)
-			texture.image = hqxImage
-			texture.needsUpdate = true
+			if (HQXFactor > 1) {
+				const hqxImage = hqx(texture.image, HQXFactor)
+				texture.image = hqxImage
+				texture.needsUpdate = true
+			}
 			onLoad && onLoad(texture)
 		}
 		return super.load(path, wrappedOnLoad, ...args)
