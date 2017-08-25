@@ -1,9 +1,15 @@
-import { NearestFilter, TextureLoader } from "three"
+import hqx from "js-hqx"
+import { CanvasTexture, NearestFilter, TextureLoader } from "three"
+
+const hqxFactor = 4
 
 export function SpriteSheetProxy(texture, frameWidth, frames) {
 	const p = {
 		offset: texture.offset.clone(),
 		repeat: texture.repeat.clone()
+	}
+	if (frameWidth) {
+		frameWidth *= hqxFactor
 	}
 	p.frameWidth = frameWidth || texture.image.height
 	p.frames = frames || Math.floor(texture.image.width / p.frameWidth)
@@ -13,7 +19,9 @@ export function SpriteSheetProxy(texture, frameWidth, frames) {
 	p.offsetRepeatUniform = null
 	p.setFrame = function(n) {
 		if (n < 0 || n >= this.frames) {
-			throw new RangeError("Invalid frame number")
+			console.log(texture.image.width)
+			console.log(p.frameWidth)
+			throw new RangeError(`Invalid frame number ${n} of ${this.frames}`)
 		}
 		this.offset.x = n * this.frameUvWidth
 		this.repeat.x = this.frameUvWidth
@@ -52,12 +60,18 @@ class TextureCache extends TextureLoader {
 		this.stats = new Map()
 	}
 
-	load(path, ...args) {
+	load(path, onLoad, ...args) {
 		if (!this.stats.has(path)) {
 			this.stats.set(path, {hits: 0, loaded: 0})
 		}
 		this.stats.get(path).loaded++
-		return super.load(path, ...args)
+		function wrappedOnLoad(texture) {
+			const hqxImage = hqx(texture.image, hqxFactor)
+			texture.image = hqxImage
+			texture.needsUpdate = true
+			onLoad && onLoad(texture)
+		}
+		return super.load(path, wrappedOnLoad, ...args)
 	}
 
 	get(path, onLoad, onProgress, onError) {
