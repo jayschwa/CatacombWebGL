@@ -88,9 +88,14 @@ mapSelect.addEventListener("change", event => {
 	location.search = "?map=" + encodeURIComponent(mapSelect.value)
 })
 
+let hqxFactor = 1
+if (queryParams.hqx) {
+	hqxFactor = Number(queryParams.hqx)
+}
+
 const gameContainer = document.getElementById("cat3d")
 const gameHud = document.getElementById("hud")
-const game = new Catacomb3D.Game("pwn", gameContainer, gameHud, mapSelect.value)
+const game = new Catacomb3D.Game("pwn", gameContainer, gameHud, mapSelect.value, hqxFactor)
 game.resizeView(gameContainer.clientWidth, gameContainer.clientHeight)
 
 let resizeNextFrame = false

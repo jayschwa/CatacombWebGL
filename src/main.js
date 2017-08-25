@@ -1,5 +1,6 @@
 import * as THREE from "three"
 import { Clock } from "./clock"
+import { SetHQXFactor } from "./config"
 import { Enemy } from "./enemies"
 import { Map } from "./map"
 import { Player } from "./player"
@@ -99,12 +100,13 @@ class TouchControls {
 }
 
 export class Game {
-	constructor(name, container, hud, mapOverride) {
+	constructor(name, container, hud, mapOverride, hqxFactor) {
 		this.name = name
 		this.container = container
 		this.hud = hud
 		this.hudInventory = hud.children.inventory
 		this.hudLocation = hud.children.location
+		SetHQXFactor(hqxFactor)
 
 		const globalState = JSON.parse(localStorage.getItem(this.name) || "{}")
 		this.fromSave = "mapName" in globalState && globalState.mapName == mapOverride
