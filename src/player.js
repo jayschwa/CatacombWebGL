@@ -186,7 +186,8 @@ export class Player extends Actor {
 
 	updateMovement() {
 		let forward = 0
-		let side = 0
+		let strafe = 0
+		let turn = 0
 		if (this.movingForward) {
 			forward += 1
 		}
@@ -194,13 +195,20 @@ export class Player extends Actor {
 			forward -= 1
 		}
 		if (this.movingLeft) {
-			side += 1
+			strafe += 1
 		}
 		if (this.movingRight) {
-			side -= 1
+			strafe -= 1
+		}
+		if (this.turningLeft) {
+			turn += 1
+		}
+		if (this.turningRight) {
+			turn -= 1
 		}
 		this.moveDirection.z = forward
-		this.moveDirection.x = side
+		this.moveDirection.x = strafe
+		this.turnDirection = turn
 		this.updateVelocity()
 	}
 
@@ -209,6 +217,8 @@ export class Player extends Actor {
 		this.movingBackward = false
 		this.movingLeft = false
 		this.movingRight = false
+		this.turningLeft = false
+		this.turningRight = false
 		this.updateMovement()
 	}
 
@@ -217,8 +227,8 @@ export class Player extends Actor {
 	moveLeft(value) { this.movingLeft = value; this.updateMovement() }
 	moveRight(value) { this.movingRight = value; this.updateMovement() }
 	sprint(value) { this.speed *= (value > 0) ? 2 : 0.5; this.updateVelocity() }
-	turnLeft(value) { this.turnDirection += value }
-	turnRight(value) { this.turnDirection -= value }
+	turnLeft(value) { this.turningLeft = value; this.updateMovement() }
+	turnRight(value) { this.turningRight = value; this.updateMovement() }
 	shoot(value) {
 		if (value && !this.chargeStarted) {
 			this.chargeStarted = this.lastTime

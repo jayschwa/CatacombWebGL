@@ -1949,7 +1949,10 @@ Object.assign( WebGLRenderTarget.prototype, EventDispatcher.prototype, {
 } );
 
 /**
- * @author alteredq / http://alteredqualia.com
+ * @author mikael emtinger / http://gomo.se/
+ * @author alteredq / http://alteredqualia.com/
+ * @author WestLangley / http://github.com/WestLangley
+ * @author bhouston / http://clara.io
  */
 
 function Quaternion( x, y, z, w ) {
@@ -13008,8 +13011,6 @@ Object.assign( BufferAttribute.prototype, {
 
 } );
 
-//
-
 function Uint16BufferAttribute( array, itemSize ) {
 
 	BufferAttribute.call( this, new Uint16Array( array ), itemSize );
@@ -13039,6 +13040,10 @@ function Float32BufferAttribute( array, itemSize ) {
 Float32BufferAttribute.prototype = Object.create( BufferAttribute.prototype );
 Float32BufferAttribute.prototype.constructor = Float32BufferAttribute;
 
+
+/**
+ * @author mrdoob / http://mrdoob.com/
+ */
 
 function DirectGeometry() {
 
@@ -24380,7 +24385,7 @@ Group.prototype = Object.assign( Object.create( Object3D.prototype ), {
 } );
 
 /**
- * @author mrdoob / http://mrdoob.com/
+ * @author alteredq / http://alteredqualia.com/
  */
 
 function CompressedTexture( mipmaps, width, height, format, type, mapping, wrapS, wrapT, magFilter, minFilter, anisotropy, encoding ) {
@@ -24409,6 +24414,7 @@ CompressedTexture.prototype.isCompressedTexture = true;
 
 /**
  * @author mrdoob / http://mrdoob.com/
+ * @author Mugen87 / https://github.com/Mugen87
  */
 
 function WireframeGeometry( geometry ) {
@@ -36082,10 +36088,7 @@ Object.assign( StereoCamera.prototype, {
 } );
 
 /**
- * Camera for rendering cube maps
- *	- renders scene into axis-aligned cube
- *
- * @author alteredq / http://alteredqualia.com/
+ * @author mrdoob / http://mrdoob.com/
  */
 
 function AudioListener() {
@@ -40055,8 +40058,9 @@ Object.assign( Cylindrical.prototype, {
 } );
 
 /**
- * @author alteredq / http://alteredqualia.com/
- */
+ * @author mrdoob / http://mrdoob.com/
+ * @author WestLangley / http://github.com/WestLangley
+*/
 
 function VertexNormalsHelper( object, size, hex, linewidth ) {
 
@@ -40198,10 +40202,12 @@ VertexNormalsHelper.prototype.update = ( function () {
 }() );
 
 /**
- * @author alteredq / http://alteredqualia.com/
+ * @author Sean Griffin / http://twitter.com/sgrif
+ * @author Michael Guerrero / http://realitymeltdown.com
  * @author mrdoob / http://mrdoob.com/
- * @author WestLangley / http://github.com/WestLangley
-*/
+ * @author ikerr / http://verold.com
+ * @author Mugen87 / https://github.com/Mugen87
+ */
 
 function getBoneList( object ) {
 
@@ -40315,6 +40321,7 @@ SkeletonHelper.prototype.onBeforeRender = function () {
 /**
  * @author alteredq / http://alteredqualia.com/
  * @author mrdoob / http://mrdoob.com/
+ * @author Mugen87 / https://github.com/Mugen87
  */
 
 function HemisphereLightHelper( light, size ) {
@@ -40387,7 +40394,8 @@ HemisphereLightHelper.prototype.update = function () {
 
 /**
  * @author mrdoob / http://mrdoob.com/
- */
+ * @author WestLangley / http://github.com/WestLangley
+*/
 
 function FaceNormalsHelper( object, size, hex, linewidth ) {
 
@@ -40495,8 +40503,12 @@ FaceNormalsHelper.prototype.update = ( function () {
 
 /**
  * @author alteredq / http://alteredqualia.com/
- * @author mrdoob / http://mrdoob.com/
- * @author WestLangley / http://github.com/WestLangley
+ * @author Mugen87 / https://github.com/Mugen87
+ *
+ *	- shows frustum, line of sight and up of the camera
+ *	- suitable for fast updates
+ * 	- based on frustum visualization in lightgl.js shadowmap example
+ *		http://evanw.github.com/lightgl.js/tests/shadowmap.html
  */
 
 function CameraHelper( camera ) {
@@ -40689,9 +40701,26 @@ CameraHelper.prototype.update = function () {
 }();
 
 /**
- * @author mrdoob / http://mrdoob.com/
- * @author Mugen87 / http://github.com/Mugen87
+ * @author zz85 https://github.com/zz85
+ *
+ * Centripetal CatmullRom Curve - which is useful for avoiding
+ * cusps and self-intersections in non-uniform catmull rom curves.
+ * http://www.cemyuksel.com/research/catmullrom_param/catmullrom.pdf
+ *
+ * curve.type accepts centripetal(default), chordal and catmullrom
+ * curve.tension is used for catmullrom which defaults to 0.5
  */
+
+
+/*
+Based on an optimized c++ solution in
+ - http://stackoverflow.com/questions/9489736/catmull-rom-curve-with-no-cusps-and-no-self-intersections/
+ - http://ideone.com/NoEbVM
+
+This CubicPoly class could be used for reusing some variables and calculations,
+but for three.js curve use, it could be possible inlined and flatten into a single function call
+which can be placed in CurveUtils.
+*/
 
 function CubicPoly() {
 
@@ -40848,6 +40877,8 @@ CatmullRomCurve3.prototype.getPoint = function ( t ) {
 
 };
 
+//
+
 Curve.create = function ( construct, getPoint ) {
 
 	console.log( 'THREE.Curve.create() has been deprecated' );
@@ -40893,12 +40924,13 @@ Object.assign( Spline.prototype, {
 
 } );
 
-//
 SkeletonHelper.prototype.update = function () {
 
 	console.error( 'THREE.SkeletonHelper: update() no longer needs to be called.' );
 	
 };
+
+//
 
 Object.assign( Box2.prototype, {
 
@@ -41945,8 +41977,6 @@ AudioAnalyser.prototype.getData = function () {
 	return this.getFrequencyData();
 
 };
-
-//
 
 class Clock$1 {
 	constructor(startTime) {
@@ -43424,7 +43454,8 @@ class Player extends Actor {
 
 	updateMovement() {
 		let forward = 0;
-		let side = 0;
+		let strafe = 0;
+		let turn = 0;
 		if (this.movingForward) {
 			forward += 1;
 		}
@@ -43432,13 +43463,20 @@ class Player extends Actor {
 			forward -= 1;
 		}
 		if (this.movingLeft) {
-			side += 1;
+			strafe += 1;
 		}
 		if (this.movingRight) {
-			side -= 1;
+			strafe -= 1;
+		}
+		if (this.turningLeft) {
+			turn += 1;
+		}
+		if (this.turningRight) {
+			turn -= 1;
 		}
 		this.moveDirection.z = forward;
-		this.moveDirection.x = side;
+		this.moveDirection.x = strafe;
+		this.turnDirection = turn;
 		this.updateVelocity();
 	}
 
@@ -43447,6 +43485,8 @@ class Player extends Actor {
 		this.movingBackward = false;
 		this.movingLeft = false;
 		this.movingRight = false;
+		this.turningLeft = false;
+		this.turningRight = false;
 		this.updateMovement();
 	}
 
@@ -43455,8 +43495,8 @@ class Player extends Actor {
 	moveLeft(value) { this.movingLeft = value; this.updateMovement(); }
 	moveRight(value) { this.movingRight = value; this.updateMovement(); }
 	sprint(value) { this.speed *= (value > 0) ? 2 : 0.5; this.updateVelocity(); }
-	turnLeft(value) { this.turnDirection += value; }
-	turnRight(value) { this.turnDirection -= value; }
+	turnLeft(value) { this.turningLeft = value; this.updateMovement(); }
+	turnRight(value) { this.turningRight = value; this.updateMovement(); }
 	shoot(value) {
 		if (value && !this.chargeStarted) {
 			this.chargeStarted = this.lastTime;
@@ -43493,6 +43533,8 @@ class Player extends Actor {
 		}
 	}
 }
+
+// TODO: Sort out copyright of https://github.com/stegu/webgl-noise
 
 const vertexShader$1 = `
 #define USE_MAP = 1;
@@ -43791,8 +43833,9 @@ class Game {
 		const binds = this.player.binds();
 		binds.Enter = this.save.bind(this);
 		return (event) => {
+			console.log(event.code, event);
 			const command = binds[event.code];
-			if (command && !event.repeat) {
+			if (!event.repeat && command) {
 				command(value);
 			}
 		}
