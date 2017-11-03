@@ -3,13 +3,15 @@ import uglify from "rollup-plugin-uglify";
 import { minify } from "uglify-es";
 
 export default {
-  entry: "src/main.js",
-  dest: "build/cat3d.js",
-  format: "iife",
-  moduleName: "Catacomb3D",
-  sourceMap: true,
-  plugins: [
-    nodeResolve()
-    //uglify({}, minify)
-  ]
+	input: "src/main.js",
+	output: {
+		file: "build/cat3d.js",
+		format: "iife",
+		name: "Catacomb3D",
+		sourcemap: true
+	},
+	plugins: [
+		nodeResolve()
+		//uglify({}, minify)
+	]
 };

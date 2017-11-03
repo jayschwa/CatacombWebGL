@@ -102,7 +102,6 @@ void main() {
 
 	#include <map_fragment>
 
-	#include <normal_flip>
 	#include <normal_fragment>
 
 	ReflectedLight reflectedLight = ReflectedLight(vec3(0.0), vec3(0.0), vec3(0.0), vec3(0.0));

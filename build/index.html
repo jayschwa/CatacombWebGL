@@ -81,7 +81,6 @@ location.search.substr(1).split("&").forEach(pair => {
 	const tokens = pair.split("=").map(decodeURIComponent)
 	queryParams[tokens[0]] = tokens[1]
 })
-console.log(queryParams)
 
 function encodeParam([key, value]) {
 	return encodeURIComponent(key) + '=' + encodeURIComponent(value)

@@ -4,8 +4,8 @@
   "description": "Catacomb 3D game recreated in JavaScript and WebGL",
   "main": "cat3d.js",
   "scripts": {
-    "build": "rollup -c",
-    "dev": "rollup -c -w"
+    "build": "rollup --config",
+    "dev": "rollup --config --watch"
   },
   "repository": {
     "type": "git",
@@ -18,15 +18,15 @@
   },
   "homepage": "https://github.com/jayschwa/Cat3D-Tools#readme",
   "devDependencies": {
-    "express": "^4.15.4",
-    "rollup": "^0.47.6",
+    "express": "^4.16.2",
+    "rollup": "^0.50.0",
     "rollup-plugin-node-resolve": "^3.0.0",
     "rollup-plugin-uglify": "^2.0.1",
     "rollup-watch": "^4.3.1",
-    "uglify-es": "^3.0.28"
+    "uglify-es": "^3.1.6"
   },
   "dependencies": {
     "js-hqx": "^1.0.0",
-    "three": "^0.86.0"
+    "three": "^0.88.0"
   }
 }
