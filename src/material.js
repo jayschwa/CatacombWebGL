@@ -72,7 +72,8 @@ vec3 clampToPalette(const in vec3 color) {
 #include <common>
 #include <bsdfs>
 #include <fog_pars_fragment>
-#include <lights_pars>
+#include <lights_pars_begin>
+#include <lights_pars_maps>
 #include <map_pars_fragment>
 #include <uv_pars_fragment>
 
@@ -102,7 +103,8 @@ void main() {
 
 	#include <map_fragment>
 
-	#include <normal_fragment>
+	#include <normal_fragment_begin>
+	#include <normal_fragment_maps>
 
 	ReflectedLight reflectedLight = ReflectedLight(vec3(0.0), vec3(0.0), vec3(0.0), vec3(0.0));
 
@@ -118,7 +120,9 @@ void main() {
 	}
 	vec3 vViewPosition = -(modelViewMatrix * vec4(modelPosition, 1.0)).xyz;
 
-	#include <lights_template>
+	#include <lights_fragment_begin>
+	#include <lights_fragment_maps>
+	#include <lights_fragment_end>
 
 	vec3 outgoingLight = reflectedLight.indirectDiffuse;
 	outgoingLight += reflectedLight.directDiffuse * interweave;

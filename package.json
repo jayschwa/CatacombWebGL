@@ -19,14 +19,14 @@
   "homepage": "https://github.com/jayschwa/Cat3D-Tools#readme",
   "devDependencies": {
     "express": "^4.16.3",
-    "rollup": "^0.50.1",
+    "rollup": "^0.58.2",
     "rollup-plugin-node-resolve": "^3.3.0",
-    "rollup-plugin-uglify": "^2.0.1",
+    "rollup-plugin-uglify": "^3.0.0",
     "rollup-watch": "^4.3.1",
     "uglify-es": "^3.3.9"
   },
   "dependencies": {
     "js-hqx": "^1.0.0",
-    "three": "^0.88.0"
+    "three": "^0.92.0"
   }
 }
