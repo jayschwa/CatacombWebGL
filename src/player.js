@@ -69,7 +69,7 @@ export class Player extends Actor {
 	}
 
 	get direction() {
-		return this.getWorldDirection()
+		return this.getWorldDirection(new Vector3())
 	}
 
 	set direction(vector) {
@@ -236,7 +236,7 @@ export class Player extends Actor {
 			this.light.distance = 0
 		} else if (this.chargeStarted) {
 			const chargeTime = this.lastTime - this.chargeStarted
-			const direction = this.getWorldDirection()
+			const direction = this.getWorldDirection(new Vector3())
 			const fireball = new Fireball({
 				type: "Fireball",
 				position: this.position.clone().addScaledVector(direction, 2/3),

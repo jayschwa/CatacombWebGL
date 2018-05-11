@@ -93,7 +93,8 @@ export class Actor extends Entity {
 							normal.copy(collision.face.normal)
 						} else {
 							// calculate normal vector of sprite
-							const objDir = collision.object.getWorldPosition().sub(collision.point)
+							const objDir = new Vector3()
+							collision.object.getWorldPosition(objDir).sub(collision.point)
 							normal.crossVectors(direction, objDir).cross(objDir).normalize()
 						}
 						const pushBackDistance = Math.min(magnitude, far - collision.distance)
