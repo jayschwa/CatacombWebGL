@@ -1,6 +1,6 @@
 # CatacombWebGL
 
-CatacombWebGL is a project that [I](https://jayschwa.net) worked on at the [Recurse Center](https://recurse.com) in 2017. [Catacomb 3-D](https://catacomb.games) is a first-person shooter from the early 1990s that I used to play as a kid. I thought it would be fun to attempt to recreate it using WebGL.
+CatacombWebGL is a project that [I](https://jayschwa.net) worked on at the [Recurse Center](https://www.recurse.com) in 2017. [Catacomb 3-D](https://catacomb.games) is a first-person shooter from the early 1990s that I used to play as a kid. I thought it would be fun to attempt to recreate it using WebGL.
 
 The project is unfinished and unlikely to be completed. Shortly after my stint at the Recurse Center, I bought the rights to the original game series and have been working on modernizing the original code base.
 
