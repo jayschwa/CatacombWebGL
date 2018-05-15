@@ -1,10 +1,20 @@
 <html>
 <head>
-	<title>Catacomb 3D</title>
+	<title>Catacomb WebGL</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 	<link rel="icon" type="image/png" href="favicon.png"/>
 	<style>
 		body { margin: 0; }
+		a {
+			color: #55FF55;
+			text-decoration: none;
+		}
+		a:hover {
+			text-decoration: underline;
+		}
+		a:visited {
+			color: #00AA00;
+		}
 		#cat3d {
 			color: white;
 			text-shadow: black 0 0 5px;
@@ -35,7 +45,8 @@
 <body>
 	<div id="cat3d">
 		<div id="menu">
-			<select id="map-select" name="map">
+			<p><a href="https://catacomb.games">Catacomb 3-D</a> partially recreated with WebGL. See the <a href="https://github.com/jayschwa/CatacombWebGL/blob/master/README.md">README</a> for more information.</p>
+			Map Select: <select id="map-select" name="map">
 				<option value="Test">Test Map</option>
 				<option value="Approach">1. The Approach</option>
 				<option value="Nemesis's_Keep">2. Nemesis's Keep</option>
@@ -59,7 +70,6 @@
 				<option value="Nemesis's_Lair">20. Nemesis's Lair</option>
 			</select>
 			<button onclick="localStorage.clear()">Clear saved state</button>
-			<p><strong>Please do not share!</strong> Copyright issues and work in progress...</p>
 			<h3>Controls</h3>
 			<ul>
 				<li>Click scene to start playing</li>

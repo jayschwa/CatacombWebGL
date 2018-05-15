@@ -1,5 +1,5 @@
 {
-  "name": "catacomb3d",
+  "name": "catacombwebgl",
   "version": "0.1.0",
   "description": "Catacomb 3D game recreated in JavaScript and WebGL",
   "main": "cat3d.js",
@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jayschwa/Cat3D-Tools.git"
+    "url": "git+https://github.com/jayschwa/CatacombWebGL.git"
   },
   "author": "Jay Weisskopf",
   "license": "GPL-2.0",
   "bugs": {
-    "url": "https://github.com/jayschwa/Cat3D-Tools/issues"
+    "url": "https://github.com/jayschwa/CatacombWebGL/issues"
   },
-  "homepage": "https://github.com/jayschwa/Cat3D-Tools#readme",
+  "homepage": "https://github.com/jayschwa/CatacombWebGL#readme",
   "devDependencies": {
     "express": "^4.16.3",
     "rollup": "^0.58.2",
