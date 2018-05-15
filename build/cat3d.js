@@ -55533,8 +55533,6 @@ var Catacomb3D = (function (exports) {
 	  }
 	};
 
-	//# sourceMappingURL=hqx.js.map
-
 	function SpriteSheetProxy(texture, frameWidth, frames) {
 		const p = {
 			offset: texture.offset.clone(),
