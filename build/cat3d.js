@@ -56514,9 +56514,6 @@ void main() {
 			if (this.shouldRemove) {
 				return false
 			} else {
-				if (!silent) {
-					this.unlockSound.play();
-				}
 				this.shouldRemove = true;
 				this.removeFunc();
 				this.adjacent.forEach(door => door.unlock(true));

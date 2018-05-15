@@ -61,7 +61,7 @@ export class Door extends Entity {
 			return false
 		} else {
 			if (!silent) {
-				this.unlockSound.play()
+				//this.unlockSound.play()
 			}
 			this.shouldRemove = true
 			this.removeFunc()
