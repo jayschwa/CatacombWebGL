@@ -178,9 +178,6 @@ export class CustomMaterial extends ShaderMaterial {
 
 	get map() { return this.uniforms.map.value }
 	set map(value) {
-		if (value.isSpriteSheet) {
-			value.offsetRepeatUniform = this.uniforms.offsetRepeat.value
-		}
 		this.uniforms.map.value = value
 	}
 

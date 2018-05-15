@@ -56398,9 +56398,6 @@ void main() {
 
 		get map() { return this.uniforms.map.value }
 		set map(value) {
-			if (value.isSpriteSheet) {
-				value.offsetRepeatUniform = this.uniforms.offsetRepeat.value;
-			}
 			this.uniforms.map.value = value;
 		}
 
@@ -56505,7 +56502,7 @@ void main() {
 		update(time) {
 			if (this.mesh.material.map) {
 				const frame = Math.floor(this.frequency * time) % 2;
-				this.mesh.material.map.setFrame(frame);
+				//this.mesh.material.map.setFrame(frame)
 			}
 		}
 

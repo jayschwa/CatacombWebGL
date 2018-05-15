@@ -48,7 +48,7 @@ export class Door extends Entity {
 	update(time) {
 		if (this.mesh.material.map) {
 			const frame = Math.floor(this.frequency * time) % 2
-			this.mesh.material.map.setFrame(frame)
+			//this.mesh.material.map.setFrame(frame)
 		}
 	}
 
