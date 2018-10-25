@@ -217,6 +217,8 @@ type Picture struct {
 }
 
 var Magenta = color.RGBA{0xAA, 0x00, 0xAA, 0xFF}
+var WrongBrown = color.RGBA{0xAA, 0xAA, 0x00, 0xFF}
+var RightBrown = color.RGBA{0xAA, 0x55, 0x00, 0xFF}
 
 func (p *Picture) At(x, y int) color.Color {
 	planeSize := int(p.dims.Width*p.dims.Height) / 8
@@ -258,6 +260,9 @@ func (p *Picture) At(x, y int) color.Color {
 		B: readColor(0),
 		A: 0xFF,
 	}
+	if c == WrongBrown {
+		c = RightBrown
+	}
 	if c == Magenta {
 		c.A = 0x00
 	}
@@ -290,6 +295,9 @@ func main() {
 	if start > g.Len() || end > g.Len() {
 		panic(fmt.Errorf("Requested chunk range exceeds %d", g.Len()))
 	}
+	if err := os.MkdirAll(os.Args[6], 0700); err != nil {
+		panic(err)
+	}
 	for i := start; i < end; i++ {
 		pic, err := g.Picture(i)
 		fmt.Println("picture", i)
@@ -297,7 +305,7 @@ func main() {
 			fmt.Println(err)
 			continue
 		}
-		f, err := os.Create(fmt.Sprintf("pictures/%v.png", i))
+		f, err := os.Create(fmt.Sprintf("%v/%v.png", os.Args[6], i))
 		if err != nil {
 			panic(err)
 		}
