@@ -9,6 +9,7 @@ import (
 	"image/png"
 	"io"
 	"os"
+	"strconv"
 )
 
 type BitReader struct {
@@ -90,9 +91,9 @@ func (b GraphicsOffset) Value() int {
 	return offset
 }
 
-type GraphicsHeader [479]GraphicsOffset
+type GraphicsHeader []GraphicsOffset
 
-func (h *GraphicsHeader) ChunkLen(i int) int {
+func (h GraphicsHeader) ChunkLen(i int) int {
 	if !h[i].Valid() {
 		return -1
 	}
@@ -112,8 +113,17 @@ type Graphics struct {
 	cache map[int][]byte
 }
 
+func (g *Graphics) Len() int {
+	return len(g.header)
+}
+
 func OpenGraphics(data, header, dictionary string) (*Graphics, error) {
 	var g Graphics
+	if fi, err := os.Stat(header); err != nil {
+		return nil, err
+	} else {
+		g.header = make(GraphicsHeader, fi.Size() / 3)
+	}
 	read := func(to interface{}, from_file string) error {
 		f, err := os.Open(from_file)
 		if err != nil {
@@ -173,7 +183,7 @@ func (d Dimensions) String() string {
 type PictureTable []Dimensions
 
 func (g *Graphics) PictureTable() (PictureTable, error) {
-	chunk, err := g.Chunk(1)
+	chunk, err := g.Chunk(0)
 	if err != nil {
 		return nil, err
 	}
@@ -193,7 +203,7 @@ func (g *Graphics) Picture(i int) (*Picture, error) {
 	if err != nil {
 		return nil, err
 	}
-	dims := picTable[i-160]
+	dims := picTable[i-4]
 	chunk, err := g.Chunk(i)
 	if err != nil {
 		return nil, err
@@ -210,11 +220,11 @@ var Magenta = color.RGBA{0xAA, 0x00, 0xAA, 0xFF}
 
 func (p *Picture) At(x, y int) color.Color {
 	planeSize := int(p.dims.Width*p.dims.Height) / 8
-	if len(p.data)/planeSize < 5 {
+	if len(p.data)/planeSize < 4 {
 		return color.Gray{}
 	}
 
-	planes := make([][]byte, 5)
+	planes := make([][]byte, 4)
 	for i := range planes {
 		start := i * planeSize
 		end := start + planeSize
@@ -226,7 +236,7 @@ func (p *Picture) At(x, y int) color.Color {
 		shift := uint(7 - pos%8)
 		return (byte>>shift)&0x01 != 0
 	}
-	intense := readBit(4)
+	intense := readBit(3)
 	readColor := func(plane int) byte {
 		if readBit(plane) {
 			if intense {
@@ -242,15 +252,11 @@ func (p *Picture) At(x, y int) color.Color {
 			}
 		}
 	}
-	var alpha byte
-	if !readBit(0) {
-		alpha = 0xFF
-	}
 	c := color.RGBA{
-		R: readColor(3),
-		G: readColor(2),
-		B: readColor(1),
-		A: alpha,
+		R: readColor(2),
+		G: readColor(1),
+		B: readColor(0),
+		A: 0xFF,
 	}
 	if c == Magenta {
 		c.A = 0x00
@@ -269,11 +275,22 @@ func (p *Picture) ColorModel() color.Model {
 }
 
 func main() {
-	g, err := OpenGraphics("EGAGRAPH.C3D", "EGAHEAD.C3D", "EGADICT.C3D")
+	g, err := OpenGraphics(os.Args[1], os.Args[2], os.Args[3])
 	if err != nil {
 		panic(err)
 	}
-	for i := 161; i <= 162; i++ {
+	start, err := strconv.Atoi(os.Args[4])
+	if err != nil {
+		panic(err)
+	}
+	end, err := strconv.Atoi(os.Args[5])
+	if err != nil {
+		panic(err)
+	}
+	if start > g.Len() || end > g.Len() {
+		panic(fmt.Errorf("Requested chunk range exceeds %d", g.Len()))
+	}
+	for i := start; i < end; i++ {
 		pic, err := g.Picture(i)
 		fmt.Println("picture", i)
 		if err != nil {
