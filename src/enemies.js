@@ -1,4 +1,4 @@
-import { NearestFilter, PositionalAudio, Raycaster, Sprite, SpriteMaterial } from "three"
+import { PositionalAudio, Raycaster, Sprite, SpriteMaterial } from "three"
 import { audioListener, audioLoader } from "./audio"
 import { Actor, Fireball } from "./entities"
 import { SpriteSheetProxy, textureCache } from "./utils"
@@ -27,7 +27,6 @@ export class Enemy extends Actor {
 		const totalFrames = Object.values(this.animations).map(a => a.start + a.length).reduce(Math.max, 0)
 
 		textureCache.get(sprite, texture => {
-			texture.magFilter = NearestFilter
 			this.texture = new SpriteSheetProxy(texture, spriteInfo.frameWidth, totalFrames)
 			this.sprite.material.map = this.texture
 			this.sprite.material.needsUpdate = true
@@ -221,7 +220,7 @@ export class RangedEnemy extends Enemy {
 export class Orc extends MeleeEnemy {
 	constructor(props) {
 		super("sprites/orc.png", props, 3, 0.5, 2, 1, {
-			frameWidth: 51,
+			frameWidth: 51 * 4,
 			animations: {
 				move:   {start: 0, length: 4, speed: 4},
 				attack: {start: 4, length: 2, speed: 2},
@@ -235,7 +234,7 @@ export class Orc extends MeleeEnemy {
 export class Troll extends MeleeEnemy {
 	constructor(props) {
 		super("sprites/troll.png", props, 10, 0.75, 5, 1, {
-			frameWidth: 64,
+			frameWidth: 64 * 4,
 			animations: {
 				move:   {start: 0, length: 4, speed: 6},
 				attack: {start: 4, length: 3, speed: 5},
@@ -249,7 +248,7 @@ export class Troll extends MeleeEnemy {
 export class Bat extends MeleeEnemy {
 	constructor(props) {
 		super("sprites/bat.png", props, 1, 0.5, 5, 0, {
-			frameWidth: 40,
+			frameWidth: 40 * 4,
 			animations: {
 				move:   {start: 0, length: 4, speed: 16},
 				death:  {start: 4, length: 2, speed: 8}
@@ -266,7 +265,7 @@ export class Bat extends MeleeEnemy {
 export class Mage extends RangedEnemy {
 	constructor(props) {
 		super("sprites/mage.png", props, 5, 0.5, 1.5, 2, {
-			frameWidth: 56,
+			frameWidth: 56 * 4,
 			animations: {
 				move:   {start: 0, length: 2, speed: 3},
 				attack: {start: 2, length: 1, speed: 3},
@@ -281,7 +280,7 @@ export class Mage extends RangedEnemy {
 export class Demon extends MeleeEnemy {
 	constructor(props) {
 		super("sprites/demon.png", props, 50, 0.75, 1.5, 1, {
-			frameWidth: 64,
+			frameWidth: 64 * 4,
 			animations: {
 				move:   {start: 0, length: 4, speed: 3.5},
 				attack: {start: 4, length: 3, speed: 4},
@@ -295,7 +294,7 @@ export class Demon extends MeleeEnemy {
 export class Nemesis extends RangedEnemy {
 	constructor(props) {
 		super("sprites/nemesis.png", props, 100, 0.5, 5, 2, {
-			frameWidth: 64,
+			frameWidth: 64 * 4,
 			animations: {
 				move:   {start: 0, length: 2, speed: 10},
 				attack: {start: 2, length: 1, speed: 2},

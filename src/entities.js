@@ -158,7 +158,6 @@ export class Fireball extends Actor {
 		}
 
 		textureCache.get("sprites/fireball.png", texture => {
-			texture.magFilter = NearestFilter
 			this.spriteSheet = SpriteSheetProxy(texture)
 			this.sprite = new Sprite(new SpriteMaterial({map: this.spriteSheet}))
 			if (!this.isBig) {
@@ -220,7 +219,6 @@ export class Portal extends Entity {
 		this.add(this.light)
 
 		textureCache.get("sprites/portal.png", texture => {
-			texture.magFilter = NearestFilter
 			this.spritesheet = new SpriteSheetProxy(texture)
 			this.sprite = new Sprite(new SpriteMaterial({fog: true, map: this.spritesheet}))
 			this.add(this.sprite)

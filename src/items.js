@@ -16,9 +16,8 @@ export class Item extends Entity {
 			this.add(this.pickupSound)
 		})
 		textureCache.get("sprites/items.png", texture => {
-			texture.magFilter = NearestFilter
 			this.texture = texture
-			this.spritesheet = new SpriteSheetProxy(texture, 40, 11)
+			this.spritesheet = new SpriteSheetProxy(texture, 40 * 4, 11)
 			this.spritesheet.setFrame(this.itemFrames[0])
 			this.sprite = new Sprite(new SpriteMaterial({fog: true, map: this.spritesheet}))
 			this.sprite.scale.multiplyScalar(ITEM_SCALE)

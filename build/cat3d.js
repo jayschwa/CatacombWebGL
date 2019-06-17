@@ -55806,7 +55806,6 @@ var Catacomb3D = (function (exports) {
 			}
 
 			textureCache.get("sprites/fireball.png", texture => {
-				texture.magFilter = NearestFilter;
 				this.spriteSheet = SpriteSheetProxy(texture);
 				this.sprite = new Sprite(new SpriteMaterial({map: this.spriteSheet}));
 				if (!this.isBig) {
@@ -55868,7 +55867,6 @@ var Catacomb3D = (function (exports) {
 			this.add(this.light);
 
 			textureCache.get("sprites/portal.png", texture => {
-				texture.magFilter = NearestFilter;
 				this.spritesheet = new SpriteSheetProxy(texture);
 				this.sprite = new Sprite(new SpriteMaterial({fog: true, map: this.spritesheet}));
 				this.add(this.sprite);
@@ -55931,7 +55929,6 @@ var Catacomb3D = (function (exports) {
 			const totalFrames = Object.values(this.animations).map(a => a.start + a.length).reduce(Math.max, 0);
 
 			textureCache.get(sprite, texture => {
-				texture.magFilter = NearestFilter;
 				this.texture = new SpriteSheetProxy(texture, spriteInfo.frameWidth, totalFrames);
 				this.sprite.material.map = this.texture;
 				this.sprite.material.needsUpdate = true;
@@ -56125,7 +56122,7 @@ var Catacomb3D = (function (exports) {
 	class Orc extends MeleeEnemy {
 		constructor(props) {
 			super("sprites/orc.png", props, 3, 0.5, 2, 1, {
-				frameWidth: 51,
+				frameWidth: 51 * 4,
 				animations: {
 					move:   {start: 0, length: 4, speed: 4},
 					attack: {start: 4, length: 2, speed: 2},
@@ -56139,7 +56136,7 @@ var Catacomb3D = (function (exports) {
 	class Troll extends MeleeEnemy {
 		constructor(props) {
 			super("sprites/troll.png", props, 10, 0.75, 5, 1, {
-				frameWidth: 64,
+				frameWidth: 64 * 4,
 				animations: {
 					move:   {start: 0, length: 4, speed: 6},
 					attack: {start: 4, length: 3, speed: 5},
@@ -56153,7 +56150,7 @@ var Catacomb3D = (function (exports) {
 	class Bat extends MeleeEnemy {
 		constructor(props) {
 			super("sprites/bat.png", props, 1, 0.5, 5, 0, {
-				frameWidth: 40,
+				frameWidth: 40 * 4,
 				animations: {
 					move:   {start: 0, length: 4, speed: 16},
 					death:  {start: 4, length: 2, speed: 8}
@@ -56170,7 +56167,7 @@ var Catacomb3D = (function (exports) {
 	class Mage extends RangedEnemy {
 		constructor(props) {
 			super("sprites/mage.png", props, 5, 0.5, 1.5, 2, {
-				frameWidth: 56,
+				frameWidth: 56 * 4,
 				animations: {
 					move:   {start: 0, length: 2, speed: 3},
 					attack: {start: 2, length: 1, speed: 3},
@@ -56185,7 +56182,7 @@ var Catacomb3D = (function (exports) {
 	class Demon extends MeleeEnemy {
 		constructor(props) {
 			super("sprites/demon.png", props, 50, 0.75, 1.5, 1, {
-				frameWidth: 64,
+				frameWidth: 64 * 4,
 				animations: {
 					move:   {start: 0, length: 4, speed: 3.5},
 					attack: {start: 4, length: 3, speed: 4},
@@ -56199,7 +56196,7 @@ var Catacomb3D = (function (exports) {
 	class Nemesis extends RangedEnemy {
 		constructor(props) {
 			super("sprites/nemesis.png", props, 100, 0.5, 5, 2, {
-				frameWidth: 64,
+				frameWidth: 64 * 4,
 				animations: {
 					move:   {start: 0, length: 2, speed: 10},
 					attack: {start: 2, length: 1, speed: 2},
@@ -56604,9 +56601,8 @@ void main() {
 				this.add(this.pickupSound);
 			});
 			textureCache.get("sprites/items.png", texture => {
-				texture.magFilter = NearestFilter;
 				this.texture = texture;
-				this.spritesheet = new SpriteSheetProxy(texture, 40, 11);
+				this.spritesheet = new SpriteSheetProxy(texture, 40 * 4, 11);
 				this.spritesheet.setFrame(this.itemFrames[0]);
 				this.sprite = new Sprite(new SpriteMaterial({fog: true, map: this.spritesheet}));
 				this.sprite.scale.multiplyScalar(ITEM_SCALE);
@@ -56848,8 +56844,7 @@ void main() {
 			}
 
 			textureCache.get("sprites/hand.png", texture => {
-				texture.magFilter = NearestFilter;
-				const spritesheet = SpriteSheetProxy(texture, 88, 2);
+				const spritesheet = SpriteSheetProxy(texture, 88 * 4, 2);
 				spritesheet.repeat.y = 88/72;
 				this.hand = new Sprite(new SpriteMaterial({map: spritesheet}));
 				this.hand.setFrame = frame => {
