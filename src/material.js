@@ -142,7 +142,7 @@ export class CustomMaterial extends ShaderMaterial {
 			UniformsLib.fog,
 			UniformsLib.lights,
 			{
-				clampColor: {value: true},
+				clampColor: {value: false},
 				interweaveMin: {value: 2/3},
 				interweaveSteps: {value: 3},
 				pixelate: {value: 64}

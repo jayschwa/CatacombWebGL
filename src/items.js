@@ -1,4 +1,4 @@
-import { Audio, AudioLoader, PositionalAudio, Sprite, SpriteMaterial } from "three"
+import { Audio, AudioLoader, NearestFilter, PositionalAudio, Sprite, SpriteMaterial } from "three"
 import { audioListener, audioLoader } from "./audio"
 import { Entity } from "./entities"
 import { SpriteSheetProxy, textureCache } from "./utils"
@@ -16,6 +16,7 @@ export class Item extends Entity {
 			this.add(this.pickupSound)
 		})
 		textureCache.get("sprites/items.png", texture => {
+			texture.magFilter = NearestFilter
 			this.texture = texture
 			this.spritesheet = new SpriteSheetProxy(texture, 40, 11)
 			this.spritesheet.setFrame(this.itemFrames[0])

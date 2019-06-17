@@ -86,7 +86,7 @@ export class ExplodingWall extends Entity {
 		const material = new MeshBasicMaterial({transparent: true})
 		this.box = new Mesh(geometry, material)
 		textureCache.get("walls/exploding.png", texture => {
-			this.box.material.map = new SpriteSheetProxy(texture, 64, 3)
+			this.box.material.map = new SpriteSheetProxy(texture, 256, 3)
 			this.box.material.needsUpdate = true
 		})
 

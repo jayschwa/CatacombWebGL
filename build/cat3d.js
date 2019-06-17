@@ -55643,7 +55643,6 @@ var Catacomb3D = (function (exports) {
 					});
 				queued.texture = texture;
 				queuedTextures.set(path, queued);
-				texture.magFilter = NearestFilter;
 				return texture
 			}
 		}
@@ -55807,6 +55806,7 @@ var Catacomb3D = (function (exports) {
 			}
 
 			textureCache.get("sprites/fireball.png", texture => {
+				texture.magFilter = NearestFilter;
 				this.spriteSheet = SpriteSheetProxy(texture);
 				this.sprite = new Sprite(new SpriteMaterial({map: this.spriteSheet}));
 				if (!this.isBig) {
@@ -55826,7 +55826,7 @@ var Catacomb3D = (function (exports) {
 				let damagedSomething = false;
 				for (let obj = collision.object; obj; obj = obj.parent) {
 					if (obj.onDamage) {
-						const damage = this.isBig ? 3 : 1;
+						const damage = this.isBig ? 15 : 5;
 						obj.onDamage(time, damage);
 						damagedSomething = true;
 						break
@@ -55868,6 +55868,7 @@ var Catacomb3D = (function (exports) {
 			this.add(this.light);
 
 			textureCache.get("sprites/portal.png", texture => {
+				texture.magFilter = NearestFilter;
 				this.spritesheet = new SpriteSheetProxy(texture);
 				this.sprite = new Sprite(new SpriteMaterial({fog: true, map: this.spritesheet}));
 				this.add(this.sprite);
@@ -55930,6 +55931,7 @@ var Catacomb3D = (function (exports) {
 			const totalFrames = Object.values(this.animations).map(a => a.start + a.length).reduce(Math.max, 0);
 
 			textureCache.get(sprite, texture => {
+				texture.magFilter = NearestFilter;
 				this.texture = new SpriteSheetProxy(texture, spriteInfo.frameWidth, totalFrames);
 				this.sprite.material.map = this.texture;
 				this.sprite.material.needsUpdate = true;
@@ -56040,7 +56042,7 @@ var Catacomb3D = (function (exports) {
 			}
 
 			super.update(time, maze);
-			
+
 			if (this.texture) {
 				const delta = time - this.animStartTime;
 				const animFrameInfo = this.animations[this.anim];
@@ -56362,7 +56364,7 @@ void main() {
 				UniformsLib.fog,
 				UniformsLib.lights,
 				{
-					clampColor: {value: true},
+					clampColor: {value: false},
 					interweaveMin: {value: 2/3},
 					interweaveSteps: {value: 3},
 					pixelate: {value: 64}
@@ -56537,7 +56539,7 @@ void main() {
 			const material = new MeshBasicMaterial({transparent: true});
 			this.box = new Mesh(geometry, material);
 			textureCache.get("walls/exploding.png", texture => {
-				this.box.material.map = new SpriteSheetProxy(texture, 64, 3);
+				this.box.material.map = new SpriteSheetProxy(texture, 256, 3);
 				this.box.material.needsUpdate = true;
 			});
 
@@ -56602,6 +56604,7 @@ void main() {
 				this.add(this.pickupSound);
 			});
 			textureCache.get("sprites/items.png", texture => {
+				texture.magFilter = NearestFilter;
 				this.texture = texture;
 				this.spritesheet = new SpriteSheetProxy(texture, 40, 11);
 				this.spritesheet.setFrame(this.itemFrames[0]);
@@ -56845,6 +56848,7 @@ void main() {
 			}
 
 			textureCache.get("sprites/hand.png", texture => {
+				texture.magFilter = NearestFilter;
 				const spritesheet = SpriteSheetProxy(texture, 88, 2);
 				spritesheet.repeat.y = 88/72;
 				this.hand = new Sprite(new SpriteMaterial({map: spritesheet}));

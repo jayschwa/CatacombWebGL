@@ -1,4 +1,4 @@
-import { PositionalAudio, Raycaster, Sprite, SpriteMaterial } from "three"
+import { NearestFilter, PositionalAudio, Raycaster, Sprite, SpriteMaterial } from "three"
 import { audioListener, audioLoader } from "./audio"
 import { Actor, Fireball } from "./entities"
 import { SpriteSheetProxy, textureCache } from "./utils"
@@ -27,6 +27,7 @@ export class Enemy extends Actor {
 		const totalFrames = Object.values(this.animations).map(a => a.start + a.length).reduce(Math.max, 0)
 
 		textureCache.get(sprite, texture => {
+			texture.magFilter = NearestFilter
 			this.texture = new SpriteSheetProxy(texture, spriteInfo.frameWidth, totalFrames)
 			this.sprite.material.map = this.texture
 			this.sprite.material.needsUpdate = true
@@ -137,7 +138,7 @@ export class Enemy extends Actor {
 		}
 
 		super.update(time, maze)
-		
+
 		if (this.texture) {
 			const delta = time - this.animStartTime
 			const animFrameInfo = this.animations[this.anim]

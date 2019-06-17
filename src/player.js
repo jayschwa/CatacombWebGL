@@ -1,4 +1,4 @@
-import { Audio, PerspectiveCamera, PointLight, PositionalAudio, Sprite, SpriteMaterial, Vector3 } from "three"
+import { Audio, NearestFilter, PerspectiveCamera, PointLight, PositionalAudio, Sprite, SpriteMaterial, Vector3 } from "three"
 import { audioListener, audioLoader } from "./audio"
 import { Actor, Fireball, JumpGate, WarpGate } from "./entities"
 import { Door } from "./environment"
@@ -42,6 +42,7 @@ export class Player extends Actor {
 		}
 
 		textureCache.get("sprites/hand.png", texture => {
+			texture.magFilter = NearestFilter
 			const spritesheet = SpriteSheetProxy(texture, 88, 2)
 			spritesheet.repeat.y = 88/72
 			this.hand = new Sprite(new SpriteMaterial({map: spritesheet}))

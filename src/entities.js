@@ -1,4 +1,4 @@
-import { Object3D, PointLight, PositionalAudio, Raycaster, Sprite, SpriteMaterial, Vector3 } from "three"
+import { NearestFilter, Object3D, PointLight, PositionalAudio, Raycaster, Sprite, SpriteMaterial, Vector3 } from "three"
 import { audioListener, audioLoader } from "./audio"
 import { SpriteSheetProxy, textureCache } from "./utils"
 
@@ -158,6 +158,7 @@ export class Fireball extends Actor {
 		}
 
 		textureCache.get("sprites/fireball.png", texture => {
+			texture.magFilter = NearestFilter
 			this.spriteSheet = SpriteSheetProxy(texture)
 			this.sprite = new Sprite(new SpriteMaterial({map: this.spriteSheet}))
 			if (!this.isBig) {
@@ -177,7 +178,7 @@ export class Fireball extends Actor {
 			let damagedSomething = false
 			for (let obj = collision.object; obj; obj = obj.parent) {
 				if (obj.onDamage) {
-					const damage = this.isBig ? 3 : 1
+					const damage = this.isBig ? 15 : 5
 					obj.onDamage(time, damage)
 					damagedSomething = true
 					break
@@ -219,6 +220,7 @@ export class Portal extends Entity {
 		this.add(this.light)
 
 		textureCache.get("sprites/portal.png", texture => {
+			texture.magFilter = NearestFilter
 			this.spritesheet = new SpriteSheetProxy(texture)
 			this.sprite = new Sprite(new SpriteMaterial({fog: true, map: this.spritesheet}))
 			this.add(this.sprite)

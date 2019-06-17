@@ -112,7 +112,6 @@ class TextureCache extends TextureLoader {
 				})
 			queued.texture = texture
 			queuedTextures.set(path, queued)
-			texture.magFilter = NearestFilter
 			return texture
 		}
 	}
