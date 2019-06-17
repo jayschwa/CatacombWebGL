@@ -18,9 +18,9 @@
   },
   "homepage": "https://github.com/jayschwa/CatacombWebGL#readme",
   "devDependencies": {
-    "express": "^4.16.3",
+    "express": "^4.17.1",
     "rollup": "^0.58.2",
-    "rollup-plugin-node-resolve": "^3.3.0",
+    "rollup-plugin-node-resolve": "^3.4.0",
     "rollup-plugin-uglify": "^3.0.0",
     "rollup-watch": "^4.3.1",
     "uglify-es": "^3.3.9"
