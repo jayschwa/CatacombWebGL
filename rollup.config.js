@@ -8,10 +8,10 @@ export default {
 		file: "build/cat3d.js",
 		format: "iife",
 		name: "Catacomb3D",
-		sourcemap: true
+		sourcemap: true,
 	},
 	plugins: [
-		nodeResolve()
+		nodeResolve(),
 		//uglify({}, minify)
 	]
 };
