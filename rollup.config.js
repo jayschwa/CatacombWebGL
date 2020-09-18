@@ -1,6 +1,5 @@
-import nodeResolve from "rollup-plugin-node-resolve";
-import uglify from "rollup-plugin-uglify";
-import { minify } from "uglify-es";
+import nodeResolve from "@rollup/plugin-node-resolve";
+import { terser } from "rollup-plugin-terser";
 
 export default {
 	input: "src/main.js",
@@ -12,6 +11,6 @@ export default {
 	},
 	plugins: [
 		nodeResolve(),
-		//uglify({}, minify)
+		terser()
 	]
 };

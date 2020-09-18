@@ -2,30 +2,28 @@
   "name": "catacombwebgl",
   "version": "0.1.0",
   "description": "Catacomb 3D game recreated in JavaScript and WebGL",
-  "main": "cat3d.js",
-  "scripts": {
-    "build": "rollup --config",
-    "dev": "rollup --config --watch"
+  "homepage": "https://github.com/jayschwa/CatacombWebGL#readme",
+  "bugs": {
+    "url": "https://github.com/jayschwa/CatacombWebGL/issues"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/jayschwa/CatacombWebGL.git"
   },
-  "author": "Jay Weisskopf",
   "license": "GPL-2.0",
-  "bugs": {
-    "url": "https://github.com/jayschwa/CatacombWebGL/issues"
-  },
-  "homepage": "https://github.com/jayschwa/CatacombWebGL#readme",
-  "devDependencies": {
-    "express": "^4.17.1",
-    "rollup": "^1.15.6",
-    "rollup-plugin-node-resolve": "^5.0.3",
-    "rollup-plugin-uglify": "^6.0.2",
-    "uglify-es": "^3.3.9"
+  "author": "Jay Petacat",
+  "main": "cat3d.js",
+  "scripts": {
+    "build": "rollup --config",
+    "dev": "rollup --config --watch"
   },
   "dependencies": {
-    "js-hqx": "^1.0.0",
     "three": "^0.92.0"
+  },
+  "devDependencies": {
+    "@rollup/plugin-node-resolve": "^9.0.0",
+    "express": "^4.17.1",
+    "rollup": "^2.27.1",
+    "rollup-plugin-terser": "^7.0.2"
   }
 }

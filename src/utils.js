@@ -1,6 +1,6 @@
-import hqx from "js-hqx"
 import { CanvasTexture, NearestFilter, TextureLoader } from "three"
 import { HQXFactor } from "./config"
+import hqx from "./hqx"
 
 export function SpriteSheetProxy(texture, frameWidth, frames) {
 	const p = {
