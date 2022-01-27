@@ -344,11 +344,6 @@ jest-worker@^26.2.1:
     merge-stream "^2.0.0"
     supports-color "^7.0.0"
 
-js-hqx@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/js-hqx/-/js-hqx-1.0.0.tgz#1d93378820e330813c52aa3f40c3a8e6bd8a907b"
-  integrity sha512-cRHfY5uuD4pijOh5W8J6kAnPrqmp9mttI0FSSzXC7kjAOqbe24WPqgA3n3Pq5MY+IsleotdIhYcl8bjM9UZoZg==
-
 js-tokens@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/js-tokens/-/js-tokens-4.0.0.tgz#19203fb59991df98e3a287050d4647cdeaf32499"
@@ -589,10 +584,10 @@ terser@^5.0.0:
     source-map "~0.6.1"
     source-map-support "~0.5.12"
 
-three@^0.92.0:
-  version "0.92.0"
-  resolved "https://registry.yarnpkg.com/three/-/three-0.92.0.tgz#8d3d1f5af890e62da7f4cb45d20c09fa51057dcd"
-  integrity sha1-jT0fWviQ5i2n9MtF0gwJ+lEFfc0=
+three@^0.137.0:
+  version "0.137.0"
+  resolved "https://registry.yarnpkg.com/three/-/three-0.137.0.tgz#0ebd6ba66637a332c31f234bcdd35aeec071a6e3"
+  integrity sha512-rzSDhia6cU35UCy6y+zEEws6vSgytfHqFMSaBvUcySgzwvDO6vETyswtSNi/+aVqJw8WLMwyT1mlQQ1T/dxxOA==
 
 toidentifier@1.0.0:
   version "1.0.0"
